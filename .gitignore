@@ -3,11 +3,24 @@
 *.lo
 *.o
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
