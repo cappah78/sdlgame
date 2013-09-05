@@ -1,0 +1,67 @@
+﻿Build started 18/07/2013 19:52:40.
+     1>Project "D:\glsdk_0.5.0\glfw\glfw.vcxproj" on node 4 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "obj\Release\glfw.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /Ilib /Ilib\win32 /nologo /W4 /WX- /O2 /Oy /GL /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D BOOST_ALL_NO_LIB /D _LIB /D WIN32 /D NDEBUG /D _MBCS /GF /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"obj\Release\\" /Fd"obj\Release\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt lib\enable.c lib\fullscreen.c lib\glext.c lib\image.c lib\init.c lib\input.c lib\joystick.c lib\stream.c lib\tga.c lib\thread.c lib\time.c lib\window.c lib\win32\win32_dllmain.c lib\win32\win32_enable.c lib\win32\win32_fullscreen.c lib\win32\win32_glext.c lib\win32\win32_init.c lib\win32\win32_joystick.c lib\win32\win32_thread.c lib\win32\win32_time.c lib\win32\win32_window.c
+         enable.c
+         fullscreen.c
+         glext.c
+     1>lib\glext.c(110): warning C4127: conditional expression is constant
+         image.c
+         init.c
+         input.c
+         joystick.c
+         stream.c
+     1>lib\stream.c(31): warning C4005: '_CRT_SECURE_NO_WARNINGS' : macro redefinition
+                 command-line arguments :  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+         tga.c
+         thread.c
+         time.c
+         window.c
+     1>lib\window.c(580): warning C4055: 'type cast' : from data pointer 'void *' to function pointer 'PFNGLGETSTRINGIPROC'
+         win32_dllmain.c
+         win32_enable.c
+         win32_fullscreen.c
+         win32_glext.c
+     1>lib\win32\win32_glext.c(80): warning C4054: 'type cast' : from function pointer 'PROC' to data pointer 'void *'
+         win32_init.c
+         win32_joystick.c
+         win32_thread.c
+         win32_time.c
+         Compiling...
+         win32_window.c
+     1>lib\win32\win32_window.c(434): warning C4389: '==' : signed/unsigned mismatch
+     1>lib\win32\win32_window.c(1299): warning C4100: 'height' : unreferenced formal parameter
+     1>lib\win32\win32_window.c(1299): warning C4100: 'width' : unreferenced formal parameter
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"library\glfw.lib" /NOLOGO /LTCG obj\Release\enable.obj
+         obj\Release\fullscreen.obj
+         obj\Release\glext.obj
+         obj\Release\image.obj
+         obj\Release\init.obj
+         obj\Release\input.obj
+         obj\Release\joystick.obj
+         obj\Release\stream.obj
+         obj\Release\tga.obj
+         obj\Release\thread.obj
+         obj\Release\time.obj
+         obj\Release\window.obj
+         obj\Release\win32_dllmain.obj
+         obj\Release\win32_enable.obj
+         obj\Release\win32_fullscreen.obj
+         obj\Release\win32_glext.obj
+         obj\Release\win32_init.obj
+         obj\Release\win32_joystick.obj
+         obj\Release\win32_thread.obj
+         obj\Release\win32_time.obj
+         obj\Release\win32_window.obj
+         glfw.vcxproj -> D:\glsdk_0.5.0\glfw\library\glfw.lib
+       FinalizeBuildStatus:
+         Deleting file "obj\Release\glfw.unsuccessfulbuild".
+         Touching "obj\Release\glfw.lastbuildstate".
+     1>Done Building Project "D:\glsdk_0.5.0\glfw\glfw.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.67

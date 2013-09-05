@@ -1,0 +1,18 @@
+﻿Build started 9/5/2013 12:19:09 PM.
+     1>Project "D:\Dropbox\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Release\sdl2-3d.unsuccessfulbuild".
+       ClCompile:
+         All outputs are up-to-date.
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         sdl2-3d.vcxproj -> D:\Dropbox\sdl2-3d\Release\sdl2-3d.exe
+       FinalizeBuildStatus:
+         Deleting file "Release\sdl2-3d.unsuccessfulbuild".
+         Touching "Release\sdl2-3d.lastbuildstate".
+     1>Done Building Project "D:\Dropbox\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.11

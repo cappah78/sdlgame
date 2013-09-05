@@ -1,0 +1,39 @@
+﻿Build started 18/07/2013 19:52:20.
+     1>Project "D:\glsdk_0.5.0\glmesh\glmesh.vcxproj" on node 3 (build target(s)).
+     1>PrepareForBuild:
+         Creating directory "lib\".
+       InitializeBuildStatus:
+         Creating "Debug\glmesh.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Iinclude /Isource /I..\glload\include /I..\glutil\include /I..\glm /I..\boost /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D BOOST_ALL_NO_LIB /D WIN32 /D DEBUG /D _DEBUG /D MEMORY_DEBUGGING /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt source\CpuDataWriter.cpp source\Draw.cpp source\GenHelper.cpp source\GenMeshMisc.cpp source\GenPlatonic.cpp source\GenQuadrics.cpp source\Mesh.cpp source\StreamBuffer.cpp source\VertexFormat.cpp source\VertexWriter.cpp
+         VertexWriter.cpp
+         VertexFormat.cpp
+         StreamBuffer.cpp
+         Mesh.cpp
+         GenQuadrics.cpp
+         GenPlatonic.cpp
+         GenMeshMisc.cpp
+         GenHelper.cpp
+         Draw.cpp
+         CpuDataWriter.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\glmeshD.lib" /NOLOGO Debug\CpuDataWriter.obj
+         Debug\Draw.obj
+         Debug\GenHelper.obj
+         Debug\GenMeshMisc.obj
+         Debug\GenPlatonic.obj
+         Debug\GenQuadrics.obj
+         Debug\Mesh.obj
+         Debug\StreamBuffer.obj
+         Debug\VertexFormat.obj
+         Debug\VertexWriter.obj
+         glmesh.vcxproj -> D:\glsdk_0.5.0\glmesh\lib\glmeshD.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\glmesh.unsuccessfulbuild".
+         Touching "Debug\glmesh.lastbuildstate".
+     1>Done Building Project "D:\glsdk_0.5.0\glmesh\glmesh.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:11.51

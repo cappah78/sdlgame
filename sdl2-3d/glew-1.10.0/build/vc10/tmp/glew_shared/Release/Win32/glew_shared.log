@@ -1,0 +1,24 @@
+﻿Build started 19/08/2013 00:48:03.
+     1>Project "C:\Users\Enrico\Documents\Visual Studio 2010\Projects\sdl2-3d\glew-1.10.0\build\vc10\glew_shared.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "tmp\glew_shared\Release\Win32\glew_shared.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../../include /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D WIN32 /D WIN32_LEAN_AND_MEAN /D VC_EXTRALEAN /D GLEW_BUILD /D _WINDLL /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"tmp\glew_shared\Release\Win32\\" /Fd"tmp\glew_shared\Release\Win32\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\src\glew.c
+         glew.c
+       ResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D NDEBUG /l"0x0409" /nologo /fo"tmp\glew_shared\Release\Win32\glew.res" ..\glew.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"../../bin\Release\Win32\glew32.dll" /INCREMENTAL:NO /NOLOGO opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"tmp\glew_shared\Release\Win32\glew32.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"C:\Users\Enrico\Documents\Visual Studio 2010\Projects\sdl2-3d\glew-1.10.0\bin\Release\Win32\glew32.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /BASE:"0x62AA0000" /DYNAMICBASE /NXCOMPAT /IMPLIB:"../../lib\Release\Win32\glew32.lib" /MACHINE:X86 /DLL tmp\glew_shared\Release\Win32\glew.res
+         tmp\glew_shared\Release\Win32\glew.obj  /ignore:4089
+            Creating library ../../lib\Release\Win32\glew32.lib and object ../../lib\Release\Win32\glew32.exp
+         glew_shared.vcxproj -> C:\Users\Enrico\Documents\Visual Studio 2010\Projects\sdl2-3d\glew-1.10.0\build\vc10\../../bin\Release\Win32\glew32.dll
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"../../bin\Release\Win32\glew32.dll;#2" /manifest tmp\glew_shared\Release\Win32\glew32.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "tmp\glew_shared\Release\Win32\glew_shared.unsuccessfulbuild".
+         Touching "tmp\glew_shared\Release\Win32\glew_shared.lastbuildstate".
+     1>Done Building Project "C:\Users\Enrico\Documents\Visual Studio 2010\Projects\sdl2-3d\glew-1.10.0\build\vc10\glew_shared.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.27

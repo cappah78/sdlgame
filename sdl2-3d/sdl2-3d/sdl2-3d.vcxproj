@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ComponentManager.cpp" />
+    <ClCompile Include="DeltaProcessingSystem.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityBuilder.cpp" />
+    <ClCompile Include="EntityFactory.cpp" />
+    <ClCompile Include="EntityInfo.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="EntityProcessingSystem.cpp" />
+    <ClCompile Include="EntitySystem.cpp" />
+    <ClCompile Include="FPSCameraController.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="GBuffer.cpp" />
+    <ClCompile Include="GroupManager.cpp" />
+    <ClCompile Include="HeightMap.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="LightSorter.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="ManagerManager.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
+    <ClCompile Include="MouseLookSystem.cpp" />
+    <ClCompile Include="MovementSystem.cpp" />
+    <ClCompile Include="NumberUtils.cpp" />
+    <ClCompile Include="PerlinGenerator.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="Pixmap.cpp" />
+    <ClCompile Include="SDLGame.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="SpriteBatch.cpp" />
+    <ClCompile Include="stb_image.c" />
+    <ClCompile Include="SystemManager.cpp" />
+    <ClCompile Include="TagManager.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="Terrain2.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\Desktop\stripes.png" />
+    <None Include="alphascribble.png" />
+    <None Include="spritebatch.frag" />
+    <None Include="spritebatch.vert" />
+    <None Include="grass.png" />
+    <None Include="scribble.png" />
+    <None Include="terrain.frag" />
+    <None Include="terrain.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="coment\Component.h" />
+    <ClInclude Include="coment\Entity.h" />
+    <ClInclude Include="coment\EntityId.h" />
+    <ClInclude Include="coment\EntityInfo.h" />
+    <ClInclude Include="coment\exceptions\BitcountOutOfRange.h" />
+    <ClInclude Include="coment\exceptions\BitIndexOutOfBounds.h" />
+    <ClInclude Include="coment\exceptions\CompMapUnregistered.h" />
+    <ClInclude Include="coment\exceptions\DeadEntity.h" />
+    <ClInclude Include="coment\exceptions\IndexOutOfBounds.h" />
+    <ClInclude Include="coment\exceptions\NotImplemented.h" />
+    <ClInclude Include="coment\exceptions\UninitialisedEntity.h" />
+    <ClInclude Include="coment\managers\ComponentManager.h" />
+    <ClInclude Include="coment\managers\ComponentTypeManager.h" />
+    <ClInclude Include="coment\managers\EntityManager.h" />
+    <ClInclude Include="coment\managers\GroupManager.h" />
+    <ClInclude Include="coment\managers\Manager.h" />
+    <ClInclude Include="coment\managers\ManagerManager.h" />
+    <ClInclude Include="coment\managers\SystemManager.h" />
+    <ClInclude Include="coment\managers\TagManager.h" />
+    <ClInclude Include="coment\managers\VariableManager.h" />
+    <ClInclude Include="coment\scenes\Scene.h" />
+    <ClInclude Include="coment\systems\EntityProcessingSystem.h" />
+    <ClInclude Include="coment\systems\EntitySystem.h" />
+    <ClInclude Include="coment\utils\BitMask.h" />
+    <ClInclude Include="coment\utils\Bitset.h" />
+    <ClInclude Include="coment\utils\Functions.h" />
+    <ClInclude Include="coment\utils\Map.h" />
+    <ClInclude Include="coment\utils\SharedPtr.h" />
+    <ClInclude Include="coment\World.h" />
+    <ClInclude Include="DeltaProcessingSystem.h" />
+    <ClInclude Include="Direction.h" />
+    <ClInclude Include="EntityBuilder.h" />
+    <ClInclude Include="EntityFactory.h" />
+    <ClInclude Include="FPSCameraController.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="GBuffer.h" />
+    <ClInclude Include="HeightMap.h" />
+    <ClInclude Include="KeyListener.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="LightManager.h" />
+    <ClInclude Include="LightSorter.h" />
+    <ClInclude Include="MathUtils.h" />
+    <ClInclude Include="MouseFollow.h" />
+    <ClInclude Include="MouseListener.h" />
+    <ClInclude Include="MouseLookSystem.h" />
+    <ClInclude Include="MovementSystem.h" />
+    <ClInclude Include="NumberUtils.h" />
+    <ClInclude Include="PerlinGenerator.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="Pixmap.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="SDLGame.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="SpriteBatch.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="Terrain2.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureRegion.h" />
+    <ClInclude Include="Velocity.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BFD87650-6020-41DA-8A4C-CB7843B7CD65}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>sdl23d</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)..\SDL2-2.0.0\include;$(ProjectDir)..\glew-1.10.0\include;$(ProjectDir)..\glsdk_0.5.0\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\SDL2-2.0.0\lib\x86;$(ProjectDir)..\glew-1.10.0\lib\Debug\Win32;$(ProjectDir)..\libpng;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)..\SDL2-2.0.0\include;$(ProjectDir)..\glew-1.10.0\include;$(ProjectDir)..\glsdk_0.5.0\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\SDL2-2.0.0\lib\x86;$(ProjectDir)..\glew-1.10.0\lib\Release\Win32;$(ProjectDir)..\libpng;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+    <SourcePath>$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SDL2-2.0.0\lib\x86;$(ProjectDir)..\glew-1.10.0\lib\Debug\Win32;$(ProjectDir)..\libpng;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32d.lib;libpng16d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SDL2-2.0.0\lib\x86;$(ProjectDir)..\glew-1.10.0\lib\Release\Win32;$(ProjectDir)..\libpng;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

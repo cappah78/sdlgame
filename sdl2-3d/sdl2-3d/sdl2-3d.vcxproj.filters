@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{21320252-decb-4777-b8f6-cb6c1d692e82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{61951764-42a0-4d7e-b5c0-5ab7af34a28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\shaders">
+      <UniqueIdentifier>{11908bdf-a7b3-45cf-b06a-b8f2bdd7f112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\interfaces">
+      <UniqueIdentifier>{11e24b22-3565-417b-975b-a3275dc528c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{9dad4a46-a251-4f8a-a6ac-fa7d5a4a5c9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\assets">
+      <UniqueIdentifier>{b425fa23-49e6-4f34-87c9-5037a616e822}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{3b524395-eb3b-4858-ba22-296faf45a3a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{18bd5661-e502-4cc3-a79e-5172f004fb95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{dbad075c-7ebe-4115-ad0b-d35e74fc253e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Screens">
+      <UniqueIdentifier>{d23d7541-d0a1-487f-b365-cbdc1e0fe929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Screens">
+      <UniqueIdentifier>{78f0eddf-b44b-48f1-afa2-f35b8bc809b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Coment">
+      <UniqueIdentifier>{a4ce3bac-57f6-40d2-81ce-6c215c9941e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Coment">
+      <UniqueIdentifier>{37ad34d2-51ce-42c2-bbb3-da264f7d464f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Coment\Systems">
+      <UniqueIdentifier>{dd99fa51-6a26-457c-b604-b749acbd83bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Coment\Managers">
+      <UniqueIdentifier>{06deb20d-e0d9-41a7-9793-8a1e83a91e53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Coment\Exceptions">
+      <UniqueIdentifier>{02f0434e-a2b4-4b0a-9e04-cd5e2a925625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Coment\Utils">
+      <UniqueIdentifier>{59472ac5-3dcb-4c02-a7e7-4c770e3094d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Coment\Scenes">
+      <UniqueIdentifier>{637ce331-a449-4f6a-984f-65fd25a28397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems">
+      <UniqueIdentifier>{1fabb14d-d6d6-4ea8-8d96-03509be987c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{f146f991-3066-483e-bd0a-bef996e8fec7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="MathUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinGenerator.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="NumberUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Pixmap.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBatch.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScreen.cpp">
+      <Filter>Source Files\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.c">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLGame.cpp">
+      <Filter>Source Files\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSCameraController.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="TagManager.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemManager.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagerManager.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupManager.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="EntitySystem.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityProcessingSystem.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityInfo.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentManager.cpp">
+      <Filter>Source Files\Coment</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="DeltaProcessingSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseLookSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityBuilder.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityFactory.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain2.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="LightSorter.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scribble.png">
+      <Filter>data\assets</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\stripes.png">
+      <Filter>data\assets</Filter>
+    </None>
+    <None Include="alphascribble.png">
+      <Filter>data\assets</Filter>
+    </None>
+    <None Include="grass.png">
+      <Filter>data\assets</Filter>
+    </None>
+    <None Include="spritebatch.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="spritebatch.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="terrain.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="terrain.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Pixmap.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteBatch.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRegion.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>Header Files\Engine\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseListener.h">
+      <Filter>Header Files\Engine\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyListener.h">
+      <Filter>Header Files\Engine\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSCameraController.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="NumberUtils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinGenerator.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLGame.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\Component.h">
+      <Filter>Header Files\Coment</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\Entity.h">
+      <Filter>Header Files\Coment</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\EntityId.h">
+      <Filter>Header Files\Coment</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\EntityInfo.h">
+      <Filter>Header Files\Coment</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\World.h">
+      <Filter>Header Files\Coment</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\ComponentManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\ComponentTypeManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\EntityManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\GroupManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\Manager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\ManagerManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\SystemManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\TagManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\managers\VariableManager.h">
+      <Filter>Header Files\Coment\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\exceptions\BitcountOutOfRange.h">
+      <Filter>Header Files\Coment\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\exceptions\BitIndexOutOfBounds.h">
+      <Filter>Header Files\Coment\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\exceptions\CompMapUnregistered.h">
+      <Filter>Header Files\Coment\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\exceptions\DeadEntity.h">
+      <Filter>Header Files\Coment\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\exceptions\IndexOutOfBounds.h">
+      <Filter>Header Files\Coment\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\exceptions\NotImplemented.h">
+      <Filter>Header Files\Coment\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\exceptions\UninitialisedEntity.h">
+      <Filter>Header Files\Coment\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\scenes\Scene.h">
+      <Filter>Header Files\Coment\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\utils\BitMask.h">
+      <Filter>Header Files\Coment\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\utils\Bitset.h">
+      <Filter>Header Files\Coment\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\utils\Functions.h">
+      <Filter>Header Files\Coment\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\utils\Map.h">
+      <Filter>Header Files\Coment\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\utils\SharedPtr.h">
+      <Filter>Header Files\Coment\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\systems\EntityProcessingSystem.h">
+      <Filter>Header Files\Coment\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="coment\systems\EntitySystem.h">
+      <Filter>Header Files\Coment\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Velocity.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="DeltaProcessingSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseLookSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseFollow.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Direction.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityBuilder.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain2.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="LightSorter.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
