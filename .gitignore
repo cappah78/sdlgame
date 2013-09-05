@@ -1,8 +1,8 @@
-.obj
-.o
-.tlog
-.pdb
-.cache
-.sdf
+*.obj
+*.o
+*.tlog
+*.pdb
+*.cache
+*.sdf
 
 ipch/
