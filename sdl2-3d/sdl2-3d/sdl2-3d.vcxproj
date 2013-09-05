@@ -24,6 +24,7 @@
     <ClCompile Include="FPSCameraController.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="GroupManager.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="Light.cpp" />

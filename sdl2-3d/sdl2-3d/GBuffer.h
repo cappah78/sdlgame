@@ -1,6 +1,9 @@
 #ifndef GBUFFER_H_
 #define GBUFFER_H_
 
+#include <gl/glew.h>
+#include <glm/glm.hpp>
+
 class GBuffer
 {
 public:

@@ -10,12 +10,15 @@ GameScreen::GameScreen()
 	: batch(4)
 	, camera(glm::vec3(0, 10, 0), glm::vec3(0, 0, -1))
 	, cameraController(camera)
-	, heightMap(23, 512, 512)
+	, heightMap(23, 32, 32)
 	, terrainShader(TERRAIN_VERTEX_SHADER, TERRAIN_FRAGMENT_SHADER)
 	, lightManager(terrainShader.shaderId)
 {
+	/*
+	std::cout << "init" << std::endl;
 	SDLGame::registerKeyListener(&cameraController);
 	SDLGame::registerMouseListener(&mouseLookSystem);
+	std::cout << "Registered input listeners" << std::endl;
 
 	heightMap.addPerlinNoise(30.0f);
 	heightMap.addPerlinNoise(10.0f);
@@ -27,17 +30,21 @@ GameScreen::GameScreen()
 		heightMap.erode(128.0f);
 	heightMap.smoothen();
 	heightMap.smoothen();
+	std::cout << "Created heightmap" << std::endl;
 
 	terrain = new Terrain2(heightMap, 5);
 	SDLGame::registerKeyListener(terrain);
+	std::cout << "Created terrain" << std::endl;
 
 	texture = new Texture("grass.png");
 	texture->bind();
+	std::cout << "Created texture" << std::endl;
 
 	world.registerSystem(movementSystem);
 	world.registerSystem(mouseLookSystem);
 
 	EntityFactory::createPlayer(world, 1, 1, 0);
+	*/
 }
 
 GameScreen::~GameScreen() 
@@ -52,13 +59,15 @@ GameScreen::~GameScreen()
 
 void GameScreen::render(float deltaSec) 
 {
+	std::cout << "Renderin:" << std::endl;
+	/*
 	world.loopStart();
 	world.setDelta(deltaSec);
 	world.update();
-
-	glClearColor(0, 0, 0, 0);
+	*/
+	glClearColor(0.5f, 0.5f, 0.5f, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	/*
 	cameraController.update(deltaSec);
 	camera.lookAtDir(mouseLookSystem.getLookDir());
 
@@ -69,7 +78,7 @@ void GameScreen::render(float deltaSec)
 	lightManager.update(camera);
 	terrain->render();
 	terrainShader.end();
-
+	*/
 	SDLGame::swap();
 }
 

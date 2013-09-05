@@ -1,4 +1,4 @@
-#version 330 core
+#version 330
 
 const int maxLights = 10;
 const float shininess = 0.01;

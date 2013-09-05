@@ -19,8 +19,8 @@
 /* Ensure we are using opengl's core profile only */
 #define GL3_PROTOTYPES 1
 #define PROGRAM_NAME "sdlgame"
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 768
+#define WINDOW_WIDTH 512
+#define WINDOW_HEIGHT 512
 
 
 #define GLM_FORCE_RADIANS
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     SDL_GL_SetSwapInterval(1);
 
 	math::detail();
-	
+
 	SDLGame* sdlGame(0);
 	try
 	{

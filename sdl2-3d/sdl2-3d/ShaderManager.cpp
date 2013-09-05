@@ -62,7 +62,7 @@ void ShaderManager::attachShaderSource(GLuint prog, GLenum type, const char * so
 			typeString = "nan";
 			break;
 		}
-		std::cout << "Error in " << typeString << " shader: " << buffer << std::endl;
+		std::cout << "Shader log: " << typeString << " shader: " << buffer << std::endl;
 	}
 
     glAttachShader(prog, sh);
