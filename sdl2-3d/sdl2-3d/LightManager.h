@@ -22,6 +22,7 @@ struct LightProperties
 struct LightBlock
 {
 	glm::vec3 eyeDirection;
+	glm::mat4 lightMvp;
 	float padding;
 	LightProperties lights[maxLights];
 };

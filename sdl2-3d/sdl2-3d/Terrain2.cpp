@@ -155,7 +155,7 @@ void Terrain2::render()
 {
 	glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, width * height * 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_LINES, width * height * 6, GL_UNSIGNED_INT, 0);
 }
 
 float Terrain2::getHeightAt(const glm::vec3& position)

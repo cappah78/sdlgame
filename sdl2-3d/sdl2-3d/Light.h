@@ -15,6 +15,9 @@ public:
 private:
 	Light(glm::vec3& position, glm::vec3& color, float linearAttenuation);
 	~Light();
+
+	GLuint depthTexture;
+	GLuint depthFbo;
 };
 
 #endif //LIGHT_H_

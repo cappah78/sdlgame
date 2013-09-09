@@ -128,9 +128,6 @@ void GameScreen::render(float deltaSec)
 	cameraController.update(deltaSec);
 	camera.lookAtDir(mouseLookSystem.getLookDir());
 	camera.update();
-
-	//geometryPassDS();
-
 	
 	terrainShader.use(camera);
 	lightManager.update(camera);

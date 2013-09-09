@@ -73,7 +73,7 @@ void LightManager::updateBlock(const Camera& camera)
 		Light* light = lights.at(i);
 
 		glm::vec4 lightWorldPos(camera.viewMatrix * glm::vec4(light->position, 1));
-		lightWorldPos.w = light->isEnabled ? 1 : 0;
+		lightWorldPos.w = light->isEnabled;
 
 		lightBlock.lights[i].color = glm::vec4(light->color, light->linearAttenuation);
 		lightBlock.lights[i].position = lightWorldPos;
