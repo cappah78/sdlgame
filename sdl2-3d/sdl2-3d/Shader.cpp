@@ -21,14 +21,9 @@ Shader::~Shader()
 
 }
 
-void Shader::begin(const Camera& camera)
+void Shader::use(const Camera& camera)
 {
 	glUseProgram(shaderId);
 	glUniformMatrix4fv(u_mvp, 1, GL_FALSE, &camera.combinedMatrix[0][0]);
 	glUniformMatrix4fv(u_mv, 1, GL_FALSE, &camera.viewMatrix[0][0]);
-}
-
-void Shader::end()
-{
-
 }

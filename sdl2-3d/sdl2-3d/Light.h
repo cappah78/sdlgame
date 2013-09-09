@@ -7,7 +7,7 @@
 class Light
 {
 	friend class LightManager;
-protected:
+public:
 	bool isEnabled;
 	glm::vec3 position;
 	glm::vec3 color;

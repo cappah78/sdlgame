@@ -20,13 +20,17 @@ public:
 
 	bool init(unsigned int width, unsigned int height);
 
-	void bindForWriting();
-	void bindForReading();
+	void startFrame();
+	void bindForGeomPass();
+	void bindForStencilPass();
+	void bindForLightPass();
+	void bindForFinalPass();
 
 private:
 	GLuint fbo;
 	GLuint textures[GBUFFER_NUM_TEXTURES];
 	GLuint depthTexture;
+	GLuint finalTexture;
 };
 
 #endif //GBUFFER_H_

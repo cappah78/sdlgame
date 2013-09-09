@@ -2,12 +2,14 @@
 #define LIGHTMANAGER_H_
 
 #include <vector>
+#include <algorithm>
 
 #include <gl/glew.h>
 #include <glm/glm.hpp>
 
 #include "Light.h"
 #include "Camera.h"
+#include "LightSorter.h"
 
 const int maxLights = 10;
 
@@ -38,6 +40,7 @@ public:
 	static const int LIGHTBLOCK_INDEX;
 
 private:
+	void sortLights(const Camera& camera);
 	void updateBlock(const Camera& camera);
 
 	std::vector<Light*> lights;

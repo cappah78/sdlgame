@@ -9,9 +9,9 @@ class Texture
 {
 public:
 	Texture(Pixmap& pixmap);
-	Texture(char* fileName);
+	Texture(const char* fileName);
 	Texture(Pixmap& pixmap, GLuint& textureID_);
-	Texture(char* fileName, GLuint& textureID_);
+	Texture(const char* fileName, GLuint& textureID_);
 	~Texture();
 
 	void bind();

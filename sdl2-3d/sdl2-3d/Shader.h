@@ -28,8 +28,7 @@ public:
 	GLuint u_mvp;
 	GLuint u_mv;
 
-	void begin(const Camera& camera);
-	void end();
+	void use(const Camera& camera);
 private:
 
 };

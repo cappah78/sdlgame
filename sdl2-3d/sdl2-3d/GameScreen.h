@@ -17,6 +17,8 @@
 #include "Terrain2.h"
 #include "Shader.h"
 #include "LightManager.h"
+#include "GBuffer.h"
+#include "Mesh.h"
 
 #include "coment\World.h"
 #include "EntityFactory.h"
@@ -39,15 +41,29 @@ public:
 	void resize(int width, int height);
 
 private:
+	void renderSceneCB();
+	void geometryPassDS();
+	void lightPassDS();
+	void stencilPassDS();
+
+	int screenWidth;
+	int screenHeight;
+
+	GBuffer gbuffer;
+	Shader geomPassShader;
+
+
 	coment::World world;
 	entitysystem::MovementSystem movementSystem;
 	entitysystem::MouseLookSystem mouseLookSystem;
 
 	LightManager lightManager;
-	Shader terrainShader;
+
+
+	Mesh sphere;
 
 	HeightMap heightMap;
-
+	Shader terrainShader;
 	SpriteBatch batch;
 	PerspectiveCamera camera;
 	FPSCameraController cameraController;

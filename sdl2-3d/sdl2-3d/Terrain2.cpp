@@ -20,9 +20,9 @@
 #define TERRAIN_UNI_LINATTEN "linearAttenuation"
 #define TERRAIN_UNI_QUADATTEN "quadraticAttenuation"
 
-Terrain2::Terrain2(HeightMap& heightMap)
-	: scale(1)
-	, heightScale(100)
+Terrain2::Terrain2(HeightMap& heightMap, float scale_, float heightScale_)
+	: scale(scale_)
+	, heightScale(heightScale_)
 	, lightPos(0, 10, 0)
 	, followCam(true)
 	, numLights(10)
@@ -127,14 +127,7 @@ void Terrain2::generateNormals()
 	normals = new glm::vec3[numVertices];
 	for (unsigned int i = 0; i < numIndices; i += 3) 
 	{
-		if( i > numIndices - 3 )
-			std::cout << "daaaaaaa" << i << std::endl;
-		unsigned int indice = indices[i + 2];
-		if(indice > numVertices)
-			std::cout << "da: " << indice << std::endl;
-		
 		glm::vec3 v0 = positions[indices[i]];
-	
 		glm::vec3 v1 = positions[indices[i + 1]];
 		glm::vec3 v2 = positions[indices[i + 2]];
 			

@@ -20,7 +20,7 @@ Texture::Texture(Pixmap& pixmap, GLuint& textureID_)
 	textureID_ = textureID;
 }
 
-Texture::Texture(char* fileName)
+Texture::Texture(const char* fileName)
 {
 	Pixmap p(fileName);
 	width = p.width;
@@ -29,7 +29,7 @@ Texture::Texture(char* fileName)
 	setupGLTexture(p);
 }
 
-Texture::Texture(char* fileName, GLuint& textureID_)
+Texture::Texture(const char* fileName, GLuint& textureID_)
 {
 	Pixmap p(fileName);
 	width = p.width;
@@ -80,8 +80,8 @@ void Texture::setupGLTexture(Pixmap& pixmap)
  
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);

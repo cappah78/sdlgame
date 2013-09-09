@@ -45,9 +45,6 @@
     <Filter Include="Header Files\Coment">
       <UniqueIdentifier>{a4ce3bac-57f6-40d2-81ce-6c215c9941e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Coment">
-      <UniqueIdentifier>{37ad34d2-51ce-42c2-bbb3-da264f7d464f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Coment\Systems">
       <UniqueIdentifier>{dd99fa51-6a26-457c-b604-b749acbd83bd}</UniqueIdentifier>
     </Filter>
@@ -68,6 +65,9 @@
     </Filter>
     <Filter Include="Source Files\Systems">
       <UniqueIdentifier>{f146f991-3066-483e-bd0a-bef996e8fec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Coment">
+      <UniqueIdentifier>{37ad34d2-51ce-42c2-bbb3-da264f7d464f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +191,9 @@
     <ClCompile Include="GBuffer.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="scribble.png">
@@ -215,6 +218,24 @@
       <Filter>data\shaders</Filter>
     </None>
     <None Include="terrain.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="geometrypass.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="geometrypass.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="lightpass.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="lightpass.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="null.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="null.frag">
       <Filter>data\shaders</Filter>
     </None>
   </ItemGroup>
@@ -412,6 +433,9 @@
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="GBuffer.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>

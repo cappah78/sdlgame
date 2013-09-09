@@ -10,10 +10,11 @@
 #include <gl\glew.h>
 #include <glm\glm.hpp>
 
+
 class Terrain2 : public KeyListener
 {
 public:
-	Terrain2(HeightMap& heightMap);
+	Terrain2(HeightMap& heightMap, float scale, float heightScale);
 	~Terrain2();
 
 	bool keyDown(SDL_Keysym key);
