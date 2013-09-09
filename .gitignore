@@ -4,5 +4,9 @@
 *.pdb
 *.cache
 *.sdf
+*.exe
+*.suo
+*.log
+*.idb
 
 ipch/
