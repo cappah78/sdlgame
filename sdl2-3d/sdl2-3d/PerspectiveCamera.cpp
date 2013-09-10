@@ -2,7 +2,7 @@
 
 const float FOVY = 80;
 const float DEFAULT_ASPECTRATIO = 1.0f;
-const float NEAR = 0.5f;
+const float NEAR = 0.1f;
 const float FAR = 1000.0f;
 
 PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec3 direction)

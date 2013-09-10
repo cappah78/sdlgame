@@ -17,12 +17,12 @@ struct LightProperties
 {
 	glm::vec4 position;
 	glm::vec4 color;
+	glm::mat4 lightMvp;
 };
 
 struct LightBlock
 {
 	glm::vec3 eyeDirection;
-	glm::mat4 lightMvp;
 	float padding;
 	LightProperties lights[maxLights];
 };
@@ -43,6 +43,7 @@ public:
 private:
 	void sortLights(const Camera& camera);
 	void updateBlock(const Camera& camera);
+	void updateShadowMaps();
 
 	std::vector<Light*> lights;
 	LightBlock lightBlock;

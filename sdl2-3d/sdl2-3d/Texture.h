@@ -44,4 +44,4 @@ private:
 	unsigned int numComponents;
 };
 
-#endif TEXTURE_H_
+#endif //TEXTURE_H_

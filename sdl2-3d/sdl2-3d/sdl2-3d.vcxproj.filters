@@ -194,6 +194,12 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="CubeMap.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="scribble.png">
@@ -236,6 +242,12 @@
       <Filter>data\shaders</Filter>
     </None>
     <None Include="null.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="skybox.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="skybox.frag">
       <Filter>data\shaders</Filter>
     </None>
   </ItemGroup>
@@ -436,6 +448,12 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMap.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>

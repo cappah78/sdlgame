@@ -14,6 +14,6 @@ void main()
 {
 	vec4 color = texture(tex, texCoord);
 	vec3 rgb = min(color.rgb * scatteredLight + reflectedLight, vec3(1.0));
-
+	//fragColor = vec4(0.5, 0.5, 0.5, 1.0);
 	fragColor = vec4(rgb, color.a);
 }

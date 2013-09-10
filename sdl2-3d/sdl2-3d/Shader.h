@@ -33,4 +33,4 @@ private:
 
 };
 
-#endif SHADER_H_
+#endif //SHADER_H_

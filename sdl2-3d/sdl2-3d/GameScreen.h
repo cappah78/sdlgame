@@ -18,7 +18,7 @@
 #include "Shader.h"
 #include "LightManager.h"
 #include "GBuffer.h"
-#include "Mesh.h"
+#include "SkyBox.h"
 
 #include "coment\World.h"
 #include "EntityFactory.h"
@@ -39,40 +39,25 @@ public:
 
 	void render(float deltaSec);
 	void resize(int width, int height);
-
 private:
-	void renderSceneCB();
-	void geometryPassDS();
-	void lightPassDS();
-	void stencilPassDS();
-
 	int screenWidth;
 	int screenHeight;
-
-	GBuffer gbuffer;
-	Shader geomPassShader;
-
 
 	coment::World world;
 	entitysystem::MovementSystem movementSystem;
 	entitysystem::MouseLookSystem mouseLookSystem;
 
-	LightManager lightManager;
-
-
-	Mesh sphere;
-
-	HeightMap heightMap;
-	Shader terrainShader;
-	SpriteBatch batch;
 	PerspectiveCamera camera;
 	FPSCameraController cameraController;
+	HeightMap heightMap;
 
+	LightManager lightManager;
+
+	Shader skyBoxShader;
+	SkyBox skyBox;
+
+	Shader terrainShader;
 	Texture* texture;
-	Texture* texture2;
-	Texture* texture3;
-	TextureRegion* region;
-
 	Terrain2* terrain;
 };
 

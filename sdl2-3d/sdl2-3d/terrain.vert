@@ -11,6 +11,7 @@ layout(location = 2) in vec3 in_normal;
 struct LightProperties {
 	vec4 position;
 	vec4 color;
+	mat4 lightMvp;
 };
 
 layout(std140) uniform LightBlock

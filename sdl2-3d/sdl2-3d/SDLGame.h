@@ -12,7 +12,8 @@
 #include "KeyListener.h"
 #include "MouseListener.h"
 
-class SDLGame : public Game {
+class SDLGame : public Game 
+{
 public:
 	//singleton
 	static SDLGame* instance;

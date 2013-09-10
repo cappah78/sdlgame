@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
+    <ClCompile Include="CubeMap.cpp" />
     <ClCompile Include="DeltaProcessingSystem.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityBuilder.cpp" />
@@ -44,6 +45,7 @@
     <ClCompile Include="SDLGame.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="SystemManager.cpp" />
@@ -62,6 +64,8 @@
     <None Include="lightpass.vert" />
     <None Include="null.frag" />
     <None Include="null.vert" />
+    <None Include="skybox.frag" />
+    <None Include="skybox.vert" />
     <None Include="spritebatch.frag" />
     <None Include="spritebatch.vert" />
     <None Include="grass.png" />
@@ -100,6 +104,7 @@
     <ClInclude Include="coment\utils\Map.h" />
     <ClInclude Include="coment\utils\SharedPtr.h" />
     <ClInclude Include="coment\World.h" />
+    <ClInclude Include="CubeMap.h" />
     <ClInclude Include="DeltaProcessingSystem.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="EntityBuilder.h" />
@@ -129,6 +134,7 @@
     <ClInclude Include="SDLGame.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Terrain.h" />
