@@ -1,37 +1,62 @@
 #include "ShaderManager.h"
 
+#include <gl/glew.h>
+#include <fstream>
+#include <sstream>
+#include <stdexcept>
 #include <iostream>
 #include <stdio.h>
 
 #define LOCAL_FILE_DIR ""
 #define GLOBAL_FILE_DIR ""
 
-GLuint ShaderManager::createShaderProgram(const std::string& vertexShaderFileName, const std::string &fragmentShaderFileName)
+GLuint ShaderManager::createShaderProgram(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName)
 {
-	//Read contents from first file
-	std::string vertexFilename = findFileOrThrow(vertexShaderFileName);
-	std::ifstream vertexFile(vertexFilename);
-	std::stringstream vertexData;
-	vertexData << vertexFile.rdbuf();
-	vertexFile.close();
-	const std::string& vertexString(vertexData.str());
+	const std::string* vertexFileData = getStringFromFile(vertexShaderFileName);
+	const std::string* fragmentFileData = getStringFromFile(fragmentShaderFileName);
 
-	//Read contents from second file.
-	std::string fragmentFilename = findFileOrThrow(fragmentShaderFileName);
-	std::ifstream fragmentFile(fragmentFilename);
-	std::stringstream fragmentData;
-	fragmentData << fragmentFile.rdbuf();
-	fragmentFile.close();
-	const std::string& fragmentString(fragmentData.str());
-
-	//std::cout << "\nfragment: \n" << fragmentString << "\n\nvertex: \n" << vertexString << std::endl;
 	GLuint program = glCreateProgram();
-	attachShaderSource(program, GL_VERTEX_SHADER, vertexString.c_str());
-	attachShaderSource(program, GL_FRAGMENT_SHADER, fragmentString.c_str());
+	attachShaderSource(program, GL_VERTEX_SHADER, vertexFileData->c_str());
+	attachShaderSource(program, GL_FRAGMENT_SHADER, fragmentFileData->c_str());
 	glLinkProgram(program);
+
+	delete vertexFileData;
+	delete fragmentFileData;
 
 	return program;
 }
+
+GLuint ShaderManager::createShaderProgram(const std::string& vertexShaderFileName, const std::string& geometryShaderFileName, const std::string& fragmentShaderFileName)
+{
+	const std::string* vertexFileData = getStringFromFile(vertexShaderFileName);
+	const std::string* geometryFileData = getStringFromFile(geometryShaderFileName);
+	const std::string* fragmentFileData = getStringFromFile(fragmentShaderFileName);
+
+	GLuint program = glCreateProgram();
+	attachShaderSource(program, GL_VERTEX_SHADER, vertexFileData->c_str());
+	attachShaderSource(program, GL_GEOMETRY_SHADER, geometryFileData->c_str());
+	attachShaderSource(program, GL_FRAGMENT_SHADER, fragmentFileData->c_str());
+	glLinkProgram(program);
+
+	delete vertexFileData;
+	delete geometryFileData;
+	delete fragmentFileData;
+
+	return program;
+}
+
+const std::string* ShaderManager::getStringFromFile(const std::string& fileName)
+{
+	std::string actualFileName = findFileOrThrow(fileName);
+	std::ifstream file(actualFileName);
+	std::stringstream data;
+	data << file.rdbuf();
+	file.close();
+	
+	const std::string* str = new std::string(data.str());
+	return str;
+}
+
 
 void ShaderManager::attachShaderSource(GLuint prog, GLenum type, const char * source)
 {

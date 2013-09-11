@@ -4,6 +4,12 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdexcept>
+#include <gl\glew.h>
+
+#include "Texture.h"
+#include "TextureRegion.h"
+#include "ShaderManager.h"
+#include "MathUtils.h"
 
 #define FLOATS_PER_SPRITE 16
 #define BUFFER_OFFSET(offset) ((void *)(offset))

@@ -3,6 +3,11 @@
 #include <iostream>
 #include <stdio.h>
 
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtx\transform.hpp>
+#include <glm\gtx\rotate_vector.hpp>
+#include "MathUtils.h"
+
 static const glm::vec3 UP(0, 1, 0);
 
 Camera::Camera(glm::vec3 position_, glm::vec3 direction_)

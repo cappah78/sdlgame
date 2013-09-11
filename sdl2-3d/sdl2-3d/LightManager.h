@@ -2,14 +2,12 @@
 #define LIGHTMANAGER_H_
 
 #include <vector>
-#include <algorithm>
-
-#include <gl/glew.h>
 #include <glm/glm.hpp>
 
-#include "Light.h"
-#include "Camera.h"
-#include "LightSorter.h"
+typedef unsigned int GLuint;
+
+class Camera;
+class Light;
 
 const int maxLights = 10;
 
@@ -17,7 +15,7 @@ struct LightProperties
 {
 	glm::vec4 position;
 	glm::vec4 color;
-	glm::mat4 lightMvp;
+	glm::mat4 lightVPMat;
 };
 
 struct LightBlock
@@ -34,7 +32,6 @@ public:
 	~LightManager();
 
 	void update(const Camera& camera);
-
 	Light* createPointLight(glm::vec3& position, glm::vec3& color, float linearAttenuation);
 
 	static const char* U_LIGHTBLOCK_NAME;
@@ -50,6 +47,9 @@ private:
 
 	GLuint u_lightBlock;
 	GLuint lightUniformBuffer;
+
+	GLuint shadowArrayTex;
+	GLuint shadowFb;
 };
 
 #endif //LIGHTMANAGER_H_

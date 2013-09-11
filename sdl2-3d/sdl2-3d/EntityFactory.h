@@ -1,7 +1,7 @@
 #ifndef ENTITYFACTORY_H_
 #define ENTITYFACTORY_H_
 
-#include "EntityBuilder.h"
+#include "coment\World.h"
 
 class EntityFactory
 {

@@ -1,5 +1,7 @@
 #include "EntityFactory.h"
 
+#include "EntityBuilder.h"
+
 coment::Entity& EntityFactory::createPlayer(coment::World& world, float x, float y, float z)
 {
 	EntityBuilder b(world, world.createEntity());

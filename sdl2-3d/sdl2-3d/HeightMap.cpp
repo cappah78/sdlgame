@@ -8,7 +8,7 @@ HeightMap::HeightMap(int seed, int width_, int height_)
 	, perlin(seed)
 {
 	heights = new float[width * height];
-	memset(heights, 0.0f, width * height * sizeof(float));
+	memset(heights, 0, width * height * sizeof(float));
 }
 
 HeightMap::~HeightMap()

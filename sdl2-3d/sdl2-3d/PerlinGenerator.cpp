@@ -1,5 +1,7 @@
 #include "PerlinGenerator.h"
 
+#include "MathUtils.h"
+
 /** ported from http://www.float4x4.net/index.php/2010/06/generating-realistic-and-playable-terrain-height-maps/ */
 
 const int gradientTableSize = 256;
@@ -25,7 +27,6 @@ const unsigned char perm[256] =  {
 
 PerlinGenerator::PerlinGenerator(int seed)
 	: random(seed, 0, 1)
-	, gradients()
 {
 	initGradients();
 }
@@ -37,17 +38,17 @@ PerlinGenerator::~PerlinGenerator()
 
 float PerlinGenerator::noise(float x, float y, float z)
 {
-	int ix = floor(x);
+	int ix = (int) floor(x);
 	float fx0 = x - ix;
 	float fx1 = fx0 - 1;
 	float wx = smooth(fx0);
 
-	int iy = floor(y);
+	int iy = (int) floor(y);
 	float fy0 = y - iy;
 	float fy1 = fy0 - 1;
 	float wy = smooth(fy0);
  
-	int iz = floor(z);
+	int iz = (int) floor(z);
 	float fz0 = z - iz;
 	float fz1 = fz0 - 1;
 	float wz = smooth(fz0);

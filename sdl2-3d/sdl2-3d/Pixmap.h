@@ -1,9 +1,6 @@
 #ifndef PIXMAP_H_
 #define PIXMAP_H_
 
-#include "stb_image.h"
-
-
 /** Represents texture data on the cpu */
 class Pixmap
 {

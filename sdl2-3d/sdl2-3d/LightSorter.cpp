@@ -1,5 +1,8 @@
 #include "LightSorter.h"
 
+#include "Light.h"
+#include "Camera.h"
+
 LightSorter::LightSorter(const Camera& camera_)
 	: camera(camera_)
 {

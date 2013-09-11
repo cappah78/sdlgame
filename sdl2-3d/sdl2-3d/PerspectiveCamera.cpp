@@ -1,5 +1,7 @@
 #include "PerspectiveCamera.h"
 
+#include <glm\gtc\matrix_transform.hpp>
+
 const float FOVY = 80;
 const float DEFAULT_ASPECTRATIO = 1.0f;
 const float NEAR = 0.1f;

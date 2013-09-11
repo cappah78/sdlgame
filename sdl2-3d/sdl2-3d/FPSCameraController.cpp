@@ -1,5 +1,7 @@
 #include "FPSCameraController.h"
 
+#include "PerspectiveCamera.h"
+
 const float CAMERA_SPEED = 100.0f;
 
 const float DIAGONAL_SPEED = sqrt(pow(CAMERA_SPEED, 2) + pow(CAMERA_SPEED, 2));

@@ -1,5 +1,14 @@
 #include "SDLGame.h"
 
+#include <vector>
+#include <algorithm>
+
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include "Screen.h"
+#include "KeyListener.h"
+#include "MouseListener.h"
+
 SDL_Window* SDLGame::mainWindow;
 SDLGame* SDLGame::instance;
 

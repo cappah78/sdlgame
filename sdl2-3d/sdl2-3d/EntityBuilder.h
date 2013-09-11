@@ -3,9 +3,6 @@
 
 #include "coment\World.h"
 
-#include "Position.h"
-#include "Velocity.h"
-
 class EntityBuilder
 {
 public:

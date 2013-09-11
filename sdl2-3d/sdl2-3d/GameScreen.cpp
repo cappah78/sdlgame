@@ -1,14 +1,18 @@
 ﻿#include "GameScreen.h"
 
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtx\transform.hpp>
 #include <iostream>
 #include <stdio.h>
 
+#include "Texture.h"
+#include "Terrain.h"
+
 #define TERRAIN_VERTEX_SHADER "terrain.vert"
 #define TERRAIN_FRAGMENT_SHADER "terrain.frag"
-
 #define GEOMETRY_PASS_VERTEX_SHADER "geometrypass.vert"
 #define GEOMETRY_PASS_FRAGMENT_SHADER "geometrypass.frag"
-
 #define SKYBOX_VERTEX_SHADER "skybox.vert"
 #define SKYBOX_FRAGMENT_SHADER "skybox.frag"
 
@@ -36,7 +40,7 @@ GameScreen::GameScreen()
 	heightMap.smoothen();
 
 
-	terrain = new Terrain2(heightMap, 10, 100);
+	terrain = new Terrain(heightMap, 10, 100);
 	SDLGame::registerKeyListener(terrain);
 
 	texture = new Texture("grass.png");
@@ -60,7 +64,7 @@ void GameScreen::render(float deltaSec)
 	world.setDelta(deltaSec);
 	world.update();
 
-	glClearColor(0.5, 0.2, 0.2, 0.0);
+	glClearColor(0.5f, 0.2f, 0.2f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	cameraController.update(deltaSec);

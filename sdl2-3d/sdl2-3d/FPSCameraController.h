@@ -3,7 +3,8 @@
 
 #include "MouseListener.h"
 #include "KeyListener.h"
-#include "PerspectiveCamera.h"
+
+class PerspectiveCamera;
 
 class FPSCameraController : public MouseListener, public KeyListener
 {

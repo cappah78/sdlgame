@@ -1,7 +1,7 @@
 #ifndef TEXTUREREGION_H_
 #define TEXTUREREGION_H_
 
-#include <gl\GL.h>
+typedef float GLfloat;
 
 /** Represents a part of a texture */
 struct TextureRegion

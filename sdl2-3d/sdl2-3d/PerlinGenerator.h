@@ -2,7 +2,6 @@
 #define PERLINGENERATOR_H_
 
 #include "Random.h"
-#include "MathUtils.h"
 
 static const int GRADIENTS_TABLE_SIZE = 256;
 

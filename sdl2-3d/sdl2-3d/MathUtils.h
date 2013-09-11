@@ -23,7 +23,6 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <iostream>
 
 namespace math {
 

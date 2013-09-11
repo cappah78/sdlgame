@@ -8,5 +8,6 @@
 *.suo
 *.log
 *.idb
+*.opensdf
 
 ipch/

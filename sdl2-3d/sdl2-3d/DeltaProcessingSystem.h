@@ -5,7 +5,6 @@
 #include "coment\World.h"
 #include "coment\Entity.h"
 
-
 namespace entitysystem 
 {
 	class DeltaProcessingSystem : public coment::EntitySystem

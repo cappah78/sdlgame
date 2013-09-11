@@ -3,6 +3,9 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "Position.h"
+#include "Velocity.h"
+
 namespace entitysystem
 {
 	MovementSystem::MovementSystem()

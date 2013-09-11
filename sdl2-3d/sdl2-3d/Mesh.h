@@ -19,18 +19,14 @@
 #ifndef MESH_H_
 #define	MESH_H_
 
-#include <map>
 #include <vector>
-
-#include <gl\glew.h>
 #include <glm\glm.hpp>
 
-#include <assimp.h>
-#include <aiMesh.h>
-#include <aiScene.h>
-#include <aiPostProcess.h>
+struct aiMesh;
+struct aiScene;
+class Texture;
 
-#include "texture.h"
+typedef unsigned int GLuint;
 
 struct Vertex
 {

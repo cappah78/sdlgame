@@ -1,8 +1,10 @@
 #ifndef CUBEMAP_H_
 #define CUBEMAP_H_
 
-#include <gl\glew.h>
 #include <string>
+
+typedef unsigned int GLuint;
+typedef unsigned int GLenum;
 
 class CubeMap
 {
@@ -11,6 +13,7 @@ public:
 	static CubeMap* createShadowMap(unsigned int resolution);
 
 	~CubeMap();
+
 	void bind(GLenum textureUnit);
 private:
 	CubeMap(GLuint texture);

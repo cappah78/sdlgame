@@ -3,6 +3,9 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "Pixmap.h"
+#include <gl\glew.h>
+
 Texture::Texture(Pixmap& pixmap)
 	: width(pixmap.width)
 	, height(pixmap.height)

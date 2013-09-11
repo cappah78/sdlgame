@@ -1,5 +1,10 @@
 #include "MouseLookSystem.h"
 
+#include "MouseFollow.h"
+#include "Direction.h"
+#include "MathUtils.h"
+#include <glm\gtx\rotate_vector.hpp>
+
 #define MOUSELOOK_SENSITIVITY 0.2f
 
 static const glm::vec3 UP(0, 1, 0);

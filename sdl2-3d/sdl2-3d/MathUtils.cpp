@@ -1,9 +1,6 @@
-#include <cmath>
-
 #include "MathUtils.h"
+
 #include "NumberUtils.h"
-#include <stdio.h>
-#include <iostream>
 
 using namespace math;
 
@@ -53,8 +50,8 @@ float detail::_sin[SIN_COUNT];
 float detail::_cos[SIN_COUNT];
 const int detail::BIG_ENOUGH_INT = 16 * 1024;
 const float detail::BIG_ENOUGH_FLOOR = detail::BIG_ENOUGH_INT;
-const float detail::CEIL = 0.9999999;
-const float detail::BIG_ENOUGH_CEIL = NumberUtils::longBitsToDouble(NumberUtils::doubleToLongBits(detail::BIG_ENOUGH_INT + 1) - 1);
+const float detail::CEIL = 0.9999999f;
+const float detail::BIG_ENOUGH_CEIL = (float) NumberUtils::longBitsToDouble(NumberUtils::doubleToLongBits(detail::BIG_ENOUGH_INT + 1) - 1);
 const float detail::BIG_ENOUGH_ROUND = detail::BIG_ENOUGH_INT + 0.5f;
 const int detail::ATAN2_DIM = 128;
 float detail::_atan2[ATAN2_COUNT];

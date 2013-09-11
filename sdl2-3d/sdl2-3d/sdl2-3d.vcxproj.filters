@@ -107,9 +107,6 @@
     <ClCompile Include="stb_image.c">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -173,9 +170,6 @@
     <ClCompile Include="EntityFactory.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain2.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -198,6 +192,9 @@
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -274,9 +271,6 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
@@ -426,9 +420,6 @@
     <ClInclude Include="EntityFactory.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain2.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
@@ -454,6 +445,9 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="SkyBox.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>

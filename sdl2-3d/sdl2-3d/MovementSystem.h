@@ -2,11 +2,6 @@
 #define MOVEMENTSYSTEM_H_
 
 #include "DeltaProcessingSystem.h"
-#include "MouseListener.h"
-
-#include "Position.h"
-#include "Velocity.h"
-
 
 namespace entitysystem
 {

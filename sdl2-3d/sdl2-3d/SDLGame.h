@@ -3,14 +3,12 @@
 
 #include "GameScreen.h"
 
-#include <SDL.h>
-#include <SDL_opengl.h>
-
 #include <vector>
 #include "Game.h"
-#include "Screen.h"
-#include "KeyListener.h"
-#include "MouseListener.h"
+
+class KeyListener;
+class MouseListener;
+struct SDL_Window;
 
 class SDLGame : public Game 
 {

@@ -1,8 +1,10 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-#include "Pixmap.h"
-#include <gl\glew.h>
+class Pixmap;
+
+typedef unsigned int GLuint;
+typedef unsigned int GLenum;
 
 /** Represents a texture on the gpu */
 class Texture

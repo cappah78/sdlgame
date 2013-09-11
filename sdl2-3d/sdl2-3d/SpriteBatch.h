@@ -1,13 +1,14 @@
 #ifndef SPRITEBATCH_H_
 #define SPRITEBATCH_H_
 
-#include <gl\glew.h>
 #include <glm\glm.hpp>
 
-#include "Texture.h"
-#include "TextureRegion.h"
-#include "ShaderManager.h"
-#include "MathUtils.h"
+typedef int GLint;
+typedef unsigned int GLuint;
+typedef unsigned short GLushort;
+
+struct TextureRegion;
+class Texture;
 
 class SpriteBatch
 {

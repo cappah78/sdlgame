@@ -16,9 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "mesh.h"
 #include <assert.h>
 
-#include "mesh.h"
+#include <gl\glew.h>
+#include <assimp.h>
+#include <aiMesh.h>
+#include <aiScene.h>
+#include <aiPostProcess.h>
+#include "texture.h"
 
 using namespace std;
 

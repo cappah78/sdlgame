@@ -1,5 +1,8 @@
 #include "EntityBuilder.h"
 
+#include "Position.h"
+#include "Velocity.h"
+
 using namespace component;
 
 EntityBuilder::EntityBuilder(coment::World& world_, coment::Entity& e)

@@ -3,23 +3,18 @@
 
 #include <string>
 
-#include <gl/glew.h>
-#include <glm/glm.hpp>
-
-#include "Camera.h"
-#include "Light.h"
-
+typedef unsigned int GLuint;
+class Camera;
 
 class Shader
 {
 public:
-	Shader(const std::string& vertexShaderFileName, const std::string &fragmentShaderFileName);
+	Shader(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName);
 	~Shader();
 
 	static const int IN_POSITION_LOCATION;
 	static const int IN_TEXCOORD_LOCATION;
 	static const int IN_NORMAL_LOCATION;
-
 	static const char* U_MVP_NAME;
 	static const char* U_MV_NAME;
 

@@ -1,6 +1,11 @@
 #include "Shader.h"
 #include "ShaderManager.h"
 
+#include <gl/glew.h>
+#include <glm/glm.hpp>
+#include "Camera.h"
+#include "Light.h"
+
 const int Shader::IN_POSITION_LOCATION = 0;
 const int Shader::IN_TEXCOORD_LOCATION = 1;
 const int Shader::IN_NORMAL_LOCATION = 2;

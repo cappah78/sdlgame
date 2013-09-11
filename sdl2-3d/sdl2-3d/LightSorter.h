@@ -1,8 +1,8 @@
 #ifndef LIGHTSORTER_H_
 #define LIGHTSORTER_H_
 
-#include "Light.h"
-#include "Camera.h"
+class Camera;
+class Light;
 
 class LightSorter
 {

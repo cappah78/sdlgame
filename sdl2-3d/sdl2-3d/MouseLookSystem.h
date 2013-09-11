@@ -4,14 +4,8 @@
 #include "DeltaProcessingSystem.h"
 #include "MouseListener.h"
 
-#include "MouseFollow.h"
-#include "Direction.h"
-
-#include "MathUtils.h"
-
 #include <SDL.h>
 #include <glm\glm.hpp>
-#include <glm\gtx\rotate_vector.hpp>
 
 namespace entitysystem
 {

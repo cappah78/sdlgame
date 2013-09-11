@@ -51,7 +51,6 @@
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="TagManager.cpp" />
     <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="Terrain2.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -138,7 +137,6 @@
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Terrain.h" />
-    <ClInclude Include="Terrain2.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureRegion.h" />
     <ClInclude Include="Velocity.h" />
