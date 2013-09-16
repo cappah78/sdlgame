@@ -1,11 +1,69 @@
-﻿Build started 11/09/2013 22:37:14.
-     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 16/09/2013 18:53:20.
+     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\sdl2-3d.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\sdl2-3d.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt PerlinGenerator.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Camera.cpp ComponentManager.cpp CubeMap.cpp DeltaProcessingSystem.cpp Entity.cpp EntityBuilder.cpp EntityFactory.cpp EntityInfo.cpp EntityManager.cpp EntityProcessingSystem.cpp EntitySystem.cpp FPSCameraController.cpp Game.cpp GameScreen.cpp GBuffer.cpp GroupManager.cpp HeightMap.cpp Light.cpp LightManager.cpp LightSorter.cpp main.cpp Manager.cpp ManagerManager.cpp MathUtils.cpp Mesh.cpp MouseLookSystem.cpp MovementSystem.cpp NumberUtils.cpp PerlinGenerator.cpp PerspectiveCamera.cpp Pixmap.cpp SDLGame.cpp Shader.cpp ShaderManager.cpp SkyBox.cpp SpriteBatch.cpp SystemManager.cpp TagManager.cpp Terrain.cpp Texture.cpp World.cpp
+         Camera.cpp
+         ComponentManager.cpp
+         CubeMap.cpp
+         DeltaProcessingSystem.cpp
+         Entity.cpp
+         EntityBuilder.cpp
+         EntityFactory.cpp
+         EntityInfo.cpp
+         EntityManager.cpp
+         EntityProcessingSystem.cpp
+         EntitySystem.cpp
+         FPSCameraController.cpp
+         Game.cpp
+         GameScreen.cpp
+         GBuffer.cpp
+         GroupManager.cpp
+         HeightMap.cpp
+         Light.cpp
+         LightManager.cpp
+         LightSorter.cpp
+         Compiling...
+         main.cpp
+         Manager.cpp
+         ManagerManager.cpp
+         MathUtils.cpp
+         Mesh.cpp
+     1>Mesh.cpp(93): warning C4482: nonstandard extension used: enum 'aiPostProcessSteps' used in qualified name
+     1>Mesh.cpp(93): warning C4482: nonstandard extension used: enum 'aiPostProcessSteps' used in qualified name
+     1>Mesh.cpp(93): warning C4482: nonstandard extension used: enum 'aiPostProcessSteps' used in qualified name
+         MouseLookSystem.cpp
+         MovementSystem.cpp
+         NumberUtils.cpp
+     1>NumberUtils.cpp(35): warning C4244: 'return' : conversion from 'uint64_t' to 'long', possible loss of data
+     1>NumberUtils.cpp(41): warning C4244: 'return' : conversion from 'uint64_t' to 'double', possible loss of data
          PerlinGenerator.cpp
-         All outputs are up-to-date.
+         PerspectiveCamera.cpp
+         Pixmap.cpp
+         SDLGame.cpp
+         Shader.cpp
+         ShaderManager.cpp
+         SkyBox.cpp
+         SpriteBatch.cpp
+         SystemManager.cpp
+         TagManager.cpp
+         Terrain.cpp
+         Texture.cpp
+         Compiling...
+         World.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt stb_image.c
+         stb_image.c
+     1>stb_image.c(559): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(234) : see declaration of 'fopen'
+     1>stb_image.c(621): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(234) : see declaration of 'fopen'
+     1>stb_image.c(659): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(234) : see declaration of 'fopen'
+     1>stb_image.c(4552): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(234) : see declaration of 'fopen'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_release-dll_win32" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\sdl2-3d.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 Release\Camera.obj
          Release\ComponentManager.obj
@@ -57,8 +115,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\sdl2-3d.unsuccessfulbuild".
          Touching "Release\sdl2-3d.lastbuildstate".
-     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.54
+Time Elapsed 00:00:14.68
