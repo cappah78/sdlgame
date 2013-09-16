@@ -42,10 +42,13 @@ private:
 	PerspectiveCamera camera;
 	FPSCameraController cameraController;
 	HeightMap heightMap;
+
+	//Shader skyBoxShader;
+	//SkyBox skyBox;
+	//Shader terrainShader;
+
+	GBuffer gBuffer;
 	LightManager lightManager;
-	Shader skyBoxShader;
-	SkyBox skyBox;
-	Shader terrainShader;
 
 	Texture* texture;
 	Terrain* terrain;

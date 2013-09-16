@@ -10,11 +10,10 @@ typedef unsigned int GLenum;
 class ShaderManager
 {
 public:
-	static GLuint createShaderProgram(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName);
-	static GLuint createShaderProgram(const std::string& vertexShaderFileName, const std::string& geometryShaderFileName, const std::string& fragmentShaderFileName);
+	static GLuint createShaderProgram(const char* vertexShaderFileName, const char* geometryShaderFileName, const char* fragmentShaderFileName);
 private:
 	static void attachShaderSource(GLuint prog, GLenum type, const char * source);
-	static const std::string* getStringFromFile(const std::string& fileName);
+	static const std::string* getStringFromFile(const char* fileName);
 	static std::string findFileOrThrow(const std::string &strBasename);
 };
 

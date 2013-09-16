@@ -84,7 +84,7 @@ void Terrain::generateVertices(HeightMap& heightMap)
 	float halfTerrainHeight = terrainHeight * 0.5f; 
 
 	positions = new glm::vec3[numVertices];
-	texCoords = new glm::vec2[numVertices];
+//	texCoords = new glm::vec2[numVertices];
 
 	unsigned int idx = 0;
 	// height first so counter clockwise vertices
@@ -102,7 +102,7 @@ void Terrain::generateVertices(HeightMap& heightMap)
 			float z = (t * terrainHeight) - halfTerrainHeight;
 
 			positions[idx] = glm::vec3(x, y, z);
-			texCoords[idx] = glm::vec2(s, t);
+	//		texCoords[idx] = glm::vec2(s, t);
 
 			idx++;
 		}
@@ -113,12 +113,13 @@ void Terrain::generateVertices(HeightMap& heightMap)
 	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(glm::vec3), positions, GL_STATIC_DRAW);
 	glVertexAttribPointer(Shader::IN_POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
-
+	/*
 	glGenBuffers(1, &texCoordBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, texCoordBuffer);
 	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(glm::vec2), texCoords, GL_STATIC_DRAW);
 	glVertexAttribPointer(Shader::IN_TEXCOORD_LOCATION, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
+	*/
 }
 
 void Terrain::generateNormals() 
@@ -147,12 +148,12 @@ void Terrain::generateNormals()
 	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
 	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(glm::vec3), normals, GL_STATIC_DRAW);
 	glVertexAttribPointer(Shader::IN_NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(1);
 }
 
 void Terrain::render()
 {
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, width * height * 6, GL_UNSIGNED_INT, 0);
 }

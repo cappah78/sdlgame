@@ -9,47 +9,40 @@ typedef unsigned int GLuint;
 class Camera;
 class Light;
 
-const int maxLights = 10;
 
-struct LightProperties
-{
-	glm::vec4 position;
-	glm::vec4 color;
-	glm::mat4 lightVPMat;
+struct LightData {
+	glm::vec4 position;				// light position
+	glm::vec4 color;				// light color
 };
 
-struct LightBlock
-{
-	glm::vec3 eyeDirection;
-	float padding;
-	LightProperties lights[maxLights];
+struct LightTransform {
+	glm::mat4 VPMatrix;				// light's shadow rendering view-projection matrix
 };
 
 class LightManager
 {
 public:
-	LightManager(GLuint shaderId);
+	LightManager();
 	~LightManager();
 
 	void update(const Camera& camera);
 	Light* createPointLight(glm::vec3& position, glm::vec3& color, float linearAttenuation);
 
-	static const char* U_LIGHTBLOCK_NAME;
-	static const int LIGHTBLOCK_INDEX;
+	static const int MAX_LIGHTS = 1;
 
 private:
 	void sortLights(const Camera& camera);
 	void updateBlock(const Camera& camera);
 	void updateShadowMaps();
 
-	std::vector<Light*> lights;
-	LightBlock lightBlock;
+	std::vector<Light*> lightObjects;
 
-	GLuint u_lightBlock;
-	GLuint lightUniformBuffer;
 
-	GLuint shadowArrayTex;
-	GLuint shadowFb;
+	GLuint lightUB;
+	LightData lights[MAX_LIGHTS];
+
+	GLuint lightTransformUB;
+	LightTransform lightTransform[MAX_LIGHTS];
 };
 
 #endif //LIGHTMANAGER_H_

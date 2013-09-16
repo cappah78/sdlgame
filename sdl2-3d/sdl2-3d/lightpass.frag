@@ -1,95 +1,31 @@
-#version 330 core
+#version 430 core
 
-struct BaseLight
+layout(binding = 0) uniform sampler2D positionBuffer;
+layout(binding = 1) uniform sampler2D normalBuffer;
+layout(binding = 2) uniform sampler2D depthBuffer;
+layout(binding = 3) uniform sampler2DArrayShadow shadowMapArray;
+
+layout(location = 0) out vec4 color;
+layout(location = 0) in vec2 texCoord;
+
+layout(std140, binding = 0) uniform transform {
+	mat4 MVPMatrix;
+} Transform;
+
+float linearizeDepth(float zoverw)
 {
-    vec4 Color;
-    vec4 Position;
-};
-
-
-
-
-layout (location = 0) out vec4 fragColor;
-
-uniform sampler2D gPositionMap;
-uniform sampler2D gColorMap;
-uniform sampler2D gNormalMap;
-uniform DirectionalLight gDirectionalLight;
-uniform PointLight gPointLight;
-uniform SpotLight gSpotLight;
-uniform vec3 gEyeWorldPos;
-uniform float gMatSpecularIntensity;
-uniform float gSpecularPower;
-uniform int gLightType;
-uniform vec2 gScreenSize;
-
-vec4 CalcLightInternal(BaseLight Light,
-					   vec3 LightDirection,
-					   vec3 WorldPos,
-					   vec3 Normal)
-{
-    vec4 AmbientColor = vec4(Light.Color, 1.0f) * Light.AmbientIntensity;
-    float DiffuseFactor = dot(Normal, -LightDirection);
-
-    vec4 DiffuseColor  = vec4(0, 0, 0, 0);
-    vec4 SpecularColor = vec4(0, 0, 0, 0);
-
-    if (DiffuseFactor > 0) {
-        DiffuseColor = vec4(Light.Color, 1.0f) * Light.DiffuseIntensity * DiffuseFactor;
-
-        vec3 VertexToEye = normalize(gEyeWorldPos - WorldPos);
-        vec3 LightReflect = normalize(reflect(LightDirection, Normal));
-        float SpecularFactor = dot(VertexToEye, LightReflect);
-        SpecularFactor = pow(SpecularFactor, gSpecularPower);
-        if (SpecularFactor > 0) {
-            SpecularColor = vec4(Light.Color, 1.0f) * gMatSpecularIntensity * SpecularFactor;
-        }
-    }
-
-    return (AmbientColor + DiffuseColor + SpecularColor);
+		const float n = 0.1; // camera z near
+		const float f = 600.0; // camera z far
+		return (2.0 * n) / (f + n - zoverw * (f - n));
 }
 
-vec4 CalcDirectionalLight(vec3 WorldPos, vec3 Normal)
+void main()
 {
-    return CalcLightInternal(gDirectionalLight.Base,
-							 gDirectionalLight.Direction,
-							 WorldPos,
-							 Normal);
+	float depthCol = texture(depthBuffer, texCoord).r;
+	float depth = linearizeDepth(depthCol);
+
+	vec4 posCol = texture(positionBuffer, texCoord);
+
+	color = vec4(depth, depth, depth, 1.0);
 }
-
-
-vec4 CalcPointLight(vec3 WorldPos, vec3 Normal)
-{
-    vec3 LightDirection = WorldPos - gPointLight.Position;
-    float Distance = length(LightDirection);
-    LightDirection = normalize(LightDirection);
-
-    vec4 Color = CalcLightInternal(gPointLight.Base, LightDirection, WorldPos, Normal);
-
-    float Attenuation =  gPointLight.Atten.Constant +
-                         gPointLight.Atten.Linear * Distance +
-                         gPointLight.Atten.Exp * Distance * Distance;
-
-    Attenuation = max(1.0, Attenuation);
-
-    return Color / Attenuation;
-}
-
-
-vec2 CalcTexCoord()
-{
-    return gl_FragCoord.xy / gScreenSize;
-}
-
-shader FSmainPointLight(out vec4 FragColor)
-{
-    vec2 TexCoord = CalcTexCoord();
-	vec3 WorldPos = texture(gPositionMap, TexCoord).xyz;
-	vec3 Color = texture(gColorMap, TexCoord).xyz;
-	vec3 Normal = texture(gNormalMap, TexCoord).xyz;
-	Normal = normalize(Normal);
-
-    FragColor = vec4(Color, 1.0) * CalcPointLight(WorldPos, Normal);
-}
-
 

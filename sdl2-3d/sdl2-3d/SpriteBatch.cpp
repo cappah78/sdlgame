@@ -47,7 +47,7 @@ SpriteBatch::SpriteBatch(int size_)
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	shader = ShaderManager::createShaderProgram(SPRITEBATCH_VERTEX_SHADER, SPRITEBATCH_FRAGMENT_SHADER);
+	shader = ShaderManager::createShaderProgram(SPRITEBATCH_VERTEX_SHADER, 0, SPRITEBATCH_FRAGMENT_SHADER);
 	glUseProgram(shader);
 
 	mvp = glGetUniformLocation(shader, SPRITEBATCH_UNIFORM_MVP);

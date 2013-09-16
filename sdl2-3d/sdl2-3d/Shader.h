@@ -1,15 +1,13 @@
 #ifndef SHADER_H_
 #define SHADER_H_
 
-#include <string>
-
 typedef unsigned int GLuint;
 class Camera;
 
 class Shader
 {
 public:
-	Shader(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName);
+	Shader(const char* vertexShaderFileName, const char* fragmentShaderFileName);
 	~Shader();
 
 	static const int IN_POSITION_LOCATION;

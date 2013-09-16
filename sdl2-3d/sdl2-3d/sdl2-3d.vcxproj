@@ -57,12 +57,17 @@
   <ItemGroup>
     <None Include="..\..\..\..\..\Desktop\stripes.png" />
     <None Include="alphascribble.png" />
-    <None Include="geometrypass.frag" />
-    <None Include="geometrypass.vert" />
+    <None Include="gbuffer.frag" />
+    <None Include="gbuffer.vert" />
+    <None Include="light.frag" />
+    <None Include="light.geom" />
+    <None Include="light.vert" />
     <None Include="lightpass.frag" />
+    <None Include="fullscreenquad.geom" />
     <None Include="lightpass.vert" />
-    <None Include="null.frag" />
-    <None Include="null.vert" />
+    <None Include="shadowmulti.geom" />
+    <None Include="shadowmulti.vert" />
+    <None Include="shadowsingle.vert" />
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
     <None Include="spritebatch.frag" />

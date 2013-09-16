@@ -10,32 +10,16 @@
 #define LOCAL_FILE_DIR ""
 #define GLOBAL_FILE_DIR ""
 
-GLuint ShaderManager::createShaderProgram(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName)
-{
-	const std::string* vertexFileData = getStringFromFile(vertexShaderFileName);
-	const std::string* fragmentFileData = getStringFromFile(fragmentShaderFileName);
-
-	GLuint program = glCreateProgram();
-	attachShaderSource(program, GL_VERTEX_SHADER, vertexFileData->c_str());
-	attachShaderSource(program, GL_FRAGMENT_SHADER, fragmentFileData->c_str());
-	glLinkProgram(program);
-
-	delete vertexFileData;
-	delete fragmentFileData;
-
-	return program;
-}
-
-GLuint ShaderManager::createShaderProgram(const std::string& vertexShaderFileName, const std::string& geometryShaderFileName, const std::string& fragmentShaderFileName)
+GLuint ShaderManager::createShaderProgram(const char* vertexShaderFileName, const char* geometryShaderFileName, const char* fragmentShaderFileName)
 {
 	const std::string* vertexFileData = getStringFromFile(vertexShaderFileName);
 	const std::string* geometryFileData = getStringFromFile(geometryShaderFileName);
 	const std::string* fragmentFileData = getStringFromFile(fragmentShaderFileName);
 
 	GLuint program = glCreateProgram();
-	attachShaderSource(program, GL_VERTEX_SHADER, vertexFileData->c_str());
-	attachShaderSource(program, GL_GEOMETRY_SHADER, geometryFileData->c_str());
-	attachShaderSource(program, GL_FRAGMENT_SHADER, fragmentFileData->c_str());
+	if (vertexFileData) attachShaderSource(program, GL_VERTEX_SHADER, vertexFileData->c_str());
+	if (geometryFileData) attachShaderSource(program, GL_GEOMETRY_SHADER_EXT, geometryFileData->c_str());
+	if (fragmentFileData) attachShaderSource(program, GL_FRAGMENT_SHADER, fragmentFileData->c_str());
 	glLinkProgram(program);
 
 	delete vertexFileData;
@@ -45,8 +29,11 @@ GLuint ShaderManager::createShaderProgram(const std::string& vertexShaderFileNam
 	return program;
 }
 
-const std::string* ShaderManager::getStringFromFile(const std::string& fileName)
+const std::string* ShaderManager::getStringFromFile(const char* fileName)
 {
+	if (fileName == NULL)
+		return 0;
+
 	std::string actualFileName = findFileOrThrow(fileName);
 	std::ifstream file(actualFileName);
 	std::stringstream data;
@@ -63,6 +50,11 @@ void ShaderManager::attachShaderSource(GLuint prog, GLenum type, const char * so
     GLuint sh;
 
     sh = glCreateShader(type);
+
+	if (sh == 0)
+	{
+		std::cout << "Could not create shader: " << type << std::endl;
+	}
     glShaderSource(sh, 1, &source, NULL);
     glCompileShader(sh);
 
@@ -96,6 +88,7 @@ void ShaderManager::attachShaderSource(GLuint prog, GLenum type, const char * so
 
 std::string ShaderManager::findFileOrThrow( const std::string &strBasename )
 {
+
 	std::string strFilename = LOCAL_FILE_DIR + strBasename;
 	std::ifstream testFile(strFilename.c_str());
 	if(testFile.is_open())

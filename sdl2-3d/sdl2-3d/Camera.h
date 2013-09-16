@@ -8,6 +8,7 @@ class Camera
 public:
 	Camera(glm::vec3 position, glm::vec3 direction);
 	virtual ~Camera();
+
 	virtual void translate(float x, float y, float z);
 	/** Translates the camera position relative to the view of the camera */
 	virtual void translateRelative(float x, float y, float z);
