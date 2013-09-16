@@ -1,4 +1,4 @@
-#version 420 core
+#version 330 core
 
 struct LightType
 {
@@ -6,7 +6,7 @@ struct LightType
 	vec4 color;
 };
 
-layout(std140, binding = 1) uniform lightArray {
+layout(std140) uniform lightArray {
 	LightType light[100];
 } LightArray;
 

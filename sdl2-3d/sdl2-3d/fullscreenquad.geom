@@ -1,10 +1,10 @@
-#version 430 core
+#version 330 core
 
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
 
-layout(location = 0) out vec2 texCoord;
+out vec2 texCoord;
 
 void main() 
 {
