@@ -1,4 +1,4 @@
-﻿Build started 16/09/2013 04:22:56.
+﻿Build started 9/16/2013 6:38:00 PM.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\sdl2-3d.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -61,4 +61,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.20
+Time Elapsed 00:00:01.88

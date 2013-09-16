@@ -28,29 +28,24 @@ public:
 	void renderLights();
 
 private:
+	void setupUniforms();
+
 	Transform transform;			// transformation data
 	GLuint transformUB;				// uniform buffer for the transformation
 
-	GLuint GBufferVSP;				// G-Buffer vertex shader program
-	GLuint GBufferFSP;				// G-Buffer fragment shader program
 	GLuint GBufferPPL;				// G-Buffer program pipeline
+	GLint u_transformBlockLoc;
+	GLint u_positionBufferLoc;
+	GLint u_depthBufferLoc;
+	GLint u_normalBufferLoc;
+	GLint u_shadowMapArrayLoc;
 
-	GLuint lightPassVSP;
-	GLuint lightPassGSP;
-	GLuint lightPassFSP;
 	GLuint lightPassPPL;
-
-	GLuint lightVSP;				// light vertex shader program
-	GLuint lightGSP;				// light geometry shader program
-	GLuint lightFSP;				// light fragment shader program
 	GLuint lightPPL;				// light program pipeline
 
-	GLuint shadowSingleVSP;			// single shadow vertex shader program
 	GLuint shadowSinglePPL;			// single shadow program pipeline
 	GLint lightIDUniformLoc;		// location of the lightID uniform
 
-	GLuint shadowMultiVSP;			// multi shadow vertex shader program
-	GLuint shadowMultiGSP;			// multi shadow geometry shader program
 	GLuint shadowMultiPPL;			// multi shadow program pipeline
 
 	GLuint positionGBT;				// position texture for G-buffer

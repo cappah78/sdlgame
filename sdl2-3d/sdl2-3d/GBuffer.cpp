@@ -55,14 +55,17 @@ const int SHADOW_MAP_SIZE = 1024;
 
 GBuffer::GBuffer()
 {
+	loadShaders();
+	setupGBuffer();
+	setupUniforms();
+
 	// create uniform buffer and store camera data
 	glGenBuffers(1, &transformUB);
 	glBindBuffer(GL_UNIFORM_BUFFER, transformUB);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(transform), &transform, GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, transformUB);
 
-	loadShaders();
-	setupGBuffer();
+
 
 	glEnable(GL_FRAMEBUFFER_SRGB);
 }
@@ -75,11 +78,26 @@ GBuffer::~GBuffer()
 void GBuffer::loadShaders()
 {
 	GBufferPPL = ShaderManager::createShaderProgram("gbuffer.vert", 0, "gbuffer.frag");
-	lightPPL = ShaderManager::createShaderProgram("light.vert", "light.geom", "light.frag");
+	//lightPPL = ShaderManager::createShaderProgram("light.vert", "light.geom", "light.frag");
 	lightPassPPL = ShaderManager::createShaderProgram("lightpass.vert", "fullscreenquad.geom", "lightpass.frag");
-	shadowMultiPPL  = ShaderManager::createShaderProgram("shadowmulti.vert", "shadowmulti.geom", 0);
-	shadowSinglePPL = ShaderManager::createShaderProgram("shadowsingle.vert", 0, 0);
-	lightIDUniformLoc = glGetUniformLocation(shadowSinglePPL, "lightID");
+	//shadowMultiPPL  = ShaderManager::createShaderProgram("shadowmulti.vert", "shadowmulti.geom", 0);
+	//shadowSinglePPL = ShaderManager::createShaderProgram("shadowsingle.vert", 0, 0);
+	//lightIDUniformLoc = glGetUniformLocation(shadowSinglePPL, "lightID");
+}
+
+void GBuffer::setupUniforms()
+{
+	glUseProgram(lightPassPPL);
+	u_positionBufferLoc = glGetUniformLocation(lightPassPPL, "u_positionBuffer");
+	glUniform1i(u_positionBufferLoc, 0);
+	u_normalBufferLoc = glGetUniformLocation(lightPassPPL, "u_normalBuffer");
+	glUniform1i(u_normalBufferLoc, 1);
+	u_depthBufferLoc = glGetUniformLocation(lightPassPPL, "u_depthBuffer");
+	glUniform1i(u_depthBufferLoc, 2);
+	u_shadowMapArrayLoc = glGetUniformLocation(lightPassPPL, "u_shadowMapArray");
+	glUniform1i(u_shadowMapArrayLoc, 3);
+
+	std::cout << "Uniform locs: " << u_positionBufferLoc << ":" << u_normalBufferLoc << ":" << u_depthBufferLoc << std::endl;
 }
 
 void GBuffer::setupGBuffer()
@@ -139,14 +157,6 @@ void GBuffer::setupGBuffer()
 
 	CHECK_FRAMEBUFFER_STATUS();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// create shadow rendering framebuffer
-	glGenFramebuffers(1, &shadowFB);
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowFB);
-	glDrawBuffer(GL_NONE);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadowArrayTex, 0);
-	CHECK_FRAMEBUFFER_STATUS();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void GBuffer::use(const Camera& camera)
@@ -175,13 +185,12 @@ void GBuffer::setupShadows()
 
 void GBuffer::drawBuffer()
 {
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glUseProgram(lightPassPPL);
-
+		
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, positionGBT);
 	glActiveTexture(GL_TEXTURE1);

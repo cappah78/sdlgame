@@ -1,16 +1,16 @@
-#version 420 core
+#version 330 core
 
-layout(std140, binding = 0) uniform transform {
+layout(std140) uniform transformBlock {
 	mat4 MVPMatrix;
 } Transform;
 
 uniform mat4 u_mvp;
 
-layout(location = 0) in vec3 inVertexPosition;
-layout(location = 1) in vec3 inVertexNormal;
+layout(location = 0) in vec3 in_position;
+layout(location = 1) in vec3 in_normal;
 
-layout(location = 0) out vec3 outVertexPosition;
-layout(location = 1) out vec3 outVertexNormal;
+out vec3 vertexPosition;
+out vec3 vertexNormal;
 
 out gl_PerVertex {
 	vec4 gl_Position;
@@ -19,11 +19,11 @@ out gl_PerVertex {
 void main(void) {
 
 	/* pass through world space position */
-	outVertexPosition = inVertexPosition;
+	vertexPosition = in_position;
 
 	/* pass through world space normal */
-	outVertexNormal = inVertexNormal;
+	vertexNormal = in_normal;
 
 	/* transform position into clip space */
-	gl_Position = Transform.MVPMatrix * vec4(inVertexPosition, 1);
+	gl_Position = Transform.MVPMatrix * vec4(in_position, 1);
 }

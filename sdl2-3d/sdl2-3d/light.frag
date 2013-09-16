@@ -1,6 +1,6 @@
-#version 420 core
+#version 330 core
 
-layout(std140, binding = 2) uniform lightTransform {
+layout(std140) uniform lightTransform {
 	mat4 VPMatrix[600];
 } LightTransform;
 
