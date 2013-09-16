@@ -2,6 +2,8 @@
 
 layout(std140) uniform transformBlock {
 	mat4 MVPMatrix;
+	mat4 MVMatrix;
+	mat4 PMatrix;
 } Transform;
 
 uniform mat4 u_mvp;

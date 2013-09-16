@@ -66,7 +66,6 @@ GBuffer::GBuffer()
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, transformUB);
 
 
-
 	glEnable(GL_FRAMEBUFFER_SRGB);
 }
 
@@ -162,6 +161,9 @@ void GBuffer::setupGBuffer()
 void GBuffer::use(const Camera& camera)
 {
 	transform.MVPMatrix = camera.combinedMatrix;
+	transform.MVMatrix = camera.viewMatrix;
+	transform.PMatrix = camera.projectionMatrix;
+
 	glBindBuffer(GL_UNIFORM_BUFFER, transformUB);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(transform), &transform, GL_STATIC_DRAW);
 
@@ -207,6 +209,10 @@ void GBuffer::renderLights()
 {
 // render lights
 	glUseProgram(lightPPL);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, transformUB);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(transform), &transform, GL_STATIC_DRAW);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 

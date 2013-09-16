@@ -13,7 +13,10 @@ class GBuffer
 public:
 	struct Transform {
 		glm::mat4 MVPMatrix;			// modelview-projection matrix
+		glm::mat4 MVMatrix;
+		glm::mat4 PMatrix;
 	};
+
 
 	GBuffer();
 	~GBuffer();
