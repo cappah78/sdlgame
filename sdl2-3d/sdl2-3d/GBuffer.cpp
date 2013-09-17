@@ -64,9 +64,6 @@ GBuffer::GBuffer()
 	glBindBuffer(GL_UNIFORM_BUFFER, transformUB);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(transform), &transform, GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, transformUB);
-
-
-	glEnable(GL_FRAMEBUFFER_SRGB);
 }
 
 GBuffer::~GBuffer() 
@@ -87,8 +84,8 @@ void GBuffer::loadShaders()
 void GBuffer::setupUniforms()
 {
 	glUseProgram(lightPassPPL);
-	u_positionBufferLoc = glGetUniformLocation(lightPassPPL, "u_positionBuffer");
-	glUniform1i(u_positionBufferLoc, 0);
+	u_colorBufferLoc = glGetUniformLocation(lightPassPPL, "u_colorBuffer");
+	glUniform1i(u_colorBufferLoc, 0);
 	u_normalBufferLoc = glGetUniformLocation(lightPassPPL, "u_normalBuffer");
 	glUniform1i(u_normalBufferLoc, 1);
 	u_depthBufferLoc = glGetUniformLocation(lightPassPPL, "u_depthBuffer");
@@ -96,16 +93,16 @@ void GBuffer::setupUniforms()
 	u_shadowMapArrayLoc = glGetUniformLocation(lightPassPPL, "u_shadowMapArray");
 	glUniform1i(u_shadowMapArrayLoc, 3);
 
-	std::cout << "Uniform locs: " << u_positionBufferLoc << ":" << u_normalBufferLoc << ":" << u_depthBufferLoc << std::endl;
+	std::cout << "Uniform locs: " << u_colorBufferLoc << ":" << u_normalBufferLoc << ":" << u_depthBufferLoc << std::endl;
 }
 
 void GBuffer::setupGBuffer()
 {
 	std::cerr << "> Setting up G-buffer..." << std::endl;
-	// create normal buffer
-	glGenTextures(1, &positionGBT);
-	glBindTexture(GL_TEXTURE_2D, positionGBT);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+	// create color buffer
+	glGenTextures(1, &colorGBT);
+	glBindTexture(GL_TEXTURE_2D, colorGBT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -114,7 +111,7 @@ void GBuffer::setupGBuffer()
 	// create normal buffer
 	glGenTextures(1, &normalGBT);
 	glBindTexture(GL_TEXTURE_2D, normalGBT);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -130,11 +127,10 @@ void GBuffer::setupGBuffer()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-
 	// create framebuffer and setup attachments
 	glGenFramebuffers(1, &gBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, positionGBT, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorGBT, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalGBT, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthGBT, 0);
 
@@ -160,8 +156,8 @@ void GBuffer::setupGBuffer()
 
 void GBuffer::use(const Camera& camera)
 {
-	transform.MVPMatrix = camera.combinedMatrix;
-	transform.MVMatrix = camera.viewMatrix;
+	transform.VPMatrix = camera.combinedMatrix;
+	transform.VMatrix = camera.viewMatrix;
 	transform.PMatrix = camera.projectionMatrix;
 
 	glBindBuffer(GL_UNIFORM_BUFFER, transformUB);
@@ -173,7 +169,7 @@ void GBuffer::use(const Camera& camera)
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void GBuffer::setupShadows()
@@ -194,7 +190,7 @@ void GBuffer::drawBuffer()
 	glUseProgram(lightPassPPL);
 		
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, positionGBT);
+	glBindTexture(GL_TEXTURE_2D, colorGBT);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, normalGBT);
 	glActiveTexture(GL_TEXTURE2);
@@ -222,7 +218,7 @@ void GBuffer::renderLights()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, positionGBT);
+	glBindTexture(GL_TEXTURE_2D, colorGBT);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, normalGBT);
 	glActiveTexture(GL_TEXTURE2);

@@ -12,11 +12,10 @@ class GBuffer
 {
 public:
 	struct Transform {
-		glm::mat4 MVPMatrix;			// modelview-projection matrix
-		glm::mat4 MVMatrix;
+		glm::mat4 VPMatrix;
+		glm::mat4 VMatrix;
 		glm::mat4 PMatrix;
 	};
-
 
 	GBuffer();
 	~GBuffer();
@@ -38,7 +37,7 @@ private:
 
 	GLuint GBufferPPL;				// G-Buffer program pipeline
 	GLint u_transformBlockLoc;
-	GLint u_positionBufferLoc;
+	GLint u_colorBufferLoc;
 	GLint u_depthBufferLoc;
 	GLint u_normalBufferLoc;
 	GLint u_shadowMapArrayLoc;
@@ -51,7 +50,7 @@ private:
 
 	GLuint shadowMultiPPL;			// multi shadow program pipeline
 
-	GLuint positionGBT;				// position texture for G-buffer
+	GLuint colorGBT;				// position texture for G-buffer
 	GLuint normalGBT;				// normal texture for G-buffer
 	GLuint depthGBT;				// depth texture for G-buffer
 	GLuint gBuffer;					// G-buffer framebuffer

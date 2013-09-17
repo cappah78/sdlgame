@@ -21,6 +21,7 @@ GameScreen::GameScreen()
 	: camera(glm::vec3(0, 60, 0), glm::vec3(0, 0, -1))
 	, cameraController(camera)
 	, heightMap(23, 512, 512)
+	, terrainShader(TERRAIN_VERTEX_SHADER, TERRAIN_FRAGMENT_SHADER)
 {
 	SDLGame::registerKeyListener(&cameraController);
 	SDLGame::registerMouseListener(&mouseLookSystem);
@@ -71,17 +72,11 @@ void GameScreen::render(float deltaSec)
 
 	lightManager.update(camera);
 
-
 	gBuffer.use(camera);
+	texture->bind();
 	terrain->render();
 	gBuffer.drawBuffer();
-/*	
-	gBuffer.setupShadows();
-	terrain->render();
 
-	gBuffer.renderLights();
-
-	*/
 	SDLGame::swap();
 }
 

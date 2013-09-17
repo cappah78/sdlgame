@@ -7,8 +7,8 @@
 #include "Light.h"
 
 const int Shader::IN_POSITION_LOCATION = 0;
-const int Shader::IN_TEXCOORD_LOCATION = 2;
-const int Shader::IN_NORMAL_LOCATION = 1;
+const int Shader::IN_TEXCOORD_LOCATION = 1;
+const int Shader::IN_NORMAL_LOCATION = 2;
 
 const char* Shader::U_MVP_NAME = "u_mvp";
 const char* Shader::U_MV_NAME = "u_mv";

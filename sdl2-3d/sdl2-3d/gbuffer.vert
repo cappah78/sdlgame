@@ -9,21 +9,19 @@ layout(std140) uniform transformBlock {
 uniform mat4 u_mvp;
 
 layout(location = 0) in vec3 in_position;
-layout(location = 1) in vec3 in_normal;
+layout(location = 1) in vec2 in_texCoord;
+layout(location = 2) in vec3 in_normal;
 
-out vec3 vertexPosition;
+out vec2 vertexTexCoord;
 out vec3 vertexNormal;
 
 out gl_PerVertex {
 	vec4 gl_Position;
 };
 
-void main(void) {
-
-	/* pass through world space position */
-	vertexPosition = in_position;
-
-	/* pass through world space normal */
+void main(void)
+{
+	vertexTexCoord = in_texCoord;
 	vertexNormal = in_normal;
 
 	/* transform position into clip space */
