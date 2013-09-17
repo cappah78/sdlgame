@@ -1,21 +1,29 @@
 #ifndef GBUFFER_H_
 #define GBUFFER_H_
 
-typedef unsigned int GLuint;
-typedef int GLint;
+#include "Light.h"
 
 #include <glm/glm.hpp>
+
+typedef int GLint;
+typedef unsigned int GLuint;
 
 class Camera;
 
 class GBuffer
 {
 public:
-	struct Transform {
+	struct CameraTransform {
 		glm::mat4 VPMatrix;
 		glm::mat4 VMatrix;
 		glm::mat4 PMatrix;
 	};
+
+	struct LightData {
+		glm::vec4 position;
+		glm::vec4 color;
+	};
+
 
 	GBuffer();
 	~GBuffer();
@@ -27,13 +35,21 @@ public:
 
 	void use(const Camera& camera);
 	void setupShadows();
-	void renderLights();
+
+	void updateLights(const Camera& camera, LightManager& lightManager);
+
+	static const int MAX_LIGHTS = 10;
 
 private:
 	void setupUniforms();
 
-	Transform transform;			// transformation data
-	GLuint transformUB;				// uniform buffer for the transformation
+	int numLights;
+
+	CameraTransform cameraTransform;			// transformation data
+	GLuint cameraTransformUB;				// uniform buffer for the transformation
+
+	LightData lightData[MAX_LIGHTS];
+	GLuint lightDataUB;
 
 	GLuint GBufferPPL;				// G-Buffer program pipeline
 	GLint u_transformBlockLoc;
@@ -43,7 +59,6 @@ private:
 	GLint u_shadowMapArrayLoc;
 
 	GLuint lightPassPPL;
-	GLuint lightPPL;				// light program pipeline
 
 	GLuint shadowSinglePPL;			// single shadow program pipeline
 	GLint lightIDUniformLoc;		// location of the lightID uniform

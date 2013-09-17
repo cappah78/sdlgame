@@ -64,6 +64,7 @@
     <None Include="light.vert" />
     <None Include="lightpass.frag" />
     <None Include="fullscreenquad.geom" />
+    <None Include="lightpass.geom" />
     <None Include="lightpass.vert" />
     <None Include="shadowmulti.geom" />
     <None Include="shadowmulti.vert" />

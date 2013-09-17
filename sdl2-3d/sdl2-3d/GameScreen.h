@@ -46,6 +46,7 @@ private:
 	//Shader skyBoxShader;
 	//SkyBox skyBox;
 	Shader terrainShader;
+	Shader defaultShader;
 
 	GBuffer gBuffer;
 	LightManager lightManager;

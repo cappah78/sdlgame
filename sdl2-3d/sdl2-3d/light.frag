@@ -1,6 +1,6 @@
 #version 330 core
 
-layout(std140) uniform lightTransform {
+layout(std140) uniform lightView {
 	mat4 VPMatrix[600];
 } LightTransform;
 

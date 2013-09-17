@@ -1,18 +1,18 @@
 #version 330 core
 
-layout(std140) uniform lightTransform {
-	mat4 VPMatrix[600];
-} LightTransform;
-
 struct LightType
 {
 	vec4 position;
 	vec4 color;
 };
 
-layout(std140, binding = 1) uniform lightArray {
+layout(std140) uniform lightArray {
 	LightType light[100];
 } LightArray;
+
+layout(std140) uniform lightTransform {
+	mat4 VPMatrix[600];
+} LightTransform;
 
 layout(triangles, invocations = 10) in;
 layout(triangle_strip, max_vertices = 3) out;

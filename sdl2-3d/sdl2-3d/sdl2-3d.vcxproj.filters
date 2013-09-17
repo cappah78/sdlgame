@@ -262,6 +262,9 @@
     <None Include="fullscreenquad.geom">
       <Filter>data\shaders</Filter>
     </None>
+    <None Include="lightpass.geom">
+      <Filter>data\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">

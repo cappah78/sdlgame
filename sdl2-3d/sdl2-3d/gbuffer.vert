@@ -1,10 +1,10 @@
 #version 330 core
 
-layout(std140) uniform transformBlock {
-	mat4 MVPMatrix;
-	mat4 MVMatrix;
+layout(std140) uniform CameraTransform {
+	mat4 VPMatrix;
+	mat4 VMatrix;
 	mat4 PMatrix;
-} Transform;
+} camera;
 
 uniform mat4 u_mvp;
 
@@ -25,5 +25,5 @@ void main(void)
 	vertexNormal = in_normal;
 
 	/* transform position into clip space */
-	gl_Position = Transform.MVPMatrix * vec4(in_position, 1);
+	gl_Position = camera.VPMatrix * vec4(in_position, 1);
 }

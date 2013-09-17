@@ -6,15 +6,7 @@ layout(std140) uniform lightTransform {
 	mat4 VPMatrix[600];
 } LightTransform;
 
-struct LightType
-{
-	vec4 position;
-	vec4 color;
-};
 
-layout(std140, binding = 1) uniform lightArray {
-	LightType light[100];
-} LightArray;
 
 uniform int lightID;
 

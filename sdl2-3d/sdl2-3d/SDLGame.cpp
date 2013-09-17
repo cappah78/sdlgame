@@ -2,7 +2,8 @@
 
 #include <vector>
 #include <algorithm>
-
+#include <iostream>
+#include <stdio.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "Screen.h"
@@ -19,12 +20,15 @@ SDLGame::SDLGame(SDL_Window* window)
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	initGL();
+
 	mainWindow = window;
 	int width, height;
+
 	SDL_GetWindowSize(window, &width, &height);
 
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 renderCount = 0;
+	float timePassed = 0;
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -36,6 +40,8 @@ SDLGame::SDLGame(SDL_Window* window)
 	SDL_Event event;
 
 	bool mouseCaptured = true;
+
+	char title[20];
 
 	while (true) {
 		while (SDL_PollEvent(&event))
@@ -98,7 +104,18 @@ SDLGame::SDLGame(SDL_Window* window)
 		Uint32 newTime = SDL_GetTicks();
 		float deltaSec = (float) (newTime - startTime) / 1000.0f;
 		startTime = newTime;
+
+		timePassed += deltaSec;
 		renderCount++;
+		if (timePassed >= 1.0f)
+		{
+			itoa(renderCount, title, 10);
+			char str[20] = "FPS: ";
+			std::strcat(str, title);
+			SDL_SetWindowTitle(mainWindow, str);
+			timePassed = 0.0;
+			renderCount = 0;
+		}
 
 		Game::render(deltaSec);
 	}

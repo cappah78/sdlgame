@@ -22,6 +22,7 @@ GameScreen::GameScreen()
 	, cameraController(camera)
 	, heightMap(23, 512, 512)
 	, terrainShader(TERRAIN_VERTEX_SHADER, TERRAIN_FRAGMENT_SHADER)
+	, defaultShader("spritebatch.vert", "spritebatch.frag")
 {
 	SDLGame::registerKeyListener(&cameraController);
 	SDLGame::registerMouseListener(&mouseLookSystem);
@@ -48,6 +49,7 @@ GameScreen::GameScreen()
 	world.registerSystem(mouseLookSystem);
 
 	//EntityFactory::createPlayer(world, 1, 1, 0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 GameScreen::~GameScreen() 
@@ -72,9 +74,12 @@ void GameScreen::render(float deltaSec)
 
 	lightManager.update(camera);
 
+
 	gBuffer.use(camera);
+	//defaultShader.use(camera);
 	texture->bind();
 	terrain->render();
+	gBuffer.updateLights(camera, lightManager);
 	gBuffer.drawBuffer();
 
 	SDLGame::swap();
