@@ -1,13 +1,7 @@
-﻿Build started 17/09/2013 15:23:23.
-     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
-         Creating "Release\sdl2-3d.unsuccessfulbuild" because "AlwaysCreate" was specified.
-       ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GameScreen.cpp
-         GameScreen.cpp
-         All outputs are up-to-date.
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_release-dll_win32" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\sdl2-3d.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 Release\Camera.obj
+﻿Build started 18/09/2013 04:01:05.
+     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_release-dll_win32" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Camera.obj
          Release\ComponentManager.obj
          Release\CubeMap.obj
          Release\DeltaProcessingSystem.obj
@@ -52,13 +46,8 @@
          Generating code
          Finished generating code
          sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
-       Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe;#1" /manifest "Release\sdl2-3d.exe.intermediate.manifest"
-       FinalizeBuildStatus:
-         Deleting file "Release\sdl2-3d.unsuccessfulbuild".
-         Touching "Release\sdl2-3d.lastbuildstate".
-     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.81
+Time Elapsed 00:00:02.99

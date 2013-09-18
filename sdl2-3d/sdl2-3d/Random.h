@@ -2,30 +2,34 @@
 #define RANDOM_H_
 
 #include <random>
+#include <iostream>
+#include <stdio.h>
 
 class Random
 {
 public:
-	Random( int seed, float minVal, float maxVal )
+	Random(int seed, float minVal, float maxVal)
+		: distribution(minVal, maxVal)
     {
-        gen = new Generator( Engine( seed ), Distribution( minVal, maxVal ) );
+		engine.seed(seed);
+		distribution.reset();
     }
  
     ~Random()
     {
-        delete gen;
+
     }
  
     float next()
     {
-        return (*gen)();
+		return distribution(engine);
     }
 private:
-	typedef std::minstd_rand                             Engine;
-	typedef std::uniform_real_distribution<float>        Distribution;
-    typedef std::variate_generator<Engine, Distribution> Generator;
- 
-    Generator* gen;
+	typedef std::tr1::ranlux64_base_01 Engine;
+	typedef std::tr1::uniform_real_distribution<float> Distribution;
+
+	Engine engine;
+	Distribution distribution;
 };
 
 #endif //RANDOM_H_
