@@ -112,6 +112,8 @@ void GBuffer::setupUniforms()
 	u_shadowMapArrayLoc = glGetUniformLocation(lightPassPPL, "u_shadowMapArray");
 	glUniform1i(u_shadowMapArrayLoc, 3);
 
+	u_numLightsLoc = glGetUniformLocation(lightPassPPL, "u_numLights");
+
 	std::cout << "Uniform locs: " << u_colorBufferLoc << ":" << u_normalBufferLoc << ":" << u_depthBufferLoc << std::endl;
 }
 
@@ -222,8 +224,7 @@ void GBuffer::updateLights(const Camera& camera, LightManager& lightManager)
 	{
 		const Light* light = lightObjects.at(i);
 
-		glm::vec4 lightWorldPos( glm::vec4(0, 60, 0, 1));
-		lightWorldPos.w = light->isEnabled;
+		glm::vec4 lightWorldPos(light->position, light->isEnabled);
 
 		lightData[i].color = glm::vec4(light->color, light->linearAttenuation);
 		lightData[i].position = lightWorldPos;
@@ -237,6 +238,11 @@ void GBuffer::updateLights(const Camera& camera, LightManager& lightManager)
 		lightData[i].VPMatrix = projMat * viewMatrix;
 		*/
 	}
+
+	std::cout << "Numlights: " << numLights << std::endl;
+
+	glUseProgram(lightPassPPL);
+	glUniform1i(u_numLightsLoc, numLights);
 
 	glBindBuffer(GL_UNIFORM_BUFFER, lightDataUB);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, numLights * sizeof(LightData), lightData);

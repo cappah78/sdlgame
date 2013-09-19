@@ -9,12 +9,12 @@
 
 LightManager::LightManager()
 {
-	createPointLight(glm::vec3(20, 50, 0), glm::vec3(1.0f, 1.0f, 1.0f), 0.0001f);
+	createPointLight(glm::vec3(0, 50, 0), glm::vec3(1.0f, 1.0f, 1.0f), 0.0001f);
 	
-	createPointLight(glm::vec3(50, 50, 0), glm::vec3(1.0f, 1.0f, 0.2f), 0.0001f);
-	/*
-	createPointLight(glm::vec3(200, -5, 150), glm::vec3(0.2, 0.2f, 1.0f), 0.01f);
+	createPointLight(glm::vec3(200, 50, 0), glm::vec3(1.0f, 0.0f, 0.0f), 0.0001f);
 
+	createPointLight(glm::vec3(0, 50, 200), glm::vec3(0.0, 0.0f, 1.0f), 0.0001f);
+	/*
 	createPointLight(glm::vec3(0, 20, -500), glm::vec3(1, 1, 1), 0.02f);
 	createPointLight(glm::vec3(0, 20, -400), glm::vec3(1, 1, 1), 0.02f);
 	createPointLight(glm::vec3(0, 20, -300), glm::vec3(1, 1, 1), 0.02f);

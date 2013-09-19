@@ -60,6 +60,8 @@ private:
 
 	GLuint lightPassPPL;
 
+	GLint u_numLightsLoc;
+
 	GLuint shadowSinglePPL;			// single shadow program pipeline
 	GLint lightIDUniformLoc;		// location of the lightID uniform
 
