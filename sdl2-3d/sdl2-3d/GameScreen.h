@@ -31,20 +31,17 @@ public:
 
 	void render(float deltaSec);
 	void resize(int width, int height);
-private:
-	int screenWidth;
-	int screenHeight;
 
+private:
 	coment::World world;
+
 	entitysystem::MovementSystem movementSystem;
 	entitysystem::MouseLookSystem mouseLookSystem;
+	entitysystem::FPSCameraController cameraController;
 
 	PerspectiveCamera camera;
-	FPSCameraController cameraController;
 	HeightMap heightMap;
 
-	//Shader skyBoxShader;
-	//SkyBox skyBox;
 	Shader terrainShader;
 	Shader defaultShader;
 
@@ -54,7 +51,5 @@ private:
 	Texture* texture;
 	Terrain* terrain;
 };
-
-
 
 #endif //GAMESCREEN_H_

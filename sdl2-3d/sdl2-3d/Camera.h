@@ -6,7 +6,7 @@
 class Camera
 {
 public:
-	Camera(glm::vec3 position, glm::vec3 direction);
+	Camera(glm::vec3 position, glm::vec3 direction = glm::vec3(0, 0, -1));
 	virtual ~Camera();
 
 	virtual void translate(float x, float y, float z);

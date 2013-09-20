@@ -5,6 +5,7 @@
 
 #include <gl/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm\gtx\transform.hpp>
 
 #include "ShaderManager.h"
 #include "LightManager.h"
@@ -15,8 +16,9 @@ const int SCREEN_HEIGHT = 768;
 
 const int SHADOW_MAP_SIZE = 1024;
 
-const int CAMERA_TRANSFORM_BINDING_POINT = 1;
-const int LIGHT_DATA_BINDING_POINT = 2;
+const int CAMERA_TRANSFORM_BINDING_POINT = 0;
+const int LIGHT_DATA_BINDING_POINT = 1;
+const int LIGHT_TRANSFORM_BINDING_POINT = 2;
 
 #define ARRAY_SIZE_IN_ELEMENTS(a) \
   ((sizeof(a) / sizeof(*(a))) / \
@@ -65,10 +67,12 @@ GBuffer::GBuffer()
 	setupUniforms();
 
 	GLuint lightDataIdx = glGetUniformBlockIndex(lightPassPPL, "LightData");
+	GLuint lightTransformIdx = glGetUniformBlockIndex(lightPassPPL, "LightTransform");
 	GLuint cameraTransformIdx = glGetUniformBlockIndex(lightPassPPL, "CameraTransform");
 	GLuint cameraTransformIdx2 = glGetUniformBlockIndex(GBufferPPL, "CameraTransform");
 
 	glUniformBlockBinding(lightPassPPL, lightDataIdx, LIGHT_DATA_BINDING_POINT);
+	glUniformBlockBinding(lightPassPPL, lightTransformIdx, LIGHT_TRANSFORM_BINDING_POINT);
 	glUniformBlockBinding(lightPassPPL, cameraTransformIdx, CAMERA_TRANSFORM_BINDING_POINT);
 	glUniformBlockBinding(GBufferPPL, cameraTransformIdx2, CAMERA_TRANSFORM_BINDING_POINT);
 
@@ -78,6 +82,11 @@ GBuffer::GBuffer()
 	glBufferData(GL_UNIFORM_BUFFER, MAX_LIGHTS * sizeof(LightData), lightData, GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, lightDataUB);
 
+	glGenBuffers(1, &lightTransformUB);
+	glBindBuffer(GL_UNIFORM_BUFFER, lightTransformUB);
+	glBufferData(GL_UNIFORM_BUFFER, MAX_LIGHTS * sizeof(LightTransform), lightTransforms, GL_STATIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, lightTransformUB);
+
 	glGenBuffers(1, &cameraTransformUB);
 	glBindBuffer(GL_UNIFORM_BUFFER, cameraTransformUB);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(CameraTransform), &cameraTransform, GL_STATIC_DRAW);
@@ -85,6 +94,7 @@ GBuffer::GBuffer()
 
 	std::cout << "block bindings:" << std::endl;
 	std::cout << lightDataIdx << std::endl;
+	std::cout << lightTransformIdx << std::endl;
 	std::cout << cameraTransformIdx << std::endl;
 	std::cout << cameraTransformIdx2 << std::endl;
 }
@@ -98,6 +108,7 @@ void GBuffer::loadShaders()
 {
 	GBufferPPL = ShaderManager::createShaderProgram("gbuffer.vert", 0, "gbuffer.frag");
 	lightPassPPL = ShaderManager::createShaderProgram("lightpass.vert", "lightpass.geom", "lightpass.frag");
+	shadowMultiPPL = ShaderManager::createShaderProgram("shadowmulti.vert", "shadowmulti.geom", 0);
 }
 
 void GBuffer::setupUniforms()
@@ -132,7 +143,7 @@ void GBuffer::setupGBuffer()
 	// create normal buffer
 	glGenTextures(1, &normalGBT);
 	glBindTexture(GL_TEXTURE_2D, normalGBT);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -141,7 +152,7 @@ void GBuffer::setupGBuffer()
 	// create depth buffer
 	glGenTextures(1, &depthGBT);
 	glBindTexture(GL_TEXTURE_2D, depthGBT);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
 			GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -155,12 +166,19 @@ void GBuffer::setupGBuffer()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalGBT, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthGBT, 0);
 
+	const GLenum buffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, buffers);
+
+	CHECK_FRAMEBUFFER_STATUS();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
 	// create shadow map texture cube array
 	glGenTextures(1, &shadowArrayTex);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, shadowArrayTex);
-	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT16,
+	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT32F,
 		SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, MAX_LIGHTS,
-				0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -168,9 +186,11 @@ void GBuffer::setupGBuffer()
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 
-	const GLenum buffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-	glDrawBuffers(2, buffers);
-
+	// create shadow rendering framebuffer
+	glGenFramebuffers(1, &shadowFB);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFB);
+	glDrawBuffer(GL_NONE);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadowArrayTex, 0);
 	CHECK_FRAMEBUFFER_STATUS();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -190,15 +210,19 @@ void GBuffer::use(const Camera& camera)
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 }
 
 void GBuffer::drawBuffer()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
-
 	glUseProgram(lightPassPPL);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_ONE, GL_ONE);
+	glEnable(GL_BLEND);
+	glClear(GL_COLOR_BUFFER_BIT);
 		
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorGBT);
@@ -209,37 +233,29 @@ void GBuffer::drawBuffer()
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, shadowArrayTex);
 
-	glDrawArraysInstanced(GL_POINTS, 0, 1, MAX_LIGHTS);
+	glDrawArraysInstanced(GL_POINTS, 0, 1, numLights);
 }
 
 void GBuffer::updateLights(const Camera& camera, LightManager& lightManager)
 {
 	std::vector<const Light*> lightObjects = lightManager.getLights();
 	numLights = MAX_LIGHTS < lightObjects.size() ? MAX_LIGHTS : lightObjects.size();
-	//glm::mat4 projMat = glm::perspective(90.0f, 1.0f, 0.01f, 40.0f);
 
-	float angle = 50;
+	glm::mat4 lightProjMat(glm::frustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 300.0f));
 
-	for (int i = 0; i < numLights; ++i)
+	for (int i = 0; i < numLights; ++i) 
 	{
 		const Light* light = lightObjects.at(i);
+		LightData& data = lightData[i];
+		data.position = glm::vec4(light->position, light->isEnabled ? light->spotRadius : 1.0);
+		data.color = glm::vec4(light->color, light->linearAttenuation);
+		data.direction = glm::vec4(light->direction, light->spotDropoff);
 
-		glm::vec4 lightWorldPos(light->position, light->isEnabled);
-
-		lightData[i].color = glm::vec4(light->color, light->linearAttenuation);
-		lightData[i].position = lightWorldPos;
-		/*
-		glm::mat4 viewMatrix = glm::lookAt(
-			light->position,
-			glm::vec3(0, 0, 1),
-			glm::vec3(0, 1, 0)
-		);
-
-		lightData[i].VPMatrix = projMat * viewMatrix;
-		*/
+		glm::mat4 lightViewMat = glm::lookAt(light->position, light->position + light->direction, glm::vec3(0, 1, 0));
+		lightTransforms[i].VPMatrix = lightProjMat * lightViewMat;
 	}
 
-	std::cout << "Numlights: " << numLights << std::endl;
+	std::cout << camera.position.x << ":" << camera.position.y << ":" << camera.position.z << std::endl;
 
 	glUseProgram(lightPassPPL);
 	glUniform1i(u_numLightsLoc, numLights);
@@ -247,4 +263,17 @@ void GBuffer::updateLights(const Camera& camera, LightManager& lightManager)
 	glBindBuffer(GL_UNIFORM_BUFFER, lightDataUB);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, numLights * sizeof(LightData), lightData);
 	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, lightDataUB);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, lightTransformUB);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, numLights * sizeof(LightTransform), lightTransforms);
+	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, lightTransformUB);
+}
+
+void GBuffer::setupShadows()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFB);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, shadowArrayTex, 0);
+	glUseProgram(shadowMultiPPL);
+	glViewport(0, 0, SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
+	glClear(GL_DEPTH_BUFFER_BIT);
 }

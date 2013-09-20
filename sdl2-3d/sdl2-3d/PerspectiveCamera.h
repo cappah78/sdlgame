@@ -6,7 +6,7 @@
 class PerspectiveCamera : public Camera
 {
 public:
-	PerspectiveCamera(glm::vec3 position, glm::vec3 direction);
+	PerspectiveCamera(glm::vec3 position, glm::vec3 direction = glm::vec3(0, 0, -1));
 	~PerspectiveCamera();
 
 	void resize(int width, int height);

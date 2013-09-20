@@ -1,12 +1,10 @@
 #version 330 core
 
-layout(location = 0) in vec3 inVertexPosition;
+layout(location = 0) in vec3 in_vertexPosition;
 
-layout(location = 0) out vec3 outVertexPosition;
+out vec3 vertexPosition;
 
-void main(void) {
-
-	/* pass through vertex position */
-	outVertexPosition = inVertexPosition;
-
+void main(void) 
+{
+	vertexPosition = in_vertexPosition;
 }

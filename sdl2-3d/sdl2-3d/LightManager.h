@@ -17,7 +17,7 @@ public:
 
 	void update(const Camera& camera);
 	std::vector<const Light*>& getLights();
-	Light* createPointLight(glm::vec3& position, glm::vec3& color, float linearAttenuation);
+	Light* createPointLight(glm::vec3& position, glm::vec3& direction, glm::vec3& color, float linearAttenuation, float spotRadius, float spotExponent);
 
 private:
 	void sortLights(const Camera& camera);

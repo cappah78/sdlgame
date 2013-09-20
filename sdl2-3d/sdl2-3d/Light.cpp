@@ -2,10 +2,13 @@
 
 const unsigned int DEPTH_TEXTURE_SIZE = 512;
 
-Light::Light(glm::vec3 position_, glm::vec3 color_, float linearAttenuation_)
+Light::Light(glm::vec3 position_, glm::vec3 direction_, glm::vec3 color_, float linearAttenuation_, float spotRadius_, float spotDropoff_)
 	: position(position_)
 	, color(color_)
+	, direction(direction_)
 	, linearAttenuation(linearAttenuation_)
+	, spotRadius(spotRadius_)
+	, spotDropoff(spotDropoff_)
 	, isEnabled(true)
 {
 	

@@ -11,11 +11,15 @@ static const glm::vec3 UP(0, 1, 0);
 
 namespace entitysystem
 {
-	MouseLookSystem::MouseLookSystem()
+	MouseLookSystem::MouseLookSystem(glm::vec3 lookDir_)
 		: lmbPressed(false)
 		, rmbPressed(false)
-		, lookDir(0, 0, -1)
+		, lookDir(glm::normalize(lookDir_))
 	{
+		if (lookDir.y > 0.99f)
+			lookDir.y = 0.95f;
+		if(lookDir.y < -0.99f)
+			lookDir.y = -0.95f;
 	}
 
 	void MouseLookSystem::registerComponents()
@@ -61,7 +65,7 @@ namespace entitysystem
 
 			//rotate vertically
 			glm::vec3 tmp = lookDir;
-			lookDir = glm::rotate(lookDir, yMove * MOUSELOOK_SENSITIVITY, yRotAxis);
+			lookDir = glm::rotate(lookDir, -yMove * MOUSELOOK_SENSITIVITY, yRotAxis);
 			//limit vertical look movement
 			if (lookDir.y > 0.99f || lookDir.y < -0.99f)
 				lookDir = tmp;

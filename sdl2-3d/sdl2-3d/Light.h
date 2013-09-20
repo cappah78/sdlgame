@@ -10,7 +10,11 @@ class Light
 public:
 	glm::vec3 position;
 	glm::vec3 color;
+	glm::vec3 direction;
+
+	float spotRadius;
 	float linearAttenuation;
+	float spotDropoff;
 	bool isEnabled;
 
 	void setEnabled(bool enabled);
@@ -18,7 +22,7 @@ public:
 	void setColor(glm::vec3 color);
 	void setLinearAttenuation(float att);
 private:
-	Light(glm::vec3 position, glm::vec3 color, float linearAttenuation);
+	Light(glm::vec3 position, glm::vec3 direction, glm::vec3 color, float linearAttenuation, float spotRadius, float spotDropoff);
 	~Light();
 };
 

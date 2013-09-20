@@ -23,6 +23,7 @@ Camera::~Camera()
 
 }
 
+
 void Camera::translate(float x, float y, float z)
 {
 	position.x += x;
@@ -36,7 +37,7 @@ void Camera::translateRelative(float x, float y, float z)
 	float xTrans = x * math::cos(angle) + z * math::sin(angle);
 	float zTrans = z * math::cos(angle) - x * math::sin(angle);
 
-	translate(xTrans, y, zTrans);
+	translate(-xTrans, y, -zTrans);
 }
 
 float Camera::getX()
@@ -94,18 +95,18 @@ void Camera::rotate(float angleRad, glm::vec3 axis)
 void Camera::rotateRelative(float xRot, float yRot)
 {
 	//rotate x component
-	rotate(-xRot, UP);
+	rotate(xRot, UP);
 
 	//rotate y component
 	float angle = getRotationRadXZ();
-	rotate(yRot, glm::vec3(-math::cos(angle), 0.0f, math::sin(angle)));
+	rotate(yRot, glm::vec3(math::cos(angle), 0.0f, math::sin(angle)));
 }
 
 void Camera::update()
 {
 	viewMatrix = glm::lookAt(
 		position,
-		position - direction,
+		position + direction,
 		up
 	);
 	combinedMatrix = projectionMatrix * viewMatrix;

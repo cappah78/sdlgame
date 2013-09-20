@@ -1,4 +1,5 @@
 #version 330 core
+#extension GL_ARB_gpu_shader5 : enable
 
 struct LightType
 {
@@ -6,36 +7,32 @@ struct LightType
 	vec4 color;
 };
 
-layout(std140) uniform lightArray {
+layout(std140) uniform LightData {
 	LightType light[100];
-} LightArray;
+} lightData;
 
-layout(std140) uniform lightTransform {
+layout(std140) uniform LightTransform {
 	mat4 VPMatrix[600];
-} LightTransform;
+} lightTransforms;
 
 layout(triangles, invocations = 10) in;
 layout(triangle_strip, max_vertices = 3) out;
 
-layout(location = 0) in vec3 outVertexPosition[];
+in vec3 vertexPosition[];
 
-out gl_PerVertex {
-	vec4 gl_Position;
-};
+void main() 
+{
+	vec3 normal = cross(vertexPosition[2]-vertexPosition[0], vertexPosition[0]-vertexPosition[1]);
+	vec3 light = vec3(lightData.light[gl_InvocationID].position) - vertexPosition[0];
 
-void main() {
-
-	vec3 normal = cross(outVertexPosition[2]-outVertexPosition[0], outVertexPosition[0]-outVertexPosition[1]);
-	vec3 light = vec3(LightArray.light[gl_InvocationID].position) - outVertexPosition[0];
-
-	if (dot(normal, light) > 0.f) {
-
-		for (int i=0; i<3; ++i) {
-			gl_Position = LightTransform.VPMatrix[gl_InvocationID] * vec4(outVertexPosition[i], 1.f);
+	if (dot(normal, light) > 0.f) 
+	{
+		for (int i=0; i<3; ++i) 
+		{
+			gl_Position = lightTransforms.VPMatrix[gl_InvocationID] * vec4(vertexPosition[i], 1.f);
 			gl_Layer = gl_InvocationID;
 			EmitVertex();
 		}
 		EndPrimitive();
-
 	}
 }

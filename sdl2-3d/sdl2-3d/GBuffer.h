@@ -21,7 +21,12 @@ public:
 
 	struct LightData {
 		glm::vec4 position;
+		glm::vec4 direction;
 		glm::vec4 color;
+	};
+
+	struct LightTransform {
+		glm::mat4 VPMatrix;;
 	};
 
 
@@ -50,6 +55,9 @@ private:
 
 	LightData lightData[MAX_LIGHTS];
 	GLuint lightDataUB;
+
+	LightTransform lightTransforms[MAX_LIGHTS];
+	GLuint lightTransformUB;
 
 	GLuint GBufferPPL;				// G-Buffer program pipeline
 	GLint u_transformBlockLoc;

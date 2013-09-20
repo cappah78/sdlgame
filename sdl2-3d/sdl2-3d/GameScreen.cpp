@@ -17,8 +17,9 @@
 #define SKYBOX_VERTEX_SHADER "skybox.vert"
 #define SKYBOX_FRAGMENT_SHADER "skybox.frag"
 
-GameScreen::GameScreen() 
-	: camera(glm::vec3(0, 60, 0), glm::vec3(0, 0, -1))
+GameScreen::GameScreen()
+	: mouseLookSystem(glm::vec3(0, 0, -1.0))
+	, camera(glm::vec3(0, 60, 0))
 	, cameraController(camera)
 	, heightMap(23, 512, 512)
 	, terrainShader(TERRAIN_VERTEX_SHADER, TERRAIN_FRAGMENT_SHADER)
@@ -47,6 +48,7 @@ GameScreen::GameScreen()
 
 	world.registerSystem(movementSystem);
 	world.registerSystem(mouseLookSystem);
+	world.registerSystem(cameraController);
 
 	//EntityFactory::createPlayer(world, 1, 1, 0);
 	glEnable(GL_DEPTH_TEST);
@@ -68,18 +70,17 @@ void GameScreen::render(float deltaSec)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	cameraController.update(deltaSec);
 	camera.lookAtDir(mouseLookSystem.getLookDir());
 	camera.update();
 
 	lightManager.update(camera);
 
-
 	gBuffer.use(camera);
-	//defaultShader.use(camera);
 	texture->bind();
 	terrain->render();
 	gBuffer.updateLights(camera, lightManager);
+	gBuffer.setupShadows();
+	terrain->render();
 	gBuffer.drawBuffer();
 
 	SDLGame::swap();
