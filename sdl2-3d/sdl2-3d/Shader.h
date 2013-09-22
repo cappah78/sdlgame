@@ -10,16 +10,16 @@ public:
 	Shader(const char* vertexShaderFileName, const char* fragmentShaderFileName);
 	~Shader();
 
-	static const int IN_POSITION_LOCATION;
-	static const int IN_TEXCOORD_LOCATION;
-	static const int IN_NORMAL_LOCATION;
-	static const char* U_MVP_NAME;
-	static const char* U_MV_NAME;
+	static const int IN_POSITION_LOC;
+	static const int IN_TEXCOORD_LOC;
+	static const int IN_NORMAL_LOC;
+	static const char* MVP_LOC;
+	static const char* MV_LOC;
 
-	GLuint shaderId;
+	GLuint m_shaderId;
 
-	GLuint u_mvp;
-	GLuint u_mv;
+	GLuint m_mvpLoc;
+	GLuint m_mvLoc;
 
 	void use(const Camera& camera);
 private:

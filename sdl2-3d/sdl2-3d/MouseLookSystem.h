@@ -12,7 +12,7 @@ namespace entitysystem
 	class MouseLookSystem : public DeltaProcessingSystem, public MouseListener
 	{
 	public:
-		MouseLookSystem(glm::vec3 lookDir = glm::vec3(0, 0, -1));
+		MouseLookSystem(glm::vec3 lookDir = glm::vec3(0, 0, 1));
 
 		void registerComponents();
 		virtual void process(const coment::Entity& e);
@@ -23,14 +23,13 @@ namespace entitysystem
 
 		glm::vec3 getLookDir()
 		{
-			return lookDir;
+			return m_lookDir;
 		};
 
 	private:
-		bool
-			lmbPressed,
-			rmbPressed;
-		glm::vec3 lookDir;
+		bool m_lmbPressed;
+		bool m_rmbPressed;
+		glm::vec3 m_lookDir;
 	};
 }
 

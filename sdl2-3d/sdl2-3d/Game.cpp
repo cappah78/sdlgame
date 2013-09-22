@@ -10,13 +10,13 @@ Game::~Game()
 }
 
 void Game::render(float deltaSec) {
-	if(screen != 0) {
-		screen->render(deltaSec);
+	if(m_screen != 0) {
+		m_screen->render(deltaSec);
 	}
 }
 
 void Game::resize(int width, int height) {
-	if(screen != 0) {
-		screen->resize(width, height);
+	if(m_screen != 0) {
+		m_screen->resize(width, height);
 	}
 }

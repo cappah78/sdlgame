@@ -25,7 +25,7 @@ namespace entitysystem
 		void processEntities(std::vector<coment::Entity>& entities);
 
 	protected:
-		float delta;
+		float m_delta;
 	};
 };
 

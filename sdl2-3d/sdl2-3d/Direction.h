@@ -1,5 +1,5 @@
-#ifndef DIRECTION_H_
-#define DIRECTION_H_
+#ifndef m_directionH_
+#define m_directionH_
 
 #include "coment\Component.h"
 #include <glm\glm.hpp>
@@ -14,4 +14,4 @@ namespace component
 	};
 }
 
-#endif //DIRECTION_H_
+#endif //m_directionH_

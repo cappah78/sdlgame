@@ -22,8 +22,8 @@ private:
 	float smooth(float x);
 
 
-	Random random;
-	float gradients[GRADIENTS_TABLE_SIZE * 3];
+	Random m_random;
+	float m_gradients[GRADIENTS_TABLE_SIZE * 3];
 };
 
 #endif //PERLINGENERATOR_H_

@@ -29,15 +29,15 @@
 using namespace std;
 
 #define ZERO_MEM(a) memset(a, 0, sizeof(a))
-#define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
+#define ARRAY_m_sizeIN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
 #define SAFE_DELETE(p) if (p) { delete p; p = NULL; }
 #define GLCheckError() (glGetError() == GL_NO_ERROR)
 
-#define POSITION_LOCATION 0
+#define m_positionLOCATION 0
 #define TEX_COORD_LOCATION 1
 #define NORMAL_LOCATION 2
 #define WVP_LOCATION 3
-#define WORLD_LOCATION 7
+#define m_worldLOCATION 7
 
 Mesh::Mesh()
 {
@@ -66,7 +66,7 @@ void Mesh::clear()
     }
 
     if (m_Buffers[0] != 0) {
-        glDeleteBuffers(ARRAY_SIZE_IN_ELEMENTS(m_Buffers), m_Buffers);
+        glDeleteBuffers(ARRAY_m_sizeIN_ELEMENTS(m_Buffers), m_Buffers);
     }
        
     if (m_VAO != 0) {
@@ -86,7 +86,7 @@ bool Mesh::loadMesh(const string& Filename)
     glBindVertexArray(m_VAO);
     
     // Create the buffers for the vertices attributes
-    glGenBuffers(ARRAY_SIZE_IN_ELEMENTS(m_Buffers), m_Buffers);
+    glGenBuffers(ARRAY_m_sizeIN_ELEMENTS(m_Buffers), m_Buffers);
 
     bool Ret = false;
 
@@ -149,8 +149,8 @@ bool Mesh::initFromScene(const aiScene* pScene, const string& Filename)
     // Generate and populate the buffers with vertex attributes and the indices
   	glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[POS_VB]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Positions[0]) * Positions.size(), &Positions[0], GL_STATIC_DRAW);
-    glEnableVertexAttribArray(POSITION_LOCATION);
-    glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);    
+    glEnableVertexAttribArray(m_positionLOCATION);
+    glVertexAttribPointer(m_positionLOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);    
 
     glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[TEXCOORD_VB]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(TexCoords[0]) * TexCoords.size(), &TexCoords[0], GL_STATIC_DRAW);
@@ -173,12 +173,12 @@ bool Mesh::initFromScene(const aiScene* pScene, const string& Filename)
         glVertexAttribDivisor(WVP_LOCATION + i, 1);
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[WORLD_MAT_VB]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[m_worldMAT_VB]);
 
     for (unsigned int i = 0; i < 4 ; i++) {
-        glEnableVertexAttribArray(WORLD_LOCATION + i);
-        glVertexAttribPointer(WORLD_LOCATION + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
-        glVertexAttribDivisor(WORLD_LOCATION + i, 1);
+        glEnableVertexAttribArray(m_worldLOCATION + i);
+        glVertexAttribPointer(m_worldLOCATION + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
+        glVertexAttribDivisor(m_worldLOCATION + i, 1);
     }
     
     return GLCheckError();
@@ -297,7 +297,7 @@ void Mesh::render(unsigned int NumInstances, const glm::mat4* WVPMats, const glm
     glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[WVP_MAT_VB]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * NumInstances, WVPMats, GL_DYNAMIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[WORLD_MAT_VB]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[m_worldMAT_VB]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * NumInstances, WorldMats, GL_DYNAMIC_DRAW);
 
     glBindVertexArray(m_VAO);

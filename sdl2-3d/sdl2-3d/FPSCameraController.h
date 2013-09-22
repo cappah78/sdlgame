@@ -24,16 +24,16 @@ namespace entitysystem
 		bool mouseUp(Uint8 key, int xPos, int yPos);
 		bool mouseMoved(int xPos, int yPos, int xMove, int yMove);
 	private:
-		PerspectiveCamera& camera;
-		bool lmbPressed, rmbPressed;
+		PerspectiveCamera& m_camera;
+		bool m_lmbPressed, m_rmbPressed;
 
 		bool
-			isWPressed,
-			isAPressed,
-			isSPressed,
-			isDPressed,
-			isSpacePressed,
-			isShiftPressed;
+			m_isWPressed,
+			m_isAPressed,
+			m_isSPressed,
+			m_isDPressed,
+			m_isSpacePressed,
+			m_isShiftPressed;
 	};
 }
 #endif //FPSCAMERACONTROLLER_H_

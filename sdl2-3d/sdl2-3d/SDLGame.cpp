@@ -49,7 +49,7 @@ SDLGame::SDLGame(SDL_Window* window)
 			switch(event.type)
 			{
 			case SDL_MOUSEMOTION:
-				for (auto i = mouseListeners.begin(); i != mouseListeners.end(); i++)
+				for (auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
 					if ((*i)->mouseMoved(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel))
 						break;
 				break;
@@ -60,17 +60,17 @@ SDLGame::SDLGame(SDL_Window* window)
 					SDL_SetRelativeMouseMode(SDL_TRUE);
 				}
 
-				for(auto i = mouseListeners.begin(); i != mouseListeners.end(); i++)
+				for(auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
 					if ((*i)->mouseDown(event.button.button, event.button.x, event.button.y))
 						break;
 				break;
 			case SDL_MOUSEBUTTONUP:
-				for(auto i = mouseListeners.begin(); i != mouseListeners.end(); i++)
+				for(auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
 					if ((*i)->mouseUp(event.button.button, event.button.x, event.button.y))
 						break;
 				break;
 			case SDL_MOUSEWHEEL:
-				for(auto i = mouseListeners.begin(); i != mouseListeners.end(); i++)
+				for(auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
 					if ((*i)->mouseScrolled(event.wheel.y))
 						break;
 
@@ -85,12 +85,12 @@ SDLGame::SDLGame(SDL_Window* window)
 					else goto exit_loop;
 				}
 
-				for(auto i = keyListeners.begin(); i != keyListeners.end(); i++)
+				for(auto i = m_keyListeners.begin(); i != m_keyListeners.end(); i++)
 					if ((*i)->keyDown(event.key.keysym))
 						break;
 				break;
 			case SDL_KEYUP:
-				for(auto i = keyListeners.begin(); i != keyListeners.end(); i++)
+				for(auto i = m_keyListeners.begin(); i != m_keyListeners.end(); i++)
 					if ((*i)->keyUp(event.key.keysym))
 						break;
 				break;
@@ -150,22 +150,22 @@ void SDLGame::swap()
 
 void SDLGame::registerKeyListener(KeyListener* listener)
 {
-	SDLGame::instance->keyListeners.push_back(listener);
+	SDLGame::instance->m_keyListeners.push_back(listener);
 }
 
 void SDLGame::registerMouseListener(MouseListener* listener)
 {
-	SDLGame::instance->mouseListeners.push_back(listener);
+	SDLGame::instance->m_mouseListeners.push_back(listener);
 }
 
 void SDLGame::unregisterKeyListener(KeyListener* listener)
 {
-	std::vector<KeyListener*>* list = &SDLGame::instance->keyListeners;
+	std::vector<KeyListener*>* list = &SDLGame::instance->m_keyListeners;
 	list->erase(std::remove(list->begin(), list->end(), listener), list->end());
 }
 
 void SDLGame::unregisterMouseListener(MouseListener* listener)
 {
-	std::vector<MouseListener*>* list = &SDLGame::instance->mouseListeners;
+	std::vector<MouseListener*>* list = &SDLGame::instance->m_mouseListeners;
 	list->erase(std::remove(list->begin(), list->end(), listener), list->end());
 }

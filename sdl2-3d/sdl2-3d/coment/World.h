@@ -26,7 +26,6 @@ namespace coment
 	public:
 		// Constructor - initialises managers and registers them
 		World();
-		~World();
 
 		/* Entity functions */
 		// Create a new entity

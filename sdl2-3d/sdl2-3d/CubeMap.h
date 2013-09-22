@@ -1,5 +1,5 @@
-#ifndef CUBEMAP_H_
-#define CUBEMAP_H_
+#ifndef CUBE_MAP_H
+#define CUBE_MAP_H
 
 #include <string>
 
@@ -17,7 +17,8 @@ public:
 	void bind(GLenum textureUnit);
 private:
 	CubeMap(GLuint texture);
-	GLuint texture;
+
+	GLuint m_texture;
 };
 
-#endif //CUBEMAP_H_
+#endif //CUBE_MAP_H

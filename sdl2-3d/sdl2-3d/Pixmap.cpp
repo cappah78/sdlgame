@@ -4,10 +4,10 @@
 
 Pixmap::Pixmap(const char* fileName)
 {
-	data = stbi_load(fileName, &width, &height, &numComponents, 0);
+	m_data = stbi_load(fileName, &m_width, &m_height, &m_numComponents, 0);
 }
 
 Pixmap::~Pixmap()
 {
-	delete data;
+	delete m_data;
 }

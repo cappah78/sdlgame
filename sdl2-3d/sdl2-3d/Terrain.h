@@ -1,22 +1,17 @@
 #ifndef TERRAIN_H_
 #define TERRAIN_H_
 
-#include "KeyListener.h"
-
 #include <glm\glm.hpp>
 
 typedef unsigned int GLuint;
 
 class HeightMap;
 
-class Terrain : public KeyListener
+class Terrain
 {
 public:
 	Terrain(HeightMap& heightMap, float scale, float heightScale);
 	~Terrain();
-
-	bool keyDown(SDL_Keysym key);
-	bool keyUp(SDL_Keysym key) { return false; };
 
 	void render();
 	float getHeightAt(const glm::vec3& position);
@@ -26,34 +21,34 @@ private:
 	void generateVertices(HeightMap& heightMap);
 	void generateNormals();
 
-	unsigned int width;
-	unsigned int height;
-	float scale;
-	float heightScale;
+	unsigned int m_width;
+	unsigned int m_height;
+	float m_scale;
+	float m_heightScale;
 
-	unsigned int numVertices;
-	unsigned int numIndices;
-	unsigned int numLights;
+	unsigned int m_numVertices;
+	unsigned int m_numIndices;
+	unsigned int m_numLights;
 
-	GLuint vao;
+	GLuint m_vao;
 
-	glm::vec3 lightPos;
-	bool followCam;
+	glm::vec3 m_lightPos;
+	bool m_followCam;
 
-	GLuint shininess;
-	GLuint strength;
-	GLuint eyeDirection;
+	GLuint m_shininess;
+	GLuint m_strength;
+	GLuint m_eyeDirection;
 
 	//buffers
-	GLuint indexBuffer;
-	GLuint positionBuffer;
-	GLuint texCoordBuffer;
-	GLuint normalBuffer;
+	GLuint m_indexBuffer;
+	GLuint m_positionBuffer;
+	GLuint m_texCoordBuffer;
+	GLuint m_normalBuffer;
 
-	GLuint* indices;
-	glm::vec3* positions;
-	glm::vec2* texCoords;
-	glm::vec3* normals;
+	GLuint* m_indices;
+	glm::vec3* m_positions;
+	glm::vec2* m_texCoords;
+	glm::vec3* m_normals;
 };
 
 #endif //TERRAIN_H_

@@ -7,66 +7,66 @@
 #include <gl\glew.h>
 
 Texture::Texture(Pixmap& pixmap)
-	: width(pixmap.width)
-	, height(pixmap.height)
-	, numComponents(pixmap.numComponents)
+	: m_width(pixmap.m_width)
+	, m_height(pixmap.m_height)
+	, m_numComponents(pixmap.m_numComponents)
 {
 	setupGLTexture(pixmap);
 }
 
-Texture::Texture(Pixmap& pixmap, GLuint& textureID_)
-	: width(pixmap.width)
-	, height(pixmap.height)
-	, numComponents(pixmap.numComponents)
+Texture::Texture(Pixmap& pixmap, GLuint& textureID)
+	: m_width(pixmap.m_width)
+	, m_height(pixmap.m_height)
+	, m_numComponents(pixmap.m_numComponents)
 {
 	setupGLTexture(pixmap);
-	textureID_ = textureID;
+	m_textureID = textureID;
 }
 
 Texture::Texture(const char* fileName)
 {
 	Pixmap p(fileName);
-	width = p.width;
-	height = p.height;
-	numComponents = p.numComponents;
+	m_width = p.m_width;
+	m_height = p.m_height;
+	m_numComponents = p.m_numComponents;
 	setupGLTexture(p);
 }
 
-Texture::Texture(const char* fileName, GLuint& textureID_)
+Texture::Texture(const char* fileName, GLuint& textureID)
 {
 	Pixmap p(fileName);
-	width = p.width;
-	height = p.height;
-	numComponents = p.numComponents;
+	m_width = p.m_width;
+	m_height = p.m_height;
+	m_numComponents = p.m_numComponents;
 	setupGLTexture(p);
-	textureID_ = textureID;
+	m_textureID = textureID;
 }
 
 Texture::~Texture()
 {
-	glDeleteTextures(1, &textureID);
+	glDeleteTextures(1, &m_textureID);
 }
 
 void Texture::bind()
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
 void Texture::bind(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
 void Texture::setupGLTexture(Pixmap& pixmap)
 {
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glGenTextures(1, &m_textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
  
 	GLint internalFormat;
 	GLenum format = GL_RGB;
-	switch (pixmap.numComponents)
+	switch (pixmap.m_numComponents)
 	{
 	case 1: internalFormat = GL_R;
 		break;
@@ -79,13 +79,13 @@ void Texture::setupGLTexture(Pixmap& pixmap)
 		break;
 	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, pixmap.data);
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, pixmap.m_data);
  
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

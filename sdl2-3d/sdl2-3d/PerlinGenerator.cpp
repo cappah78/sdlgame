@@ -26,7 +26,7 @@ const unsigned char perm[256] =  {
 };
 
 PerlinGenerator::PerlinGenerator(int seed)
-	: random(seed, 0, 1)
+	: m_random(seed, 0, 1)
 {
 	initGradients();
 }
@@ -79,13 +79,13 @@ void PerlinGenerator::initGradients()
 {
 	for (int i = 0; i < GRADIENTS_TABLE_SIZE; i++)
 	{
-		float z = 1.0f - 2.0f * random.next();
+		float z = 1.0f - 2.0f * m_random.next();
 		float r = sqrt(1.0f - z * z);
-		float theta = 2 * 3.1415926535f * random.next();
+		float theta = 2 * 3.1415926535f * m_random.next();
 
-		gradients[i * 3] = r * math::cos(theta);
-		gradients[i * 3 + 1] = r * math::sin(theta);
-		gradients[i * 3 + 2] = z;
+		m_gradients[i * 3] = r * math::cos(theta);
+		m_gradients[i * 3 + 1] = r * math::sin(theta);
+		m_gradients[i * 3 + 2] = z;
 	}
 }
 
@@ -104,7 +104,7 @@ float PerlinGenerator::lattice(int ix, int iy, int iz, float fx, float fy, float
 {
 	int idx = index(ix, iy, iz);
 	int g = idx * 3;
-	return gradients[g] * fx + gradients[g + 1] * fy + gradients[g + 2] * fz;
+	return m_gradients[g] * fx + m_gradients[g + 1] * fy + m_gradients[g + 2] * fz;
 }
 
 float PerlinGenerator::lerp(float t, float val0, float val1)

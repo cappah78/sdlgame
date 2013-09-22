@@ -7,12 +7,12 @@ typedef float GLfloat;
 struct TextureRegion
 {
 	TextureRegion(Texture& texture, GLfloat u, GLfloat v, GLfloat u2, GLfloat v2)
-		: texture(texture)
+		: m_texture(texture)
 		, u(u)
 		, v(v)
 		, u2(u2)
 		, v2(v2) {};
-	Texture& texture;
+	Texture& m_texture;
 	GLfloat u;
 	GLfloat v;
 	GLfloat u2;

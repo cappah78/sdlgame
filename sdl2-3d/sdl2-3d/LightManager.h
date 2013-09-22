@@ -1,5 +1,5 @@
-#ifndef LIGHTMANAGER_H_
-#define LIGHTMANAGER_H_
+#ifndef LIGHT_MANAGER_H_
+#define LIGHT_MANAGER_H_
 
 #include <vector>
 #include <glm/glm.hpp>
@@ -16,13 +16,13 @@ public:
 	~LightManager();
 
 	void update(const Camera& camera);
-	std::vector<const Light*>& getLights();
+	std::vector<Light*>& getLights();
 	Light* createPointLight(glm::vec3& position, glm::vec3& direction, glm::vec3& color, float linearAttenuation, float spotRadius, float spotExponent);
 
 private:
 	void sortLights(const Camera& camera);
 
-	std::vector<const Light*> lightObjects;
+	std::vector<Light*> m_lightObjects;
 };
 
-#endif //LIGHTMANAGER_H_
+#endif //LIGHT_MANAGER_H_

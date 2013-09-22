@@ -10,18 +10,18 @@ public:
 	virtual void render(float deltaSec);
 	virtual void resize(int width, int height);
 
-	void setScreen(Screen* screen_) 
+	void setScreen(Screen* screen) 
 	{
-		screen = screen_;
+		m_screen = screen;
 	}
 
 	const Screen *getScreen() 
 	{
-		return screen;
+		return m_screen;
 	}
 
 private:
-	Screen* screen;
+	Screen* m_screen;
 };
 
 #endif //GAME_H_

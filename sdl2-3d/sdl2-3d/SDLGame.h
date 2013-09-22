@@ -31,8 +31,8 @@ public:
 private:
 	void initGL();
 
-	std::vector<KeyListener*> keyListeners;
-	std::vector<MouseListener*> mouseListeners;
+	std::vector<KeyListener*> m_keyListeners;
+	std::vector<MouseListener*> m_mouseListeners;
 };
 
 #endif //SDLGAME_H_

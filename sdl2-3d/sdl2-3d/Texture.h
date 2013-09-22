@@ -12,8 +12,8 @@ class Texture
 public:
 	Texture(Pixmap& pixmap);
 	Texture(const char* fileName);
-	Texture(Pixmap& pixmap, GLuint& textureID_);
-	Texture(const char* fileName, GLuint& textureID_);
+	Texture(Pixmap& pixmap, GLuint& textureID);
+	Texture(const char* fileName, GLuint& textureID);
 	~Texture();
 
 	void bind();
@@ -21,29 +21,29 @@ public:
 
 	const GLuint getTextureID()
 	{
-		return textureID;
+		return m_textureID;
 	}
 	const unsigned int& getWidth()
 	{
-		return width;
+		return m_width;
 	}
 	const unsigned int& getHeight()
 	{
-		return height;
+		return m_height;
 	}
 	const unsigned int& getNumComponents()
 	{
-		return numComponents;
+		return m_numComponents;
 	}
 private:
 
 	void setupGLTexture(Pixmap& pixmap);
 
-	GLuint textureID;
-	unsigned int width;
-	unsigned int height;
+	GLuint m_textureID;
+	unsigned int m_width;
+	unsigned int m_height;
 	/** Amount of values per pixel (rgba = 4) */
-	unsigned int numComponents;
+	unsigned int m_numComponents;
 };
 
 #endif //TEXTURE_H_

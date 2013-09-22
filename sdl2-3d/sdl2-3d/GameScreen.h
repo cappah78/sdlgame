@@ -1,5 +1,5 @@
-#ifndef GAMESCREEN_H_
-#define GAMESCREEN_H_
+#ifndef GAME_SCREEN_H_
+#define GAME_SCREEN_H_
 
 #include <gl\glew.h>
 
@@ -19,11 +19,12 @@
 #include "SDLGame.h"
 #include "PerspectiveCamera.h"
 #include "FPSCameraController.h"
+#include "ForwardShader.h"
 
 class Terrain;
 class Texture;
 
-class GameScreen : public Screen
+class GameScreen : public Screen, public KeyListener
 {
 public:
 	GameScreen();
@@ -31,25 +32,25 @@ public:
 
 	void render(float deltaSec);
 	void resize(int width, int height);
-
+	virtual bool keyDown(SDL_Keysym key) override;
+	virtual bool keyUp(SDL_Keysym key) override;
 private:
-	coment::World world;
+	coment::World m_world;
 
-	entitysystem::MovementSystem movementSystem;
-	entitysystem::MouseLookSystem mouseLookSystem;
-	entitysystem::FPSCameraController cameraController;
+	entitysystem::MovementSystem movementSystem_;
+	entitysystem::MouseLookSystem mouseLookSystem_;
+	entitysystem::FPSCameraController cameraController_;
 
-	PerspectiveCamera camera;
-	HeightMap heightMap;
+	PerspectiveCamera m_camera;
+	HeightMap heightMap_;
 
-	Shader terrainShader;
-	Shader defaultShader;
+	SkyBox m_skyBox;
 
-	GBuffer gBuffer;
-	LightManager lightManager;
+	ForwardShader forwardShader;
+	LightManager m_lightManager;
 
-	Texture* texture;
-	Terrain* terrain;
+	Texture* m_texture;
+	Terrain* m_terrain;
 };
 
-#endif //GAMESCREEN_H_
+#endif //GAME_SCREEN_H_

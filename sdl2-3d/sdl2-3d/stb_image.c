@@ -689,11 +689,11 @@ extern int      stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *
 }
 
 #ifndef STBI_NO_HDR
-static float h2l_gamma_i=1.0f/2.2f, h2l_scale_i=1.0f;
+static float h2l_gamma_i=1.0f/2.2f, h2l_m_scalei=1.0f;
 static float l2h_gamma=2.2f, l2h_scale=1.0f;
 
 void   stbi_hdr_to_ldr_gamma(float gamma) { h2l_gamma_i = 1/gamma; }
-void   stbi_hdr_to_ldr_scale(float scale) { h2l_scale_i = 1/scale; }
+void   stbi_hdr_to_ldr_scale(float scale) { h2l_m_scalei = 1/scale; }
 
 void   stbi_ldr_to_hdr_gamma(float gamma) { l2h_gamma = gamma; }
 void   stbi_ldr_to_hdr_scale(float scale) { l2h_scale = scale; }
@@ -903,7 +903,7 @@ static stbi_uc *hdr_to_ldr(float   *data, int x, int y, int comp)
    if (comp & 1) n = comp; else n = comp-1;
    for (i=0; i < x*y; ++i) {
       for (k=0; k < n; ++k) {
-         float z = (float) pow(data[i*comp+k]*h2l_scale_i, h2l_gamma_i) * 255 + 0.5f;
+         float z = (float) pow(data[i*comp+k]*h2l_m_scalei, h2l_gamma_i) * 255 + 0.5f;
          if (z < 0) z = 0;
          if (z > 255) z = 255;
          output[i*comp + k] = (uint8) float2int(z);
@@ -973,8 +973,8 @@ typedef struct
 
 // sizes for components, interleaved MCUs
    int img_h_max, img_v_max;
-   int img_mcu_x, img_mcu_y;
-   int img_mcu_w, img_mcu_h;
+   int img_mcm_ux, img_mcm_uy;
+   int img_mcm_uw, img_mcm_uh;
 
 // definition of jpeg image component
    struct
@@ -1389,8 +1389,8 @@ static int parse_entropy_coded_data(jpeg *z)
    } else { // interleaved!
       int i,j,k,x,y;
       short data[64];
-      for (j=0; j < z->img_mcu_y; ++j) {
-         for (i=0; i < z->img_mcu_x; ++i) {
+      for (j=0; j < z->img_mcm_uy; ++j) {
+         for (i=0; i < z->img_mcm_ux; ++i) {
             // scan an interleaved mcu... process scan_n components in order
             for (k=0; k < z->scan_n; ++k) {
                int n = z->order[k];
@@ -1559,10 +1559,10 @@ static int process_frame_header(jpeg *z, int scan)
    // compute interleaved mcu info
    z->img_h_max = h_max;
    z->img_v_max = v_max;
-   z->img_mcu_w = h_max * 8;
-   z->img_mcu_h = v_max * 8;
-   z->img_mcu_x = (s->img_x + z->img_mcu_w-1) / z->img_mcu_w;
-   z->img_mcu_y = (s->img_y + z->img_mcu_h-1) / z->img_mcu_h;
+   z->img_mcm_uw = h_max * 8;
+   z->img_mcm_uh = v_max * 8;
+   z->img_mcm_ux = (s->img_x + z->img_mcm_uw-1) / z->img_mcm_uw;
+   z->img_mcm_uy = (s->img_y + z->img_mcm_uh-1) / z->img_mcm_uh;
 
    for (i=0; i < s->img_n; ++i) {
       // number of effective pixels (e.g. for non-interleaved MCU)
@@ -1572,8 +1572,8 @@ static int process_frame_header(jpeg *z, int scan)
       // the bogus oversized data from using interleaved MCUs and their
       // big blocks (e.g. a 16x16 iMCU on an image of width 33); we won't
       // discard the extra data until colorspace conversion
-      z->img_comp[i].w2 = z->img_mcu_x * z->img_comp[i].h * 8;
-      z->img_comp[i].h2 = z->img_mcu_y * z->img_comp[i].v * 8;
+      z->img_comp[i].w2 = z->img_mcm_ux * z->img_comp[i].h * 8;
+      z->img_comp[i].h2 = z->img_mcm_uy * z->img_comp[i].v * 8;
       z->img_comp[i].raw_data = malloc(z->img_comp[i].w2 * z->img_comp[i].h2+15);
       if (z->img_comp[i].raw_data == NULL) {
          for(--i; i >= 0; --i) {
@@ -1780,7 +1780,7 @@ void stbi_install_YCbCr_to_RGB(stbi_YCbCr_to_RGB_run func)
 
 
 // clean up the temporary component buffers
-static void cleanup_jpeg(jpeg *j)
+static void cleanm_upjpeg(jpeg *j)
 {
    int i;
    for (i=0; i < j->s->img_n; ++i) {
@@ -1813,7 +1813,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
    z->s->img_n = 0;
 
    // load a jpeg image from whichever source
-   if (!decode_jpeg_image(z)) { cleanup_jpeg(z); return NULL; }
+   if (!decode_jpeg_image(z)) { cleanm_upjpeg(z); return NULL; }
 
    // determine actual number of components to generate
    n = req_comp ? req_comp : z->s->img_n;
@@ -1838,7 +1838,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
          // allocate line buffer big enough for upsampling off the edges
          // with upsample factor of 4
          z->img_comp[k].linebuf = (uint8 *) malloc(z->s->img_x + 3);
-         if (!z->img_comp[k].linebuf) { cleanup_jpeg(z); return epuc("outofmem", "Out of memory"); }
+         if (!z->img_comp[k].linebuf) { cleanm_upjpeg(z); return epuc("outofmem", "Out of memory"); }
 
          r->hs      = z->img_h_max / z->img_comp[k].h;
          r->vs      = z->img_v_max / z->img_comp[k].v;
@@ -1856,7 +1856,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
 
       // can't error after this so, this is safe
       output = (uint8 *) malloc(n * z->s->img_x * z->s->img_y + 1);
-      if (!output) { cleanup_jpeg(z); return epuc("outofmem", "Out of memory"); }
+      if (!output) { cleanm_upjpeg(z); return epuc("outofmem", "Out of memory"); }
 
       // now go ahead and resample
       for (j=0; j < z->s->img_y; ++j) {
@@ -1897,7 +1897,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
                for (i=0; i < z->s->img_x; ++i) *out++ = y[i], *out++ = 255;
          }
       }
-      cleanup_jpeg(z);
+      cleanm_upjpeg(z);
       *out_x = z->s->img_x;
       *out_y = z->s->img_y;
       if (comp) *comp  = z->s->img_n; // report original components, not output
@@ -2321,7 +2321,7 @@ char *stbi_zlib_decode_malloc(char const *buffer, int len, int *outlen)
    return stbi_zlib_decode_malloc_guesssize(buffer, len, 16384, outlen);
 }
 
-char *stbi_zlib_decode_malloc_guesssize_headerflag(const char *buffer, int len, int initial_size, int *outlen, int parse_header)
+char *stbi_zlib_decode_malloc_guessm_sizeheaderflag(const char *buffer, int len, int initial_size, int *outlen, int parse_header)
 {
    zbuf a;
    char *p = (char *) malloc(initial_size);
@@ -2678,7 +2678,7 @@ static int parse_png_file(png *z, int scan, int req_comp)
 {
    uint8 palette[1024], pal_img_n=0;
    uint8 has_trans=0, tc[3];
-   uint32 ioff=0, idata_limit=0, i, pal_len=0;
+   uint32 ioff=0, im_datalimit=0, i, pal_len=0;
    int first=1,k,interlace=0, iphone=0;
    stbi *s = z->s;
 
@@ -2763,12 +2763,12 @@ static int parse_png_file(png *z, int scan, int req_comp)
             if (first) return e("first not IHDR", "Corrupt PNG");
             if (pal_img_n && !pal_len) return e("no PLTE","Corrupt PNG");
             if (scan == SCAN_header) { s->img_n = pal_img_n; return 1; }
-            if (ioff + c.length > idata_limit) {
+            if (ioff + c.length > im_datalimit) {
                uint8 *p;
-               if (idata_limit == 0) idata_limit = c.length > 4096 ? c.length : 4096;
-               while (ioff + c.length > idata_limit)
-                  idata_limit *= 2;
-               p = (uint8 *) realloc(z->idata, idata_limit); if (p == NULL) return e("outofmem", "Out of memory");
+               if (im_datalimit == 0) im_datalimit = c.length > 4096 ? c.length : 4096;
+               while (ioff + c.length > im_datalimit)
+                  im_datalimit *= 2;
+               p = (uint8 *) realloc(z->idata, im_datalimit); if (p == NULL) return e("outofmem", "Out of memory");
                z->idata = p;
             }
             if (!getn(s, z->idata+ioff,c.length)) return e("outofdata","Corrupt PNG");
@@ -2781,7 +2781,7 @@ static int parse_png_file(png *z, int scan, int req_comp)
             if (first) return e("first not IHDR", "Corrupt PNG");
             if (scan != SCAN_load) return 1;
             if (z->idata == NULL) return e("no IDAT","Corrupt PNG");
-            z->expanded = (uint8 *) stbi_zlib_decode_malloc_guesssize_headerflag((char *) z->idata, ioff, 16384, (int *) &raw_len, !iphone);
+            z->expanded = (uint8 *) stbi_zlib_decode_malloc_guessm_sizeheaderflag((char *) z->idata, ioff, 16384, (int *) &raw_len, !iphone);
             if (z->expanded == NULL) return 0; // zlib should set error
             free(z->idata); z->idata = NULL;
             if ((req_comp == s->img_n+1 && req_comp != 3 && !pal_img_n) || has_trans)
@@ -3865,7 +3865,7 @@ typedef struct stbi_gif_struct
    uint8  pal[256][4];
    uint8 lpal[256][4];
    stbi_gif_lzw codes[4096];
-   uint8 *color_table;
+   uint8 *m_colortable;
    int parse, step;
    int lflags;
    int start_x, start_y;
@@ -3954,7 +3954,7 @@ static void stbi_out_gif_code(stbi_gif *g, uint16 code)
    if (g->cur_y >= g->max_y) return;
   
    p = &g->out[g->cur_x + g->cur_y];
-   c = &g->color_table[g->codes[code].suffix * 4];
+   c = &g->m_colortable[g->codes[code].suffix * 4];
 
    if (c[3] >= 128) {
       p[0] = c[2];
@@ -4124,13 +4124,13 @@ static uint8 *stbi_gif_load_next(stbi *s, stbi_gif *g, int *comp, int req_comp)
 
             if (g->lflags & 0x80) {
                stbi_gif_parse_colortable(s,g->lpal, 2 << (g->lflags & 7), g->eflags & 0x01 ? g->transparent : -1);
-               g->color_table = (uint8 *) g->lpal;       
+               g->m_colortable = (uint8 *) g->lpal;       
             } else if (g->flags & 0x80) {
                for (i=0; i < 256; ++i)  // @OPTIMIZE: reset only the previous transparent
                   g->pal[i][3] = 255; 
                if (g->transparent >= 0 && (g->eflags & 0x01))
                   g->pal[g->transparent][3] = 0;
-               g->color_table = (uint8 *) g->pal;
+               g->m_colortable = (uint8 *) g->pal;
             } else
                return epuc("missing color table", "Corrupt GIF");
    

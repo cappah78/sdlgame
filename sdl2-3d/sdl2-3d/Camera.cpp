@@ -7,13 +7,23 @@
 #include <glm\gtx\transform.hpp>
 #include <glm\gtx\rotate_vector.hpp>
 #include "MathUtils.h"
+#include "MatrixUtils.h"
 
 static const glm::vec3 UP(0, 1, 0);
 
-Camera::Camera(glm::vec3 position_, glm::vec3 direction_)
-	: position(position_)
-	, direction(glm::normalize(direction_))
-	, up(UP)
+Camera::Camera(float viewportWidth, float viewportHeight)
+	: m_position(0, 0, 0)
+	, m_direction(1, 0, 0)
+	, m_viewportWidth(viewportWidth)
+	, m_viewportHeight(viewportHeight)
+{
+
+}
+
+Camera::Camera(glm::vec3 position, glm::vec3 direction)
+	: m_position(position)
+	, m_direction(glm::normalize(direction))
+	, m_up(UP)
 {
 
 }
@@ -26,9 +36,9 @@ Camera::~Camera()
 
 void Camera::translate(float x, float y, float z)
 {
-	position.x += x;
-	position.y += y;
-	position.z += z;
+	m_position.x += x;
+	m_position.y += y;
+	m_position.z += z;
 }
 
 void Camera::translateRelative(float x, float y, float z)
@@ -42,54 +52,54 @@ void Camera::translateRelative(float x, float y, float z)
 
 float Camera::getX()
 {
-	return position.x;
+	return m_position.x;
 }
 
 float Camera::getY()
 {
-	return position.y;
+	return m_position.y;
 }
 
 float Camera::getZ()
 {
-	return position.z;
+	return m_position.z;
 }
 
 void Camera::setPosition(float x, float y, float z)
 {
-	position.x = x;
-	position.y = y;
-	position.z = z;
+	m_position.x = x;
+	m_position.y = y;
+	m_position.z = z;
 }
 
 float Camera::getRotationRadXY()
 {
-	return math::atan2(direction.x, direction.y);
+	return math::atan2(m_direction.x, m_direction.y);
 }
 
 float Camera::getRotationRadXZ()
 {
-	return math::atan2(direction.x, direction.z);
+	return math::atan2(m_direction.x, m_direction.z);
 }
 
 float Camera::getRotationRadYZ()
 {
-	return math::atan2(direction.y, direction.z);
+	return math::atan2(m_direction.y, m_direction.z);
 }
 
 void Camera::rotate(float angleRad, glm::vec3 axis)
 {
-	glm::vec3 tmp = direction;
-	direction = glm::rotate(direction, angleRad, axis);
+	glm::vec3 tmp = m_direction;
+	m_direction = glm::rotate(m_direction, angleRad, axis);
 	//limit vertical look movement
-	if (direction.y > 0.99f || direction.y < -0.99f)
+	if (m_direction.y > 0.99f || m_direction.y < -0.99f)
 	{
-		direction = tmp;
+		m_direction = tmp;
 		return;
 	}
 	//recalculate up vector.
-	glm::vec3 side = glm::cross(direction, UP);
-	up = glm::cross(side, direction);
+	glm::vec3 side = glm::cross(m_direction, UP);
+	m_up = glm::cross(side, m_direction);
 }
 
 void Camera::rotateRelative(float xRot, float yRot)
@@ -104,20 +114,16 @@ void Camera::rotateRelative(float xRot, float yRot)
 
 void Camera::update()
 {
-	viewMatrix = glm::lookAt(
-		position,
-		position + direction,
-		up
-	);
-	combinedMatrix = projectionMatrix * viewMatrix;
+	m_viewMatrix = glm::lookAt(m_position, m_position + m_direction, m_up);
+	m_combinedMatrix = m_projectionMatrix * m_viewMatrix;
 }
 
 void Camera::lookAt(float x, float y, float z)
 {
-	direction = glm::normalize(glm::vec3(x - position.x, y - position.y, z - position.z));
+	m_direction = glm::normalize(glm::vec3(x - m_position.x, y - m_position.y, z - m_position.z));
 }
 
-void Camera::lookAtDir(glm::vec3 dir)
+void Camera::lookAtDir(glm::vec3 direction)
 {
-	direction = dir;
+	m_direction = direction;
 }

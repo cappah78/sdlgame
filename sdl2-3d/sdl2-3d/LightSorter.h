@@ -13,7 +13,7 @@ public:
 	bool operator() (const Light* light1, const Light* light2);
 
 private:
-	const Camera& camera;
+	const Camera& m_camera;
 };
 
 #endif //LIGHTSORTER_H_

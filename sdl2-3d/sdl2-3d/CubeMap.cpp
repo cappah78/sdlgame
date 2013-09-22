@@ -4,8 +4,8 @@
 #include "Pixmap.h"
 
 
-CubeMap::CubeMap(GLuint texture_)
-	: texture(texture_)
+CubeMap::CubeMap(GLuint texture)
+	: m_texture(texture)
 {
 
 }
@@ -18,7 +18,7 @@ CubeMap::~CubeMap()
 void CubeMap::bind(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_texture);
 }
 
 //right,left,top,bottom,near,far
@@ -32,9 +32,9 @@ CubeMap* CubeMap::createFromTextures(std::string* textureNames)
 	{
 		Pixmap img = Pixmap(textureNames[i].c_str());
 
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, img.width, img.height, 0, img.numComponents == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, img.data);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, img.m_width, img.m_height, 0, img.m_numComponents == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, img.m_data);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}

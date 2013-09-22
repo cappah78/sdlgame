@@ -1,10 +1,10 @@
 #version 330 core
 
-layout(location = 0) in vec3 in_vertexPosition;
+layout(location = 0) in vec3 in_position;
 
-out vec3 vertexPosition;
+out vec3 position;
 
 void main(void) 
 {
-	vertexPosition = in_vertexPosition;
+	position = in_position;
 }

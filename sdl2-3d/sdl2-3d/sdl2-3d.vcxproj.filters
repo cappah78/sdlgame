@@ -197,6 +197,12 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ForwardShader.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="scribble.png">
@@ -263,6 +269,12 @@
       <Filter>data\shaders</Filter>
     </None>
     <None Include="lightpass.geom">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="forwardshader.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="forwardshader.vert">
       <Filter>data\shaders</Filter>
     </None>
   </ItemGroup>
@@ -466,6 +478,12 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Terrain.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixUtils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ForwardShader.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,11 +1,16 @@
 #include "SkyBox.h"
 
 #include <gl\glew.h>
+#include <glm/glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtx\transform.hpp>
 #include "CubeMap.h"
-#include "Shader.h"
+#include "ShaderManager.h"
+#include "Camera.h"
+
 
 SkyBox::SkyBox()
-	: mesh("box.obj")
+	: m_mesh("box.obj")
 {
 	std::string* textureNames = new std::string[6];
 	textureNames[0] = "skybox/right.bmp";
@@ -15,24 +20,34 @@ SkyBox::SkyBox()
 	textureNames[5] = "skybox/back.bmp";
 	textureNames[4] = "skybox/front.bmp";
 
-	cubeMap = CubeMap::createFromTextures(textureNames);
+	m_cubeMap = CubeMap::createFromTextures(textureNames);
 	delete [] textureNames;
+
+	m_skyBoxShader = ShaderManager::createShaderProgram("skybox.vert", 0, "skybox.frag");
+	m_mvpLoc =  glGetUniformLocation(m_skyBoxShader, "u_mvp");
 }
 
 SkyBox::~SkyBox()
 {
-	delete cubeMap;
+	delete m_cubeMap;
 }
 
-void SkyBox::render()
+void SkyBox::render(const Camera& camera)
 {
-	cubeMap->bind(GL_TEXTURE0);
+	glUseProgram(m_skyBoxShader);
 
+	glm::mat4 scale = glm::scale(30.0f, 30.0f, 30.0f);
+	glm::mat4 translation = glm::translate(camera.m_position);
+	glm::mat4 mvp = camera.m_combinedMatrix * translation * scale;
+
+	glUniformMatrix4fv(m_mvpLoc, 1, GL_FALSE, &mvp[0][0]);
+
+	m_cubeMap->bind(GL_TEXTURE0);
 	glDisable(GL_DEPTH_TEST);
-	//TODO: make messh with 
-	glCullFace(GL_FRONT);
-	mesh.render();
+	glCullFace(GL_FRONT);	//TODO: make back facing box mesh
+	m_mesh.render();
 	glCullFace(GL_BACK);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT);
+	glUseProgram(0);
 }

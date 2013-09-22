@@ -16,49 +16,49 @@
 
 #define SPRITEBATCH_VERTEX_SHADER "spritebatch.vert"
 #define SPRITEBATCH_FRAGMENT_SHADER "spritebatch.frag"
-#define SPRITEBATCH_UNIFORM_MVP "u_mvp"
+#define SPRITEBATCH_UNIFORM_MVP "m_umvp"
 
-SpriteBatch::SpriteBatch(int size_)
-	: size(size_)
-	, drawing(false)
-	, lastTexture(0)
-	, idx(0)
-	, drawCalls(0)
-	, blendEnabled(false)
+SpriteBatch::SpriteBatch(int size)
+	: m_size(size)
+	, m_drawing(false)
+	, m_lastTexture(0)
+	, m_idx(0)
+	, m_drawCalls(0)
+	, m_blendEnabled(false)
 {
 	assert((size * 6) < 65535 && "Cannot draw more than 10922 items");
-	bufferByteSize = size * FLOATS_PER_SPRITE * sizeof(float);
+	m_bufferByteSize = size * FLOATS_PER_SPRITE * sizeof(float);
 
-	vertices = new float[size * FLOATS_PER_SPRITE];
-	memset(vertices, 0, bufferByteSize);
+	m_vertices = new float[size * FLOATS_PER_SPRITE];
+	memset(m_vertices, 0, m_bufferByteSize);
 
-	indices = new GLushort[size * 6];
+	m_indices = new GLushort[size * 6];
 
 	GLushort j = 0;
 	for (int i = 0; i < size * 6; i += 6, j += 4) {
-        indices[i + 0] = (j + 0);
-        indices[i + 1] = (j + 1);
-        indices[i + 2] = (j + 2);
-        indices[i + 3] = (j + 2);
-        indices[i + 4] = (j + 3);
-        indices[i + 5] = (j + 0);
+        m_indices[i + 0] = (j + 0);
+        m_indices[i + 1] = (j + 1);
+        m_indices[i + 2] = (j + 2);
+        m_indices[i + 3] = (j + 2);
+        m_indices[i + 4] = (j + 3);
+        m_indices[i + 5] = (j + 0);
     }
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	glGenVertexArrays(1, &m_vao);
+	glBindVertexArray(m_vao);
 
-	shader = ShaderManager::createShaderProgram(SPRITEBATCH_VERTEX_SHADER, 0, SPRITEBATCH_FRAGMENT_SHADER);
-	glUseProgram(shader);
+	m_shader = ShaderManager::createShaderProgram(SPRITEBATCH_VERTEX_SHADER, 0, SPRITEBATCH_FRAGMENT_SHADER);
+	glUseProgram(m_shader);
 
-	mvp = glGetUniformLocation(shader, SPRITEBATCH_UNIFORM_MVP);
+	m_mvpLoc = glGetUniformLocation(m_shader, SPRITEBATCH_UNIFORM_MVP);
 
-	glGenBuffers(1, &indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * 6 * sizeof(GLushort), indices, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * 6 * sizeof(GLushort), m_indices, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, bufferByteSize, vertices, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, m_bufferByteSize, m_vertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0); //position
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(2 * sizeof(float))); //uv
 	
@@ -68,35 +68,35 @@ SpriteBatch::SpriteBatch(int size_)
 
 SpriteBatch::~SpriteBatch()
 {
-	delete [] vertices;
-	delete [] indices;
+	delete [] m_vertices;
+	delete [] m_indices;
 }
 
 void SpriteBatch::begin()
 {
-	assert(!drawing && "Call end() before begin()");
+	assert(!m_drawing && "Call end() before begin()");
 
-	glUseProgram(shader);
+	glUseProgram(m_shader);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	drawing = true;
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+	m_drawing = true;
 }
 
 void SpriteBatch::end()
 {
-	assert(drawing && "Call begin() before end()");
+	assert(m_drawing && "Call begin() before end()");
 
 	flush();
-	drawing = false;
+	m_drawing = false;
 	glUseProgram(0);
 }
 
 void SpriteBatch::setProjectionMatrix(glm::mat4 matrix)
 {
-	assert(drawing && "Must call begin() before setting projection matrix");
-	assert(drawCalls == 0 && "Cannot change projection matrix after drawing");
+	assert(m_drawing && "Must call begin() before setting projection matrix");
+	assert(m_drawCalls == 0 && "Cannot change projection matrix after drawing");
 
-	glUniformMatrix4fv(mvp, 1, GL_FALSE, &matrix[0][0]);
+	glUniformMatrix4fv(m_mvpLoc, 1, GL_FALSE, &matrix[0][0]);
 }
 
 void SpriteBatch::draw(Texture& texture, float x, float y)
@@ -106,7 +106,7 @@ void SpriteBatch::draw(Texture& texture, float x, float y)
 
 void SpriteBatch::draw(TextureRegion& r, float x, float y)
 {
-	drawUnrotated(r.texture, x, y, (float) r.texture.getWidth(), (float) r.texture.getHeight(), r.u, r.v, r.u2, r.v2);
+	drawUnrotated(r.m_texture, x, y, (float) r.m_texture.getWidth(), (float) r.m_texture.getHeight(), r.u, r.v, r.u2, r.v2);
 }
 
 void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h)
@@ -116,7 +116,7 @@ void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h)
 
 void SpriteBatch::draw(TextureRegion& region, float x, float y, float w, float h)
 {
-	drawUnrotated(region.texture, x, y, w, h, region.u, region.v, region.u2, region.v2);
+	drawUnrotated(region.m_texture, x, y, w, h, region.u, region.v, region.u2, region.v2);
 }
 
 void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h, float angleDeg)
@@ -126,7 +126,7 @@ void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h, flo
 
 void SpriteBatch::draw(TextureRegion& r, float x, float y, float w, float h, float angleDeg)
 {
-	drawRotated(r.texture, x, y, w, h, w / 2, h / 2, angleDeg, r.u, r.v, r.u2, r.v2);
+	drawRotated(r.m_texture, x, y, w, h, w / 2, h / 2, angleDeg, r.u, r.v, r.u2, r.v2);
 }
 
 void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg)
@@ -136,23 +136,23 @@ void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h, flo
 
 void SpriteBatch::draw(TextureRegion& r, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg)
 {
-	drawRotated(r.texture, x, y, w, h, w / 2, h / 2, angleDeg, r.u, r.v, r.u2, r.v2);
+	drawRotated(r.m_texture, x, y, w, h, w / 2, h / 2, angleDeg, r.u, r.v, r.u2, r.v2);
 }
 
 void SpriteBatch::preDraw(Texture& texture)
 {
-	assert(drawing && "Call begin() before drawing");
+	assert(m_drawing && "Call begin() before drawing");
 
-	if (lastTexture == 0)
+	if (m_lastTexture == 0)
 		swapTexture(texture);
-	if (texture.getTextureID() != lastTexture)
+	if (texture.getTextureID() != m_lastTexture)
 	{
 		flush();
 		swapTexture(texture);
 	}
-	drawCalls++;
+	m_drawCalls++;
 
-	assert(drawCalls < size && "Amount of draw calls exceeded size");
+	assert(m_drawCalls < m_size && "Amount of draw calls exceeded size");
 }
 
 void SpriteBatch::drawUnrotated(Texture& t, float x, float y, float w, float h, float u, float v, float u2, float v2)
@@ -163,30 +163,30 @@ void SpriteBatch::drawUnrotated(Texture& t, float x, float y, float w, float h, 
 	float y2 = y + h;
 
 	//bottom left
-	vertices[idx++] = x;
-	vertices[idx++] = y;
-	vertices[idx++] = u;
-	vertices[idx++] = v;
+	m_vertices[m_idx++] = x;
+	m_vertices[m_idx++] = y;
+	m_vertices[m_idx++] = u;
+	m_vertices[m_idx++] = v;
 	
 	//top left
-	vertices[idx++] = x;
-	vertices[idx++] = y2;
-	vertices[idx++] = u;
-	vertices[idx++] = v2;
+	m_vertices[m_idx++] = x;
+	m_vertices[m_idx++] = y2;
+	m_vertices[m_idx++] = u;
+	m_vertices[m_idx++] = v2;
 
 	//top right
-	vertices[idx++] = x2;
-	vertices[idx++] = y2;
-	vertices[idx++] = u2;
-	vertices[idx++] = v2;
+	m_vertices[m_idx++] = x2;
+	m_vertices[m_idx++] = y2;
+	m_vertices[m_idx++] = u2;
+	m_vertices[m_idx++] = v2;
 
 	//bottom right
-	vertices[idx++] = x2;
-	vertices[idx++] = y;
-	vertices[idx++] = u2;
-	vertices[idx++] = v;
+	m_vertices[m_idx++] = x2;
+	m_vertices[m_idx++] = y;
+	m_vertices[m_idx++] = u2;
+	m_vertices[m_idx++] = v;
 
-	if(idx > size * FLOATS_PER_SPRITE)
+	if(m_idx > m_size * FLOATS_PER_SPRITE)
 		flush();
 }
 
@@ -250,43 +250,43 @@ void SpriteBatch::drawRotated(Texture& t, float x, float y, float w, float h, fl
 	x4 += totalOffsetX;
 	y4 += totalOffsetY;
 
-	vertices[idx++] = x1;
-	vertices[idx++] = y1;
-	vertices[idx++] = u;
-	vertices[idx++] = v;
+	m_vertices[m_idx++] = x1;
+	m_vertices[m_idx++] = y1;
+	m_vertices[m_idx++] = u;
+	m_vertices[m_idx++] = v;
 
-	vertices[idx++] = x2;
-	vertices[idx++] = y2;
-	vertices[idx++] = u;
-	vertices[idx++] = v2;
+	m_vertices[m_idx++] = x2;
+	m_vertices[m_idx++] = y2;
+	m_vertices[m_idx++] = u;
+	m_vertices[m_idx++] = v2;
 
-	vertices[idx++] = x3;
-	vertices[idx++] = y3;
-	vertices[idx++] = u2;
-	vertices[idx++] = v2;
+	m_vertices[m_idx++] = x3;
+	m_vertices[m_idx++] = y3;
+	m_vertices[m_idx++] = u2;
+	m_vertices[m_idx++] = v2;
 
-	vertices[idx++] = x4;
-	vertices[idx++] = y4;
-	vertices[idx++] = u2;
-	vertices[idx++] = v;
+	m_vertices[m_idx++] = x4;
+	m_vertices[m_idx++] = y4;
+	m_vertices[m_idx++] = u2;
+	m_vertices[m_idx++] = v;
 
-	if(idx > size * FLOATS_PER_SPRITE)
+	if(m_idx > m_size * FLOATS_PER_SPRITE)
 		flush();
 }
 
 void SpriteBatch::flush()
 {
-	assert(drawing && "Call begin() before flush()");
-	if (drawCalls == 0)
+	assert(m_drawing && "Call begin() before flush()");
+	if (m_drawCalls == 0)
 		return;
 
-	glBufferSubData(GL_ARRAY_BUFFER, 0, idx * sizeof(float), vertices);
-	glBindVertexArray(vao);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, m_idx * sizeof(float), m_vertices);
 
-	glDrawElements(GL_TRIANGLES, drawCalls * 6, GL_UNSIGNED_SHORT, 0);
+	glBindVertexArray(m_vao);
+	glDrawElements(GL_TRIANGLES, m_drawCalls * 6, GL_UNSIGNED_SHORT, 0);
 
-	idx = 0;
-	drawCalls = 0;
+	m_idx = 0;
+	m_drawCalls = 0;
 }
 
 void SpriteBatch::swapTexture(Texture& texture)
@@ -295,14 +295,14 @@ void SpriteBatch::swapTexture(Texture& texture)
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		blendEnabled = true;
+		m_blendEnabled = true;
 	}
-	else if (blendEnabled)
+	else if (m_blendEnabled)
 	{
 		glDisable(GL_BLEND);
-		blendEnabled = false;
+		m_blendEnabled = false;
 	}
 
-	lastTexture = texture.getTextureID();
+	m_lastTexture = texture.getTextureID();
 	texture.bind();
 }

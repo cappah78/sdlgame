@@ -5,9 +5,9 @@
 
 using namespace component;
 
-EntityBuilder::EntityBuilder(coment::World& world_, coment::Entity& e)
-	: world(world_)
-	, entity(e)
+EntityBuilder::EntityBuilder(coment::World& m_world, coment::Entity& e)
+	: m_world(m_world)
+	, m_entity(e)
 {
 
 }
@@ -19,7 +19,7 @@ EntityBuilder::~EntityBuilder()
 
 EntityBuilder& EntityBuilder::position(float x, float y, float z)
 {
-	Position* p = world.addComponent<Position>(entity);
+	Position* p = m_world.addComponent<Position>(m_entity);
 	p->x = x;
 	p->y = y;
 	p->z = z;
@@ -30,7 +30,7 @@ EntityBuilder& EntityBuilder::position(float x, float y, float z)
 
 EntityBuilder& EntityBuilder::velocity(float x, float y, float z)
 {
-	Velocity* v = world.addComponent<Velocity>(entity);
+	Velocity* v = m_world.addComponent<Velocity>(m_entity);
 	v->x = x;
 	v->y = y;
 	v->z = z;
@@ -40,5 +40,5 @@ EntityBuilder& EntityBuilder::velocity(float x, float y, float z)
 
 coment::Entity& EntityBuilder::getEntity()
 {
-	return entity;
+	return m_entity;
 }

@@ -77,7 +77,7 @@ private:
 #define NORMAL_VB    2
 #define TEXCOORD_VB  3    
 #define WVP_MAT_VB   4
-#define WORLD_MAT_VB 5
+#define m_worldMAT_VB 5
 
     GLuint m_VAO;
     GLuint m_Buffers[6];

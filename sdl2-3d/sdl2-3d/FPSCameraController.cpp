@@ -3,18 +3,18 @@
 #include "PerspectiveCamera.h"
 #include "coment\World.h"
 
-const float CAMERA_SPEED = 100.0f;
+const float m_cameraSPEED = 100.0f;
 
-const float DIAGONAL_SPEED = sqrt(pow(CAMERA_SPEED, 2) + pow(CAMERA_SPEED, 2));
+const float DIAGONAL_SPEED = sqrt(pow(m_cameraSPEED, 2) + pow(m_cameraSPEED, 2));
 
 namespace entitysystem
 {
-	FPSCameraController::FPSCameraController(PerspectiveCamera& camera_)
-		: camera(camera_)
-		, lmbPressed(false)
-		, rmbPressed(false)
-		, isWPressed(false), isAPressed(false), isSPressed(false), isDPressed(false)
-		, isSpacePressed(false), isShiftPressed(false)
+	FPSCameraController::FPSCameraController(PerspectiveCamera& camera)
+		: m_camera(camera)
+		, m_lmbPressed(false)
+		, m_rmbPressed(false)
+		, m_isWPressed(false), m_isAPressed(false), m_isSPressed(false), m_isDPressed(false)
+		, m_isSpacePressed(false), m_isShiftPressed(false)
 	{
 
 	}
@@ -29,12 +29,12 @@ namespace entitysystem
 		float delta = _world->getDelta();
 
 		bool
-			w = isWPressed,
-			a = isAPressed,
-			s = isSPressed,
-			d = isDPressed,
-			space = isSpacePressed,
-			shift = isShiftPressed;
+			w = m_isWPressed,
+			a = m_isAPressed,
+			s = m_isSPressed,
+			d = m_isDPressed,
+			space = m_isSpacePressed,
+			shift = m_isShiftPressed;
 
 		if (w && s)
 			w = false, s = false;
@@ -48,57 +48,57 @@ namespace entitysystem
 		{
 			if (a)
 			{
-				camera.translateRelative(-DIAGONAL_SPEED * delta, 0.0f, -DIAGONAL_SPEED * delta);
+				m_camera.translateRelative(-DIAGONAL_SPEED * delta, 0.0f, -DIAGONAL_SPEED * delta);
 			}
 			else if (d)
 			{
-				camera.translateRelative(DIAGONAL_SPEED * delta, 0.0f, -DIAGONAL_SPEED * delta);
+				m_camera.translateRelative(DIAGONAL_SPEED * delta, 0.0f, -DIAGONAL_SPEED * delta);
 			}
 			else
 			{
-				camera.translateRelative(0.0f, 0.0f, -CAMERA_SPEED * delta);
+				m_camera.translateRelative(0.0f, 0.0f, -m_cameraSPEED * delta);
 			}
 		}
 		else if (s)
 		{
 			if (a)
 			{
-				camera.translateRelative(-DIAGONAL_SPEED * delta, 0.0f, DIAGONAL_SPEED * delta);
+				m_camera.translateRelative(-DIAGONAL_SPEED * delta, 0.0f, DIAGONAL_SPEED * delta);
 			}
 			else if (d)
 			{
-				camera.translateRelative(DIAGONAL_SPEED * delta, 0.0f, DIAGONAL_SPEED * delta);
+				m_camera.translateRelative(DIAGONAL_SPEED * delta, 0.0f, DIAGONAL_SPEED * delta);
 			}
 			else
 			{
-				camera.translateRelative(0.0f, 0.0f, CAMERA_SPEED * delta);
+				m_camera.translateRelative(0.0f, 0.0f, m_cameraSPEED * delta);
 			}
 		}
 		else if (a)
 		{
-			camera.translateRelative(-CAMERA_SPEED * delta, 0.0f, 0.0f);
+			m_camera.translateRelative(-m_cameraSPEED * delta, 0.0f, 0.0f);
 		}
 		else if (d)
 		{
-			camera.translateRelative(CAMERA_SPEED * delta, 0.0f, 0.0f);
+			m_camera.translateRelative(m_cameraSPEED * delta, 0.0f, 0.0f);
 		}
 
 		if (space)
 		{
-			camera.translateRelative(0.0f, CAMERA_SPEED * delta, 0.0f);
+			m_camera.translateRelative(0.0f, m_cameraSPEED * delta, 0.0f);
 		}
 		else if (shift)
 		{
-			camera.translateRelative(0.0f, -CAMERA_SPEED * delta, 0.0f);
+			m_camera.translateRelative(0.0f, -m_cameraSPEED * delta, 0.0f);
 		}
 	}
 
 	bool FPSCameraController::mouseDown(Uint8 key, int xPos, int yPos)
 	{
 		if (key == 1)
-			lmbPressed = true;
+			m_lmbPressed = true;
 		if (key == 3)
-			rmbPressed = true;
+			m_rmbPressed = true;
 
 		return false;
 	}
@@ -106,18 +106,18 @@ namespace entitysystem
 	bool FPSCameraController::mouseUp(Uint8 key, int xPos, int yPos)
 	{
 		if (key == 1)
-			lmbPressed = false;
+			m_lmbPressed = false;
 		if (key == 3)
-			rmbPressed = false;
+			m_rmbPressed = false;
 
 		return false;
 	}
 
 	bool FPSCameraController::mouseMoved(int xPos, int yPos, int xMove, int yMove)
 	{
-		if (lmbPressed)
+		if (m_lmbPressed)
 		{
-			camera.rotateRelative(xMove * 0.2f, yMove * 0.2f);
+			m_camera.rotateRelative(xMove * 0.2f, yMove * 0.2f);
 		}
 
 		return false;
@@ -128,22 +128,22 @@ namespace entitysystem
 		switch (key.sym)
 		{
 		case SDLK_w:
-			isWPressed = true;
+			m_isWPressed = true;
 			break;
 		case SDLK_a:
-			isAPressed = true;
+			m_isAPressed = true;
 			break;
 		case SDLK_s:
-			isSPressed = true;
+			m_isSPressed = true;
 			break;
 		case SDLK_d:
-			isDPressed = true;
+			m_isDPressed = true;
 			break;
 		case SDLK_SPACE:
-			isSpacePressed = true;
+			m_isSpacePressed = true;
 			break;
 		case SDLK_LSHIFT:
-			isShiftPressed = true;
+			m_isShiftPressed = true;
 			break;
 		}
 
@@ -155,22 +155,22 @@ namespace entitysystem
 		switch (key.sym)
 		{
 		case SDLK_w:
-			isWPressed = false;
+			m_isWPressed = false;
 			break;
 		case SDLK_a:
-			isAPressed = false;
+			m_isAPressed = false;
 			break;
 		case SDLK_s:
-			isSPressed = false;
+			m_isSPressed = false;
 			break;
 		case SDLK_d:
-			isDPressed = false;
+			m_isDPressed = false;
 			break;
 		case SDLK_SPACE:
-			isSpacePressed = false;
+			m_isSpacePressed = false;
 			break;
 		case SDLK_LSHIFT:
-			isShiftPressed = false;
+			m_isShiftPressed = false;
 			break;
 		}
 

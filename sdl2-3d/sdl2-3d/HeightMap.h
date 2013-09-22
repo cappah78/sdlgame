@@ -18,17 +18,18 @@ public:
 
 	int getWidth()
 	{
-		return width;
+		return m_width;
 	}
 	int getHeight()
 	{
-		return height;
+		return m_height;
 	}
 private:
-	int width, height;
+	int m_width;
+	int m_height;
 
-	float* heights;
-	PerlinGenerator perlin;
+	float* m_heights;
+	PerlinGenerator m_perlin;
 };
 
 #endif //HEIGHTMAP_H_

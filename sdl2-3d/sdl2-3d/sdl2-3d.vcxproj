@@ -22,6 +22,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EntityProcessingSystem.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
+    <ClCompile Include="ForwardShader.cpp" />
     <ClCompile Include="FPSCameraController.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScreen.cpp" />
@@ -35,6 +36,7 @@
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="ManagerManager.cpp" />
     <ClCompile Include="MathUtils.cpp" />
+    <ClCompile Include="MatrixUtils.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MouseLookSystem.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
@@ -57,6 +59,8 @@
   <ItemGroup>
     <None Include="..\..\..\..\..\Desktop\stripes.png" />
     <None Include="alphascribble.png" />
+    <None Include="forwardshader.frag" />
+    <None Include="forwardshader.vert" />
     <None Include="gbuffer.frag" />
     <None Include="gbuffer.vert" />
     <None Include="light.frag" />
@@ -114,6 +118,7 @@
     <ClInclude Include="Direction.h" />
     <ClInclude Include="EntityBuilder.h" />
     <ClInclude Include="EntityFactory.h" />
+    <ClInclude Include="ForwardShader.h" />
     <ClInclude Include="FPSCameraController.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScreen.h" />
@@ -124,6 +129,7 @@
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LightSorter.h" />
     <ClInclude Include="MathUtils.h" />
+    <ClInclude Include="MatrixUtils.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MouseFollow.h" />
     <ClInclude Include="MouseListener.h" />

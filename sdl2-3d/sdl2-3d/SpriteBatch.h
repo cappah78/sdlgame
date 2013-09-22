@@ -47,25 +47,25 @@ private:
 	void drawUnrotated(Texture& t, float x, float y, float w, float h, float u, float v, float u2, float v2);
 	void drawRotated(Texture& t, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg, float u, float v, float u2, float v2);
 
-	GLuint shader;
-	GLuint vao;
-	GLuint vertexBuffer;
-	GLuint indexBuffer;
+	GLuint m_shader;
+	GLuint m_vao;
+	GLuint m_vertexBuffer;
+	GLuint m_indexBuffer;
 
-	GLint mvp; // model view projection matrix uniform
+	GLint m_mvpLoc; // model view projection matrix uniform
 
-	bool drawing;	//wether the batch is drawing or not
+	bool m_drawing;	//wether the batch is drawing or not
 
-	float* vertices;	//vertex buffer array
-	GLushort* indices;	//index buffer array
+	float* m_vertices;	//vertex buffer array
+	GLushort* m_indices;	//index buffer array
 
-	int size;	// max amount of draw calls
-	int bufferByteSize; //size of vertex buffer in bytes
-	int drawCalls;	// amount of draw calls used since begin()
+	int m_size;	// max amount of draw calls
+	int m_bufferByteSize; //size of vertex buffer in bytes
+	int m_drawCalls;	// amount of draw calls used since begin()
 
-	GLuint lastTexture;	//texture used by last draw call.
-	int idx;	//last unused vertex index
-	bool blendEnabled;
+	GLuint m_lastTexture;	//texture used by last draw call.
+	int m_idx;	//last unused vertex index
+	bool m_blendEnabled;
 };
 
 #endif //SPRITEBATCH_H_

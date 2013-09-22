@@ -7,8 +7,10 @@ class Pixmap
 public:
 	Pixmap(const char* fileName);
 	~Pixmap();
-	unsigned char* data;
-	int width, height, numComponents;
+	unsigned char* m_data;
+	int m_width;
+	int m_height;
+	int m_numComponents;
 };
 
 #endif //PIXMAP_H_

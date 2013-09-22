@@ -22,11 +22,6 @@ namespace coment
 		setDelta(0.0f);
 	}
 
-	World::~World()
-	{
-
-	}
-
 	/* Entity functions */
 	// Create a new entity
 	Entity World::createEntity()

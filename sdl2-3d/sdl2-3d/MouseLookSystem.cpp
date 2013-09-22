@@ -11,15 +11,12 @@ static const glm::vec3 UP(0, 1, 0);
 
 namespace entitysystem
 {
-	MouseLookSystem::MouseLookSystem(glm::vec3 lookDir_)
-		: lmbPressed(false)
-		, rmbPressed(false)
-		, lookDir(glm::normalize(lookDir_))
+	MouseLookSystem::MouseLookSystem(glm::vec3 lookDir)
+		: m_lmbPressed(false)
+		, m_rmbPressed(false)
+		, m_lookDir(glm::normalize(lookDir))
 	{
-		if (lookDir.y > 0.99f)
-			lookDir.y = 0.95f;
-		if(lookDir.y < -0.99f)
-			lookDir.y = -0.95f;
+
 	}
 
 	void MouseLookSystem::registerComponents()
@@ -31,44 +28,45 @@ namespace entitysystem
 	void MouseLookSystem::process(const coment::Entity& e)
 	{
 		component::Direction* direction = _world->getComponent<component::Direction>(e);
-		direction->dir = lookDir;
+		direction->dir = m_lookDir;
 	}
 
 	bool MouseLookSystem::mouseDown(Uint8 key, int xPos, int yPos)
 	{
 		if (key == 1)
-			lmbPressed = true;
+			m_lmbPressed = true;
 		if (key == 3)
-			rmbPressed = true;
+			m_rmbPressed = true;
 		return false;
 	}
 
 	bool MouseLookSystem::mouseUp(Uint8 key, int xPos, int yPos)
 	{
 		if (key == 1)
-			lmbPressed = false;
+			m_lmbPressed = false;
 		if (key == 3)
-			rmbPressed = false;
+			m_rmbPressed = false;
 		return false;
 	}
 
 	bool MouseLookSystem::mouseMoved(int xPos, int yPos, int xMove, int yMove)
 	{
-		if (lmbPressed)
+		if (m_lmbPressed)
 		{
 			//rotate horizontally
-			lookDir = glm::rotate(lookDir, -xMove * MOUSELOOK_SENSITIVITY, UP);
+			m_lookDir = glm::rotate(m_lookDir, -xMove * MOUSELOOK_SENSITIVITY, UP);
 			
 			//calculate axis to rotate vertically on
-			float xzAngle = math::atan2(lookDir.x, lookDir.z);
+			float xzAngle = math::atan2(m_lookDir.x, m_lookDir.z);
 			glm::vec3 yRotAxis(-math::cos(xzAngle), 0.0f, math::sin(xzAngle));
 
 			//rotate vertically
-			glm::vec3 tmp = lookDir;
-			lookDir = glm::rotate(lookDir, -yMove * MOUSELOOK_SENSITIVITY, yRotAxis);
+			glm::vec3 tmp = m_lookDir;
+			m_lookDir = glm::rotate(m_lookDir, -yMove * MOUSELOOK_SENSITIVITY, yRotAxis);
 			//limit vertical look movement
-			if (lookDir.y > 0.99f || lookDir.y < -0.99f)
-				lookDir = tmp;
+
+			if (m_lookDir.y > 0.99f || m_lookDir.y < -0.99f)
+				m_lookDir = tmp;
 		}
 		return false;
 	}

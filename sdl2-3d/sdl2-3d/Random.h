@@ -9,10 +9,10 @@ class Random
 {
 public:
 	Random(int seed, float minVal, float maxVal)
-		: distribution(minVal, maxVal)
+		: m_distribution(minVal, maxVal)
     {
-		engine.seed(seed);
-		distribution.reset();
+		m_engine.seed(seed);
+		m_distribution.reset();
     }
  
     ~Random()
@@ -22,14 +22,14 @@ public:
  
     float next()
     {
-		return distribution(engine);
+		return m_distribution(m_engine);
     }
 private:
 	typedef std::tr1::ranlux64_base_01 Engine;
 	typedef std::tr1::uniform_real_distribution<float> Distribution;
 
-	Engine engine;
-	Distribution distribution;
+	Engine m_engine;
+	Distribution m_distribution;
 };
 
 #endif //RANDOM_H_

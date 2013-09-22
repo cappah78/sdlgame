@@ -48,40 +48,41 @@ public:
 private:
 	void setupUniforms();
 
-	int numLights;
+	int m_numLights;
 
-	CameraTransform cameraTransform;			// transformation data
-	GLuint cameraTransformUB;				// uniform buffer for the transformation
+	CameraTransform m_cameraTransform;			// transformation data
+	GLuint m_cameraTransformUB;				// uniform buffer for the transformation
 
-	LightData lightData[MAX_LIGHTS];
-	GLuint lightDataUB;
+	LightData m_lightData[MAX_LIGHTS];
+	GLuint m_lightDataUB;
 
-	LightTransform lightTransforms[MAX_LIGHTS];
-	GLuint lightTransformUB;
+	LightTransform m_lightTransforms[MAX_LIGHTS];
+	GLuint m_lightTransformUB;
 
-	GLuint GBufferPPL;				// G-Buffer program pipeline
-	GLint u_transformBlockLoc;
-	GLint u_colorBufferLoc;
-	GLint u_depthBufferLoc;
-	GLint u_normalBufferLoc;
-	GLint u_shadowMapArrayLoc;
+	GLuint m_gBufferProgram;				// G-Buffer program pipeline
+	GLint m_transformBlockLoc;
+	GLint m_colorBufferLoc;
+	GLint m_depthBufferLoc;
+	GLint m_normalBufferLoc;
+	GLint m_shadowMapArrayLoc;
 
-	GLuint lightPassPPL;
+	GLuint m_lightPassProgram;
 
-	GLint u_numLightsLoc;
+	GLuint m_forwardShaderProgram;
 
-	GLuint shadowSinglePPL;			// single shadow program pipeline
-	GLint lightIDUniformLoc;		// location of the lightID uniform
+	GLint m_numLightsLoc;
 
-	GLuint shadowMultiPPL;			// multi shadow program pipeline
+	GLuint m_shadowSingleProgram;			// single shadow program pipeline
+	GLint m_lightIDUniformLoc;		// location of the lightID uniform
 
-	GLuint colorGBT;				// position texture for G-buffer
-	GLuint normalGBT;				// normal texture for G-buffer
-	GLuint depthGBT;				// depth texture for G-buffer
-	GLuint gBuffer;					// G-buffer framebuffer
+	GLuint m_shadowMultiProgram;			// multi shadow program pipeline
+	GLuint m_shadowDepthTex;
+	GLuint m_shadowFBO;
 
-	GLuint shadowArrayTex;			// shadow map texture cube array
-	GLuint shadowFB;				// shadow rendering framebuffer
+	GLuint m_colorBufferTex;				// position texture for G-buffer
+	GLuint m_normalBufferTex;				// normal texture for G-buffer
+	GLuint m_depthBufferTex;				// depth texture for G-buffer
+	GLuint m_gBuffer;					// G-buffer framebuffer
 };
 
 #endif //GBUFFER_H_

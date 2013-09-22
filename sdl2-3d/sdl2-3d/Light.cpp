@@ -1,15 +1,16 @@
 #include "Light.h"
 
-const unsigned int DEPTH_TEXTURE_SIZE = 512;
+const unsigned int DEPTH_m_textureSIZE = 512;
 
-Light::Light(glm::vec3 position_, glm::vec3 direction_, glm::vec3 color_, float linearAttenuation_, float spotRadius_, float spotDropoff_)
-	: position(position_)
-	, color(color_)
-	, direction(direction_)
-	, linearAttenuation(linearAttenuation_)
-	, spotRadius(spotRadius_)
-	, spotDropoff(spotDropoff_)
-	, isEnabled(true)
+Light::Light(glm::vec3 position, glm::vec3 direction, glm::vec3 color, float linearAttenuation, float spotRadius, float spotDropoff)
+	: m_position(position)
+	, m_color(color)
+	, m_direction(direction)
+	, m_linearAttenuation(linearAttenuation)
+	, m_spotRadius(spotRadius)
+	, m_spotDropoff(spotDropoff)
+	, m_isEnabled(true)
+	, m_isUpdated(false)
 {
 	
 }
@@ -21,20 +22,35 @@ Light::~Light()
 
 void Light::setEnabled(bool enabled)
 {
-	isEnabled = enabled;
+	m_isEnabled = enabled;
 }
 
-void Light::setPosition(glm::vec3 position_)
+void Light::setPosition(glm::vec3 position)
 {
-	position = position_;
+	m_position = position;
 }
 
-void Light::setColor(glm::vec3 color_)
+void Light::setColor(glm::vec3 color)
 {
-	color = color_;
+	m_color = color;
 }
 
 void Light::setLinearAttenuation(float att)
 {
-	linearAttenuation = att;
+	m_linearAttenuation = att;
+}
+
+void Light::update()
+{
+	m_isUpdated = false;
+}
+
+bool Light::isUpdated()
+{
+	return m_isUpdated;
+}
+
+void Light::setUpdated(bool updated)
+{
+	m_isUpdated = updated;
 }

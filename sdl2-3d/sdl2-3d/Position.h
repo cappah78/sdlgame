@@ -1,5 +1,5 @@
-#ifndef POSITION_H_
-#define POSITION_H_
+#ifndef m_positionH_
+#define m_positionH_
 
 #include "coment\Component.h"
 
@@ -14,4 +14,4 @@ namespace component
 	};
 }
 
-#endif //POSITION_H_
+#endif //m_positionH_
