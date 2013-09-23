@@ -21,7 +21,7 @@ const int CAMERA_TRANSFORM_BINDING_POINT = 0;
 const int LIGHT_DATA_BINDING_POINT = 1;
 const int LIGHT_TRANSFORM_BINDING_POINT = 2;
 
-#define ARRAY_m_sizeIN_ELEMENTS(a) \
+#define ARRAY_SIZE_IN_ELEMENTS(a) \
   ((sizeof(a) / sizeof(*(a))) / \
   static_cast<m_sizet>(!(sizeof(a) % sizeof(*(a)))))
 

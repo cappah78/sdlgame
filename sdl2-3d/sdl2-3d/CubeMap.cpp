@@ -3,7 +3,6 @@
 #include <gl\glew.h>
 #include "Pixmap.h"
 
-
 CubeMap::CubeMap(GLuint texture)
 	: m_texture(texture)
 {

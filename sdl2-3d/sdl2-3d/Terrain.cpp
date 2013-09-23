@@ -3,9 +3,12 @@
 #include <sstream>
 #include "HeightMap.h"
 #include "Camera.h"
-#include "Shader.h"
 #include <gl\glew.h>
 
+
+const int IN_POSITION_LOC = 0;
+const int IN_TEXCOORD_LOC = 1;
+const int IN_NORMAL_LOC = 2;
 
 #define BUFFER_OFFSET(offset) ((void *)(offset))
 #define m_terrainVERTEX_SHADER "terrain.vert"
@@ -111,13 +114,13 @@ void Terrain::generateVertices(HeightMap& heightMap)
 	glGenBuffers(1, &m_positionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);
 	glBufferData(GL_ARRAY_BUFFER, m_numVertices * sizeof(glm::vec3), m_positions, GL_STATIC_DRAW);
-	glVertexAttribPointer(Shader::IN_POSITION_LOC, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glVertexAttribPointer(IN_POSITION_LOC, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
 	
 	glGenBuffers(1, &m_texCoordBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_texCoordBuffer);
 	glBufferData(GL_ARRAY_BUFFER, m_numVertices * sizeof(glm::vec2), m_texCoords, GL_STATIC_DRAW);
-	glVertexAttribPointer(Shader::IN_TEXCOORD_LOC, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+	glVertexAttribPointer(IN_TEXCOORD_LOC, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 }
 
@@ -146,7 +149,7 @@ void Terrain::generateNormals()
 	glGenBuffers(1, &m_normalBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_normalBuffer);
 	glBufferData(GL_ARRAY_BUFFER, m_numVertices * sizeof(glm::vec3), m_normals, GL_STATIC_DRAW);
-	glVertexAttribPointer(Shader::IN_NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glVertexAttribPointer(IN_NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(2);
 }
 

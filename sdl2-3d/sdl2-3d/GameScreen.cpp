@@ -10,42 +10,35 @@
 #include "Terrain.h"
 #include "ShaderManager.h"
 
-#define m_terrainVERTEX_SHADER "terrain.vert"
-#define m_terrainFRAGMENT_SHADER "terrain.frag"
-#define GEOMETRY_PASS_VERTEX_SHADER "geometrypass.vert"
-#define GEOMETRY_PASS_FRAGMENT_SHADER "geometrypass.frag"
-#define SKYBOX_VERTEX_SHADER "skybox.vert"
-#define SKYBOX_FRAGMENT_SHADER "skybox.frag"
-
 GameScreen::GameScreen()
-	: mouseLookSystem_(glm::vec3(0.0001, 0, -1.0))
+	: m_mouseLookSystem(glm::vec3(0.0001, 0, -1.0))
 	, m_camera(glm::vec3(0, 50, 0))
-	, cameraController_(m_camera)
-	, heightMap_(23, 512, 512)
+	, m_cameraController(m_camera)
+	, m_heightMap(23, 512, 512)
 {
-	SDLGame::registerKeyListener(&cameraController_);
-	SDLGame::registerMouseListener(&mouseLookSystem_);
+	SDLGame::registerKeyListener(&m_cameraController);
+	SDLGame::registerMouseListener(&m_mouseLookSystem);
 	SDLGame::registerKeyListener(this);
 	
-	heightMap_.addPerlinNoise(30.0f);
-	heightMap_.addPerlinNoise(20.0f);
-	heightMap_.addPerlinNoise(10.0f);
-	heightMap_.addPerlinNoise(5.0f);
-	heightMap_.addPerlinNoise(1.0f);
+	m_heightMap.addPerlinNoise(30.0f);
+	m_heightMap.addPerlinNoise(20.0f);
+	m_heightMap.addPerlinNoise(10.0f);
+	m_heightMap.addPerlinNoise(5.0f);
+	m_heightMap.addPerlinNoise(1.0f);
 
-	heightMap_.perturb(250.0f, 8.0f);
+	m_heightMap.perturb(250.0f, 8.0f);
 	for(int i = 0; i < 5; i++)
-		heightMap_.erode(16.0f);
-	heightMap_.smoothen();
-	heightMap_.smoothen();
+		m_heightMap.erode(16.0f);
+	m_heightMap.smoothen();
+	m_heightMap.smoothen();
 
 
-	m_terrain = new Terrain(heightMap_, 10, 150);
+	m_terrain = new Terrain(m_heightMap, 10, 150);
 	m_texture = new Texture("grass.png");
 
-	m_world.registerSystem(movementSystem_);
-	m_world.registerSystem(mouseLookSystem_);
-	m_world.registerSystem(cameraController_);
+	m_world.registerSystem(m_movementSystem);
+	m_world.registerSystem(m_mouseLookSystem);
+	m_world.registerSystem(m_cameraController);
 
 	//EntityFactory::createPlayer(world, 1, 1, 0);
 	glEnable(GL_DEPTH_TEST);
@@ -57,7 +50,7 @@ GameScreen::~GameScreen()
 	delete m_terrain;
 }
 
-bool update = true;
+bool updateLights = true;
 
 void GameScreen::render(float deltaSec)
 {
@@ -69,13 +62,13 @@ void GameScreen::render(float deltaSec)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_camera.lookAtDir(mouseLookSystem_.getLookDir());
+	m_camera.lookAtDir(m_mouseLookSystem.getLookDir());
 	m_camera.update();
 	
 	m_skyBox.render(m_camera);
 
-	if (update) {
-		update = false;
+	if (updateLights) {
+		updateLights = false;
 		forwardShader.updateLights(m_camera, m_lightManager);
 		forwardShader.generateShadowMaps();
 		m_terrain->render();
@@ -85,8 +78,6 @@ void GameScreen::render(float deltaSec)
 	forwardShader.use(m_camera);
 	m_texture->bind();
 	m_terrain->render();
-	
-
 
 	SDLGame::swap();
 }
@@ -103,7 +94,7 @@ bool GameScreen::keyDown(SDL_Keysym key)
 {
 	if (key.sym == SDLK_r)
 	{
-		update = true;
+		updateLights = true;
 	}
 	return false;
 }

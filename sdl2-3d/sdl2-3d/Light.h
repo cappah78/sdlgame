@@ -24,7 +24,9 @@ public:
 	float m_spotRadius;
 	float m_linearAttenuation;
 	float m_spotDropoff;
+
 	bool m_isEnabled;
+	bool m_castsShadow;
 
 
 private:

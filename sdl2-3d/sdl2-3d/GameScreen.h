@@ -7,15 +7,12 @@
 #include "MouseListener.h"
 #include "KeyListener.h"
 #include "HeightMap.h"
-#include "Shader.h"
 #include "LightManager.h"
-#include "GBuffer.h"
 #include "SkyBox.h"
 #include "coment\World.h"
 #include "EntityFactory.h"
 #include "MovementSystem.h"
 #include "MouseLookSystem.h"
-#include "SpriteBatch.h"
 #include "SDLGame.h"
 #include "PerspectiveCamera.h"
 #include "FPSCameraController.h"
@@ -37,12 +34,12 @@ public:
 private:
 	coment::World m_world;
 
-	entitysystem::MovementSystem movementSystem_;
-	entitysystem::MouseLookSystem mouseLookSystem_;
-	entitysystem::FPSCameraController cameraController_;
+	entitysystem::MovementSystem m_movementSystem;
+	entitysystem::MouseLookSystem m_mouseLookSystem;
+	entitysystem::FPSCameraController m_cameraController;
 
 	PerspectiveCamera m_camera;
-	HeightMap heightMap_;
+	HeightMap m_heightMap;
 
 	SkyBox m_skyBox;
 

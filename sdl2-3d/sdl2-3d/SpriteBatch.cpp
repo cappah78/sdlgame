@@ -61,7 +61,6 @@ SpriteBatch::SpriteBatch(int size)
 	glBufferData(GL_ARRAY_BUFFER, m_bufferByteSize, m_vertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0); //position
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), BUFFER_OFFSET(2 * sizeof(float))); //uv
-	
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 }

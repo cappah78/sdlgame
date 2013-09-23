@@ -119,16 +119,16 @@ void ForwardShader::updateLights(const Camera& camera, LightManager& lightManage
 		glm::mat4 lightViewMat = glm::lookAt(light->m_position, light->m_position + light->m_direction, glm::vec3(0, 1, 0));
 		m_lightTransforms[i].VPMatrix = lightProjMat * lightViewMat;
 
+		glBindBuffer(GL_UNIFORM_BUFFER, m_lightDataBuffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(LightData), sizeof(LightData), &m_lightData[i]);
+		glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, m_lightDataBuffer);
+
+		glBindBuffer(GL_UNIFORM_BUFFER, m_lightTransformBuffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(LightTransform), sizeof(LightTransform), &m_lightTransforms[i]);
+		glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, m_lightTransformBuffer);
+
 		light->setUpdated(true);
 	}
-
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightDataBuffer);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, m_numLights * sizeof(LightData), m_lightData);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, m_lightDataBuffer);
-
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightTransformBuffer);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, m_numLights * sizeof(LightTransform), m_lightTransforms);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, m_lightTransformBuffer);
 }
 
 void ForwardShader::setupShadowFramebuffer()
