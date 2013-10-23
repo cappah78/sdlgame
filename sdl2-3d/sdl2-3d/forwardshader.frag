@@ -1,15 +1,17 @@
 #version 330 core
 
-const int maxLights = 10;
+//TODO: write #include parser to build shader
+//TODO: append #define to shader using code.
+
+#define MAX_POINT_LIGHTS 5
+#define MAX_SPOT_LIGHTS 5
+#define MAX_DIRECTIONAL_LIGHTS 3
+
+#define LIGHT_RANGE_SCALE_MULT 1000.0f
+
+//TODO: Material stuff, properties per material.
 const float shininess = 0.001;
 const float strength = 0.01;
-
-struct Light
-{
-	vec4 position;
-	vec4 direction;
-	vec4 color;
-};
 
 layout(std140) uniform CameraTransform {
 	mat4 VPMatrix;
@@ -17,18 +19,40 @@ layout(std140) uniform CameraTransform {
 	mat4 PMatrix;
 } camera;
 
-layout(std140) uniform LightData {
-	Light lights[maxLights];
-} lightData;
-
-layout(std140) uniform LightTransform {
-	mat4 VPMatrix[maxLights];
-} lightTransforms;
-
 uniform sampler2D tex;
-uniform sampler2DArrayShadow u_shadowMapArray;
+uniform vec3 u_ambient;
 
-uniform int u_numLights;
+struct PointLight
+{
+	vec3 position;
+	vec3 color;	//just using rgb, but vec4 for non confusing vec3 padding
+};
+layout(std140) uniform PointLights
+{
+	PointLight lights[MAX_POINT_LIGHTS];
+} pointLights;
+
+struct SpotLight
+{
+	vec4 positionAndAngle;
+	vec4 directionAndDropoff;
+	vec3 color;
+};
+layout(std140) uniform SpotLights
+{
+	SpotLight lights[MAX_SPOT_LIGHTS];
+} spotLights;
+
+struct DirectionalLight
+{
+	vec3 direction;
+	vec3 color;
+};
+layout(std140) uniform DirectionalLights
+{
+	DirectionalLight lights[MAX_DIRECTIONAL_LIGHTS];
+} directionalLights;
+
 
 in vec3 position;
 in vec2 texCoord;
@@ -36,57 +60,81 @@ in vec3 normal;
 
 layout(location = 0) out vec4 color;
 
+vec3 lightLevel;
+vec3 eyeDirection;
+
+void applyPointLights()
+{
+	for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
+	{
+		PointLight light = pointLights.lights[i];
+
+		vec3 lightDir = light.position - position;
+
+		float sqrDist = dot(lightDir, lightDir);
+		float invDist = inversesqrt(sqrDist);
+		lightDir *= invDist;
+		float dist = invDist * sqrDist;
+
+		float att = 1.0 / (1.0 + dist);
+		float NdotL = clamp(dot(normal, lightDir), 0.0, 2.0);
+
+		lightLevel += light.color * att * NdotL;
+	}
+}
+
+void applySpotLights()
+{
+	for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
+	{
+		SpotLight light = spotLights.lights[i];
+		vec3 lightDir = light.positionAndAngle.xyz - position;
+
+		float sqrDist = dot(lightDir, lightDir);
+		float invDist = inversesqrt(sqrDist);
+		float dist = invDist * sqrDist;
+		lightDir *= invDist;
+
+		float att = 1.0 / (1.0 + dist);
+		float NdotL = clamp(dot(normal, lightDir), 0.0, 2.0);
+		float spotCos = dot(lightDir, -light.directionAndDropoff.xyz);
+
+		float dropoff = light.directionAndDropoff.w;	
+
+		if (spotCos < light.positionAndAngle.w)
+			att = 0.0;
+		else
+			att *= pow(spotCos, clamp(dropoff, 1.0, 15.0)); //what the fuck.
+
+		lightLevel += light.color * att * NdotL;
+	}
+}
+
+void applyDirectionalLights()
+{
+	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
+	{
+		DirectionalLight light = directionalLights.lights[i];
+		float NdotL = max(dot(normal, -light.direction), 0.0);
+		lightLevel += light.color * NdotL;
+	}
+}
+
 void main()
 {
 	vec3 texCol = texture(tex, texCoord).rgb;
-	vec3 eyeDirection = -vec3(camera.VMatrix[2][0], camera.VMatrix[2][1], camera.VMatrix[2][2]);
 
-	vec3 scatteredLight = vec3(0);
-	vec3 reflectedLight = vec3(0);
+	eyeDirection = -vec3(camera.VMatrix[2][0], camera.VMatrix[2][1], camera.VMatrix[2][2]);
+	lightLevel = vec3(0);
 
-	for (int i = 0; i < u_numLights; ++i)
-	{
-		float spotCosCutoff = lightData.lights[i].position.w;
-		if (spotCosCutoff >= 1.0f)
-			continue;
+	applyPointLights();
+	applySpotLights();
+	applyDirectionalLights();
+	lightLevel += u_ambient;
 
-		vec3 lightPosition = lightData.lights[i].position.xyz;
-		vec3 lightDirection = lightData.lights[i].direction.xyz;
-		vec3 lightVec = lightPosition.xyz - position.xyz;
-		float lightDistance = length(lightVec);
-		lightVec /= lightDistance;
-
-		float spotCos = dot(lightVec, normalize(-lightDirection));
-		if (spotCos < spotCosCutoff)
-			continue;
-
-		float spotDropoff = lightData.lights[i].direction.w;
-		float linearAtt = lightData.lights[i].color.w;
-		vec3 lightColor = lightData.lights[i].color.xyz;
-
-		float att = 1.f / ( 1.0f + linearAtt * lightDistance);
-		att *= pow(spotCos, spotDropoff);
-
-		vec3 halfVector = normalize(lightVec + eyeDirection);
-		float diffuse = max(0.0, dot(normal, lightVec));
-		float specular = max(0.0, dot(normal, halfVector));
-		specular = diffuse == 0.0 ? 0.0 : pow(specular, shininess) * strength;
-		
-		vec4 shadowCoordHom = lightTransforms.VPMatrix[i] * vec4(position, 1.0f);
-		shadowCoordHom.xyz /= shadowCoordHom.w;
-		shadowCoordHom.xyz = shadowCoordHom.xyz * 0.5 + 0.5;
-		shadowCoordHom.z *= 0.9999;
-		vec4 shadowCoord = vec4(shadowCoordHom.x, shadowCoordHom.y, i, shadowCoordHom.z);
-		float shadow = texture(u_shadowMapArray, shadowCoord);
-		float counterShadow = min(floor(shadowCoord.w), 1.f);
-		shadow = mix(shadow, 1.f, counterShadow);
-
-		// Accumulate all the lights’ effects
-		scatteredLight += vec3(lightColor) * att * diffuse * shadow;
-		reflectedLight += vec3(lightColor) * att * specular * shadow;
-	}
-
-	vec3 rgb = min(texCol * scatteredLight + reflectedLight, vec3(1.0));
+	vec3 rgb = min(texCol * lightLevel, vec3(1.0));
 	color = vec4(rgb, 1.0);
 }
+
+
 

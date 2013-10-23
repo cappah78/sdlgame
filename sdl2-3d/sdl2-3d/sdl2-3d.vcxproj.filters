@@ -69,13 +69,28 @@
     <Filter Include="Source Files\Coment">
       <UniqueIdentifier>{37ad34d2-51ce-42c2-bbb3-da264f7d464f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\WIP">
+      <UniqueIdentifier>{03bd00ab-4544-40aa-8ba2-89e044b5fd80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\WIP">
+      <UniqueIdentifier>{9137cf43-39a3-4ecb-aa4b-08696c26947f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\lighting">
+      <UniqueIdentifier>{5825d134-7146-4c4c-b6fe-9f5fe3c7777f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\model">
+      <UniqueIdentifier>{cbac6b1e-1053-4599-8827-3ee39e60440a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\model">
+      <UniqueIdentifier>{0afe63ac-2d02-43eb-a905-5559be976a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\lighting">
+      <UniqueIdentifier>{df1e2546-7022-4cfe-9d38-6aae0e913d19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMap.cpp">
-      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files\Utils</Filter>
@@ -89,9 +104,6 @@
     <ClCompile Include="NumberUtils.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Pixmap.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -104,17 +116,8 @@
     <ClCompile Include="GameScreen.cpp">
       <Filter>Source Files\Screens</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image.c">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="SDLGame.cpp">
       <Filter>Source Files\Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="FPSCameraController.cpp">
-      <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Engine</Filter>
@@ -170,35 +173,71 @@
     <ClCompile Include="EntityFactory.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="LightManager.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="LightSorter.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="GBuffer.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeMap.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBox.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="MatrixUtils.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="ForwardShader.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Aabb.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Assert.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckGLError.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.c">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TiledForwardShader.cpp">
+      <Filter>Source Files\Engine\WIP</Filter>
+    </ClCompile>
+    <ClCompile Include="OBJModel.cpp">
+      <Filter>Source Files\Engine\WIP</Filter>
+    </ClCompile>
+    <ClCompile Include="LightGrid.cpp">
+      <Filter>Source Files\Engine\WIP</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Source Files\Engine\WIP</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleShader.cpp">
+      <Filter>Source Files\Engine\WIP</Filter>
+    </ClCompile>
+    <ClCompile Include="ComboShader.cpp">
+      <Filter>Source Files\Engine\WIP</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Pixmap.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Source Files\Engine\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="LightSorter.cpp">
+      <Filter>Source Files\Engine\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMap.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSCameraController.cpp">
+      <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,31 +259,10 @@
     <None Include="spritebatch.vert">
       <Filter>data\shaders</Filter>
     </None>
-    <None Include="terrain.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="terrain.vert">
-      <Filter>data\shaders</Filter>
-    </None>
     <None Include="skybox.vert">
       <Filter>data\shaders</Filter>
     </None>
     <None Include="skybox.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="gbuffer.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="gbuffer.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="light.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="light.geom">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="light.vert">
       <Filter>data\shaders</Filter>
     </None>
     <None Include="shadowmulti.geom">
@@ -253,19 +271,7 @@
     <None Include="shadowmulti.vert">
       <Filter>data\shaders</Filter>
     </None>
-    <None Include="shadowsingle.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="lightpass.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="lightpass.frag">
-      <Filter>data\shaders</Filter>
-    </None>
     <None Include="fullscreenquad.geom">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="lightpass.geom">
       <Filter>data\shaders</Filter>
     </None>
     <None Include="forwardshader.frag">
@@ -282,28 +288,13 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="HeightMap.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Pixmap.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="PerspectiveCamera.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="SpriteBatch.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureRegion.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Screen.h">
@@ -447,38 +438,107 @@
     <ClInclude Include="EntityFactory.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="LightManager.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="LightSorter.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="GBuffer.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeMap.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBox.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="MatrixUtils.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="ClipRegion.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Aabb.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GlBufferObject.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Assert.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckGLError.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="IntTypes.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TiledForwardShader.h">
+      <Filter>Header Files\Engine\WIP</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJModel.h">
+      <Filter>Header Files\Engine\WIP</Filter>
+    </ClInclude>
+    <ClInclude Include="ComboShader.h">
+      <Filter>Header Files\Engine\WIP</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleShader.h">
+      <Filter>Header Files\Engine\WIP</Filter>
+    </ClInclude>
     <ClInclude Include="ForwardShader.h">
       <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="TiledShaderPointLight.h">
+      <Filter>Header Files\Engine\WIP</Filter>
+    </ClInclude>
+    <ClInclude Include="AmbientLight.h">
+      <Filter>Header Files\Engine\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Header Files\Engine\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Engine\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="LightGrid.h">
+      <Filter>Header Files\Engine\WIP</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="Pixmap.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Header Files\Engine\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Header Files\Engine\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRegion.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Header Files\Engine\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="LightSorter.h">
+      <Filter>Header Files\Engine\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMap.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Header Files\Engine\model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

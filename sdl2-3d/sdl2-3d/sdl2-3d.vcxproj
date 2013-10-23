@@ -11,7 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Aabb.cpp" />
+    <ClCompile Include="Assert.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CheckGLError.cpp" />
+    <ClCompile Include="ComboShader.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
     <ClCompile Include="CubeMap.cpp" />
     <ClCompile Include="DeltaProcessingSystem.cpp" />
@@ -29,7 +33,7 @@
     <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="GroupManager.cpp" />
     <ClCompile Include="HeightMap.cpp" />
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightGrid.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LightSorter.cpp" />
     <ClCompile Include="main.cpp" />
@@ -41,11 +45,13 @@
     <ClCompile Include="MouseLookSystem.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="NumberUtils.cpp" />
+    <ClCompile Include="OBJModel.cpp" />
     <ClCompile Include="PerlinGenerator.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Pixmap.cpp" />
     <ClCompile Include="SDLGame.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="SimpleShader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="stb_image.c" />
@@ -53,6 +59,7 @@
     <ClCompile Include="TagManager.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TiledForwardShader.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -60,29 +67,24 @@
     <None Include="alphascribble.png" />
     <None Include="forwardshader.frag" />
     <None Include="forwardshader.vert" />
-    <None Include="gbuffer.frag" />
-    <None Include="gbuffer.vert" />
-    <None Include="light.frag" />
-    <None Include="light.geom" />
-    <None Include="light.vert" />
-    <None Include="lightpass.frag" />
     <None Include="fullscreenquad.geom" />
-    <None Include="lightpass.geom" />
-    <None Include="lightpass.vert" />
     <None Include="shadowmulti.geom" />
     <None Include="shadowmulti.vert" />
-    <None Include="shadowsingle.vert" />
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
     <None Include="spritebatch.frag" />
     <None Include="spritebatch.vert" />
     <None Include="grass.png" />
     <None Include="scribble.png" />
-    <None Include="terrain.frag" />
-    <None Include="terrain.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Aabb.h" />
+    <ClInclude Include="AmbientLight.h" />
+    <ClInclude Include="Assert.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CheckGLError.h" />
+    <ClInclude Include="ClipRegion.h" />
+    <ClInclude Include="ComboShader.h" />
     <ClInclude Include="coment\Component.h" />
     <ClInclude Include="coment\Entity.h" />
     <ClInclude Include="coment\EntityId.h" />
@@ -112,9 +114,11 @@
     <ClInclude Include="coment\utils\Map.h" />
     <ClInclude Include="coment\utils\SharedPtr.h" />
     <ClInclude Include="coment\World.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="CubeMap.h" />
     <ClInclude Include="DeltaProcessingSystem.h" />
     <ClInclude Include="Direction.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EntityBuilder.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="ForwardShader.h" />
@@ -122,9 +126,14 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GBuffer.h" />
+    <ClInclude Include="GlBufferObject.h" />
     <ClInclude Include="HeightMap.h" />
+    <ClInclude Include="IntTypes.h" />
     <ClInclude Include="KeyListener.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="PointLight.h" />
+    <ClInclude Include="TiledShaderPointLight.h" />
+    <ClInclude Include="LightGrid.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LightSorter.h" />
     <ClInclude Include="MathUtils.h" />
@@ -135,6 +144,8 @@
     <ClInclude Include="MouseLookSystem.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="NumberUtils.h" />
+    <ClInclude Include="OBJModel.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="PerlinGenerator.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Pixmap.h" />
@@ -143,12 +154,15 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SDLGame.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="SimpleShader.h" />
     <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureRegion.h" />
+    <ClInclude Include="TiledForwardShader.h" />
     <ClInclude Include="Velocity.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

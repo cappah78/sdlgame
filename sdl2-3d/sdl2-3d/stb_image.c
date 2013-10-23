@@ -115,7 +115,7 @@
 // and *x, *y, *comp will be unchanged. The function stbi_failure_reason()
 // can be queried for an extremely brief, end-user unfriendly explanation
 // of why the load failed. Define STBI_NO_FAILURE_STRINGS to avoid
-// compiling these strings at all, and STBI_FAILURE_USERMSG to get slightly
+// compiling these strings at all, and STBI_FAILURE_USERMSG to get sPointLightly
 // more user-friendly ones.
 //
 // Paletted PNG, BMP, GIF, and PIC images are automatically depalettized.

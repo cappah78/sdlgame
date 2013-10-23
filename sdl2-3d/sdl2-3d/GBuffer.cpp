@@ -18,8 +18,8 @@ const int SCREEN_HEIGHT = 768;
 const int SHADOW_MAP_SIZE = 1024;
 
 const int CAMERA_TRANSFORM_BINDING_POINT = 0;
-const int LIGHT_DATA_BINDING_POINT = 1;
-const int LIGHT_TRANSFORM_BINDING_POINT = 2;
+const int Light_DATA_BINDING_POINT = 1;
+const int Light_TRANSFORM_BINDING_POINT = 2;
 
 #define ARRAY_SIZE_IN_ELEMENTS(a) \
   ((sizeof(a) / sizeof(*(a))) / \
@@ -67,30 +67,30 @@ GBuffer::GBuffer()
 	setupGBuffer();
 	setupUniforms();
 
-	GLuint lightDataIdx = glGetUniformBlockIndex(m_lightPassProgram, "LightData");
-	GLuint lightTransformIdx = glGetUniformBlockIndex(m_lightPassProgram, "LightTransform");
-	GLuint lightDataIdx2 = glGetUniformBlockIndex(m_shadowMultiProgram, "LightData");
-	GLuint lightTransformIdx2 = glGetUniformBlockIndex(m_shadowMultiProgram, "LightTransform");
-	GLuint lightTransformIdx3 = glGetUniformBlockIndex(m_shadowSingleProgram, "LightTransform");
-	GLuint cameraTransformIdx = glGetUniformBlockIndex(m_lightPassProgram, "CameraTransform");
+	GLuint LightDataIdx = glGetUniformBlockIndex(m_LightPassProgram, "LightData");
+	GLuint LightTransformIdx = glGetUniformBlockIndex(m_LightPassProgram, "LightTransform");
+	GLuint LightDataIdx2 = glGetUniformBlockIndex(m_shadowMultiProgram, "LightData");
+	GLuint LightTransformIdx2 = glGetUniformBlockIndex(m_shadowMultiProgram, "LightTransform");
+	GLuint LightTransformIdx3 = glGetUniformBlockIndex(m_shadowSingleProgram, "LightTransform");
+	GLuint cameraTransformIdx = glGetUniformBlockIndex(m_LightPassProgram, "CameraTransform");
 	GLuint cameraTransformIdx2 = glGetUniformBlockIndex(m_gBufferProgram, "CameraTransform");
 
-	glUniformBlockBinding(m_lightPassProgram, lightDataIdx, LIGHT_DATA_BINDING_POINT);
-	glUniformBlockBinding(m_lightPassProgram, lightTransformIdx, LIGHT_TRANSFORM_BINDING_POINT);
-	glUniformBlockBinding(m_shadowMultiProgram, lightDataIdx2, LIGHT_DATA_BINDING_POINT);
-	glUniformBlockBinding(m_shadowMultiProgram, lightTransformIdx2, LIGHT_TRANSFORM_BINDING_POINT);
-	glUniformBlockBinding(m_lightPassProgram, cameraTransformIdx, CAMERA_TRANSFORM_BINDING_POINT);
+	glUniformBlockBinding(m_LightPassProgram, LightDataIdx, Light_DATA_BINDING_POINT);
+	glUniformBlockBinding(m_LightPassProgram, LightTransformIdx, Light_TRANSFORM_BINDING_POINT);
+	glUniformBlockBinding(m_shadowMultiProgram, LightDataIdx2, Light_DATA_BINDING_POINT);
+	glUniformBlockBinding(m_shadowMultiProgram, LightTransformIdx2, Light_TRANSFORM_BINDING_POINT);
+	glUniformBlockBinding(m_LightPassProgram, cameraTransformIdx, CAMERA_TRANSFORM_BINDING_POINT);
 	glUniformBlockBinding(m_gBufferProgram, cameraTransformIdx2, CAMERA_TRANSFORM_BINDING_POINT);
 
-	glGenBuffers(1, &m_lightDataUB);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightDataUB);
-	glBufferData(GL_UNIFORM_BUFFER, MAX_LIGHTS * sizeof(LightData), m_lightData, GL_STATIC_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, m_lightDataUB);
+	glGenBuffers(1, &m_LightDataUB);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_LightDataUB);
+	glBufferData(GL_UNIFORM_BUFFER, MAX_LightS * sizeof(LightData), m_LightData, GL_STATIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, Light_DATA_BINDING_POINT, m_LightDataUB);
 
-	glGenBuffers(1, &m_lightTransformUB);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightTransformUB);
-	glBufferData(GL_UNIFORM_BUFFER, MAX_LIGHTS * sizeof(LightTransform), m_lightTransforms, GL_STATIC_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, m_lightTransformUB);
+	glGenBuffers(1, &m_LightTransformUB);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_LightTransformUB);
+	glBufferData(GL_UNIFORM_BUFFER, MAX_LightS * sizeof(LightTransform), m_LightTransforms, GL_STATIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, Light_TRANSFORM_BINDING_POINT, m_LightTransformUB);
 
 	glGenBuffers(1, &m_cameraTransformUB);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformUB);
@@ -106,7 +106,7 @@ GBuffer::~GBuffer()
 void GBuffer::loadShaders()
 {
 	m_gBufferProgram = ShaderManager::createShaderProgram("gbuffer.vert", 0, "gbuffer.frag");
-	m_lightPassProgram = ShaderManager::createShaderProgram("lightpass.vert", "lightpass.geom", "lightpass.frag");
+	m_LightPassProgram = ShaderManager::createShaderProgram("Lightpass.vert", "Lightpass.geom", "Lightpass.frag");
 	m_shadowMultiProgram = ShaderManager::createShaderProgram("shadowmulti.vert", "shadowmulti.geom", 0);
 	m_shadowSingleProgram = ShaderManager::createShaderProgram("shadowsingle.vert", 0, 0);
 	m_forwardShaderProgram = ShaderManager::createShaderProgram("forwardshader.vert", 0, "forwardshader.frag");
@@ -114,16 +114,16 @@ void GBuffer::loadShaders()
 
 void GBuffer::setupUniforms()
 {
-	glUseProgram(m_lightPassProgram);
-	m_colorBufferLoc = glGetUniformLocation(m_lightPassProgram, "u_colorBuffer");
+	glUseProgram(m_LightPassProgram);
+	m_colorBufferLoc = glGetUniformLocation(m_LightPassProgram, "u_colorBuffer");
 	glUniform1i(m_colorBufferLoc, 0);
-	m_normalBufferLoc = glGetUniformLocation(m_lightPassProgram, "u_normalBuffer");
+	m_normalBufferLoc = glGetUniformLocation(m_LightPassProgram, "u_normalBuffer");
 	glUniform1i(m_normalBufferLoc, 1);
-	m_depthBufferLoc = glGetUniformLocation(m_lightPassProgram, "u_depthBuffer");
+	m_depthBufferLoc = glGetUniformLocation(m_LightPassProgram, "u_depthBuffer");
 	glUniform1i(m_depthBufferLoc, 2);
-	m_shadowMapArrayLoc = glGetUniformLocation(m_lightPassProgram, "u_shadowMapArray");
+	m_shadowMapArrayLoc = glGetUniformLocation(m_LightPassProgram, "u_shadowMapArray");
 	glUniform1i(m_shadowMapArrayLoc, 3);
-	m_numLightsLoc = glGetUniformLocation(m_lightPassProgram, "u_numLights");
+	m_numLightsLoc = glGetUniformLocation(m_LightPassProgram, "u_numLights");
 }
 
 void GBuffer::setupGBuffer()
@@ -174,7 +174,7 @@ void GBuffer::setupGBuffer()
 	glGenTextures(1, &m_shadowDepthTex);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_shadowDepthTex);
 	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT16,
-		SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, MAX_LIGHTS,
+		SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, MAX_LightS,
 		0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -211,7 +211,7 @@ void GBuffer::use(const Camera& camera)
 
 void GBuffer::drawBuffer()
 {
-	glUseProgram(m_lightPassProgram);
+	glUseProgram(m_LightPassProgram);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -232,39 +232,41 @@ void GBuffer::drawBuffer()
 	glDrawArraysInstanced(GL_POINTS, 0, 1, m_numLights);
 }
 
-void GBuffer::updateLights(const Camera& camera, LightManager& lightManager)
+void GBuffer::updateLights(const Camera& camera, LightManager& LightManager)
 {
-	std::vector<Light*> lightObjects = lightManager.getLights();
-	m_numLights = MAX_LIGHTS < lightObjects.size() ? MAX_LIGHTS : lightObjects.size();
+	/*
+	Lights LightObjects = LightManager.getLights();
+	m_numLights = MAX_LightS < LightObjects.size() ? MAX_LightS : LightObjects.size();
 
-	glm::mat4 lightProjMat(glm::frustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1200.0f));
-
+	glm::mat4 LightProjMat(glm::frustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1200.0f));
+	
 	for (int i = 0; i < m_numLights; ++i) 
 	{
-		Light* light = lightObjects.at(i);
-		LightData& data = m_lightData[i];
+		Light* Light = LightObjects.at(i);
+		LightData& data = m_LightData[i];
 
-		data.position = glm::vec4(light->m_position, light->m_isEnabled ? light->m_spotRadius : 1.0);
-		data.color = glm::vec4(light->m_color, light->m_linearAttenuation);
-		data.direction = glm::vec4(light->m_direction, light->m_spotDropoff);
+		data.position = glm::vec4(Light->m_position, Light->m_isEnabled ? Light->m_spotRadius : 1.0);
+		data.color = glm::vec4(Light->m_color, Light->m_linearAttenuation);
+		data.direction = glm::vec4(Light->m_direction, Light->m_spotDropoff);
 
-		glm::mat4 lightViewMat(1);
-		lightViewMat = glm::lookAt(light->m_position, light->m_position + light->m_direction, glm::vec3(0, 1, 0));
-		//MatrixUtils::setToViewMatrix(lightViewMat, light->m_position, light->m_direction, glm::vec3(0, 1, 0));
-		m_lightTransforms[i].VPMatrix = lightProjMat * lightViewMat;
+		glm::mat4 LightViewMat(1);
+		LightViewMat = glm::lookAt(Light->m_position, Light->m_position + Light->m_direction, glm::vec3(0, 1, 0));
+		//MatrixUtils::setToViewMatrix(LightViewMat, Light->m_position, Light->m_direction, glm::vec3(0, 1, 0));
+		m_LightTransforms[i].VPMatrix = LightProjMat * LightViewMat;
 	}
+	
+	glBindBuffer(GL_UNIFORM_BUFFER, m_LightDataUB);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, m_numLights * sizeof(LightData), m_LightData);
+	glBindBufferBase(GL_UNIFORM_BUFFER, Light_DATA_BINDING_POINT, m_LightDataUB);
 
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightDataUB);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, m_numLights * sizeof(LightData), m_lightData);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, m_lightDataUB);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_LightTransformUB);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, m_numLights * sizeof(LightTransform), m_LightTransforms);
+	glBindBufferBase(GL_UNIFORM_BUFFER, Light_TRANSFORM_BINDING_POINT, m_LightTransformUB);
 
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightTransformUB);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, m_numLights * sizeof(LightTransform), m_lightTransforms);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, m_lightTransformUB);
-
-	glUseProgram(m_lightPassProgram);
+	glUseProgram(m_LightPassProgram);
 	glUniform1i(m_numLightsLoc, m_numLights);
 	glUseProgram(0);
+	*/
 }
 
 void GBuffer::setupShadows()

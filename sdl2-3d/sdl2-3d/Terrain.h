@@ -28,11 +28,11 @@ private:
 
 	unsigned int m_numVertices;
 	unsigned int m_numIndices;
-	unsigned int m_numLights;
+	unsigned int m_numPointLights;
 
 	GLuint m_vao;
 
-	glm::vec3 m_lightPos;
+	glm::vec3 m_PointLightPos;
 	bool m_followCam;
 
 	GLuint m_shininess;

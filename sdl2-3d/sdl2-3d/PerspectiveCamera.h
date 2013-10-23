@@ -12,8 +12,11 @@ public:
 
 	void setFieldOfView(float fovy);
 	void setNearFar(float near, float far);
-
 	void resize(int width, int height);
+
+	float getNear() const { return m_near; };
+	float getFar() const { return m_far; };
+	float getFov() const { return m_fieldOfView; };
 
 private:
 	float m_fieldOfView;

@@ -17,7 +17,7 @@ GameScreen::GameScreen()
 	, m_heightMap(23, 512, 512)
 {
 	SDLGame::registerKeyListener(&m_cameraController);
-	SDLGame::registerMouseListener(&m_mouseLookSystem);
+	SDLGame::registerMouseListener(&m_cameraController);
 	SDLGame::registerKeyListener(this);
 	
 	m_heightMap.addPerlinNoise(30.0f);
@@ -25,22 +25,17 @@ GameScreen::GameScreen()
 	m_heightMap.addPerlinNoise(10.0f);
 	m_heightMap.addPerlinNoise(5.0f);
 	m_heightMap.addPerlinNoise(1.0f);
-
 	m_heightMap.perturb(250.0f, 8.0f);
 	for(int i = 0; i < 5; i++)
 		m_heightMap.erode(16.0f);
 	m_heightMap.smoothen();
 	m_heightMap.smoothen();
 
-
 	m_terrain = new Terrain(m_heightMap, 10, 150);
 	m_texture = new Texture("grass.png");
 
-	m_world.registerSystem(m_movementSystem);
-	m_world.registerSystem(m_mouseLookSystem);
 	m_world.registerSystem(m_cameraController);
 
-	//EntityFactory::createPlayer(world, 1, 1, 0);
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -54,7 +49,6 @@ bool updateLights = true;
 
 void GameScreen::render(float deltaSec)
 {
-	//std::cout << "drawan" << std::endl;
 	m_world.loopStart();
 	m_world.setDelta(deltaSec);
 	m_world.update();
@@ -62,20 +56,19 @@ void GameScreen::render(float deltaSec)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_camera.lookAtDir(m_mouseLookSystem.getLookDir());
 	m_camera.update();
-	
 	m_skyBox.render(m_camera);
+
+	forwardShader.use(m_camera);
 
 	if (updateLights) {
 		updateLights = false;
 		forwardShader.updateLights(m_camera, m_lightManager);
-		forwardShader.generateShadowMaps();
-		m_terrain->render();
-		forwardShader.finishShadowMaps();
+		//forwardShader.generateShadowMaps();
+		//m_terrain->render();
+		//forwardShader.finishShadowMaps();
 	}
 
-	forwardShader.use(m_camera);
 	m_texture->bind();
 	m_terrain->render();
 
@@ -84,8 +77,8 @@ void GameScreen::render(float deltaSec)
 
 void GameScreen::resize(int width, int height) 
 {
-	SCREEN_WIDTH = width;
-	SCREEN_HEIGHT = height;
+	screenWidth = width;
+	screenHeight = height;
 	glViewport(0, 0, width, height);
 	m_camera.resize(width, height);
 }

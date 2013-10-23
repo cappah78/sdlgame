@@ -16,7 +16,7 @@
 
 #define SPRITEBATCH_VERTEX_SHADER "spritebatch.vert"
 #define SPRITEBATCH_FRAGMENT_SHADER "spritebatch.frag"
-#define SPRITEBATCH_UNIFORM_MVP "m_umvp"
+#define SPRITEBATCH_UNIFORM_MVP "u_mvp"
 
 SpriteBatch::SpriteBatch(int size)
 	: m_size(size)

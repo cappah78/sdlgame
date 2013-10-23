@@ -2,15 +2,20 @@
 
 #include "PerspectiveCamera.h"
 #include "coment\World.h"
+#include "MathUtils.h"
+#include <glm\gtx\rotate_vector.hpp>
 
-const float m_cameraSPEED = 100.0f;
+static const float CAMERA_SPEED = 100.0f;
+static const float MOUSE_LOOK_SENSITIVITY = 0.2f;
+static const float DIAGONAL_SPEED = sqrt(pow(CAMERA_SPEED, 2) + pow(CAMERA_SPEED, 2));
 
-const float DIAGONAL_SPEED = sqrt(pow(m_cameraSPEED, 2) + pow(m_cameraSPEED, 2));
+static const glm::vec3 UP(0, 1, 0);
 
 namespace entitysystem
 {
 	FPSCameraController::FPSCameraController(PerspectiveCamera& camera)
 		: m_camera(camera)
+		, m_lookDir(1, 0, 0)
 		, m_lmbPressed(false)
 		, m_rmbPressed(false)
 		, m_isWPressed(false), m_isAPressed(false), m_isSPressed(false), m_isDPressed(false)
@@ -28,13 +33,12 @@ namespace entitysystem
 	{
 		float delta = _world->getDelta();
 
-		bool
-			w = m_isWPressed,
-			a = m_isAPressed,
-			s = m_isSPressed,
-			d = m_isDPressed,
-			space = m_isSpacePressed,
-			shift = m_isShiftPressed;
+		bool w = m_isWPressed;
+		bool a = m_isAPressed;
+		bool s = m_isSPressed;
+		bool d = m_isDPressed;
+		bool space = m_isSpacePressed;
+		bool shift = m_isShiftPressed;
 
 		if (w && s)
 			w = false, s = false;
@@ -43,54 +47,35 @@ namespace entitysystem
 		if (space && shift)
 			space = false, shift = false;
 
-
 		if (w)
 		{
 			if (a)
-			{
 				m_camera.translateRelative(-DIAGONAL_SPEED * delta, 0.0f, -DIAGONAL_SPEED * delta);
-			}
 			else if (d)
-			{
 				m_camera.translateRelative(DIAGONAL_SPEED * delta, 0.0f, -DIAGONAL_SPEED * delta);
-			}
 			else
-			{
-				m_camera.translateRelative(0.0f, 0.0f, -m_cameraSPEED * delta);
-			}
+				m_camera.translateRelative(0.0f, 0.0f, -CAMERA_SPEED * delta);
 		}
 		else if (s)
 		{
 			if (a)
-			{
 				m_camera.translateRelative(-DIAGONAL_SPEED * delta, 0.0f, DIAGONAL_SPEED * delta);
-			}
 			else if (d)
-			{
 				m_camera.translateRelative(DIAGONAL_SPEED * delta, 0.0f, DIAGONAL_SPEED * delta);
-			}
 			else
-			{
-				m_camera.translateRelative(0.0f, 0.0f, m_cameraSPEED * delta);
-			}
+				m_camera.translateRelative(0.0f, 0.0f, CAMERA_SPEED * delta);
 		}
 		else if (a)
-		{
-			m_camera.translateRelative(-m_cameraSPEED * delta, 0.0f, 0.0f);
-		}
+			m_camera.translateRelative(-CAMERA_SPEED * delta, 0.0f, 0.0f);
 		else if (d)
-		{
-			m_camera.translateRelative(m_cameraSPEED * delta, 0.0f, 0.0f);
-		}
+			m_camera.translateRelative(CAMERA_SPEED * delta, 0.0f, 0.0f);
 
 		if (space)
-		{
-			m_camera.translateRelative(0.0f, m_cameraSPEED * delta, 0.0f);
-		}
+			m_camera.translateRelative(0.0f, CAMERA_SPEED * delta, 0.0f);
 		else if (shift)
-		{
-			m_camera.translateRelative(0.0f, -m_cameraSPEED * delta, 0.0f);
-		}
+			m_camera.translateRelative(0.0f, -CAMERA_SPEED * delta, 0.0f);
+
+		m_camera.lookAtDir(m_lookDir);
 	}
 
 	bool FPSCameraController::mouseDown(Uint8 key, int xPos, int yPos)
@@ -99,7 +84,6 @@ namespace entitysystem
 			m_lmbPressed = true;
 		if (key == 3)
 			m_rmbPressed = true;
-
 		return false;
 	}
 
@@ -109,7 +93,6 @@ namespace entitysystem
 			m_lmbPressed = false;
 		if (key == 3)
 			m_rmbPressed = false;
-
 		return false;
 	}
 
@@ -117,9 +100,21 @@ namespace entitysystem
 	{
 		if (m_lmbPressed)
 		{
-			m_camera.rotateRelative(xMove * 0.2f, yMove * 0.2f);
-		}
+			//rotate horizontally
+			m_lookDir = glm::rotate(m_lookDir, -xMove * MOUSE_LOOK_SENSITIVITY, UP);
 
+			//calculate axis to rotate vertically on
+			float xzAngle = math::atan2(m_lookDir.x, m_lookDir.z);
+			glm::vec3 yRotAxis(-math::cos(xzAngle), 0.0f, math::sin(xzAngle));
+
+			//rotate vertically
+			glm::vec3 tmp = m_lookDir;
+			m_lookDir = glm::rotate(m_lookDir, -yMove * MOUSE_LOOK_SENSITIVITY, yRotAxis);
+			//limit vertical look movement
+
+			if (m_lookDir.y > 0.99f || m_lookDir.y < -0.99f)
+				m_lookDir = tmp;
+		}
 		return false;
 	}
 
@@ -146,7 +141,6 @@ namespace entitysystem
 			m_isShiftPressed = true;
 			break;
 		}
-
 		return false;
 	}
 
@@ -173,8 +167,6 @@ namespace entitysystem
 			m_isShiftPressed = false;
 			break;
 		}
-
 		return false;
 	}
-
 }

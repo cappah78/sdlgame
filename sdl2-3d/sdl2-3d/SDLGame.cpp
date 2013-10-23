@@ -12,6 +12,8 @@
 
 SDL_Window* SDLGame::mainWindow;
 SDLGame* SDLGame::instance;
+int SDLGame::screenWidth;
+int SDLGame::screenHeight;
 
 SDLGame::SDLGame(SDL_Window* window)
 {
@@ -22,9 +24,8 @@ SDLGame::SDLGame(SDL_Window* window)
 	initGL();
 
 	mainWindow = window;
-	int width, height;
 
-	SDL_GetWindowSize(window, &width, &height);
+	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
 
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 renderCount = 0;
@@ -33,8 +34,8 @@ SDLGame::SDLGame(SDL_Window* window)
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	Screen* gameScreen = new GameScreen();
-	gameScreen->resize(width, height);
+	gameScreen = new GameScreen();
+	gameScreen->resize(screenWidth, screenHeight);
 	setScreen(gameScreen);
 
 	SDL_Event event;
@@ -168,4 +169,14 @@ void SDLGame::unregisterMouseListener(MouseListener* listener)
 {
 	std::vector<MouseListener*>* list = &SDLGame::instance->m_mouseListeners;
 	list->erase(std::remove(list->begin(), list->end(), listener), list->end());
+}
+
+int SDLGame::getWidth() 
+{
+	return screenWidth;
+}
+
+int SDLGame::getHeight()
+{
+	return screenHeight;
 }

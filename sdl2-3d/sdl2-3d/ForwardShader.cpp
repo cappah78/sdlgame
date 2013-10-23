@@ -1,7 +1,7 @@
 #include "ForwardShader.h"
 
 #include "ShaderManager.h"
-#include "Light.h"
+#include "PointLight.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -10,25 +10,34 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+#define CHECK_GL_ERROR()												\
+{																		\
+	GLenum glError;														\
+	if ((glError = glGetError()) != GL_NO_ERROR) {						\
+		std::cerr << "OpenGL error code in '" << __FILE__ << "' at line " << __LINE__ << ": " << gluErrorString(glError) << std::endl;	\
+	}																	\
+}
+
 const int SHADOW_MAP_SIZE = 1024;
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
 
 const int CAMERA_TRANSFORM_BINDING_POINT = 0;
-const int LIGHT_DATA_BINDING_POINT = 1;
-const int LIGHT_TRANSFORM_BINDING_POINT = 2;
+const int POINT_LIGHT_DATA_BINDING_POINT = 1;
+const int SPOT_LIGHT_DATA_BINDING_POINT = 2;
+const int DIRECTIONAL_LIGHT_DATA_BINDING_POINT = 3;
 
 const float LIGHT_NEAR = 1.0f;
 const float LIGHT_FAR = 1200.0f;
 
 ForwardShader::ForwardShader()
-	: m_numLights(0)
 {
+	CHECK_GL_ERROR();
 	m_forwardShaderProgram = ShaderManager::createShaderProgram("forwardshader.vert", 0, "forwardshader.frag");
 	m_shadowProgram = ShaderManager::createShaderProgram("shadowmulti.vert", "shadowmulti.geom", 0);
 	setupUniforms();
 	setupBuffers();
-	setupShadowFramebuffer();
+	//setupShadowFramebuffer();
 }
 
 ForwardShader::~ForwardShader()
@@ -39,98 +48,59 @@ ForwardShader::~ForwardShader()
 void ForwardShader::setupUniforms()
 {
 	glUseProgram(m_forwardShaderProgram);
-	m_numLightsLoc = glGetUniformLocation(m_forwardShaderProgram, "u_numLights");
+	CHECK_GL_ERROR();
 
 	GLint m_texLoc = glGetUniformLocation(m_forwardShaderProgram, "tex");
 	glUniform1i(m_texLoc, 0);
-	GLint m_shadowArrayTexLoc = glGetUniformLocation(m_forwardShaderProgram, "u_shadowMapArray");
-	glUniform1i(m_shadowArrayTexLoc, 1);
+	CHECK_GL_ERROR();
 
-	GLuint lightDataIdx = glGetUniformBlockIndex(m_forwardShaderProgram, "LightData");
-	GLuint lightTransformIdx = glGetUniformBlockIndex(m_forwardShaderProgram, "LightTransform");
+	m_ambientLightUniformLoc = glGetUniformLocation(m_forwardShaderProgram, "u_ambient");
+	CHECK_GL_ERROR();
+
 	GLuint cameraTransformIdx = glGetUniformBlockIndex(m_forwardShaderProgram, "CameraTransform");
-
-	GLuint lightDataIdx2 = glGetUniformBlockIndex(m_shadowProgram, "LightData");
-	GLuint lightTransformIdx2 = glGetUniformBlockIndex(m_shadowProgram, "LightTransform");
-
-	glUniformBlockBinding(m_forwardShaderProgram, lightDataIdx, LIGHT_DATA_BINDING_POINT);
-	glUniformBlockBinding(m_forwardShaderProgram, lightTransformIdx, LIGHT_TRANSFORM_BINDING_POINT);
 	glUniformBlockBinding(m_forwardShaderProgram, cameraTransformIdx, CAMERA_TRANSFORM_BINDING_POINT);
+	CHECK_GL_ERROR();
 
-	glUniformBlockBinding(m_shadowProgram, lightDataIdx2, LIGHT_DATA_BINDING_POINT);
-	glUniformBlockBinding(m_shadowProgram, lightTransformIdx2, LIGHT_TRANSFORM_BINDING_POINT);
+	GLuint pointLightIdx = glGetUniformBlockIndex(m_forwardShaderProgram, "PointLights");
+	glUniformBlockBinding(m_forwardShaderProgram, pointLightIdx, POINT_LIGHT_DATA_BINDING_POINT);
+	CHECK_GL_ERROR();
+
+	GLuint spotLightIdx = glGetUniformBlockIndex(m_forwardShaderProgram, "SpotLights");
+	glUniformBlockBinding(m_forwardShaderProgram, spotLightIdx, SPOT_LIGHT_DATA_BINDING_POINT);
+	CHECK_GL_ERROR();
+
+	GLuint directionalLightIdx = glGetUniformBlockIndex(m_forwardShaderProgram, "DirectionalLights");
+	glUniformBlockBinding(m_forwardShaderProgram, directionalLightIdx, DIRECTIONAL_LIGHT_DATA_BINDING_POINT);
+	CHECK_GL_ERROR();
 }
 
 void ForwardShader::setupBuffers()
 {
-	glGenBuffers(1, &m_lightDataBuffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightDataBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, MAX_LIGHTS * sizeof(LightData), m_lightData, GL_STATIC_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, m_lightDataBuffer);
-
-	glGenBuffers(1, &m_lightTransformBuffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_lightTransformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, MAX_LIGHTS * sizeof(LightTransform), m_lightTransforms, GL_STATIC_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, m_lightTransformBuffer);
-
 	glGenBuffers(1, &m_cameraTransformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(CameraTransform), &m_cameraTransform, GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, CAMERA_TRANSFORM_BINDING_POINT, m_cameraTransformBuffer);
+	CHECK_GL_ERROR();
+
+	glGenBuffers(1, &m_pointLightDataBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_pointLightDataBuffer);
+	glBindBufferBase(GL_UNIFORM_BUFFER, POINT_LIGHT_DATA_BINDING_POINT, m_pointLightDataBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(m_pointLightData), &m_pointLightData[0], GL_STATIC_DRAW);
+	CHECK_GL_ERROR();
+
+	glGenBuffers(1, &m_spotLightDataBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_spotLightDataBuffer);
+	glBindBufferBase(GL_UNIFORM_BUFFER, SPOT_LIGHT_DATA_BINDING_POINT, m_spotLightDataBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(m_spotLightData), &m_spotLightData[0], GL_STATIC_DRAW);
+	CHECK_GL_ERROR();
+
+	glGenBuffers(1, &m_directionalLightDataBuffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_directionalLightDataBuffer);
+	glBindBufferBase(GL_UNIFORM_BUFFER, DIRECTIONAL_LIGHT_DATA_BINDING_POINT, m_directionalLightDataBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(m_directionalLightData), &m_directionalLightData[0], GL_STATIC_DRAW);
+	CHECK_GL_ERROR();
 }
 
-void ForwardShader::use(const Camera& camera)
-{
-	m_cameraTransform.VPMatrix = camera.m_combinedMatrix;
-	m_cameraTransform.VMatrix = camera.m_viewMatrix;
-	m_cameraTransform.PMatrix = camera.m_projectionMatrix;
-
-	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(CameraTransform), &m_cameraTransform, GL_STATIC_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, CAMERA_TRANSFORM_BINDING_POINT, m_cameraTransformBuffer);
-
-	glUseProgram(m_forwardShaderProgram);
-	glUniform1i(m_numLightsLoc, m_numLights);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, m_shadowArrayTex);
-	glActiveTexture(GL_TEXTURE0);
-}
-
-void ForwardShader::updateLights(const Camera& camera, LightManager& lightManager)
-{
-	std::vector<Light*> lightObjects = lightManager.getLights();
-	m_numLights = MAX_LIGHTS < lightObjects.size() ? MAX_LIGHTS : lightObjects.size();
-
-	glm::mat4 lightProjMat(glm::frustum(-1.0f, 1.0f, -1.0f, 1.0f, LIGHT_NEAR, LIGHT_FAR));
-
-	for (int i = 0; i < m_numLights; ++i)
-	{
-		Light* light = lightObjects.at(i);
-		if (light->isUpdated())
-			continue;
-
-		LightData& data = m_lightData[i];
-
-		data.position = glm::vec4(light->m_position, light->m_isEnabled ? light->m_spotRadius : 1.0);
-		data.color = glm::vec4(light->m_color, light->m_linearAttenuation);
-		data.direction = glm::vec4(light->m_direction, light->m_spotDropoff);
-
-		glm::mat4 lightViewMat = glm::lookAt(light->m_position, light->m_position + light->m_direction, glm::vec3(0, 1, 0));
-		m_lightTransforms[i].VPMatrix = lightProjMat * lightViewMat;
-
-		glBindBuffer(GL_UNIFORM_BUFFER, m_lightDataBuffer);
-		glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(LightData), sizeof(LightData), &m_lightData[i]);
-		glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_DATA_BINDING_POINT, m_lightDataBuffer);
-
-		glBindBuffer(GL_UNIFORM_BUFFER, m_lightTransformBuffer);
-		glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(LightTransform), sizeof(LightTransform), &m_lightTransforms[i]);
-		glBindBufferBase(GL_UNIFORM_BUFFER, LIGHT_TRANSFORM_BINDING_POINT, m_lightTransformBuffer);
-
-		light->setUpdated(true);
-	}
-}
-
+/*
 void ForwardShader::setupShadowFramebuffer()
 {
 	glGenTextures(1, &m_shadowArrayTex);
@@ -153,7 +123,82 @@ void ForwardShader::setupShadowFramebuffer()
 	glDrawBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+*/
 
+void ForwardShader::use(const Camera& camera)
+{
+	m_cameraTransform.VPMatrix = camera.m_combinedMatrix;
+	m_cameraTransform.VMatrix = camera.m_viewMatrix;
+	m_cameraTransform.PMatrix = camera.m_projectionMatrix;
+
+	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(CameraTransform), &m_cameraTransform, GL_STATIC_DRAW);
+
+	glUseProgram(m_forwardShaderProgram);
+}
+
+void ForwardShader::updateLights(const Camera& camera, LightManager& lightManager)
+{
+	PointLights& pointLights = lightManager.getPointLights();
+	SpotLights& spotLights = lightManager.getSpotLights();
+	DirectionalLights& directionalLights = lightManager.getDirectionalLights();
+	AmbientLights& ambientLights = lightManager.getAmbientLights();
+
+	//smallest of MAX_POINT_LIGHTS and pointLights.size()
+	int numPointLights = pointLights.size() < MAX_POINT_LIGHTS ? pointLights.size() : MAX_POINT_LIGHTS;
+
+	for (int i = 0; i < numPointLights; ++i)
+	{
+		PointLight* light = pointLights.at(i);
+		if (light->m_updated)
+			continue;
+		light->m_updated = true;
+
+		m_pointLightData[i] = light->getData();
+		glBindBuffer(GL_UNIFORM_BUFFER, m_pointLightDataBuffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(PointLightData), sizeof(PointLightData), &m_pointLightData[i]);
+	}
+
+	
+	int numSpotLights = spotLights.size() < MAX_SPOT_LIGHTS ? spotLights.size() : MAX_SPOT_LIGHTS;
+	for (int i = 0; i < numSpotLights; ++i)
+	{
+		SpotLight* light = spotLights.at(i);
+		if (light->m_updated)
+			continue;
+		light->m_updated = true;
+
+		m_spotLightData[i] = light->getData();
+		glBindBuffer(GL_UNIFORM_BUFFER, m_spotLightDataBuffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(SpotLightData), sizeof(SpotLightData), &m_spotLightData[i]);
+	}
+	
+	int numDirectionalLights = directionalLights.size() < MAX_DIRECTIONAL_LIGHTS ? directionalLights.size() : MAX_DIRECTIONAL_LIGHTS;
+	for (int i = 0; i < numDirectionalLights; ++i)
+	{
+		DirectionalLight* light = directionalLights.at(i);
+		if (light->m_updated)
+			continue;
+		light->m_updated = true;
+
+		m_directionalLightData[i] = light->getData();
+		glBindBuffer(GL_UNIFORM_BUFFER, m_directionalLightDataBuffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(DirectionalLightData), sizeof(DirectionalLightData), &m_directionalLightData[i]);
+	}
+
+	glm::vec3 ambient = glm::vec3(0);
+	for (int i = 0; i < ambientLights.size(); ++i)
+	{
+		AmbientLight* light = ambientLights.at(i);
+		if (!light->m_enabled)
+			continue;
+
+		ambient += light->m_color;
+	}
+	glUniform3f(m_ambientLightUniformLoc, ambient.r, ambient.g, ambient.b);
+}
+
+/*
 void ForwardShader::generateShadowMaps()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFBO);
@@ -172,3 +217,4 @@ void ForwardShader::finishShadowMaps()
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
+*/

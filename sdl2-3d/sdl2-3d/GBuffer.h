@@ -2,7 +2,7 @@
 #define GBUFFER_H_
 
 #include "Light.h"
-
+#include "LightManager.h"
 #include <glm/glm.hpp>
 
 typedef int GLint;
@@ -41,9 +41,9 @@ public:
 	void use(const Camera& camera);
 	void setupShadows();
 
-	void updateLights(const Camera& camera, LightManager& lightManager);
+	void updateLights(const Camera& camera, LightManager& LightManager);
 
-	static const int MAX_LIGHTS = 10;
+	static const int MAX_LightS = 10;
 
 private:
 	void setupUniforms();
@@ -53,11 +53,11 @@ private:
 	CameraTransform m_cameraTransform;			// transformation data
 	GLuint m_cameraTransformUB;				// uniform buffer for the transformation
 
-	LightData m_lightData[MAX_LIGHTS];
-	GLuint m_lightDataUB;
+	LightData m_LightData[MAX_LightS];
+	GLuint m_LightDataUB;
 
-	LightTransform m_lightTransforms[MAX_LIGHTS];
-	GLuint m_lightTransformUB;
+	LightTransform m_LightTransforms[MAX_LightS];
+	GLuint m_LightTransformUB;
 
 	GLuint m_gBufferProgram;				// G-Buffer program pipeline
 	GLint m_transformBlockLoc;
@@ -66,14 +66,14 @@ private:
 	GLint m_normalBufferLoc;
 	GLint m_shadowMapArrayLoc;
 
-	GLuint m_lightPassProgram;
+	GLuint m_LightPassProgram;
 
 	GLuint m_forwardShaderProgram;
 
 	GLint m_numLightsLoc;
 
 	GLuint m_shadowSingleProgram;			// single shadow program pipeline
-	GLint m_lightIDUniformLoc;		// location of the lightID uniform
+	GLint m_LightIDUniformLoc;		// location of the LightID uniform
 
 	GLuint m_shadowMultiProgram;			// multi shadow program pipeline
 	GLuint m_shadowDepthTex;

@@ -14,8 +14,8 @@ const int IN_NORMAL_LOC = 2;
 #define m_terrainVERTEX_SHADER "terrain.vert"
 #define m_terrainFRAGMENT_SHADER "terrain.frag"
 #define m_terrainUNI_AMBIENT "ambient"
-#define m_terrainUNI_LIGHTCOLOR "lightColor"
-#define m_terrainUNI_LIGHTPOSITION "lightPosition"
+#define m_terrainUNI_PointLightCOLOR "PointLightColor"
+#define m_terrainUNI_PointLightPOSITION "PointLightPosition"
 #define m_terrainUNI_SHININESS "shininess"
 #define m_terrainUNI_STRENGTH "strength"
 #define m_terrainUNI_EYEDIRECTION "eyeDirection"
@@ -27,9 +27,9 @@ const int IN_NORMAL_LOC = 2;
 Terrain::Terrain(HeightMap& heightMap, float scale, float heightScale)
 	: m_scale(scale)
 	, m_heightScale(heightScale)
-	, m_lightPos(0, 10, 0)
+	, m_PointLightPos(0, 10, 0)
 	, m_followCam(true)
-	, m_numLights(10)
+	, m_numPointLights(10)
 {
 	m_width = heightMap.getWidth();
 	m_height = heightMap.getHeight();

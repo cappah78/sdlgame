@@ -1,19 +1,33 @@
-#ifndef LIGHTSORTER_H_
-#define LIGHTSORTER_H_
+#ifndef LIGHT_SORTER_H_
+#define LIGHT_SORTER_H_
 
 class Camera;
-class Light;
+class PointLight;
+class SpotLight;
 
-class LightSorter
+class SpotLightSorter
 {
 public:
-	LightSorter(const Camera& camera);
-	~LightSorter();
-
-	bool operator() (const Light* light1, const Light* light2);
+	SpotLightSorter(const Camera& camera)
+		: m_camera(camera)
+	{};
+	~SpotLightSorter() {};
+	bool operator() (const SpotLight* light1, const SpotLight* light2);
 
 private:
 	const Camera& m_camera;
 };
 
-#endif //LIGHTSORTER_H_
+class PointLightSorter
+{
+public:
+	PointLightSorter(const Camera& camera)
+		: m_camera(camera) 
+	{};
+	~PointLightSorter() {};
+	bool operator() (const PointLight* light1, const PointLight* light2);
+private:
+	const Camera& m_camera;
+};
+
+#endif //LIGHT_SORTER_H_

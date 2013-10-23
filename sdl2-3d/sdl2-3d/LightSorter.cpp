@@ -1,20 +1,18 @@
 #include "LightSorter.h"
 
-#include "Light.h"
 #include "Camera.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 
-LightSorter::LightSorter(const Camera& camera)
-	: m_camera(camera)
+bool PointLightSorter::operator() (const PointLight* light1, const PointLight* light2)
 {
+	float dist1 = glm::distance(m_camera.m_position, light1->m_position);
+	float dist2 = glm::distance(m_camera.m_position, light2->m_position);
 
+	return dist1 < dist2;
 }
 
-LightSorter::~LightSorter()
-{
-
-}
-
-bool LightSorter::operator() (const Light* light1, const Light* light2)
+bool SpotLightSorter::operator() (const SpotLight* light1, const SpotLight* light2)
 {
 	float dist1 = glm::distance(m_camera.m_position, light1->m_position);
 	float dist2 = glm::distance(m_camera.m_position, light2->m_position);

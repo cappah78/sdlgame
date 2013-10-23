@@ -3,37 +3,21 @@
 
 #include <glm/glm.hpp>
 
-class Light
+class Light 
 {
 public:
-	friend class LightManager;
-	friend class GBuffer;
+	Light(glm::vec3& color = glm::vec3(1, 1, 1)) 
+		: m_color(color)
+		, m_enabled(true)
+		, m_updated(false)
+	{};
 
-	void setEnabled(bool enabled);
-	void setPosition(glm::vec3 position);
-	void setColor(glm::vec3 color);
-	void setLinearAttenuation(float att);
-	void update();
-	bool isUpdated();
-	void setUpdated(bool updated);
+	virtual ~Light() {};
 
-	glm::vec3 m_position;
 	glm::vec3 m_color;
-	glm::vec3 m_direction;
-
-	float m_spotRadius;
-	float m_linearAttenuation;
-	float m_spotDropoff;
-
-	bool m_isEnabled;
-	bool m_castsShadow;
-
-
-private:
-	Light(glm::vec3 position, glm::vec3 direction, glm::vec3 color, float linearAttenuation, float spotRadius, float spotDropoff);
-	~Light();
-
-	bool m_isUpdated;
+	bool m_enabled;
+	/* False if this light should be be updated in the uniform buffer */
+	bool m_updated;
 };
 
 #endif //LIGHT_H_

@@ -4,6 +4,7 @@
 #include "MouseListener.h"
 #include "KeyListener.h"
 #include "coment\systems\EntitySystem.h"
+#include <glm\glm.hpp>
 
 class PerspectiveCamera;
 
@@ -34,6 +35,8 @@ namespace entitysystem
 			m_isDPressed,
 			m_isSpacePressed,
 			m_isShiftPressed;
+
+		glm::vec3 m_lookDir;
 	};
 }
 #endif //FPSCAMERACONTROLLER_H_
