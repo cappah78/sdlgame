@@ -173,7 +173,7 @@ bool Mesh::initFromScene(const aiScene* pScene, const string& Filename)
         glVertexAttribDivisor(WVP_LOCATION + i, 1);
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[m_worldMAT_VB]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[WORLD_MAT_VB]);
 
     for (unsigned int i = 0; i < 4 ; i++) {
         glEnableVertexAttribArray(WORLD_LOCATION + i);
@@ -297,7 +297,7 @@ void Mesh::render(unsigned int NumInstances, const glm::mat4* WVPMats, const glm
     glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[WVP_MAT_VB]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * NumInstances, WVPMats, GL_DYNAMIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[m_worldMAT_VB]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_Buffers[WORLD_MAT_VB]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * NumInstances, WorldMats, GL_DYNAMIC_DRAW);
 
     glBindVertexArray(m_VAO);

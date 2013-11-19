@@ -119,7 +119,7 @@ void VoxelBatch::renderFace(const Face face, int x, int y, int z, const Material
 	if ((mat->m_flags & Material::DIFFUSE) == 0)	//if has no diffuse texture return.
 		return;
 
-	glm::vec4 texCoords = mat->m_diffuse->m_texCoords;
+	const glm::vec4& texCoords = mat->m_diffuse->m_texCoords;
 
 	assert(m_drawCalls < m_sizeInFaces && "Amount of draw calls exceeded size");
 	m_drawCalls++;

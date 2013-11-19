@@ -16,7 +16,7 @@ struct TextureRegion
 	, m_texCoords(texCoords)
 	{};
 
-	const Texture m_texture;
+	const Texture m_texture;	//copy because cache
 	const glm::vec4 m_texCoords;
 };
 
