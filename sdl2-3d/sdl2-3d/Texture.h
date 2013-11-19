@@ -10,40 +10,41 @@ typedef unsigned int GLenum;
 class Texture
 {
 public:
-	Texture(Pixmap& pixmap);
-	Texture(const char* fileName);
-	Texture(Pixmap& pixmap, GLuint& textureID);
-	Texture(const char* fileName, GLuint& textureID);
+	Texture(const Pixmap& pixmap);
+	Texture(const char* const fileName);
+	Texture(const Pixmap& pixmap, GLuint& textureID);
+	Texture(const char* const fileName, GLuint& textureID);
 	~Texture();
 
-	void bind();
-	void bind(GLenum textureUnit);
+	void bind() const;
+	void bind(GLenum textureUnit) const;
+	void dispose();
 
-	const GLuint getTextureID()
+	const GLuint getTextureID() const
 	{
 		return m_textureID;
 	}
-	const unsigned int& getWidth()
+	const unsigned int getWidth() const
 	{
 		return m_width;
 	}
-	const unsigned int& getHeight()
+	const unsigned int getHeight() const
 	{
 		return m_height;
 	}
-	const unsigned int& getNumComponents()
+	const unsigned char getNumComponents() const
 	{
 		return m_numComponents;
 	}
 private:
 
-	void setupGLTexture(Pixmap& pixmap);
+	void setupGLTexture(const Pixmap& pixmap);
 
 	GLuint m_textureID;
 	unsigned int m_width;
 	unsigned int m_height;
 	/** Amount of values per pixel (rgba = 4) */
-	unsigned int m_numComponents;
+	unsigned char m_numComponents;
 };
 
 #endif //TEXTURE_H_

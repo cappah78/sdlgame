@@ -18,15 +18,18 @@
 #include "FPSCameraController.h"
 #include "ForwardShader.h"
 
-class Terrain;
+#include "MaterialManager.h"
+
+class HeightMapRenderer;
 class Texture;
+class Material;
+class VoxelBatch;
 
 class GameScreen : public Screen, public KeyListener
 {
 public:
 	GameScreen();
 	~GameScreen();
-
 	void render(float deltaSec);
 	void resize(int width, int height);
 	virtual bool keyDown(SDL_Keysym key) override;
@@ -43,11 +46,17 @@ private:
 
 	SkyBox m_skyBox;
 
+	MaterialManager m_materialManager;
+
+
 	ForwardShader forwardShader;
 	LightManager m_lightManager;
 
+	const Material& m_material;
+	VoxelBatch* m_voxelBatch;
+
 	Texture* m_texture;
-	Terrain* m_terrain;
+	HeightMapRenderer* m_terrain;
 };
 
 #endif //GAME_SCREEN_H_

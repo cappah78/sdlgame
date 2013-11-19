@@ -22,30 +22,30 @@ public:
 	void begin();
 	void setProjectionMatrix(glm::mat4 matrix);
 
-	void draw(Texture& t, float x, float y);
-	void draw(Texture& t, float x, float y, float w, float h);
+	void draw(const Texture& t, float x, float y);
+	void draw(const Texture& t, float x, float y, float w, float h);
 	/** Draws texture rotated around its center */
-	void draw(Texture& t, float x, float y, float w, float h, float angleDeg);
+	void draw(const Texture& t, float x, float y, float w, float h, float angleDeg);
 	/** Draws texture rotated around the given origin, origin is relative to x/y */
-	void draw(Texture& t, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg);
+	void draw(const Texture& t, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg);
 
-	void draw(TextureRegion& r, float x, float y);
-	void draw(TextureRegion& r, float x, float y, float w, float h);
-	void draw(TextureRegion& r, float x, float y, float w, float h, float angleDeg);
-	void draw(TextureRegion& r, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg);
+	void draw(const TextureRegion& r, float x, float y);
+	void draw(const TextureRegion& r, float x, float y, float w, float h);
+	void draw(const TextureRegion& r, float x, float y, float w, float h, float angleDeg);
+	void draw(const TextureRegion& r, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg);
 
 	/** Ends the drawing of more textures and flush the batch */
 	void end();
 private:
 	/** Do error checks and texture swapping, avoids code duplication */
-	void preDraw(Texture& texture);
+	void preDraw(const Texture& texture);
 	/** Render everything drawn so far, must be done before swapping texture */
 	void flush();
 	/** Swaps the current active texture */
-	void swapTexture(Texture& texture);
+	void swapTexture(const Texture& texture);
 
-	void drawUnrotated(Texture& t, float x, float y, float w, float h, float u, float v, float u2, float v2);
-	void drawRotated(Texture& t, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg, float u, float v, float u2, float v2);
+	void drawUnrotated(const Texture& t, float x, float y, float w, float h, float u, float v, float u2, float v2);
+	void drawRotated(const Texture& t, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg, float u, float v, float u2, float v2);
 
 	GLuint m_shader;
 	GLuint m_vao;

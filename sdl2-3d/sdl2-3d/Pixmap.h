@@ -5,7 +5,7 @@
 class Pixmap
 {
 public:
-	Pixmap(const char* fileName);
+	Pixmap(const char* const fileName);
 	~Pixmap();
 	unsigned char* m_data;
 	int m_width;

@@ -1,22 +1,23 @@
 #ifndef TEXTUREREGION_H_
 #define TEXTUREREGION_H_
 
-typedef float GLfloat;
+#include <glm\glm.hpp>
+#include "Texture.h"
+
+static const glm::vec4 FULL_REGION(0.0f, 1.0f, 1.0f, 0.0f);
+
+typedef unsigned int GLuint;
 
 /** Represents a part of a texture */
 struct TextureRegion
 {
-	TextureRegion(Texture& texture, GLfloat u, GLfloat v, GLfloat u2, GLfloat v2)
-		: m_texture(texture)
-		, u(u)
-		, v(v)
-		, u2(u2)
-		, v2(v2) {};
-	Texture& m_texture;
-	GLfloat u;
-	GLfloat v;
-	GLfloat u2;
-	GLfloat v2;
+	TextureRegion(const Texture* texture, glm::vec4& texCoords = glm::vec4(FULL_REGION))
+	: m_texture(*texture)
+	, m_texCoords(texCoords)
+	{};
+
+	const Texture m_texture;
+	const glm::vec4 m_texCoords;
 };
 
 #endif //TEXTUREREGION_H_

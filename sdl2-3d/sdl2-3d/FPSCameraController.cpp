@@ -5,7 +5,7 @@
 #include "MathUtils.h"
 #include <glm\gtx\rotate_vector.hpp>
 
-static const float CAMERA_SPEED = 100.0f;
+static const float CAMERA_SPEED = 5.0f;
 static const float MOUSE_LOOK_SENSITIVITY = 0.2f;
 static const float DIAGONAL_SPEED = sqrt(pow(CAMERA_SPEED, 2) + pow(CAMERA_SPEED, 2));
 

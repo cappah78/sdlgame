@@ -6,7 +6,7 @@
 #include "Pixmap.h"
 #include <gl\glew.h>
 
-Texture::Texture(Pixmap& pixmap)
+Texture::Texture(const Pixmap& pixmap)
 	: m_width(pixmap.m_width)
 	, m_height(pixmap.m_height)
 	, m_numComponents(pixmap.m_numComponents)
@@ -14,7 +14,7 @@ Texture::Texture(Pixmap& pixmap)
 	setupGLTexture(pixmap);
 }
 
-Texture::Texture(Pixmap& pixmap, GLuint& textureID)
+Texture::Texture(const Pixmap& pixmap, GLuint& textureID)
 	: m_width(pixmap.m_width)
 	, m_height(pixmap.m_height)
 	, m_numComponents(pixmap.m_numComponents)
@@ -23,7 +23,7 @@ Texture::Texture(Pixmap& pixmap, GLuint& textureID)
 	m_textureID = textureID;
 }
 
-Texture::Texture(const char* fileName)
+Texture::Texture(const char* const fileName)
 {
 	Pixmap p(fileName);
 	m_width = p.m_width;
@@ -32,7 +32,7 @@ Texture::Texture(const char* fileName)
 	setupGLTexture(p);
 }
 
-Texture::Texture(const char* fileName, GLuint& textureID)
+Texture::Texture(const char* const fileName, GLuint& textureID)
 {
 	Pixmap p(fileName);
 	m_width = p.m_width;
@@ -44,22 +44,27 @@ Texture::Texture(const char* fileName, GLuint& textureID)
 
 Texture::~Texture()
 {
+	
+}
+
+void Texture::dispose()
+{
 	glDeleteTextures(1, &m_textureID);
 }
 
-void Texture::bind()
+void Texture::bind() const
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
-void Texture::bind(GLenum textureUnit)
+void Texture::bind(GLenum textureUnit) const
 {
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
-void Texture::setupGLTexture(Pixmap& pixmap)
+void Texture::setupGLTexture(const Pixmap& pixmap)
 {
 	glGenTextures(1, &m_textureID);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);

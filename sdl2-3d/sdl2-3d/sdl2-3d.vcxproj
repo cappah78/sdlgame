@@ -18,6 +18,10 @@
     <ClCompile Include="ComboShader.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
     <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
+    <ClCompile Include="ShadowCubeMap.cpp" />
+    <ClCompile Include="VoxelBatch.cpp" />
     <ClCompile Include="DeltaProcessingSystem.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityBuilder.cpp" />
@@ -57,9 +61,11 @@
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="TagManager.cpp" />
-    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="HeightMapRenderer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TiledForwardShader.cpp" />
+    <ClCompile Include="VoxelChunk.cpp" />
+    <ClCompile Include="VoxelWorld.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +82,8 @@
     <None Include="spritebatch.vert" />
     <None Include="grass.png" />
     <None Include="scribble.png" />
+    <None Include="voxelshader.frag" />
+    <None Include="voxelshader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aabb.h" />
@@ -116,6 +124,11 @@
     <ClInclude Include="coment\World.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="CubeMap.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
+    <ClInclude Include="ShadowCubeMap.h" />
+    <ClInclude Include="UniformBufferStructs.h" />
+    <ClInclude Include="VoxelBatch.h" />
     <ClInclude Include="DeltaProcessingSystem.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="DirectionalLight.h" />
@@ -159,11 +172,16 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="HeightMapRenderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureRegion.h" />
     <ClInclude Include="TiledForwardShader.h" />
     <ClInclude Include="Velocity.h" />
+    <ClInclude Include="VoxelChunk.h" />
+    <ClInclude Include="VoxelWorld.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="arrow.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BFD87650-6020-41DA-8A4C-CB7843B7CD65}</ProjectGuid>

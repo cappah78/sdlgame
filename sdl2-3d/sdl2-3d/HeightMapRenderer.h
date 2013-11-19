@@ -7,11 +7,11 @@ typedef unsigned int GLuint;
 
 class HeightMap;
 
-class Terrain
+class HeightMapRenderer
 {
 public:
-	Terrain(HeightMap& heightMap, float scale, float heightScale);
-	~Terrain();
+	HeightMapRenderer(HeightMap& heightMap, float scale, float heightScale);
+	~HeightMapRenderer();
 
 	void render();
 	float getHeightAt(const glm::vec3& position);

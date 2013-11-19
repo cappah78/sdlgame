@@ -24,6 +24,7 @@
 #ifndef FORWARD_SHADER_H_
 #define FORWARD_SHADER_H_
 
+#include "UniformBufferStructs.h"
 #include <glm/glm.hpp>
 
 #include "Camera.h"
@@ -39,16 +40,6 @@ typedef unsigned int GLuint;
 class ForwardShader
 {
 public:
-	struct CameraTransform {
-		glm::mat4 VPMatrix;
-		glm::mat4 VMatrix;
-		glm::mat4 PMatrix;
-	};
-
-	struct LightTransform {
-		glm::mat4 VPMatrix;;
-	};
-
 	ForwardShader();
 	~ForwardShader();
 	void use(const Camera& camera);

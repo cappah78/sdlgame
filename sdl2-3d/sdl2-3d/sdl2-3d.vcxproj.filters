@@ -87,6 +87,24 @@
     <Filter Include="Source Files\Engine\lighting">
       <UniqueIdentifier>{df1e2546-7022-4cfe-9d38-6aae0e913d19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\renderers">
+      <UniqueIdentifier>{8adfee23-fc89-47f8-a011-cfa3e23f3270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\renderers\shaders">
+      <UniqueIdentifier>{5d807c91-44ce-46ab-905c-71ab73774c68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\renderers">
+      <UniqueIdentifier>{5c62b795-94bb-4e61-9a03-a01c8a204161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\renderers\shaders">
+      <UniqueIdentifier>{bf4199fe-bba1-4212-8b6a-86c58d0f0d68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\voxel">
+      <UniqueIdentifier>{e5248dd5-44e4-4f91-91b7-28227e9f009a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\voxel">
+      <UniqueIdentifier>{0180495f-82e3-4273-9e60-d833afae7c75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,32 +113,14 @@
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="PerspectiveCamera.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="PerlinGenerator.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="NumberUtils.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderManager.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteBatch.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="GameScreen.cpp">
       <Filter>Source Files\Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="SDLGame.cpp">
-      <Filter>Source Files\Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files\Coment</Filter>
@@ -176,9 +176,6 @@
     <ClCompile Include="MatrixUtils.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="ForwardShader.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Aabb.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
@@ -215,9 +212,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\Engine\model</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files\Engine\model</Filter>
-    </ClCompile>
     <ClCompile Include="SkyBox.cpp">
       <Filter>Source Files\Engine\model</Filter>
     </ClCompile>
@@ -238,6 +232,48 @@
     </ClCompile>
     <ClCompile Include="FPSCameraController.cpp">
       <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="PerspectiveCamera.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBatch.cpp">
+      <Filter>Source Files\Engine\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMapRenderer.cpp">
+      <Filter>Source Files\Engine\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="ForwardShader.cpp">
+      <Filter>Source Files\Engine\renderers\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VoxelChunk.cpp">
+      <Filter>Source Files\Engine\voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="VoxelWorld.cpp">
+      <Filter>Source Files\Engine\voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="VoxelBatch.cpp">
+      <Filter>Source Files\Engine\renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Engine\model</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowCubeMap.cpp">
+      <Filter>Source Files\Engine\model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,23 +316,14 @@
     <None Include="forwardshader.vert">
       <Filter>data\shaders</Filter>
     </None>
+    <None Include="voxelshader.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="voxelshader.vert">
+      <Filter>data\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="PerspectiveCamera.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteBatch.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManager.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>Header Files\Engine\interfaces</Filter>
     </ClInclude>
@@ -317,9 +344,6 @@
     </ClInclude>
     <ClInclude Include="PerlinGenerator.h">
       <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="SDLGame.h">
-      <Filter>Header Files\Screens</Filter>
     </ClInclude>
     <ClInclude Include="GameScreen.h">
       <Filter>Header Files\Screens</Filter>
@@ -480,9 +504,6 @@
     <ClInclude Include="SimpleShader.h">
       <Filter>Header Files\Engine\WIP</Filter>
     </ClInclude>
-    <ClInclude Include="ForwardShader.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="TiledShaderPointLight.h">
       <Filter>Header Files\Engine\WIP</Filter>
     </ClInclude>
@@ -502,9 +523,6 @@
       <Filter>Header Files\Engine\model</Filter>
     </ClInclude>
     <ClInclude Include="Pixmap.h">
-      <Filter>Header Files\Engine\model</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
       <Filter>Header Files\Engine\model</Filter>
     </ClInclude>
     <ClInclude Include="SpotLight.h">
@@ -540,5 +558,55 @@
     <ClInclude Include="GBuffer.h">
       <Filter>Header Files\Engine\model</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="PerspectiveCamera.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMapRenderer.h">
+      <Filter>Header Files\Engine\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="ForwardShader.h">
+      <Filter>Header Files\Engine\renderers\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteBatch.h">
+      <Filter>Header Files\Engine\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelWorld.h">
+      <Filter>Header Files\Engine\voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelChunk.h">
+      <Filter>Header Files\Engine\voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelBatch.h">
+      <Filter>Header Files\Engine\renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="UniformBufferStructs.h">
+      <Filter>Header Files\Engine\renderers\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowCubeMap.h">
+      <Filter>Header Files\Engine\model</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="arrow.png">
+      <Filter>data\assets</Filter>
+    </Image>
   </ItemGroup>
 </Project>

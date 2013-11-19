@@ -1,24 +1,21 @@
 #ifndef CUBE_MAP_H
 #define CUBE_MAP_H
 
-#include <string>
-
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 
 class CubeMap
 {
 public:
-	static CubeMap* createFromTextures(std::string* textures);
-	static CubeMap* createShadowMap(unsigned int resolution);
-
+	CubeMap(const char** textureNames);
 	~CubeMap();
 
 	void bind(GLenum textureUnit);
+	void dispose();
+	GLuint getTextureID() { return m_textureID; };
 private:
-	CubeMap(GLuint texture);
 
-	GLuint m_texture;
+	GLuint m_textureID;
 };
 
 #endif //CUBE_MAP_H

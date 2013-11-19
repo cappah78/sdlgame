@@ -1,9 +1,6 @@
 #include "SpriteBatch.h"
 
 #include <assert.h>
-#include <iostream>
-#include <stdio.h>
-#include <stdexcept>
 #include <gl\glew.h>
 
 #include "Texture.h"
@@ -98,47 +95,47 @@ void SpriteBatch::setProjectionMatrix(glm::mat4 matrix)
 	glUniformMatrix4fv(m_mvpLoc, 1, GL_FALSE, &matrix[0][0]);
 }
 
-void SpriteBatch::draw(Texture& texture, float x, float y)
+void SpriteBatch::draw(const Texture& texture, float x, float y)
 {
 	drawUnrotated(texture, x, y, (float) texture.getWidth(), (float) texture.getHeight(), 0, 1, 1, 0);
 }
 
-void SpriteBatch::draw(TextureRegion& r, float x, float y)
+void SpriteBatch::draw(const TextureRegion& r, float x, float y)
 {
-	drawUnrotated(r.m_texture, x, y, (float) r.m_texture.getWidth(), (float) r.m_texture.getHeight(), r.u, r.v, r.u2, r.v2);
+	drawUnrotated(r.m_texture, x, y, (float) r.m_texture.getWidth(), (float) r.m_texture.getHeight(), r.m_texCoords.x, r.m_texCoords.y, r.m_texCoords.z, r.m_texCoords.w);
 }
 
-void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h)
+void SpriteBatch::draw(const Texture& texture, float x, float y, float w, float h)
 {
 	drawUnrotated(texture, x, y, w, h, 0, 1, 1, 0);
 }
 
-void SpriteBatch::draw(TextureRegion& region, float x, float y, float w, float h)
+void SpriteBatch::draw(const TextureRegion& r, float x, float y, float w, float h)
 {
-	drawUnrotated(region.m_texture, x, y, w, h, region.u, region.v, region.u2, region.v2);
+	drawUnrotated(r.m_texture, x, y, w, h, r.m_texCoords.x, r.m_texCoords.y, r.m_texCoords.z, r.m_texCoords.w);
 }
 
-void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h, float angleDeg)
+void SpriteBatch::draw(const Texture& texture, float x, float y, float w, float h, float angleDeg)
 {
 	drawRotated(texture, x, y, w, h, w / 2.0f, h / 2.0f, angleDeg, 0, 1, 1, 0);
 }
 
-void SpriteBatch::draw(TextureRegion& r, float x, float y, float w, float h, float angleDeg)
+void SpriteBatch::draw(const TextureRegion& r, float x, float y, float w, float h, float angleDeg)
 {
-	drawRotated(r.m_texture, x, y, w, h, w / 2, h / 2, angleDeg, r.u, r.v, r.u2, r.v2);
+	drawRotated(r.m_texture, x, y, w, h, w / 2.0f, h / 2.0f, angleDeg, r.m_texCoords.x, r.m_texCoords.y, r.m_texCoords.z, r.m_texCoords.w);
 }
 
-void SpriteBatch::draw(Texture& texture, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg)
+void SpriteBatch::draw(const Texture& texture, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg)
 {
 	drawRotated(texture, x, y, w, h, rotOriginX, rotOriginY, angleDeg, 0, 1, 1, 0);
 }
 
-void SpriteBatch::draw(TextureRegion& r, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg)
+void SpriteBatch::draw(const TextureRegion& r, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg)
 {
-	drawRotated(r.m_texture, x, y, w, h, w / 2, h / 2, angleDeg, r.u, r.v, r.u2, r.v2);
+	drawRotated(r.m_texture, x, y, w, h, w / 2.0f, h / 2.0f, angleDeg, r.m_texCoords.x, r.m_texCoords.y, r.m_texCoords.z, r.m_texCoords.w);
 }
 
-void SpriteBatch::preDraw(Texture& texture)
+void SpriteBatch::preDraw(const Texture& texture)
 {
 	assert(m_drawing && "Call begin() before drawing");
 
@@ -154,7 +151,7 @@ void SpriteBatch::preDraw(Texture& texture)
 	assert(m_drawCalls < m_size && "Amount of draw calls exceeded size");
 }
 
-void SpriteBatch::drawUnrotated(Texture& t, float x, float y, float w, float h, float u, float v, float u2, float v2)
+void SpriteBatch::drawUnrotated(const Texture& t, float x, float y, float w, float h, float u, float v, float u2, float v2)
 {
 	preDraw(t);
 
@@ -189,7 +186,7 @@ void SpriteBatch::drawUnrotated(Texture& t, float x, float y, float w, float h, 
 		flush();
 }
 
-void SpriteBatch::drawRotated(Texture& t, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg, float u, float v, float u2, float v2)
+void SpriteBatch::drawRotated(const Texture& t, float x, float y, float w, float h, float rotOriginX, float rotOriginY, float angleDeg, float u, float v, float u2, float v2)
 {
 	preDraw(t);
 
@@ -288,7 +285,7 @@ void SpriteBatch::flush()
 	m_drawCalls = 0;
 }
 
-void SpriteBatch::swapTexture(Texture& texture)
+void SpriteBatch::swapTexture(const Texture& texture)
 {
 	if (texture.getNumComponents() == 4) //rgba
 	{

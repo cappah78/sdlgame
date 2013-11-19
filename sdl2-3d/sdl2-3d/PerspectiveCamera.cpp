@@ -3,8 +3,8 @@
 #include <glm\gtc\matrix_transform.hpp>
 
 const float FOVY = 80.0f;
-const float NEAR = 10.0f;
-const float FAR = 1500.0f;
+const float NEAR = 0.25f;
+const float FAR = 100.0f;
 
 PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec3 direction)
 	: Camera(position, direction)

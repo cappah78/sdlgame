@@ -1,30 +1,15 @@
-#include "Terrain.h"
+#include "HeightMapRenderer.h"
 
 #include <sstream>
 #include "HeightMap.h"
 #include "Camera.h"
 #include <gl\glew.h>
 
-
 const int IN_POSITION_LOC = 0;
 const int IN_TEXCOORD_LOC = 1;
 const int IN_NORMAL_LOC = 2;
 
-#define BUFFER_OFFSET(offset) ((void *)(offset))
-#define m_terrainVERTEX_SHADER "terrain.vert"
-#define m_terrainFRAGMENT_SHADER "terrain.frag"
-#define m_terrainUNI_AMBIENT "ambient"
-#define m_terrainUNI_PointLightCOLOR "PointLightColor"
-#define m_terrainUNI_PointLightPOSITION "PointLightPosition"
-#define m_terrainUNI_SHININESS "shininess"
-#define m_terrainUNI_STRENGTH "strength"
-#define m_terrainUNI_EYEDIRECTION "eyeDirection"
-#define m_terrainUNI_CONSTATTEN "constantAttenuation"
-#define m_terrainUNI_LINATTEN "linearAttenuation"
-#define m_terrainUNI_QUADATTEN "quadraticAttenuation"
-
-
-Terrain::Terrain(HeightMap& heightMap, float scale, float heightScale)
+HeightMapRenderer::HeightMapRenderer(HeightMap& heightMap, float scale, float heightScale)
 	: m_scale(scale)
 	, m_heightScale(heightScale)
 	, m_PointLightPos(0, 10, 0)
@@ -43,7 +28,7 @@ Terrain::Terrain(HeightMap& heightMap, float scale, float heightScale)
 	generateNormals();
 }
 
-Terrain::~Terrain()
+HeightMapRenderer::~HeightMapRenderer()
 {
 	delete [] m_positions;
 	delete [] m_indices;
@@ -51,7 +36,7 @@ Terrain::~Terrain()
 	delete [] m_normals;
 }
 
-void Terrain::generateIndices()
+void HeightMapRenderer::generateIndices()
 {
 	m_numIndices = (m_width - 1) * (m_height - 1) * 6;
 
@@ -78,7 +63,7 @@ void Terrain::generateIndices()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_numIndices * sizeof(GLuint), m_indices, GL_STATIC_DRAW);
 }
 
-void Terrain::generateVertices(HeightMap& heightMap)
+void HeightMapRenderer::generateVertices(HeightMap& heightMap)
 {
 	float terrainWidth = m_width * m_scale;
 	float terrainHeight = m_height * m_scale;
@@ -124,7 +109,7 @@ void Terrain::generateVertices(HeightMap& heightMap)
 	glEnableVertexAttribArray(1);
 }
 
-void Terrain::generateNormals() 
+void HeightMapRenderer::generateNormals()
 {
 	m_normals = new glm::vec3[m_numVertices];
 	for (unsigned int i = 0; i < m_numIndices; i += 3) 
@@ -153,14 +138,14 @@ void Terrain::generateNormals()
 	glEnableVertexAttribArray(2);
 }
 
-void Terrain::render()
+void HeightMapRenderer::render()
 {
 	//glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_width * m_height * 6, GL_UNSIGNED_INT, 0);
 }
 
-float Terrain::getHeightAt(const glm::vec3& position)
+float HeightMapRenderer::getHeightAt(const glm::vec3& position)
 {
 	float result = 0;
 

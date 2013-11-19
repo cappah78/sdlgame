@@ -2,7 +2,7 @@
 
 #include "stb_image.h"
 
-Pixmap::Pixmap(const char* fileName)
+Pixmap::Pixmap(const char* const fileName)
 {
 	m_data = stbi_load(fileName, &m_width, &m_height, &m_numComponents, 0);
 }

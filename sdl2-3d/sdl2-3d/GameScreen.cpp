@@ -6,20 +6,24 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "Material.h"
+#include "VoxelBatch.h"
+
 #include "Texture.h"
-#include "Terrain.h"
+#include "HeightMapRenderer.h"
 #include "ShaderManager.h"
 
 GameScreen::GameScreen()
 	: m_mouseLookSystem(glm::vec3(0.0001, 0, -1.0))
-	, m_camera(glm::vec3(0, 50, 0))
+	, m_camera(glm::vec3(0, 0, 0))
 	, m_cameraController(m_camera)
 	, m_heightMap(23, 512, 512)
+	, m_material(m_materialManager.getMaterial(Asset::GRASS))
 {
 	SDLGame::registerKeyListener(&m_cameraController);
 	SDLGame::registerMouseListener(&m_cameraController);
 	SDLGame::registerKeyListener(this);
-	
+	/*
 	m_heightMap.addPerlinNoise(30.0f);
 	m_heightMap.addPerlinNoise(20.0f);
 	m_heightMap.addPerlinNoise(10.0f);
@@ -31,9 +35,11 @@ GameScreen::GameScreen()
 	m_heightMap.smoothen();
 	m_heightMap.smoothen();
 
-	m_terrain = new Terrain(m_heightMap, 10, 150);
+	m_terrain = new HeightMapRenderer(m_heightMap, 10, 150);
 	m_texture = new Texture("grass.png");
-
+	*/
+	m_voxelBatch = new VoxelBatch();
+		
 	m_world.registerSystem(m_cameraController);
 
 	glEnable(GL_DEPTH_TEST);
@@ -53,24 +59,34 @@ void GameScreen::render(float deltaSec)
 	m_world.setDelta(deltaSec);
 	m_world.update();
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_camera.update();
 	m_skyBox.render(m_camera);
 
-	forwardShader.use(m_camera);
+	//forwardShader.use(m_camera);
 
-	if (updateLights) {
-		updateLights = false;
-		forwardShader.updateLights(m_camera, m_lightManager);
+	//if (updateLights) {
+	//	updateLights = false;
+	//	forwardShader.updateLights(m_camera, m_lightManager);
 		//forwardShader.generateShadowMaps();
 		//m_terrain->render();
 		//forwardShader.finishShadowMaps();
-	}
+	//}
 
-	m_texture->bind();
-	m_terrain->render();
+	//m_texture->bind();
+	//m_terrain->render();
+
+
+	m_voxelBatch->begin(m_camera);
+	m_voxelBatch->renderFace(VoxelBatch::UP, 0, 0, 0, m_material);
+	m_voxelBatch->renderFace(VoxelBatch::DOWN, 0, 0, 0, m_material);
+	m_voxelBatch->renderFace(VoxelBatch::LEFT, 0, 0, 0, m_material);
+	m_voxelBatch->renderFace(VoxelBatch::RIGHT, 0, 0, 0, m_material);
+	m_voxelBatch->renderFace(VoxelBatch::FRONT, 0, 0, 0, m_material);
+	m_voxelBatch->renderFace(VoxelBatch::BACK, 0, 0, 0, m_material);
+	m_voxelBatch->end();
 
 	SDLGame::swap();
 }
