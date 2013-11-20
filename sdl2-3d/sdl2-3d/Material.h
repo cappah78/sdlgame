@@ -6,6 +6,7 @@
 class Material
 {
 	friend class VoxelBatch;
+	friend class VoxelCache;
 public:
 	Material();
 	Material(const TextureRegion* const diffuse);

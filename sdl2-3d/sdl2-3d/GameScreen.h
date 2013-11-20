@@ -15,9 +15,10 @@
 #include "FPSCameraController.h"
 
 class Texture;
-class TextureRegion;
+struct TextureRegion;
 class Material;
 class VoxelBatch;
+class VoxelCache;
 
 class GameScreen : public IScreen, public IKeyListener
 {
@@ -35,6 +36,7 @@ private:
 	Material m_material;
 
 	VoxelBatch* m_voxelBatch;
+	VoxelCache* m_voxelCache;
 	Texture* m_texture;
 	TextureRegion* m_region;
 };

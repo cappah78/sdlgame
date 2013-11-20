@@ -244,6 +244,20 @@ SimpleShader::SimpleShader(const char *vertexShaderFileName, const char *fragmen
 	CHECK_GL_ERROR();
 }
 
+SimpleShader::SimpleShader(const char* geometryShaderFileName, const char *vertexShaderFileName, const char *fragmentShaderFileName, const Context &context)
+{
+	m_shaderProgram = glCreateProgram();
+
+	m_compiled = loadCompileAttachShader(m_shaderProgram, GL_VERTEX_SHADER, vertexShaderFileName, context)
+		&& loadCompileAttachShader(m_shaderProgram, GL_FRAGMENT_SHADER, fragmentShaderFileName, context)
+		&& loadCompileAttachShader(m_shaderProgram, GL_GEOMETRY_SHADER, geometryShaderFileName, context);
+
+	// debug state
+	m_linked = false;
+	m_begun = false;
+	CHECK_GL_ERROR();
+}
+
 
 
 bool SimpleShader::link()

@@ -187,7 +187,7 @@ void ForwardShader::updateLights(const Camera& camera, LightManager& lightManage
 	}
 
 	glm::vec3 ambient = glm::vec3(0);
-	for (int i = 0; i < ambientLights.size(); ++i)
+	for (unsigned int i = 0; i < ambientLights.size(); ++i)
 	{
 		AmbientLight* light = ambientLights.at(i);
 		if (!light->m_enabled)

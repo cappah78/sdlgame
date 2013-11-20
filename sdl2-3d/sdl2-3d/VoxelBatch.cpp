@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include <iostream>
 
-const char* CAMERA_TRANSFORM_UNIFORM_NAME = "CameraTransform";
-const int CAMERA_TRANSFORM_BINDING_POINT = 0;
+const char* BATCH_CAMERA_TRANSFORM_UNIFORM_NAME = "CameraTransform";
+const int BATCH_CAMERA_TRANSFORM_BINDING_POINT = 0;
 
 VoxelBatch::VoxelBatch(unsigned int sizeInFaces)
 	: m_sizeInFaces(sizeInFaces)
@@ -29,7 +29,7 @@ VoxelBatch::VoxelBatch(unsigned int sizeInFaces)
 
 	m_indices = new GLushort[sizeInFaces * 6];
 	GLushort j = 0;
-	for (int i = 0; i < sizeInFaces * 6; i += 6, j += 4) {
+	for (unsigned int i = 0; i < sizeInFaces * 6; i += 6, j += 4) {
 		m_indices[i + 0] = (j + 0);
 		m_indices[i + 1] = (j + 1);
 		m_indices[i + 2] = (j + 2);
@@ -65,10 +65,10 @@ VoxelBatch::VoxelBatch(unsigned int sizeInFaces)
 
 	glGenBuffers(1, &m_cameraTransformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
-	glBindBufferBase(GL_UNIFORM_BUFFER, CAMERA_TRANSFORM_BINDING_POINT, m_cameraTransformBuffer);
+	glBindBufferBase(GL_UNIFORM_BUFFER, BATCH_CAMERA_TRANSFORM_BINDING_POINT, m_cameraTransformBuffer);
 
-	GLuint cameraTransformIdx = glGetUniformBlockIndex(m_shaderId, CAMERA_TRANSFORM_UNIFORM_NAME);
-	glUniformBlockBinding(m_shaderId, cameraTransformIdx, CAMERA_TRANSFORM_BINDING_POINT);
+	GLuint cameraTransformIdx = glGetUniformBlockIndex(m_shaderId, BATCH_CAMERA_TRANSFORM_UNIFORM_NAME);
+	glUniformBlockBinding(m_shaderId, cameraTransformIdx, BATCH_CAMERA_TRANSFORM_BINDING_POINT);
 }
 
 VoxelBatch::VoxelBatch(const VoxelBatch& copyMe)

@@ -5,42 +5,95 @@
 #include <glm\gtx\transform.hpp>
 #include <iostream>
 #include <stdio.h>
+#include <vector>
 
-#include "VoxelBatch.h"
+//#include "VoxelBatch.h"
+#include "VoxelCache.h"
 #include "Texture.h"
 #include "TextureRegion.h"
 #include "Material.h"
 
-GameScreen::GameScreen() 
-	: m_camera(glm::vec3(0, 0, 0))
-	, m_cameraController(m_camera)
+Cache* topCache;
+Cache* bottomCache;
+Cache* leftCache;
+Cache* rightCache;
+Cache* frontCache;
+Cache* backCache;
+
+std::vector<Cache*> caches;
+
+GameScreen::GameScreen()
+: m_camera(glm::vec3(0, 0, 0))
+, m_cameraController(m_camera)
 {
 	SDLGame::registerKeyListener(&m_cameraController);
 	SDLGame::registerMouseListener(&m_cameraController);
 	SDLGame::registerKeyListener(this);
+	glEnable(GL_DEPTH_TEST);
+
 
 	m_texture = new Texture("arrow.png");
 	m_region = new TextureRegion(m_texture);
 	m_material.setDiffuse(m_region);
 
-	m_voxelBatch = new VoxelBatch();
+	const unsigned int chunkSize = 16;
 
-	glEnable(GL_DEPTH_TEST);
+	//m_voxelBatch = new VoxelBatch();
+	m_voxelCache = new VoxelCache(chunkSize * chunkSize * chunkSize);
+
+
+	for (int i = 0; i < 20; ++i) {
+		m_voxelCache->beginCache(TOP, i * chunkSize, 0, 0);
+		for (int x = 0; x < chunkSize; ++x)
+		for (int y = 0; y < chunkSize; ++y)
+		for (int z = 0; z < chunkSize; ++z)
+			m_voxelCache->addFace(x, y, z, m_material);
+		caches.push_back(m_voxelCache->endCache());
+
+		m_voxelCache->beginCache(BOTTOM, i * chunkSize, 0, 0);
+		for (int x = 0; x < chunkSize; ++x)
+		for (int y = 0; y < chunkSize; ++y)
+		for (int z = 0; z < chunkSize; ++z)
+			m_voxelCache->addFace(x, y, z, m_material);
+		caches.push_back(m_voxelCache->endCache());
+
+		m_voxelCache->beginCache(LEFT, i * chunkSize, 0, 0);
+		for (int x = 0; x < chunkSize; ++x)
+		for (int y = 0; y < chunkSize; ++y)
+		for (int z = 0; z < chunkSize; ++z)
+			m_voxelCache->addFace(x, y, z, m_material);
+		caches.push_back(m_voxelCache->endCache());
+
+		m_voxelCache->beginCache(RIGHT, i * chunkSize, 0, 0);
+		for (int x = 0; x < chunkSize; ++x)
+		for (int y = 0; y < chunkSize; ++y)
+		for (int z = 0; z < chunkSize; ++z)
+			m_voxelCache->addFace(x, y, z, m_material);
+		caches.push_back(m_voxelCache->endCache());
+
+		m_voxelCache->beginCache(FRONT, i * chunkSize, 0, 0);
+		for (int x = 0; x < chunkSize; ++x)
+		for (int y = 0; y < chunkSize; ++y)
+		for (int z = 0; z < chunkSize; ++z)
+			m_voxelCache->addFace(x, y, z, m_material);
+		caches.push_back(m_voxelCache->endCache());
+
+		m_voxelCache->beginCache(BACK, i * chunkSize, 0, 0);
+		for (int x = 0; x < chunkSize; ++x)
+		for (int y = 0; y < chunkSize; ++y)
+		for (int z = 0; z < chunkSize; ++z)
+			m_voxelCache->addFace(x, y, z, m_material);
+		caches.push_back(m_voxelCache->endCache());
+	}
 }
 
 GameScreen::~GameScreen() 
 {
+	//delete m_voxelBatch;
+	m_voxelCache->deleteCache(topCache);
+	delete m_voxelCache;
 	delete m_texture;
 	delete m_region;
-}
-
-void renderCube(VoxelBatch* batch, Material& material, int x, int y, int z) {
-	batch->renderFace(VoxelBatch::TOP, x, y, z, material);
-	batch->renderFace(VoxelBatch::BOTTOM, x, y, z, material);
-	batch->renderFace(VoxelBatch::LEFT, x, y, z, material);
-	batch->renderFace(VoxelBatch::RIGHT, x, y, z, material);
-	batch->renderFace(VoxelBatch::FRONT, x, y, z, material);
-	batch->renderFace(VoxelBatch::BACK, x, y, z, material);
 }
 
 void GameScreen::render(float deltaSec)
@@ -53,18 +106,11 @@ void GameScreen::render(float deltaSec)
 
 	m_skyBox.render(m_camera);
 
-	m_voxelBatch->begin(m_camera);
-	for (int x = 0; x < 100; ++x) {
-		for (int z = 0; z < 10; ++z) {
-			renderCube(m_voxelBatch, m_material, x, 0, z);
-		}
-	}
-	m_voxelBatch->end();
+	for (Cache* c : caches)
+		m_voxelCache->renderCache(c, m_camera);
 
 	SDLGame::swap();
 }
-
-
 
 void GameScreen::resize(int width, int height) 
 {

@@ -43,6 +43,7 @@ public:
 	* Constructs and compiles a shader, the context provides preprocessor definitions.
 	*/
 	SimpleShader(const char *vertexShaderFileName, const char *fragmentShaderFileName, const Context &context);
+	SimpleShader(const char* geometryShaderFileName, const char *vertexShaderFileName, const char *fragmentShaderFileName, const Context &context);
 	/**
 	* link the shader, must be done after constructor to complete the shader creation.
 	* But, should not be done before attribute- and fragment data locations are bound,
