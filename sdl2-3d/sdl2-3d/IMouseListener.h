@@ -1,12 +1,12 @@
-#ifndef MOUSELISTENER_H_
-#define MOUSELISTENER_H_
+#ifndef I_MOUSE_LISTENER_H_
+#define I_MOUSE_LISTENER_H_
 
 #include <SDL.h>
 
-class MouseListener
+class IMouseListener
 {
 public:
-	virtual ~MouseListener() {};
+	virtual ~IMouseListener() {};
 	/*
 		Mouse buttons: 
 			1 = LMB,
@@ -25,4 +25,4 @@ public:
 };
 
 
-#endif // MOUSELISTENER_H_
+#endif // I_MOUSE_LISTENER_H_

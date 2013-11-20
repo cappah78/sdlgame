@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
-#include "Screen.h"
-#include "KeyListener.h"
-#include "MouseListener.h"
+#include "IScreen.h"
+#include "IKeyListener.h"
+#include "IMouseListener.h"
 
 SDL_Window* SDLGame::mainWindow;
 SDLGame* SDLGame::instance;
@@ -110,7 +110,7 @@ SDLGame::SDLGame(SDL_Window* window)
 		renderCount++;
 		if (timePassed >= 1.0f)
 		{
-			itoa(renderCount, title, 10);
+			_itoa(renderCount, title, 10);
 			char str[20] = "FPS: ";
 			std::strcat(str, title);
 			SDL_SetWindowTitle(mainWindow, str);
@@ -149,25 +149,25 @@ void SDLGame::swap()
 	 SDL_GL_SwapWindow(mainWindow);
 }
 
-void SDLGame::registerKeyListener(KeyListener* listener)
+void SDLGame::registerKeyListener(IKeyListener* listener)
 {
 	SDLGame::instance->m_keyListeners.push_back(listener);
 }
 
-void SDLGame::registerMouseListener(MouseListener* listener)
+void SDLGame::registerMouseListener(IMouseListener* listener)
 {
 	SDLGame::instance->m_mouseListeners.push_back(listener);
 }
 
-void SDLGame::unregisterKeyListener(KeyListener* listener)
+void SDLGame::unregisterKeyListener(IKeyListener* listener)
 {
-	std::vector<KeyListener*>* list = &SDLGame::instance->m_keyListeners;
+	std::vector<IKeyListener*>* list = &SDLGame::instance->m_keyListeners;
 	list->erase(std::remove(list->begin(), list->end(), listener), list->end());
 }
 
-void SDLGame::unregisterMouseListener(MouseListener* listener)
+void SDLGame::unregisterMouseListener(IMouseListener* listener)
 {
-	std::vector<MouseListener*>* list = &SDLGame::instance->m_mouseListeners;
+	std::vector<IMouseListener*>* list = &SDLGame::instance->m_mouseListeners;
 	list->erase(std::remove(list->begin(), list->end(), listener), list->end());
 }
 

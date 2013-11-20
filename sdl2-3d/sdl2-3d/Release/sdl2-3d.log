@@ -1,63 +1,9 @@
-﻿Build started 18/09/2013 20:25:28.
+﻿Build started 19/11/2013 20:09:27.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GBuffer.cpp GameScreen.cpp SDLGame.cpp main.cpp
-         GBuffer.cpp
-         GameScreen.cpp
-         SDLGame.cpp
-     1>SDLGame.cpp(112): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _itoa. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdlib.h(937) : see declaration of 'itoa'
-     1>SDLGame.cpp(114): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string.h(118) : see declaration of 'strcat'
-         main.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_release-dll_win32" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Camera.obj
-         Release\ComponentManager.obj
-         Release\CubeMap.obj
-         Release\DeltaProcessingSystem.obj
-         Release\Entity.obj
-         Release\EntityBuilder.obj
-         Release\EntityFactory.obj
-         Release\EntityInfo.obj
-         Release\EntityManager.obj
-         Release\EntityProcessingSystem.obj
-         Release\EntitySystem.obj
-         Release\FPSCameraController.obj
-         Release\Game.obj
-         Release\GameScreen.obj
-         Release\GBuffer.obj
-         Release\GroupManager.obj
-         Release\HeightMap.obj
-         Release\Light.obj
-         Release\LightManager.obj
-         Release\LightSorter.obj
-         Release\main.obj
-         Release\Manager.obj
-         Release\ManagerManager.obj
-         Release\MathUtils.obj
-         Release\Mesh.obj
-         Release\MouseLookSystem.obj
-         Release\MovementSystem.obj
-         Release\NumberUtils.obj
-         Release\PerlinGenerator.obj
-         Release\PerspectiveCamera.obj
-         Release\Pixmap.obj
-         Release\SDLGame.obj
-         Release\Shader.obj
-         Release\ShaderManager.obj
-         Release\SkyBox.obj
-         Release\SpriteBatch.obj
-         Release\stb_image.obj
-         Release\SystemManager.obj
-         Release\TagManager.obj
-         Release\Terrain.obj
-         Release\Texture.obj
-         Release\World.obj
-         Generating code
-         Finished generating code
+     1>Link:
          sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
      1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:06.46
+Time Elapsed 00:00:00.06

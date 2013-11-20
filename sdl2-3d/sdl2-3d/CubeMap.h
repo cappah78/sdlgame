@@ -14,7 +14,6 @@ public:
 	void dispose();
 	GLuint getTextureID() { return m_textureID; };
 private:
-
 	GLuint m_textureID;
 };
 

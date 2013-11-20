@@ -6,9 +6,9 @@
 #include <vector>
 #include "Game.h"
 
-class KeyListener;
-class MouseListener;
-class Screen;
+class IKeyListener;
+class IMouseListener;
+class IScreen;
 struct SDL_Window;
 
 class SDLGame : public Game 
@@ -20,11 +20,11 @@ public:
 	SDLGame(SDL_Window* mainWindow);
 	~SDLGame();
 
-	static void registerKeyListener(KeyListener* listener);
-	static void registerMouseListener(MouseListener* listener);
+	static void registerKeyListener(IKeyListener* listener);
+	static void registerMouseListener(IMouseListener* listener);
 
-	static void unregisterKeyListener(KeyListener* listener);
-	static void unregisterMouseListener(MouseListener* listener);
+	static void unregisterKeyListener(IKeyListener* listener);
+	static void unregisterMouseListener(IMouseListener* listener);
 
 	static int getWidth();
 	static int getHeight();
@@ -37,10 +37,10 @@ private:
 	static int screenWidth;
 	static int screenHeight;
 
-	Screen* gameScreen;
+	IScreen* gameScreen;
 
-	std::vector<KeyListener*> m_keyListeners;
-	std::vector<MouseListener*> m_mouseListeners;
+	std::vector<IKeyListener*> m_keyListeners;
+	std::vector<IMouseListener*> m_mouseListeners;
 };
 
 #endif //SDLGAME_H_

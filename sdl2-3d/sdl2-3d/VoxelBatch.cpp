@@ -19,6 +19,7 @@ VoxelBatch::VoxelBatch(unsigned int sizeInFaces)
 	, m_vertexIdx(0)
 	, m_texCoordIdx(0)
 	, m_blendEnabled(false)
+	, m_currentMaterial(NULL)
 {
 	SimpleShader::Context context;
 	SimpleShader shader("voxelshader.vert", "voxelshader.frag", context);
@@ -86,7 +87,6 @@ void VoxelBatch::begin(const Camera& camera)
 {
 	assert(!m_drawing && "Call end() before begin()");
 	glUseProgram(m_shaderId);
-	glBindVertexArray(m_vao);
 	m_drawing = true;
 
 	m_cameraTransform.VPMatrix = camera.m_combinedMatrix;
@@ -95,6 +95,8 @@ void VoxelBatch::begin(const Camera& camera)
 
 	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(CameraTransform), &m_cameraTransform, GL_STATIC_DRAW);
+
+	glBindVertexArray(m_vao);
 }
 
 void VoxelBatch::end()
@@ -111,10 +113,13 @@ void VoxelBatch::renderFace(const Face face, int x, int y, int z, const Material
 	const Material* mat = &material;
 	if (m_currentMaterial == NULL)
 		swapMaterial(mat);
-	else if (mat != m_currentMaterial) {
+	else if (material.getDiffuse()->m_texture.getTextureID() != m_currentMaterial->getDiffuse()->m_texture.getTextureID())
+	{
 		flush();
 		swapMaterial(mat);
 	}
+	else if (m_drawCalls >= m_sizeInFaces)
+		flush();
 
 	if ((mat->m_flags & Material::DIFFUSE) == 0)	//if has no diffuse texture return.
 		return;
@@ -136,7 +141,7 @@ void VoxelBatch::renderFace(const Face face, int x, int y, int z, const Material
 
 	switch (face)
 	{
-	case UP:
+	case TOP:
 		p1.y++;
 		p2.y++;
 		p3.y++;
@@ -150,7 +155,7 @@ void VoxelBatch::renderFace(const Face face, int x, int y, int z, const Material
 		m_texCoords[m_texCoordIdx++] = texCoords.z;
 		m_texCoords[m_texCoordIdx++] = texCoords.y;
 		break;
-	case DOWN:
+	case BOTTOM:
 		p1.x++;
 		p2.x++;
 		p3.x--;

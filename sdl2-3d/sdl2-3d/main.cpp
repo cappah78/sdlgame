@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     checkSDLError(__LINE__);
  
     /* This makes our buffer swap syncronized with the monitor's vertical refresh */
-    SDL_GL_SetSwapInterval(1);	//1 is vsync 0 is unlimited
+    SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is unlimited
 
 	math::detail();
 	

@@ -1,7 +1,7 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "Screen.h"
+#include "IScreen.h"
 
 class Game {
 public:
@@ -10,18 +10,18 @@ public:
 	virtual void render(float deltaSec);
 	virtual void resize(int width, int height);
 
-	void setScreen(Screen* screen) 
+	void setScreen(IScreen* screen)
 	{
 		m_screen = screen;
 	}
 
-	const Screen *getScreen() 
+	const IScreen *getScreen()
 	{
 		return m_screen;
 	}
 
 private:
-	Screen* m_screen;
+	IScreen* m_screen;
 };
 
 #endif //GAME_H_

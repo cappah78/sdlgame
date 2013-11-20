@@ -1,5 +1,5 @@
-#ifndef VOXEL_BATCH_H_
-#define VOXEL_BATCH_H_
+#ifndef VOXEL_CACHE_H_
+#define VOXEL_CACHE_H_
 
 #include "UniformBufferStructs.h"
 
@@ -9,24 +9,19 @@
 class Material;
 class Camera;
 
-class VoxelBatch
+typedef unsigned int CacheID;
+
+class VoxelCache
 {
 public:
-	static const int FACE_SIZE = 3 * 4;
+	VoxelCache(unsigned int sizeInFaces = 2000);
+	VoxelCache(const VoxelCache& copyMe);
+	~VoxelCache();
 
-	VoxelBatch(unsigned int sizeInFaces = 2000);
-	VoxelBatch(const VoxelBatch& copyMe);
-	~VoxelBatch();
+	CacheID begin(const Camera& camera);
+	void begin(const Camera& camera, CacheID cacheID);
 
-	void begin(const Camera& camera);
 	void end();
-
-	enum Face
-	{
-		TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT
-	};
-
-	void renderFace(const Face face, int x, int y, int z, const Material& material);
 private:
 	void flush();
 	void swapMaterial(const Material* const material);
@@ -53,4 +48,4 @@ private:
 	unsigned short* m_indices;
 };
 
-#endif //VOXEL_BATCH_H_
+#endif //VOXEL_CACHE_H_

@@ -35,7 +35,7 @@
 #include "ComboShader.h"
 #include "Aabb.h"
 #include "GlBufferObject.h"
-#include "IntTypes.h"""
+#include "IntTypes.h"
 
 class OBJModel
 {
