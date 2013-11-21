@@ -1,4 +1,4 @@
-#include "SDLGame.h"
+#include "GameLoop.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +12,7 @@
 
 #include <SDL.h>
 #include <SDL_opengl.h>
+
 #include "MathUtils.h"
 
 
@@ -137,17 +138,17 @@ int main(int argc, char *argv[])
 
 	math::detail();
 	
-	SDLGame* sdlGame(0);
+	GameLoop* gameLoop;
 	try
 	{
-		sdlGame = new SDLGame(mainwindow);
+		gameLoop = new GameLoop(mainwindow);
 	}
 	catch(std::runtime_error& e)
 	{
 		std::cout << "runtime_error:" << e.what() << std::endl;
 		Sleep(5000);
 	}
-	delete sdlGame;
+	delete gameLoop;
 
 
     /* Delete our opengl context, destroy our window, and shutdown SDL */

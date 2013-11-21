@@ -24,7 +24,7 @@
 #include "TiledForwardShader.h"
 
 #include "Config.h"
-#include "SDLGame.h"
+#include "GameLoop.h"
 #include "ShaderManager.h"
 #include "ComboShader.h"
 
@@ -97,7 +97,7 @@ TiledForwardShader::~TiledForwardShader()
 void TiledForwardShader::render(const PerspectiveCamera& camera, const RenderList& renderList)
 {
 	updateShaderGlobals(camera.m_viewMatrix, camera.m_projectionMatrix, camera.m_up, 
-		SDLGame::getWidth(), SDLGame::getHeight(), camera.getNear(), camera.getFov());
+		GameLoop::getWidth(), GameLoop::getHeight(), camera.getNear(), camera.getFov());
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -108,7 +108,7 @@ void TiledForwardShader::render(const PerspectiveCamera& camera, const RenderLis
 
 	m_LightGridTransparent.build(
 		glm::uvec2(LIGHT_GRID_TILE_DIM_X, LIGHT_GRID_TILE_DIM_Y),
-		glm::uvec2(SDLGame::getWidth(), SDLGame::getHeight()),
+		glm::uvec2(GameLoop::getWidth(), GameLoop::getHeight()),
 		m_lights,
 		camera.m_viewMatrix,
 		camera.m_projectionMatrix,
@@ -124,7 +124,7 @@ void TiledForwardShader::render(const PerspectiveCamera& camera, const RenderLis
 	bindLightGridConstants(m_LightGridOpaque);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glViewport(0, 0, SDLGame::getWidth(), SDLGame::getHeight());
+	glViewport(0, 0, GameLoop::getWidth(), GameLoop::getHeight());
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// if pre-z is enabled, we don't want to re-clear the frame buffer.
@@ -226,7 +226,7 @@ void TiledForwardShader::drawPreZPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_forwardFbo);
 
-	glViewport(0, 0, SDLGame::getWidth(), SDLGame::getHeight());
+	glViewport(0, 0, GameLoop::getWidth(), GameLoop::getHeight());
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -267,7 +267,7 @@ void TiledForwardShader::downSampleDepthBuffer(std::vector<glm::vec2>& depthRang
 	glBindFramebuffer(GL_FRAMEBUFFER, m_minMaxDepthFbo);
 
 	glm::uvec2 tileSize = glm::uvec2(LIGHT_GRID_TILE_DIM_X, LIGHT_GRID_TILE_DIM_Y);
-	glm::uvec2 resolution = glm::uvec2(SDLGame::getWidth(), SDLGame::getHeight());
+	glm::uvec2 resolution = glm::uvec2(GameLoop::getWidth(), GameLoop::getHeight());
 	glm::uvec2 gridRes = (resolution + tileSize - glm::uvec2(1, 1)) / tileSize;
 	{
 		glViewport(0, 0, gridRes.x, gridRes.y);

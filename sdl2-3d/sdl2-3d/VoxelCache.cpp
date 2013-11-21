@@ -6,17 +6,23 @@
 
 #include "ShaderManager.h"
 
-const int WIDTH_BITS = 4;
-const int HEIGHT_BITS = 4;
+
+const unsigned int SIZE_BITS = 4; //2^sizebits == chunksize or sqrt(chunkSize)
+const unsigned int INDEX_BITS = 3 * SIZE_BITS;
+const unsigned int TEXTURE_ID_BITS = 12;
+const unsigned int OCCLUSION_BITS = 8;
 
 const char* CACHE_VERTEX_TRANSFORM_UNIFORM_NAME = "VertexTransform";
 const int CACHE_VERTEX_TRANSFORM_BINDING_POINT = 0;
+
+const unsigned int INDEX_MASK = 0x00000FFFu;
+const unsigned int TEXTURE_ID_MASK = 0x00FFF000u;
+const unsigned int LIGHT_LEVEL_MASK = 0xFF000000u;
 
 VoxelCache::VoxelCache(unsigned int sizeInFaces)
 	: m_sizeInFaces(sizeInFaces)
 	, m_drawing(false)
 	, m_blendEnabled(false)
-	, m_currentMaterial(NULL)
 	, m_pointIdx(0)
 {
 	m_shaderId = ShaderManager::createShaderProgram("voxelshader.vert", "voxelshader.geom", "voxelshader.frag");
@@ -75,7 +81,7 @@ void VoxelCache::beginCache(Face face, float xOffset, float yOffset, float zOffs
 	glUseProgram(m_shaderId);
 }
 
-void VoxelCache::renderCache(Cache* const cache, const Camera& camera)
+void VoxelCache::renderCache(Cache* const cache, const TextureArray* tileSet, const Camera& camera)
 {
 	if (cache->m_amount == 0)
 		return;
@@ -84,6 +90,8 @@ void VoxelCache::renderCache(Cache* const cache, const Camera& camera)
 	glBindVertexArray(cache->m_vao);
 
 	setUniforms(camera, cache->m_face, cache->m_xOffset, cache->m_yOffset, cache->m_zOffset);
+
+	tileSet->bind();
 
 	glDrawArrays(GL_POINTS, 0, cache->m_amount);
 
@@ -190,25 +198,26 @@ VoxelCache::Cache* const VoxelCache::endCache()
 	return currentCache;
 }
 
-void VoxelCache::addFace(int x, int y, int z, const Material& material)
+void VoxelCache::addFace(int x, int y, int z, int textureID, unsigned char occlusionBits)
 {
 	assert(m_drawing && "Call beginCache() before addFace()");
-	const Material* mat = &material;
-	if (m_currentMaterial == NULL)
-		swapMaterial(mat);
 
 	assert(m_currentCache->m_amount < m_sizeInFaces && "Amount of draw calls exceeded size");
 	m_currentCache->m_amount++;
 
-	unsigned int index = x | (y | z << HEIGHT_BITS) << WIDTH_BITS;
-	m_points[m_pointIdx++] = index;
+	unsigned int index = x | (y | z << SIZE_BITS) << SIZE_BITS;
+	unsigned int vertexData = occlusionBits << (TEXTURE_ID_BITS + INDEX_BITS);
+	vertexData |= textureID << INDEX_BITS;
+	vertexData |= index;
+	m_points[m_pointIdx++] = vertexData;
 }
 
+/*
 void VoxelCache::swapMaterial(const Material* const material)
 {
 	m_currentMaterial = material;
 	const Texture& t = m_currentMaterial->getDiffuse()->m_texture;
-
+	
 	if (t.getNumComponents() == 4) //rgba
 	{
 		glEnable(GL_BLEND);
@@ -222,4 +231,5 @@ void VoxelCache::swapMaterial(const Material* const material)
 	}
 
 	t.bind();
-}
+	
+	}*/

@@ -8,9 +8,6 @@
 #include "IKeyListener.h"
 
 #include "SkyBox.h"
-#include "Material.h"
-
-#include "SDLGame.h"
 #include "PerspectiveCamera.h"
 #include "FPSCameraController.h"
 
@@ -33,12 +30,11 @@ private:
 	SkyBox m_skyBox;
 	FPSCameraController m_cameraController;
 	PerspectiveCamera m_camera;
-	Material m_material;
 
 	VoxelBatch* m_voxelBatch;
 	VoxelCache* m_voxelCache;
-	Texture* m_texture;
-	TextureRegion* m_region;
+	//Texture* m_texture;
+	//TextureRegion* m_region;
 };
 
 #endif //GAME_SCREEN_H_
