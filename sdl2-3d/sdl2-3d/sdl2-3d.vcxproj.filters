@@ -450,6 +450,9 @@
     <ClInclude Include="VoxelCache.h">
       <Filter>Header Files\Engine\renderers</Filter>
     </ClInclude>
+    <ClInclude Include="TextureArray.h">
+      <Filter>Header Files\Engine\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="arrow.png">

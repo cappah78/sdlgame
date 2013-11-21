@@ -1,0 +1,4 @@
+#ifndef TEXTURE_ARRAY_H_
+#define TEXTURE_ARRAY_H_
+
+#endif //TEXTURE_ARRAY_H_

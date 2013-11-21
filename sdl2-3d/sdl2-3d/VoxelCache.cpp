@@ -15,7 +15,6 @@ const int CACHE_VERTEX_TRANSFORM_BINDING_POINT = 0;
 VoxelCache::VoxelCache(unsigned int sizeInFaces)
 	: m_sizeInFaces(sizeInFaces)
 	, m_drawing(false)
-	, m_drawCalls(0)
 	, m_blendEnabled(false)
 	, m_currentMaterial(NULL)
 	, m_pointIdx(0)
@@ -42,11 +41,15 @@ VoxelCache::~VoxelCache()
 
 void VoxelCache::beginCache(Cache* const cache, Face face, float xOffset, float yOffset, float zOffset)
 {
-	//WIP, reuse existing cache
-
 	assert(!m_drawing && "Call end() before begin()");
 	m_drawing = true;
+	cache->m_amount = 0;
+	cache->m_face = face;
+	cache->m_xOffset = xOffset;
+	cache->m_yOffset = yOffset;
+	cache->m_zOffset = zOffset;
 
+	glBindVertexArray(cache->m_vao);
 	m_currentCache = cache;
 
 	glUseProgram(m_shaderId);
@@ -94,14 +97,19 @@ void VoxelCache::deleteCache(Cache* const cache)
 	delete cache;
 }
 
-void VoxelCache::setCameraUniforms(const Camera& camera)
+VoxelCache::Cache* const VoxelCache::createCache(Face face, float xOffset, float yOffset, float zOffset)
 {
-	m_cameraTransform.VPMatrix = camera.m_combinedMatrix;
-	m_cameraTransform.VMatrix = camera.m_viewMatrix;
-	m_cameraTransform.PMatrix = camera.m_projectionMatrix;
+	assert(!m_drawing && "Cannot create a new cache in between begin() and end()");
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
-	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(CameraTransform), &m_cameraTransform, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_pointBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_pointBuffer);
+	glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(int), 0);
+	glEnableVertexAttribArray(0);
+
+	return new Cache(vao, m_pointBuffer, face, xOffset, yOffset, zOffset);
 }
 
 void VoxelCache::setUniforms(const Camera& camera, Face face, float xOffset, float yOffset, float zOffset)
@@ -165,50 +173,7 @@ void VoxelCache::setUniforms(const Camera& camera, Face face, float xOffset, flo
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(VertexTransform), &m_vertexTransform, GL_STATIC_DRAW);
 }
 
-void VoxelCache::setFaceUniforms(Face face)
-{
-	switch (face)
-	{
-	case TOP:
-		glUniform3f(m_v1OffsetUniform, 1.0f, 1.0f, 0.0f);
-		glUniform3f(m_v2OffsetUniform, 0.0f, 1.0f, 0.0f);
-		glUniform3f(m_v3OffsetUniform, 1.0f, 1.0f, 1.0f);
-		glUniform3f(m_v4OffsetUniform, 0.0f, 1.0f, 1.0f);
-		break;
-	case BOTTOM:
-		glUniform3f(m_v1OffsetUniform, 1.0f, 0.0f, 1.0f);
-		glUniform3f(m_v2OffsetUniform, 0.0f, 0.0f, 1.0f);
-		glUniform3f(m_v3OffsetUniform, 1.0f, 0.0f, 0.0f);
-		glUniform3f(m_v4OffsetUniform, 0.0f, 0.0f, 0.0f);
-		break;
-	case LEFT:
-		glUniform3f(m_v1OffsetUniform, 0.0f, 1.0f, 0.0f);
-		glUniform3f(m_v2OffsetUniform, 1.0f, 1.0f, 0.0f);
-		glUniform3f(m_v3OffsetUniform, 0.0f, 0.0f, 0.0f);
-		glUniform3f(m_v4OffsetUniform, 1.0f, 0.0f, 0.0f);
-		break;
-	case RIGHT:
-		glUniform3f(m_v1OffsetUniform, 1.0f, 1.0f, 1.0f);
-		glUniform3f(m_v2OffsetUniform, 0.0f, 1.0f, 1.0f);
-		glUniform3f(m_v3OffsetUniform, 1.0f, 0.0f, 1.0f);
-		glUniform3f(m_v4OffsetUniform, 0.0f, 0.0f, 1.0f);
-		break;
-	case FRONT:
-		glUniform3f(m_v1OffsetUniform, 1.0f, 1.0f, 0.0f);
-		glUniform3f(m_v2OffsetUniform, 1.0f, 1.0f, 1.0f);
-		glUniform3f(m_v3OffsetUniform, 1.0f, 0.0f, 0.0f);
-		glUniform3f(m_v4OffsetUniform, 1.0f, 0.0f, 1.0f);
-		break;
-	case BACK:
-		glUniform3f(m_v1OffsetUniform, 0.0f, 1.0f, 1.0f);
-		glUniform3f(m_v2OffsetUniform, 0.0f, 1.0f, 0.0f);
-		glUniform3f(m_v3OffsetUniform, 0.0f, 0.0f, 1.0f);
-		glUniform3f(m_v4OffsetUniform, 0.0f, 0.0f, 0.0f);
-		break;
-	}
-}
-
-Cache* const VoxelCache::endCache()
+VoxelCache::Cache* const VoxelCache::endCache()
 {
 	assert(m_drawing && "Call begin() before end()");
 	m_drawing = false;
@@ -227,6 +192,7 @@ Cache* const VoxelCache::endCache()
 
 void VoxelCache::addFace(int x, int y, int z, const Material& material)
 {
+	assert(m_drawing && "Call beginCache() before addFace()");
 	const Material* mat = &material;
 	if (m_currentMaterial == NULL)
 		swapMaterial(mat);
@@ -234,7 +200,7 @@ void VoxelCache::addFace(int x, int y, int z, const Material& material)
 	assert(m_currentCache->m_amount < m_sizeInFaces && "Amount of draw calls exceeded size");
 	m_currentCache->m_amount++;
 
-	int index = x | (y | z << HEIGHT_BITS) << WIDTH_BITS;
+	unsigned int index = x | (y | z << HEIGHT_BITS) << WIDTH_BITS;
 	m_points[m_pointIdx++] = index;
 }
 

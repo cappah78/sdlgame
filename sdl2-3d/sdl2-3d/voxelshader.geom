@@ -16,10 +16,15 @@ layout(triangle_strip, max_vertices = 4) out;
 in uint chunkIdx[1];
 
 out vec2 texCoord;
+out uint textureId;
+out float lightLevel;
 
 void main() 
 {
-	uint index = chunkIdx[0];
+	uint index = chunkIdx[0] & 0x00000FFFu;
+	textureId = chunkIdx[0] & 0x00FFF000u;
+	lightLevel = float(chunkIdx[0] & 0xFF000000u);
+
 	float z = float((index >> (WIDTH_BITS + HEIGHT_BITS)));
 	float y = float((index >> WIDTH_BITS) & ((1u << HEIGHT_BITS) - 1u));
 	float x = float(index & ((1u << WIDTH_BITS) - 1u));

@@ -84,6 +84,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="ShadowCubeMap.h" />
+    <ClInclude Include="TextureArray.h" />
     <ClInclude Include="UniformBufferStructs.h" />
     <ClInclude Include="VoxelBatch.h" />
     <ClInclude Include="DeltaProcessingSystem.h" />
