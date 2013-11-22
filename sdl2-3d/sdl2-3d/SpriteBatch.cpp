@@ -32,7 +32,8 @@ SpriteBatch::SpriteBatch(int size)
 	m_indices = new GLushort[size * 6];
 
 	GLushort j = 0;
-	for (int i = 0; i < size * 6; i += 6, j += 4) {
+	for (int i = 0; i < size * 6; i += 6, j += 4) 
+	{
         m_indices[i + 0] = (j + 0);
         m_indices[i + 1] = (j + 1);
         m_indices[i + 2] = (j + 2);

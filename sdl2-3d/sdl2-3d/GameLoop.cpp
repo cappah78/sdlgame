@@ -18,21 +18,18 @@ int GameLoop::screenHeight;
 GameLoop::GameLoop(SDL_Window* window)
 {
 	instance = this;
-
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-
-	initGL();
-
 	mainWindow = window;
 
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	initGL();
 	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 renderCount = 0;
 	float timePassed = 0;
-
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
 
 	gameScreen = new GameScreen();
 	gameScreen->resize(screenWidth, screenHeight);
@@ -50,8 +47,8 @@ GameLoop::GameLoop(SDL_Window* window)
 			switch(event.type)
 			{
 			case SDL_MOUSEMOTION:
-				for (auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
-					if ((*i)->mouseMoved(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel))
+				for (IMouseListener* mouseListener : m_mouseListeners)
+					if (mouseListener->mouseMoved(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel))
 						break;
 				break;
 			case SDL_MOUSEBUTTONDOWN:
@@ -60,19 +57,18 @@ GameLoop::GameLoop(SDL_Window* window)
 					mouseCaptured = true;
 					SDL_SetRelativeMouseMode(SDL_TRUE);
 				}
-
-				for(auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
-					if ((*i)->mouseDown(event.button.button, event.button.x, event.button.y))
+				for (IMouseListener* mouseListener: m_mouseListeners)
+					if (mouseListener->mouseDown(event.button.button, event.button.x, event.button.y))
 						break;
 				break;
 			case SDL_MOUSEBUTTONUP:
-				for(auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
-					if ((*i)->mouseUp(event.button.button, event.button.x, event.button.y))
+				for (IMouseListener* mouseListener : m_mouseListeners)
+					if (mouseListener->mouseUp(event.button.button, event.button.x, event.button.y))
 						break;
 				break;
 			case SDL_MOUSEWHEEL:
-				for(auto i = m_mouseListeners.begin(); i != m_mouseListeners.end(); i++)
-					if ((*i)->mouseScrolled(event.wheel.y))
+				for (IMouseListener* mouseListener : m_mouseListeners)
+					if (mouseListener->mouseScrolled(event.wheel.y))
 						break;
 
 			case SDL_KEYDOWN:
@@ -86,13 +82,13 @@ GameLoop::GameLoop(SDL_Window* window)
 					else goto exit_loop;
 				}
 
-				for(auto i = m_keyListeners.begin(); i != m_keyListeners.end(); i++)
-					if ((*i)->keyDown(event.key.keysym))
+				for (IKeyListener* keyListener : m_keyListeners)
+					if (keyListener->keyDown(event.key.keysym))
 						break;
 				break;
 			case SDL_KEYUP:
-				for(auto i = m_keyListeners.begin(); i != m_keyListeners.end(); i++)
-					if ((*i)->keyUp(event.key.keysym))
+				for (IKeyListener* keyListener : m_keyListeners)
+					if (keyListener->keyUp(event.key.keysym))
 						break;
 				break;
 
@@ -161,14 +157,14 @@ void GameLoop::registerMouseListener(IMouseListener* listener)
 
 void GameLoop::unregisterKeyListener(IKeyListener* listener)
 {
-	std::vector<IKeyListener*>* list = &GameLoop::instance->m_keyListeners;
-	list->erase(std::remove(list->begin(), list->end(), listener), list->end());
+	std::vector<IKeyListener*>& list = GameLoop::instance->m_keyListeners;
+	list.erase(std::remove(list.begin(), list.end(), listener), list.end());
 }
 
 void GameLoop::unregisterMouseListener(IMouseListener* listener)
 {
-	std::vector<IMouseListener*>* list = &GameLoop::instance->m_mouseListeners;
-	list->erase(std::remove(list->begin(), list->end(), listener), list->end());
+	std::vector<IMouseListener*>& list = GameLoop::instance->m_mouseListeners;
+	list.erase(std::remove(list.begin(), list.end(), listener), list.end());
 }
 
 int GameLoop::getWidth()
