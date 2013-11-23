@@ -10,7 +10,7 @@ TextureArray::TextureArray(const std::vector<const char*>& imageNames, unsigned 
 	glGenTextures(1, &m_textureID);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureID);
 
-	glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, textureWidth, textureHeight, imageNames.size());
+	//glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, textureWidth, textureHeight, imageNames.size());
 	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, textureWidth, textureHeight, imageNames.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
