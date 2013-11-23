@@ -250,6 +250,12 @@
     <None Include="voxelshader.geom">
       <Filter>data\shaders</Filter>
     </None>
+    <None Include="voxelshaderinstanced.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="voxelshaderinstanced.frag">
+      <Filter>data\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FPSCameraController.h">

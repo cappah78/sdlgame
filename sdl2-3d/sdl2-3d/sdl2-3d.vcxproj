@@ -69,6 +69,8 @@
     <None Include="voxelshader.frag" />
     <None Include="voxelshader.geom" />
     <None Include="voxelshader.vert" />
+    <None Include="voxelshaderinstanced.frag" />
+    <None Include="voxelshaderinstanced.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aabb.h" />

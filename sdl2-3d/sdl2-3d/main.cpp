@@ -20,8 +20,8 @@
 /* Ensure we are using opengl's core profile only */
 #define GL3_PROTOTYPES 1
 #define PROGRAM_NAME "sdlgame"
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 768
+#define WINDOW_WIDTH 1600
+#define WINDOW_HEIGHT 900
 
 
 #define GLM_FORCE_RADIANS

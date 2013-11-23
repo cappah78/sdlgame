@@ -1,15 +1,8 @@
-﻿Build started 21/11/2013 16:42:21.
+﻿Build started 23/11/2013 03:53:19.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TextureArray.cpp GameScreen.cpp VoxelCache.cpp
-         TextureArray.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GameScreen.cpp VoxelCache.cpp
          GameScreen.cpp
-     1>GameScreen.cpp(46): warning C4244: 'argument' : conversion from 'const unsigned int' to 'float', possible loss of data
-     1>GameScreen.cpp(53): warning C4244: 'argument' : conversion from 'const unsigned int' to 'float', possible loss of data
-     1>GameScreen.cpp(60): warning C4244: 'argument' : conversion from 'const unsigned int' to 'float', possible loss of data
-     1>GameScreen.cpp(67): warning C4244: 'argument' : conversion from 'const unsigned int' to 'float', possible loss of data
-     1>GameScreen.cpp(74): warning C4244: 'argument' : conversion from 'const unsigned int' to 'float', possible loss of data
-     1>GameScreen.cpp(81): warning C4244: 'argument' : conversion from 'const unsigned int' to 'float', possible loss of data
          VoxelCache.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_release-dll_win32" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Aabb.obj
@@ -19,7 +12,6 @@
          Release\ComboShader.obj
          Release\CubeMap.obj
          Release\Material.obj
-         Release\MaterialManager.obj
          Release\ShadowCubeMap.obj
          Release\TextureArray.obj
          Release\VoxelBatch.obj
@@ -41,7 +33,7 @@
          Release\PerlinGenerator.obj
          Release\PerspectiveCamera.obj
          Release\Pixmap.obj
-         Release\SDLGame.obj
+         Release\GameLoop.obj
          Release\ShaderManager.obj
          Release\SimpleShader.obj
          Release\SkyBox.obj
@@ -60,4 +52,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.05
+Time Elapsed 00:00:02.67

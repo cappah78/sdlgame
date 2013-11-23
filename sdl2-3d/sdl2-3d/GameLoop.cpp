@@ -26,7 +26,7 @@ GameLoop::GameLoop(SDL_Window* window)
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-
+	//glColorMask(false, false, false, false);
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 renderCount = 0;
 	float timePassed = 0;

@@ -60,20 +60,27 @@ public:
 
 	void addFace(int x, int y, int z, int textureIdx, unsigned char occlusionBits);
 
+	void beginRender();
 	void renderCache(Cache* const cache, const TextureArray* tileSet, const Camera& camera);
+	void finishRender();
 	void deleteCache(Cache* const cache);
 private:
 	void setUniforms(const Camera& camera, Face face, float xOffset, float yOffset, float zOffset);
 
 	unsigned int m_sizeInFaces;
+	bool m_buildingCache;
 	bool m_drawing;
 	bool m_blendEnabled;
 
-	VertexTransform m_vertexTransform;
-	GLuint m_vertexTransformBuffer;
+	CameraTransform m_cameraTransform;
+	GLuint m_cameraTransformBuffer;
+
+	GLuint m_vertexBuffer;
+	GLuint m_cornerIndexBuffer;
+	GLuint m_texCoordBuffer;
+	GLuint m_positionBuffer;
 
 	GLuint m_shaderId;
-	GLuint m_pointBuffer;
 
 	Cache* m_currentCache;
 

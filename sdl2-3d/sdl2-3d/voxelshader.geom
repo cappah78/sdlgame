@@ -5,7 +5,7 @@ const unsigned int INDEX_BITS = 3u * SIZE_BITS;
 const unsigned int TEXTURE_ID_BITS = 12u;
 const unsigned int OCCLUSION_BITS = 8u;
 
-const unsigned int INDEX_MASK = 0x00000FFFu;
+const unsigned int INDEX_MASK = 0x000FFFFFu;
 const unsigned int TEXTURE_ID_MASK = 0x00FFF000u;
 const unsigned int OCCLUSION_MASK = 0xFF000000u;
 
@@ -28,52 +28,48 @@ layout(std140) uniform VertexTransform {
 layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
 
-in uint chunkIdx[1];
+in float texId[1];
+in uint occlusionBits[1];
+in vec4 pos[1];
 
 out vec2 texCoord;
-out float textureId;
 out float occlusion;
+out float textureId;
+
 
 void main() 
 {
-	uint index = chunkIdx[0] & INDEX_MASK;
-	uint occlusionBits = chunkIdx[0] & OCCLUSION_MASK;
-	textureId = float((chunkIdx[0] & TEXTURE_ID_MASK) >> INDEX_BITS);
+	textureId = texId[0];
 
-	float z = float((index >> (SIZE_BITS + SIZE_BITS)));
-	float y = float((index >> SIZE_BITS) & ((1u << SIZE_BITS) - 1u));
-	float x = float(index & ((1u << SIZE_BITS) - 1u));
-	vec4 pos = vec4(x, y, z, 1.0);
-
-	gl_Position = vertexTransform.V1MVPMatrix * pos;
+	gl_Position = vertexTransform.V1MVPMatrix * pos[0];
 	texCoord = vec2(1.0, 0.0);
-	occlusion = min(occlusionBits & UP, 1u);
-	occlusion += min(occlusionBits & UP_RIGHT, 1u);
-	occlusion += min(occlusionBits & RIGHT, 1u);
+	occlusion = min(occlusionBits[0] & UP, 1u);
+	occlusion += min(occlusionBits[0] & UP_RIGHT, 1u);
+	occlusion += min(occlusionBits[0] & RIGHT, 1u);
 	occlusion = clamp(occlusion, 0.0, 2.0);
 	EmitVertex(); //topright
 
-	gl_Position = vertexTransform.V2MVPMatrix * pos;
+	gl_Position = vertexTransform.V2MVPMatrix * pos[0];
 	texCoord = vec2(0.0, 0.0);	
-	occlusion = min(occlusionBits & UP, 1u);
-	occlusion += min(occlusionBits & UP_LEFT, 1u);
-	occlusion += min(occlusionBits & LEFT, 1u);
+	occlusion = min(occlusionBits[0] & UP, 1u);
+	occlusion += min(occlusionBits[0] & UP_LEFT, 1u);
+	occlusion += min(occlusionBits[0] & LEFT, 1u);
 	occlusion = clamp(occlusion, 0.0, 2.0);
 	EmitVertex(); //topleft
 
-	gl_Position = vertexTransform.V3MVPMatrix * pos;
+	gl_Position = vertexTransform.V3MVPMatrix * pos[0];
 	texCoord = vec2(1.0, 1.0); 
-	occlusion = min(occlusionBits & DOWN, 1u);
-	occlusion += min(occlusionBits & DOWN_RIGHT, 1u);
-	occlusion += min(occlusionBits & RIGHT, 1u);
+	occlusion = min(occlusionBits[0] & DOWN, 1u);
+	occlusion += min(occlusionBits[0] & DOWN_RIGHT, 1u);
+	occlusion += min(occlusionBits[0] & RIGHT, 1u);
 	occlusion = clamp(occlusion, 0.0, 2.0);
 	EmitVertex(); //bottomright
 
-	gl_Position = vertexTransform.V4MVPMatrix * pos;
+	gl_Position = vertexTransform.V4MVPMatrix * pos[0];
 	texCoord = vec2(0.0, 1.0); 
-	occlusion = min(occlusionBits & DOWN, 1u);
-	occlusion += min(occlusionBits & DOWN_LEFT, 1u);
-	occlusion += min(occlusionBits & LEFT, 1u);
+	occlusion = min(occlusionBits[0] & DOWN, 1u);
+	occlusion += min(occlusionBits[0] & DOWN_LEFT, 1u);
+	occlusion += min(occlusionBits[0] & LEFT, 1u);
 	occlusion = clamp(occlusion, 0.0, 2.0);
 	EmitVertex(); //bottomleft
 

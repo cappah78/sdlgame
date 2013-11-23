@@ -41,50 +41,71 @@ GameScreen::GameScreen()
 	const unsigned int chunkSize = 16;
 
 	m_voxelCache = new VoxelCache(chunkSize * chunkSize * chunkSize);
+	int y = 0;
+	for (int i = 0; i < 16; ++i) {
+		for (int j = 0; j < 16; ++j) {
+			for (int k = 0; k < 1; ++k) {
+				m_voxelCache->beginCache(VoxelCache::TOP, float(i * chunkSize), float(k * chunkSize), float(j * chunkSize));
+				for (int x = 0; x < chunkSize; x += 2)
+				for (int y = 0; y < chunkSize; y += 2)
+				for (int z = 0; z < chunkSize; z += 2)
+					m_voxelCache->addFace(x, y, z, 1, VoxelCache::AO_UP);
+				caches.push_back(m_voxelCache->endCache());
 
-	for (int i = 0; i < 20; ++i) {
-		m_voxelCache->beginCache(VoxelCache::TOP, float(i * chunkSize), 0, 0);
-		for (int x = 0; x < chunkSize; ++x)
-		for (int y = 0; y < chunkSize; ++y)
-		for (int z = 0; z < chunkSize; ++z)
-			m_voxelCache->addFace(x, y, z, 1, VoxelCache::AO_UP);
-		caches.push_back(m_voxelCache->endCache());
+				m_voxelCache->beginCache(VoxelCache::BOTTOM, float(i * chunkSize), float(k * chunkSize), float(j * chunkSize));
+				for (int x = 0; x < chunkSize; x += 2)
+				for (int y = 0; y < chunkSize; y += 2)
+				for (int z = 0; z < chunkSize; z += 2)
+					m_voxelCache->addFace(x, y, z, 0, VoxelCache::AO_RIGHT);
+				caches.push_back(m_voxelCache->endCache());
 
-		m_voxelCache->beginCache(VoxelCache::BOTTOM, float(i * chunkSize), 0, 0);
-		for (int x = 0; x < chunkSize; ++x)
-		for (int y = 0; y < chunkSize; ++y)
-		for (int z = 0; z < chunkSize; ++z)
-			m_voxelCache->addFace(x, y, z, 0, 0);
-		caches.push_back(m_voxelCache->endCache());
+				m_voxelCache->beginCache(VoxelCache::LEFT, float(i * chunkSize), float(k * chunkSize), float(j * chunkSize));;
+				for (int x = 0; x < chunkSize; x += 2)
+				for (int y = 0; y < chunkSize; y += 2)
+				for (int z = 0; z < chunkSize; z += 2)
+					m_voxelCache->addFace(x, y, z, 2, 0);
+				caches.push_back(m_voxelCache->endCache());
 
-		m_voxelCache->beginCache(VoxelCache::LEFT, float(i * chunkSize), 0, 0);
-		for (int x = 0; x < chunkSize; ++x)
-		for (int y = 0; y < chunkSize; ++y)
-		for (int z = 0; z < chunkSize; ++z)
-			m_voxelCache->addFace(x, y, z, 2, VoxelCache::AO_DOWN);
-		caches.push_back(m_voxelCache->endCache());
+				m_voxelCache->beginCache(VoxelCache::RIGHT, float(i * chunkSize), float(k * chunkSize), float(j * chunkSize));
+				for (int x = 0; x < chunkSize; x += 2)
+				for (int y = 0; y < chunkSize; y += 2)
+				for (int z = 0; z < chunkSize; z += 2)
+					m_voxelCache->addFace(x, y, z, 2, VoxelCache::AO_DOWN);
+				caches.push_back(m_voxelCache->endCache());
 
-		m_voxelCache->beginCache(VoxelCache::RIGHT, float(i * chunkSize), 0, 0);
-		for (int x = 0; x < chunkSize; ++x)
-		for (int y = 0; y < chunkSize; ++y)
-		for (int z = 0; z < chunkSize; ++z)
-			m_voxelCache->addFace(x, y, z, 0, 0);
-		caches.push_back(m_voxelCache->endCache());
+				m_voxelCache->beginCache(VoxelCache::FRONT, float(i * chunkSize), float(k * chunkSize), float(j * chunkSize));
+				for (int x = 0; x < chunkSize; x += 2)
+				for (int y = 0; y < chunkSize; y += 2)
+				for (int z = 0; z < chunkSize; z += 2)
+					m_voxelCache->addFace(x, y, z, 0, VoxelCache::AO_UP);
+				caches.push_back(m_voxelCache->endCache());
 
-		m_voxelCache->beginCache(VoxelCache::FRONT, float(i * chunkSize), 0, 0);
-		for (int x = 0; x < chunkSize; ++x)
-		for (int y = 0; y < chunkSize; ++y)
-		for (int z = 0; z < chunkSize; ++z)
-			m_voxelCache->addFace(x, y, z, 0, 0);
-		caches.push_back(m_voxelCache->endCache());
-
-		m_voxelCache->beginCache(VoxelCache::BACK, float(i * chunkSize), 0, 0);
-		for (int x = 0; x < chunkSize; ++x)
-		for (int y = 0; y < chunkSize; ++y)
-		for (int z = 0; z < chunkSize; ++z)
-			m_voxelCache->addFace(x, y, z, 0, 0);
-		caches.push_back(m_voxelCache->endCache());
+				m_voxelCache->beginCache(VoxelCache::BACK, float(i * chunkSize), float(k * chunkSize), float(j * chunkSize));
+				for (int x = 0; x < chunkSize; x += 2)
+				for (int y = 0; y < chunkSize; y += 2)
+				for (int z = 0; z < chunkSize; z += 2)
+					m_voxelCache->addFace(x, y, z, 0, VoxelCache::AO_LEFT);
+				caches.push_back(m_voxelCache->endCache());
+			}
+		}
 	}
+}
+
+void GameScreen::render(float deltaSec)
+{
+
+	glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	m_cameraController.update(deltaSec);
+	m_camera.update();
+	//m_skyBox.render(m_camera);
+
+	m_voxelCache->beginRender();
+	for (VoxelCache::Cache* c : caches)
+		m_voxelCache->renderCache(c, arr, m_camera);
+	m_voxelCache->finishRender();
+	GameLoop::swap();
 }
 
 GameScreen::~GameScreen() 
@@ -97,21 +118,7 @@ GameScreen::~GameScreen()
 	//delete m_region;
 }
 
-void GameScreen::render(float deltaSec)
-{
-	glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_cameraController.update(deltaSec);
-	m_camera.update();
-
-	m_skyBox.render(m_camera);
-
-	for (VoxelCache::Cache* c : caches)
-		m_voxelCache->renderCache(c, arr, m_camera);
-
-	GameLoop::swap();
-}
 
 void GameScreen::resize(int width, int height) 
 {
