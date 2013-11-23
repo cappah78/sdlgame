@@ -2,15 +2,20 @@
 
 #extension GL_EXT_texture_array : enable
 
+layout(std140) uniform VoxelTransform {
+	mat4 VPMatrix;
+	vec3 offset;
+	vec3 normal;
+} transform;
+
 uniform sampler2DArray texArr;
 
-in vec2 texCoord;
-in float textureId;
+in vec3 texCoord;
 in float occlusion;
 
 out vec4 color;
 
 void main()
 {
-	color = texture2DArray(texArr, vec3(texCoord, textureId)) * occlusion;
+	color = texture2DArray(texArr, texCoord) * occlusion;
 }

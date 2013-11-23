@@ -17,7 +17,7 @@
 
 std::vector<VoxelCache::Cache*> caches;
 VoxelCache::Cache* da;
-TextureArray* arr;
+TextureArray* tileSet;
 
 GameScreen::GameScreen()
 : m_camera(glm::vec3(0, 0, 0))
@@ -36,7 +36,9 @@ GameScreen::GameScreen()
 	images.push_back("blocks/stone.png");
 	images.push_back("blocks/dirt.png");
 	images.push_back("blocks/cobblestone.png");
-	arr = new TextureArray(images, 16, 16);
+	images.shrink_to_fit();
+	tileSet = new TextureArray(images, 16, 16);
+	tileSet->bind();
 
 	const unsigned int chunkSize = 16;
 
@@ -89,22 +91,23 @@ GameScreen::GameScreen()
 			}
 		}
 	}
+	caches.shrink_to_fit();
 }
 
 void GameScreen::render(float deltaSec)
 {
-
 	glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_cameraController.update(deltaSec);
 	m_camera.update();
-	//m_skyBox.render(m_camera);
+	m_skyBox.render(m_camera);
 
 	m_voxelCache->beginRender();
-	for (VoxelCache::Cache* c : caches)
-		m_voxelCache->renderCache(c, arr, m_camera);
+	for (VoxelCache::Cache* cache : caches) 
+		m_voxelCache->renderCache(cache, tileSet, m_camera);
 	m_voxelCache->finishRender();
+
 	GameLoop::swap();
 }
 

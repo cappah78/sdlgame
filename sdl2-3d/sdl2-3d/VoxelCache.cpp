@@ -10,7 +10,7 @@ const unsigned int INDEX_BITS = 3 * SIZE_BITS;
 const unsigned int TEXTURE_ID_BITS = 12;
 const unsigned int OCCLUSION_BITS = 8;
 
-const char* CACHE_VERTEX_TRANSFORM_UNIFORM_NAME = "CameraTransform";
+const char* CACHE_VERTEX_TRANSFORM_UNIFORM_NAME = "VoxelTransform";
 const int CACHE_VERTEX_TRANSFORM_BINDING_POINT = 0;
 
 const unsigned int INDEX_MASK = 0x00000FFFu;
@@ -180,12 +180,12 @@ VoxelCache::Cache* const VoxelCache::endCache()
 	return currentCache;
 }
 
-
 void VoxelCache::beginRender()
 {
 	assert(!m_drawing && "Call end() before begin()");
 	m_drawing = true;
 	glUseProgram(m_shaderId);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
 }
 
 void VoxelCache::finishRender()
@@ -194,6 +194,7 @@ void VoxelCache::finishRender()
 	m_drawing = false;
 	glUseProgram(0);
 }
+
 void VoxelCache::renderCache(Cache* const cache, const TextureArray* tileSet, const Camera& camera)
 {
 	assert(m_drawing);
@@ -207,17 +208,27 @@ void VoxelCache::renderCache(Cache* const cache, const TextureArray* tileSet, co
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, cache->m_amount);
 }
 
+glm::mat4 modelMat = glm::mat4(1);
+
 void VoxelCache::setUniforms(const Camera& camera, Face face, float xOffset, float yOffset, float zOffset)
 {
-	m_cameraTransform.VPMatrix = camera.m_combinedMatrix;
-	m_cameraTransform.VMatrix = camera.m_viewMatrix;
-	m_cameraTransform.PMatrix = camera.m_projectionMatrix;
+	m_cameraTransform.matrix = camera.m_combinedMatrix;
 
-	glm::mat4 modelMatrix = glm::translate(xOffset / 2.0f, yOffset / 2.0f, zOffset / 2.0f);	//TODO: wtf?
-	m_cameraTransform.VPMatrix *= modelMatrix;
+	m_cameraTransform.offset.x = xOffset;
+	m_cameraTransform.offset.y = yOffset;
+	m_cameraTransform.offset.z = zOffset;
 
-	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(CameraTransform), &m_cameraTransform, GL_STATIC_DRAW);
+	switch (face)
+	{
+	case TOP:	 m_cameraTransform.normal = glm::vec3(0.0, 1.0, 0.0);	break;
+	case BOTTOM: m_cameraTransform.normal = glm::vec3(0.0, -1.0, 0.0);	break;
+	case LEFT:	 m_cameraTransform.normal = glm::vec3(-1.0, 0.0, 0.0);	break;
+	case RIGHT:  m_cameraTransform.normal = glm::vec3(1.0, 0.0, 0.0);	break;
+	case FRONT:  m_cameraTransform.normal = glm::vec3(0.0, 0.0, 1.0);	break;
+	case BACK:	 m_cameraTransform.normal = glm::vec3(0.0, 0.0, -1.0);	break;
+	}
+
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(VoxelTransform), &m_cameraTransform, GL_STATIC_DRAW);
 }
 
 void VoxelCache::deleteCache(Cache* const cache)

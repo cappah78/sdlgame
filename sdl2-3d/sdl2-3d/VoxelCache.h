@@ -72,7 +72,7 @@ private:
 	bool m_drawing;
 	bool m_blendEnabled;
 
-	CameraTransform m_cameraTransform;
+	VoxelTransform m_cameraTransform;
 	GLuint m_cameraTransformBuffer;
 
 	GLuint m_vertexBuffer;

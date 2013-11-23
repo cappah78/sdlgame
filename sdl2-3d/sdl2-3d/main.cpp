@@ -1,15 +1,10 @@
 #include "GameLoop.h"
 
-#include <stdio.h>
 #include <stdlib.h>
-
 #include <windows.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include <io.h>
-#include <iostream>
 #include <fstream>
-
 #include <SDL.h>
 #include <SDL_opengl.h>
 
@@ -23,9 +18,7 @@
 #define WINDOW_WIDTH 1600
 #define WINDOW_HEIGHT 900
 
-
 #define GLM_FORCE_RADIANS
-
 
 /* A simple function that prints a message, the error code returned by SDL,
  * and quits the application */
@@ -101,8 +94,6 @@ int main(int argc, char *argv[])
 	redirectIOToConsole();
 	#endif //_DEBUG
 
-	std::cout << "hai" << std::endl;
-
     SDL_Window *mainwindow; /* Our window handle */
     SDL_GLContext maincontext; /* Our opengl context handle */
  
@@ -139,13 +130,10 @@ int main(int argc, char *argv[])
 	math::detail();
 	
 	GameLoop* gameLoop;
-	try
-	{
+	try {
 		gameLoop = new GameLoop(mainwindow);
-	}
-	catch(std::runtime_error& e)
-	{
-		std::cout << "runtime_error:" << e.what() << std::endl;
+	} catch(std::runtime_error& e) {
+		printf("runtime_error: %s\n", e.what());
 		Sleep(5000);
 	}
 	delete gameLoop;
@@ -156,6 +144,5 @@ int main(int argc, char *argv[])
     SDL_DestroyWindow(mainwindow);
     SDL_Quit();
 
-	std::cout << "bai" << std::endl;
     return 0;
 }

@@ -17,31 +17,31 @@ const unsigned int DOWN_LEFT = 32u << (INDEX_BITS + TEXTURE_ID_BITS);
 const unsigned int LEFT = 64u << (INDEX_BITS + TEXTURE_ID_BITS); 
 const unsigned int UP_LEFT = 128u << (INDEX_BITS + TEXTURE_ID_BITS); 
 
-layout(std140) uniform CameraTransform {
+layout(std140) uniform VoxelTransform {
 	mat4 VPMatrix;
-	mat4 VMatrix;
-	mat4 PMatrix;
-} camera;
+	vec3 offset;
+	vec3 normal;
+} transform;
 
 layout(location = 0) in vec4 in_vertex;
 layout(location = 1) in uint in_cornerIdx;
 layout(location = 2) in vec2 in_texCoord;
 layout(location = 3) in uint in_data;
 
-out vec2 texCoord;
-out float textureId;
+out vec3 texCoord;
 out float occlusion;
 
 void main(void)
 {
-	texCoord = in_texCoord;
+
 	uint index = in_data & INDEX_MASK;
 	float z = float((index >> (SIZE_BITS + SIZE_BITS)));
 	float y = float((index >> SIZE_BITS) & ((1u << SIZE_BITS) - 1u));
 	float x = float(index & ((1u << SIZE_BITS) - 1u));
-	gl_Position = camera.VPMatrix * (in_vertex + vec4(x, y, z, 1.0));
+	gl_Position = transform.VPMatrix * (in_vertex + vec4(x, y, z, 1.0) + vec4(transform.offset, 0.0));
 
-	textureId = float((in_data & TEXTURE_ID_MASK) >> INDEX_BITS);
+	float textureId = float((in_data & TEXTURE_ID_MASK) >> INDEX_BITS);
+	texCoord = vec3(in_texCoord, textureId);
 
 	uint isUpRight = min(in_cornerIdx & UP_RIGHT, 1u);
 	uint isUpLeft = min(in_cornerIdx & UP_LEFT, 1u);

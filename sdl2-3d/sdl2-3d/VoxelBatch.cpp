@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 
-const char* BATCH_CAMERA_TRANSFORM_UNIFORM_NAME = "CameraTransform";
+const char* BATCH_CAMERA_TRANSFORM_UNIFORM_NAME = "VoxelTransform";
 const int BATCH_CAMERA_TRANSFORM_BINDING_POINT = 0;
 
 VoxelBatch::VoxelBatch(unsigned int sizeInFaces)
