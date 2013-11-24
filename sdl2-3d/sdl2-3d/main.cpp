@@ -8,8 +8,6 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-#include "MathUtils.h"
-
 
 /* If using gl3.h */
 /* Ensure we are using opengl's core profile only */
@@ -116,8 +114,6 @@ int main(int argc, char *argv[])
     checkSDLError(__LINE__);
  
     SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is unlimited
-
-	math::detail();
 	
 	GameLoop* gameLoop;
 	gameLoop = new GameLoop(mainwindow);

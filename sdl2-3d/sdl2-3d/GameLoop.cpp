@@ -8,10 +8,11 @@
 #include <LuaUnityBuild.h>
 #include <LuaBridge.h>
 
-#include "IScreen.h"
-#include "IKeyListener.h"
-#include "IMouseListener.h"
-#include "CheckGLError.h"
+#include "Engine\Model\IScreen.h"
+#include "Engine\Model\IKeyListener.h"
+#include "Engine\Model\IMouseListener.h"
+#include "Engine\Utils\CheckGLError.h"
+#include "Screens\GameScreen.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -54,7 +55,7 @@ GameLoop::GameLoop(SDL_Window* window)
 
 	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
 
-	int script = luaL_dofile(L, "Test.lua");
+	int script = luaL_dofile(L, "Scripts/Test.lua");
 	report_errors(L, script);
 
 	glEnable(GL_CULL_FACE);	/* Back face culling gets enabled here!--*/

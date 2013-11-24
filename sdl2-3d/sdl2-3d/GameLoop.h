@@ -1,10 +1,10 @@
 #ifndef GAME_LOOP_H_
 #define GAME_LOOP_H_
 
-#include "GameScreen.h"
+#include "Screens\GameScreen.h"
+#include "Engine\Model\Game.h"
 
 #include <vector>
-#include "Game.h"
 
 class IKeyListener;
 class IMouseListener;

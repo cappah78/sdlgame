@@ -8,12 +8,6 @@
     <Filter Include="Header Files\Engine">
       <UniqueIdentifier>{21320252-decb-4777-b8f6-cb6c1d692e82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data">
-      <UniqueIdentifier>{61951764-42a0-4d7e-b5c0-5ab7af34a28d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="data\shaders">
-      <UniqueIdentifier>{11908bdf-a7b3-45cf-b06a-b8f2bdd7f112}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -21,50 +15,11 @@
     <Filter Include="Source Files\Engine">
       <UniqueIdentifier>{9dad4a46-a251-4f8a-a6ac-fa7d5a4a5c9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data\assets">
-      <UniqueIdentifier>{b425fa23-49e6-4f34-87c9-5037a616e822}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Screens">
       <UniqueIdentifier>{d23d7541-d0a1-487f-b365-cbdc1e0fe929}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Screens">
       <UniqueIdentifier>{78f0eddf-b44b-48f1-afa2-f35b8bc809b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\WIP">
-      <UniqueIdentifier>{03bd00ab-4544-40aa-8ba2-89e044b5fd80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine\WIP">
-      <UniqueIdentifier>{9137cf43-39a3-4ecb-aa4b-08696c26947f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\renderers">
-      <UniqueIdentifier>{8adfee23-fc89-47f8-a011-cfa3e23f3270}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\renderers\shaders">
-      <UniqueIdentifier>{5d807c91-44ce-46ab-905c-71ab73774c68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine\renderers">
-      <UniqueIdentifier>{5c62b795-94bb-4e61-9a03-a01c8a204161}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine\renderers\shaders">
-      <UniqueIdentifier>{bf4199fe-bba1-4212-8b6a-86c58d0f0d68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine\graphics">
-      <UniqueIdentifier>{cbac6b1e-1053-4599-8827-3ee39e60440a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine\model">
-      <UniqueIdentifier>{11e24b22-3565-417b-975b-a3275dc528c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\graphics">
-      <UniqueIdentifier>{0afe63ac-2d02-43eb-a905-5559be976a17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Engine\graphics\lighting">
-      <UniqueIdentifier>{5825d134-7146-4c4c-b6fe-9f5fe3c7777f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\graphics\lighting">
-      <UniqueIdentifier>{df1e2546-7022-4cfe-9d38-6aae0e913d19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\model">
-      <UniqueIdentifier>{2d458583-f48e-4dbc-8ffb-0e761607fe2c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Utils">
       <UniqueIdentifier>{3b524395-eb3b-4858-ba22-296faf45a3a6}</UniqueIdentifier>
@@ -72,388 +27,1243 @@
     <Filter Include="Header Files\Engine\Utils">
       <UniqueIdentifier>{18bd5661-e502-4cc3-a79e-5172f004fb95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\voxel">
-      <UniqueIdentifier>{0180495f-82e3-4273-9e60-d833afae7c75}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\voxel">
-      <UniqueIdentifier>{e5248dd5-44e4-4f91-91b7-28227e9f009a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Scripts">
       <UniqueIdentifier>{04c5ebfe-7b29-437e-a3d3-70156613f945}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Voxel">
+      <UniqueIdentifier>{0180495f-82e3-4273-9e60-d833afae7c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Voxel">
+      <UniqueIdentifier>{e5248dd5-44e4-4f91-91b7-28227e9f009a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Graphics">
+      <UniqueIdentifier>{cbac6b1e-1053-4599-8827-3ee39e60440a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Model">
+      <UniqueIdentifier>{11e24b22-3565-417b-975b-a3275dc528c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Graphics\Lighting">
+      <UniqueIdentifier>{5825d134-7146-4c4c-b6fe-9f5fe3c7777f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics">
+      <UniqueIdentifier>{0afe63ac-2d02-43eb-a905-5559be976a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Lighting">
+      <UniqueIdentifier>{df1e2546-7022-4cfe-9d38-6aae0e913d19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Model">
+      <UniqueIdentifier>{2d458583-f48e-4dbc-8ffb-0e761607fe2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{61951764-42a0-4d7e-b5c0-5ab7af34a28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Textures">
+      <UniqueIdentifier>{b425fa23-49e6-4f34-87c9-5037a616e822}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Shaders">
+      <UniqueIdentifier>{11908bdf-a7b3-45cf-b06a-b8f2bdd7f112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Graphics\Renderers">
+      <UniqueIdentifier>{8058e4b9-26b4-42d0-a401-e165ae4c60fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Renderers">
+      <UniqueIdentifier>{bb9864ae-0a7f-4d19-b45c-c6643eaa5ed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Graphics\Renderers\Shaders">
+      <UniqueIdentifier>{78d194e5-d03b-4034-ac3e-6ff0b33b95ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Voxel\Shaders">
+      <UniqueIdentifier>{e1d60436-2fec-4dfb-8396-c3dec00a25a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Models">
+      <UniqueIdentifier>{27e1ad42-302a-4d18-aa65-d700b7a7773f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Models\Skybox">
+      <UniqueIdentifier>{4728e2e3-8161-4735-9497-dd4ea5004fa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Textures\MinecraftBlocks">
+      <UniqueIdentifier>{80222897-9a92-49d1-9faf-4b6d5e55ba84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MathUtils.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="PerlinGenerator.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="NumberUtils.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScreen.cpp">
-      <Filter>Source Files\Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="MatrixUtils.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Aabb.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Assert.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="CheckGLError.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.c">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="TiledForwardShader.cpp">
-      <Filter>Source Files\Engine\WIP</Filter>
-    </ClCompile>
-    <ClCompile Include="OBJModel.cpp">
-      <Filter>Source Files\Engine\WIP</Filter>
-    </ClCompile>
-    <ClCompile Include="LightGrid.cpp">
-      <Filter>Source Files\Engine\WIP</Filter>
-    </ClCompile>
-    <ClCompile Include="GBuffer.cpp">
-      <Filter>Source Files\Engine\WIP</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleShader.cpp">
-      <Filter>Source Files\Engine\WIP</Filter>
-    </ClCompile>
-    <ClCompile Include="ComboShader.cpp">
-      <Filter>Source Files\Engine\WIP</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBox.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Pixmap.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="LightManager.cpp">
-      <Filter>Source Files\Engine\graphics\lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="LightSorter.cpp">
-      <Filter>Source Files\Engine\graphics\lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeMap.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMap.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManager.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteBatch.cpp">
-      <Filter>Source Files\Engine\renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMapRenderer.cpp">
-      <Filter>Source Files\Engine\renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="ForwardShader.cpp">
-      <Filter>Source Files\Engine\renderers\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="VoxelChunk.cpp">
-      <Filter>Source Files\voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="VoxelWorld.cpp">
-      <Filter>Source Files\voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="VoxelBatch.cpp">
-      <Filter>Source Files\Engine\renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowCubeMap.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files\Engine\model</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Engine\model</Filter>
-    </ClCompile>
-    <ClCompile Include="PerspectiveCamera.cpp">
-      <Filter>Source Files\Engine\model</Filter>
-    </ClCompile>
-    <ClCompile Include="VoxelCache.cpp">
-      <Filter>Source Files\Engine\renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureArray.cpp">
-      <Filter>Source Files\Engine\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="FPSCameraController.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="GameLoop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StoneBlock.h">
-      <Filter>Header Files\voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="StoneBlock.cpp">
-      <Filter>Source Files\voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="DirtBlock.cpp">
-      <Filter>Source Files\voxel</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="scribble.png">
-      <Filter>data\assets</Filter>
-    </None>
-    <None Include="..\..\..\..\..\Desktop\stripes.png">
-      <Filter>data\assets</Filter>
-    </None>
-    <None Include="alphascribble.png">
-      <Filter>data\assets</Filter>
-    </None>
-    <None Include="grass.png">
-      <Filter>data\assets</Filter>
-    </None>
-    <None Include="spritebatch.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="spritebatch.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="skybox.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="skybox.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="shadowmulti.geom">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="shadowmulti.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="fullscreenquad.geom">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="forwardshader.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="forwardshader.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="voxelshader.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="voxelshader.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="voxelshader.geom">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="voxelshaderinstanced.vert">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="voxelshaderinstanced.frag">
-      <Filter>data\shaders</Filter>
-    </None>
-    <None Include="Test.lua">
-      <Filter>Source Files\Scripts</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="FPSCameraController.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MathUtils.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="NumberUtils.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="PerlinGenerator.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScreen.h">
-      <Filter>Header Files\Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixUtils.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="ClipRegion.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Aabb.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="GlBufferObject.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Assert.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="CheckGLError.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Config.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="IntTypes.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="TiledForwardShader.h">
-      <Filter>Header Files\Engine\WIP</Filter>
-    </ClInclude>
-    <ClInclude Include="OBJModel.h">
-      <Filter>Header Files\Engine\WIP</Filter>
-    </ClInclude>
-    <ClInclude Include="ComboShader.h">
-      <Filter>Header Files\Engine\WIP</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleShader.h">
-      <Filter>Header Files\Engine\WIP</Filter>
-    </ClInclude>
-    <ClInclude Include="TiledShaderPointLight.h">
-      <Filter>Header Files\Engine\WIP</Filter>
-    </ClInclude>
-    <ClInclude Include="AmbientLight.h">
-      <Filter>Header Files\Engine\graphics\lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>Header Files\Engine\graphics\lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files\Engine\graphics\lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="LightGrid.h">
-      <Filter>Header Files\Engine\WIP</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Pixmap.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="SpotLight.h">
-      <Filter>Header Files\Engine\graphics\lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLight.h">
-      <Filter>Header Files\Engine\graphics\lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureRegion.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBox.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="HeightMap.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="LightManager.h">
-      <Filter>Header Files\Engine\graphics\lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="LightSorter.h">
-      <Filter>Header Files\Engine\graphics\lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeMap.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="HeightMapRenderer.h">
-      <Filter>Header Files\Engine\renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="ForwardShader.h">
-      <Filter>Header Files\Engine\renderers\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteBatch.h">
-      <Filter>Header Files\Engine\renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManager.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="VoxelWorld.h">
-      <Filter>Header Files\voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="VoxelChunk.h">
-      <Filter>Header Files\voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="VoxelBatch.h">
-      <Filter>Header Files\Engine\renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="UniformBufferStructs.h">
-      <Filter>Header Files\Engine\renderers\shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowCubeMap.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="IKeyListener.h">
-      <Filter>Header Files\Engine\model</Filter>
-    </ClInclude>
-    <ClInclude Include="IMouseListener.h">
-      <Filter>Header Files\Engine\model</Filter>
-    </ClInclude>
-    <ClInclude Include="IScreen.h">
-      <Filter>Header Files\Engine\model</Filter>
-    </ClInclude>
-    <ClInclude Include="GBuffer.h">
-      <Filter>Header Files\Engine\WIP</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files\Engine\model</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\Engine\model</Filter>
-    </ClInclude>
-    <ClInclude Include="PerspectiveCamera.h">
-      <Filter>Header Files\Engine\model</Filter>
-    </ClInclude>
-    <ClInclude Include="VoxelCache.h">
-      <Filter>Header Files\Engine\renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureArray.h">
-      <Filter>Header Files\Engine\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="GameLoop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VoxelBlockData.h">
-      <Filter>Header Files\voxel</Filter>
+    <ClInclude Include="Engine\Graphics\Camera.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="VoxelBlock.h">
-      <Filter>Header Files\voxel</Filter>
+    <ClInclude Include="Engine\Graphics\CubeMap.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="DirtBlock.h">
-      <Filter>Header Files\voxel</Filter>
+    <ClInclude Include="Engine\Graphics\HeightMap.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Material.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Mesh.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PerspectiveCamera.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Pixmap.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Texture.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\TextureArray.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\TextureRegion.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\AmbientLight.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\DirectionalLight.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\Light.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\LightManager.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\LightSorter.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\PointLight.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\ShadowCubeMap.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Lighting\SpotLight.h">
+      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Renderers\ForwardShader.h">
+      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h">
+      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Renderers\SkyBox.h">
+      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Renderers\SpriteBatch.h">
+      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Renderers\UniformBufferStructs.h">
+      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\Game.h">
+      <Filter>Header Files\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\IKeyListener.h">
+      <Filter>Header Files\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\IMouseListener.h">
+      <Filter>Header Files\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\IntTypes.h">
+      <Filter>Header Files\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\IScreen.h">
+      <Filter>Header Files\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\Assert.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\CheckGLError.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\FPSCameraController.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\NumberUtils.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\PerlinGenerator.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\Random.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\ShaderManager.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\stb_image.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Screens\GameScreen.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\DirtBlock.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\StoneBlock.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelBatch.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelBlock.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelBlockData.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelCache.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelChunk.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelWorld.h">
+      <Filter>Header Files\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="arrow.png">
-      <Filter>data\assets</Filter>
+    <ClCompile Include="GameLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\TextureArray.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Texture.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Pixmap.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PerspectiveCamera.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Mesh.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Material.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\HeightMap.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\CubeMap.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Camera.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Renderers\SpriteBatch.cpp">
+      <Filter>Source Files\Engine\Graphics\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Renderers\SkyBox.cpp">
+      <Filter>Source Files\Engine\Graphics\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp">
+      <Filter>Source Files\Engine\Graphics\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Renderers\ForwardShader.cpp">
+      <Filter>Source Files\Engine\Graphics\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Lighting\ShadowCubeMap.cpp">
+      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Lighting\LightSorter.cpp">
+      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Lighting\LightManager.cpp">
+      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\ShaderManager.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\PerlinGenerator.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\NumberUtils.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\FPSCameraController.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\CheckGLError.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\Assert.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Screens\GameScreen.cpp">
+      <Filter>Source Files\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\VoxelWorld.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\VoxelChunk.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\VoxelCache.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\VoxelBatch.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\StoneBlock.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\DirtBlock.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\stb_image.c">
+      <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Test.lua">
+      <Filter>Source Files\Scripts</Filter>
+    </None>
+    <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </None>
+    <None Include="Assets\Textures\MinecraftBlocks\fire_layer_1.png.mcmeta">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </None>
+    <None Include="Assets\Textures\MinecraftBlocks\lava_flow.png.mcmeta">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </None>
+    <None Include="Assets\Textures\MinecraftBlocks\lava_still.png.mcmeta">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </None>
+    <None Include="Assets\Textures\MinecraftBlocks\portal.png.mcmeta">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </None>
+    <None Include="Assets\Textures\MinecraftBlocks\water_flow.png.mcmeta">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </None>
+    <None Include="Assets\Textures\MinecraftBlocks\water_still.png.mcmeta">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </None>
+    <None Include="Assets\Shaders\forwardshader.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\forwardshader.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\fullscreenquad.geom">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\geometrypass.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\geometrypass.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\shadowmulti.geom">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\shadowmulti.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\skybox.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\skybox.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\spritebatch.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\spritebatch.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshader.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshader.geom">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshader.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshaderinstanced.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshaderinstanced.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Models\Skybox\back.bmp">
+      <Filter>Assets\Models\Skybox</Filter>
+    </Image>
+    <Image Include="Assets\Models\Skybox\bottom.bmp">
+      <Filter>Assets\Models\Skybox</Filter>
+    </Image>
+    <Image Include="Assets\Models\Skybox\front.bmp">
+      <Filter>Assets\Models\Skybox</Filter>
+    </Image>
+    <Image Include="Assets\Models\Skybox\left.bmp">
+      <Filter>Assets\Models\Skybox</Filter>
+    </Image>
+    <Image Include="Assets\Models\Skybox\right.bmp">
+      <Filter>Assets\Models\Skybox</Filter>
+    </Image>
+    <Image Include="Assets\Models\Skybox\top.bmp">
+      <Filter>Assets\Models\Skybox</Filter>
+    </Image>
+    <Image Include="Assets\Textures\alphascribble.png">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="Assets\Textures\arrow.png">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="Assets\Textures\grass.png">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="Assets\Textures\scribble.png">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="Assets\Textures\stripes.png">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\anvil_base.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\anvil_top_damaged_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\anvil_top_damaged_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\anvil_top_damaged_2.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\beacon.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bed_feet_end.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bed_feet_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bed_feet_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bed_head_end.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bed_head_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bed_head_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bedrock.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\bookshelf.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\brewing_stand.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\brewing_stand_base.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\brick.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cactus_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cactus_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cactus_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cake_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cake_inner.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cake_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cake_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\carrots_stage_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\carrots_stage_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\carrots_stage_2.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\carrots_stage_3.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cauldron_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cauldron_inner.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cauldron_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cauldron_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\clay.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\coal_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\coal_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cobblestone.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cobblestone_mossy.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cocoa_stage_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cocoa_stage_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\cocoa_stage_2.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\command_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\comparator_off.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\comparator_on.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\crafting_table_front.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\crafting_table_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\crafting_table_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\daylight_detector_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\daylight_detector_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\deadbush.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_2.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_3.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_4.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_5.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_6.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_7.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_8.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\destroy_stage_9.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\diamond_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\diamond_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\dirt.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\dispenser_front_horizontal.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\dispenser_front_vertical.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\door_iron_lower.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\door_iron_upper.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\door_wood_lower.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\door_wood_upper.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\dragon_egg.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\dropper_front_horizontal.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\dropper_front_vertical.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\emerald_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\emerald_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\enchanting_table_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\enchanting_table_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\enchanting_table_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\end_stone.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\endframe_eye.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\endframe_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\endframe_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\farmland_dry.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\farmland_wet.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\fern.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\fire_layer_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\flower_dandelion.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\flower_pot.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\flower_rose.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\furnace_front_off.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\furnace_front_on.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\furnace_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\furnace_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\glass.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\glass_pane_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\glowstone.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\gold_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\gold_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\grass_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\grass_side_overlay.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\grass_side_snowed.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\grass_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\gravel.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_black.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_blue.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_brown.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_cyan.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_gray.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_green.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_light_blue.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_lime.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_magenta.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_orange.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_pink.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_purple.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_red.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_silver.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_white.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hardened_clay_stained_yellow.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hay_block_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hay_block_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hopper_inside.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hopper_outside.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\hopper_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\ice.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\iron_bars.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\iron_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\iron_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\itemframe_background.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\jukebox_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\jukebox_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\ladder.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\lapis_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\lapis_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\lava_flow.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\lava_still.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_birch.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_birch_opaque.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_jungle.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_jungle_opaque.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_oak.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_oak_opaque.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_spruce.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\leaves_spruce_opaque.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\lever.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_birch.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_birch_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_jungle.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_jungle_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_oak.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_oak_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_spruce.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\log_spruce_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\melon_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\melon_stem_connected.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\melon_stem_disconnected.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\melon_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mob_spawner.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mushroom_block_inside.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mushroom_block_skin_brown.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mushroom_block_skin_red.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mushroom_block_skin_stem.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mushroom_brown.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mushroom_red.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mycelium_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\mycelium_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\nether_brick.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\nether_wart_stage_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\nether_wart_stage_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\nether_wart_stage_2.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\netherrack.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\noteblock.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\obsidian.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\piston_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\piston_inner.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\piston_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\piston_top_normal.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\piston_top_sticky.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\planks_birch.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\planks_jungle.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\planks_oak.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\planks_spruce.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\portal.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\potatoes_stage_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\potatoes_stage_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\potatoes_stage_2.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\potatoes_stage_3.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\pumpkin_face_off.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\pumpkin_face_on.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\pumpkin_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\pumpkin_stem_connected.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\pumpkin_stem_disconnected.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\pumpkin_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_block_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_block_chiseled.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_block_chiseled_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_block_lines.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_block_lines_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_block_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_block_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\quartz_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_activator.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_activator_powered.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_detector.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_detector_powered.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_golden.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_golden_powered.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_normal.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\rail_normal_turned.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_block.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_dust_cross.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_dust_cross_overlay.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_dust_line.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_dust_line_overlay.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_lamp_off.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_lamp_on.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_ore.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_torch_off.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\redstone_torch_on.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\reeds.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\repeater_off.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\repeater_on.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sand.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sandstone_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sandstone_carved.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sandstone_normal.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sandstone_smooth.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sandstone_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sapling_birch.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sapling_jungle.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sapling_oak.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sapling_spruce.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\snow.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\soul_sand.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\sponge.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\stone.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\stone_slab_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\stone_slab_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\stonebrick.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\stonebrick_carved.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\stonebrick_cracked.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\stonebrick_mossy.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\tallgrass.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\tnt_bottom.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\tnt_side.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\tnt_top.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\torch_on.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\trapdoor.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\trip_wire.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\trip_wire_source.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\vine.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\water_flow.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\water_still.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\waterlily.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\web.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_0.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_1.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_2.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_3.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_4.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_5.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_6.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wheat_stage_7.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_black.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_blue.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_brown.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_cyan.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_gray.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_green.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_light_blue.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_lime.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_magenta.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_orange.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_pink.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_purple.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_red.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_silver.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_white.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
+    </Image>
+    <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_yellow.png">
+      <Filter>Assets\Textures\MinecraftBlocks</Filter>
     </Image>
   </ItemGroup>
 </Project>
