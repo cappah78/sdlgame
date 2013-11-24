@@ -65,6 +65,7 @@ VoxelBatch::VoxelBatch(unsigned int sizeInFaces)
 
 	glGenBuffers(1, &m_cameraTransformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(m_cameraTransform), &m_cameraTransform, GL_STATIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, BATCH_CAMERA_TRANSFORM_BINDING_POINT, m_cameraTransformBuffer);
 
 	GLuint cameraTransformIdx = glGetUniformBlockIndex(m_shaderId, BATCH_CAMERA_TRANSFORM_UNIFORM_NAME);

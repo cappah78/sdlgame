@@ -78,6 +78,9 @@
     <Filter Include="Source Files\voxel">
       <UniqueIdentifier>{e5248dd5-44e4-4f91-91b7-28227e9f009a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{04c5ebfe-7b29-437e-a3d3-70156613f945}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -200,6 +203,15 @@
     <ClCompile Include="GameLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StoneBlock.h">
+      <Filter>Header Files\voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="StoneBlock.cpp">
+      <Filter>Source Files\voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="DirtBlock.cpp">
+      <Filter>Source Files\voxel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="scribble.png">
@@ -255,6 +267,9 @@
     </None>
     <None Include="voxelshaderinstanced.frag">
       <Filter>data\shaders</Filter>
+    </None>
+    <None Include="Test.lua">
+      <Filter>Source Files\Scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -425,6 +440,15 @@
     </ClInclude>
     <ClInclude Include="GameLoop.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelBlockData.h">
+      <Filter>Header Files\voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelBlock.h">
+      <Filter>Header Files\voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="DirtBlock.h">
+      <Filter>Header Files\voxel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

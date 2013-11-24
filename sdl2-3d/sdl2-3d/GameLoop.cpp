@@ -2,31 +2,64 @@
 
 #include <vector>
 #include <algorithm>
-#include <iostream>
-#include <stdio.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
+
+#include <LuaUnityBuild.h>
+#include <LuaBridge.h>
+
 #include "IScreen.h"
 #include "IKeyListener.h"
 #include "IMouseListener.h"
+#include "CheckGLError.h"
 
-SDL_Window* GameLoop::mainWindow;
+#include <iostream>
+#include <stdio.h>
+
+
 GameLoop* GameLoop::instance;
+SDL_Window* GameLoop::mainWindow;
+lua_State* GameLoop::L;
 int GameLoop::screenWidth;
 int GameLoop::screenHeight;
+
+//custom errors for lua
+void report_errors(lua_State *L, int status)
+{
+	if (status != 0) {
+		std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1); // remove error message
+	}
+}
 
 GameLoop::GameLoop(SDL_Window* window)
 {
 	instance = this;
 	mainWindow = window;
 
+	L = luaL_newstate();
+	luaL_openlibs(L);
+	luabridge::getGlobalNamespace(L)
+		.beginNamespace("Game")
+			.beginNamespace("window")
+				.addVariable("screenWidth", &screenWidth, false)
+				.addVariable("screenHeight", &screenHeight, false)
+			.endNamespace()
+		.endNamespace();
+
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+	checkGLError(__FILE__, __LINE__);
 	initGL();
+	checkGLError(__FILE__, __LINE__);
+
 	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
 
-	glEnable(GL_CULL_FACE);
+	int script = luaL_dofile(L, "Test.lua");
+	report_errors(L, script);
+
+	glEnable(GL_CULL_FACE);	/* Back face culling gets enabled here!--*/
 	glCullFace(GL_BACK);
-	//glColorMask(false, false, false, false);
+
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 renderCount = 0;
 	float timePassed = 0;
@@ -106,9 +139,9 @@ GameLoop::GameLoop(SDL_Window* window)
 		renderCount++;
 		if (timePassed >= 1.0f)
 		{
-			_itoa(renderCount, title, 10);
+			_itoa_s(renderCount, title, 10);
 			char str[20] = "FPS: ";
-			std::strcat(str, title);
+			strcat_s(str, 10, title);
 			SDL_SetWindowTitle(mainWindow, str);
 			timePassed = 0.0;
 			renderCount = 0;
@@ -118,12 +151,14 @@ GameLoop::GameLoop(SDL_Window* window)
 	}
 	exit_loop: ;	//goto
 
+	lua_close(L);
+
 	delete gameScreen;
 }
 
 GameLoop::~GameLoop()
 {
-
+	checkGLError(__FILE__, __LINE__);
 }
 
 void GameLoop::initGL()
@@ -135,7 +170,12 @@ void GameLoop::initGL()
     {
         /* Problem: glewInit failed, something is seriously wrong. */
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-    }
+	}
+	else 
+	{
+		//clear invalid enum bullshit error
+		for (GLenum glErr = glGetError(); glErr != GL_NO_ERROR; glErr = glGetError());
+	}
 
     fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 }

@@ -10,13 +10,11 @@ class IKeyListener;
 class IMouseListener;
 class IScreen;
 struct SDL_Window;
+struct lua_State;
 
 class GameLoop : public Game 
 {
 public:
-	//singleton
-	static GameLoop* instance;
-
 	GameLoop(SDL_Window* mainWindow);
 	~GameLoop();
 
@@ -29,13 +27,18 @@ public:
 	static int getWidth();
 	static int getHeight();
 	static void swap();	/* Update the screen */
-	static SDL_Window* GameLoop::mainWindow; /* Our window handle */
+
 
 private:
 	void initGL();
 
+	//singleton
+	static GameLoop* instance;
+	static SDL_Window* mainWindow;
 	static int screenWidth;
 	static int screenHeight;
+
+	static lua_State* L;
 
 	IScreen* gameScreen;
 

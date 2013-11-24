@@ -1,22 +1,20 @@
-﻿Build started 23/11/2013 18:30:41.
+﻿Build started 24/11/2013 20:41:26.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ForwardShader.cpp GameScreen.cpp VoxelBatch.cpp VoxelCache.cpp VoxelChunk.cpp VoxelWorld.cpp
-         ForwardShader.cpp
-         GameScreen.cpp
-         VoxelBatch.cpp
-         VoxelCache.cpp
-         VoxelChunk.cpp
-         VoxelWorld.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GameLoop.cpp
+         GameLoop.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_release-dll_win32" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Aabb.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_release-dll_win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\LuaBridge\Release" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib LuaUnityBuild.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Aabb.obj
          Release\Assert.obj
          Release\Camera.obj
          Release\CheckGLError.obj
          Release\ComboShader.obj
          Release\CubeMap.obj
+         Release\DirtBlock.obj
          Release\Material.obj
          Release\ShadowCubeMap.obj
+         Release\StoneBlock.obj
+         Release\StoneBlock.obj
          Release\TextureArray.obj
          Release\VoxelBatch.obj
          Release\ForwardShader.obj
@@ -49,6 +47,8 @@
          Release\VoxelCache.obj
          Release\VoxelChunk.obj
          Release\VoxelWorld.obj
+     1>Release\StoneBlock.obj : warning LNK4042: object specified more than once; extras ignored
+     1>LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
          Generating code
          Finished generating code
          sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
@@ -56,4 +56,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.11
+Time Elapsed 00:00:03.32

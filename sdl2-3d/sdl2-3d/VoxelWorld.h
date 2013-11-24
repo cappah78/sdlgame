@@ -4,6 +4,11 @@
 #include "VoxelBatch.h"
 #include "VoxelChunk.h"
 
+#include "VoxelBlock.h"
+
+#include <vector>
+#include <map>
+
 static const unsigned int CHUNK_LOAD_RANGE = 16;
 
 class VoxelWorld
@@ -12,9 +17,10 @@ public:
 	VoxelWorld();
 	VoxelWorld(const VoxelWorld& copyMe);
 	~VoxelWorld();
+
 private:
-	VoxelBatch batch;
-	VoxelChunk chunk;
+	//VoxelBatch batch;
+	//VoxelChunk chunk;
 };
 
 #endif //VOXEL_WORLD_H_

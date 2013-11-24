@@ -1,0 +1,1 @@
+print(Game.window.screenWidth .. ":" .. Game.window.screenHeight)

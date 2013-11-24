@@ -15,18 +15,27 @@
 #include "TextureArray.h"
 #include "GameLoop.h"
 
+#include "StoneBlock.h"
+#include "DirtBlock.h"
+
 std::vector<VoxelCache::Cache*> caches;
-VoxelCache::Cache* da;
 TextureArray* tileSet;
 
 GameScreen::GameScreen()
-: m_camera(glm::vec3(0, 0, 0))
-, m_cameraController(m_camera)
+	: m_camera(glm::vec3(0, 0, 0))
+	, m_cameraController(m_camera)
 {
 	GameLoop::registerKeyListener(&m_cameraController);
 	GameLoop::registerMouseListener(&m_cameraController);
 	GameLoop::registerKeyListener(this);
 	glEnable(GL_DEPTH_TEST);
+
+	StoneBlock block;
+
+	StoneBlock block2;
+	DirtBlock block3;
+
+	std::cout << "size: " << sizeof(StoneBlock) << std::endl;
 
 	GLint maxTexLayers;
 	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTexLayers);
