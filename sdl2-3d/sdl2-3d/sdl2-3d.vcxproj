@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h" />
     <ClInclude Include="Engine\Graphics\CubeMap.h" />
+    <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\HeightMap.h" />
     <ClInclude Include="Engine\Graphics\Lighting\AmbientLight.h" />
     <ClInclude Include="Engine\Graphics\Lighting\DirectionalLight.h" />
@@ -34,20 +35,22 @@
     <ClInclude Include="Engine\Graphics\Texture.h" />
     <ClInclude Include="Engine\Graphics\TextureArray.h" />
     <ClInclude Include="Engine\Graphics\TextureRegion.h" />
-    <ClInclude Include="Engine\Model\Game.h" />
+    <ClInclude Include="Engine\Input\Input.h" />
+    <ClInclude Include="Engine\Model\ScreenManager.h" />
     <ClInclude Include="Engine\Model\IKeyListener.h" />
     <ClInclude Include="Engine\Model\IMouseListener.h" />
     <ClInclude Include="Engine\Model\IntTypes.h" />
     <ClInclude Include="Engine\Model\IScreen.h" />
     <ClInclude Include="Engine\Utils\Assert.h" />
     <ClInclude Include="Engine\Utils\CheckGLError.h" />
+    <ClInclude Include="Engine\Utils\CheckLuaError.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
     <ClInclude Include="Engine\Utils\NumberUtils.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
     <ClInclude Include="Engine\Utils\Random.h" />
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
     <ClInclude Include="Engine\Utils\stb_image.h" />
-    <ClInclude Include="GameLoop.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\DirtBlock.h" />
     <ClInclude Include="Voxel\StoneBlock.h" />
@@ -61,6 +64,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\Graphics\Camera.cpp" />
     <ClCompile Include="Engine\Graphics\CubeMap.cpp" />
+    <ClCompile Include="Engine\Graphics\Graphics.cpp" />
     <ClCompile Include="Engine\Graphics\HeightMap.cpp" />
     <ClCompile Include="Engine\Graphics\Lighting\LightManager.cpp" />
     <ClCompile Include="Engine\Graphics\Lighting\LightSorter.cpp" />
@@ -75,6 +79,7 @@
     <ClCompile Include="Engine\Graphics\Renderers\SpriteBatch.cpp" />
     <ClCompile Include="Engine\Graphics\Texture.cpp" />
     <ClCompile Include="Engine\Graphics\TextureArray.cpp" />
+    <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Utils\Assert.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp" />
@@ -82,7 +87,7 @@
     <ClCompile Include="Engine\Utils\PerlinGenerator.cpp" />
     <ClCompile Include="Engine\Utils\ShaderManager.cpp" />
     <ClCompile Include="Engine\Utils\stb_image.c" />
-    <ClCompile Include="GameLoop.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
     <ClCompile Include="Voxel\DirtBlock.cpp" />

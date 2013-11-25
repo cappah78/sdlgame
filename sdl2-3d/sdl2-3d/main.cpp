@@ -1,22 +1,25 @@
-#include "GameLoop.h"
+#include <gl\glew.h>	//including these here to make sure they're not included out of order later on
+#include <gl\GL.h>
 
-#include <stdlib.h>
+#include "Game.h"
+#include "Screens/GameScreen.h"
+#include "Engine/Utils/CheckGLError.h"
+
 #include <windows.h>
 #include <fcntl.h>
 #include <io.h>
-#include <fstream>
 #include <SDL.h>
-#include <SDL_opengl.h>
-
 
 /* If using gl3.h */
 /* Ensure we are using opengl's core profile only */
 #define GL3_PROTOTYPES 1
-#define PROGRAM_NAME "sdlgame"
-#define WINDOW_WIDTH 1600
-#define WINDOW_HEIGHT 900
-
 #define GLM_FORCE_RADIANS
+
+const char* PROGRAM_NAME = "sdlgame";
+const unsigned int INIT_WINDOW_WIDTH = 1600;
+const unsigned int INIT_WINDOW_HEIGHT = 900;
+const unsigned int INIT_WINDOW_XPOS = 30;
+const unsigned int INIT_WINDOW_YPOS = 30;
 
 /* A simple function that prints a message, the error code returned by SDL,
  * and quits the application */
@@ -36,6 +39,25 @@ void checkSDLError(int line = -1) {
 		SDL_ClearError();
 	}
 #endif
+}
+
+void initGL()
+{
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit(); 
+
+	if (GLEW_OK != err)
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+	}
+	else 
+	{
+		//clear invalid enum bullshit error
+		for (GLenum glErr = glGetError(); glErr != GL_NO_ERROR; glErr = glGetError());
+	}
+
+	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 }
 
 
@@ -103,8 +125,8 @@ int main(int argc, char *argv[])
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
  
-    mainwindow = SDL_CreateWindow(PROGRAM_NAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	mainwindow = SDL_CreateWindow(PROGRAM_NAME, INIT_WINDOW_XPOS, INIT_WINDOW_YPOS,
+        INIT_WINDOW_WIDTH, INIT_WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
     if (!mainwindow)
         sdldie("Unable to create window");
@@ -113,15 +135,32 @@ int main(int argc, char *argv[])
     maincontext = SDL_GL_CreateContext(mainwindow);
     checkSDLError(__LINE__);
  
-    SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is unlimited
-	
-	GameLoop* gameLoop;
-	gameLoop = new GameLoop(mainwindow);
-	delete gameLoop;
+    SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is
+
+	CHECK_GL_ERROR();
+	initGL();
+	CHECK_GL_ERROR();
+
+	int width, height;
+	SDL_GetWindowSize(mainwindow, &width, &height);
+
+	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
+
+	Game::graphics.setWindow(mainwindow);
+	Game::graphics.resizeScreen(width, height);
+
+	glEnable(GL_CULL_FACE);	/* Back face culling gets enabled here!--*/
+	glCullFace(GL_BACK);
+
+	GameScreen gameScreen;
+	Game::setScreen(&gameScreen);
+	Game::startGameLoop();
 
     SDL_GL_DeleteContext(maincontext);
     SDL_DestroyWindow(mainwindow);
     SDL_Quit();
+
+	printf("Bye");
 
     return 0;
 }

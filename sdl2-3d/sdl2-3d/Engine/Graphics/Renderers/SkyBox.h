@@ -1,6 +1,7 @@
 #ifndef SKYBOX_H_
 #define SKYBOX_H_
 
+
 #include "..\Mesh.h" 
 #include "..\CubeMap.h"
 

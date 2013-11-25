@@ -72,9 +72,6 @@
     <Filter Include="Header Files\Engine\Graphics\Renderers\Shaders">
       <UniqueIdentifier>{78d194e5-d03b-4034-ac3e-6ff0b33b95ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Voxel\Shaders">
-      <UniqueIdentifier>{e1d60436-2fec-4dfb-8396-c3dec00a25a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Models">
       <UniqueIdentifier>{27e1ad42-302a-4d18-aa65-d700b7a7773f}</UniqueIdentifier>
     </Filter>
@@ -84,11 +81,14 @@
     <Filter Include="Assets\Textures\MinecraftBlocks">
       <UniqueIdentifier>{80222897-9a92-49d1-9faf-4b6d5e55ba84}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Input">
+      <UniqueIdentifier>{e0376f48-7e7d-4140-b5c3-af5c3520ec2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Input">
+      <UniqueIdentifier>{7340cd5f-3b6a-4be8-8af5-58351aafe7ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameLoop.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Camera.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
@@ -158,9 +158,6 @@
     <ClInclude Include="Engine\Graphics\Renderers\UniformBufferStructs.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Model\Game.h">
-      <Filter>Header Files\Engine\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Model\IKeyListener.h">
       <Filter>Header Files\Engine\Model</Filter>
     </ClInclude>
@@ -224,11 +221,23 @@
     <ClInclude Include="Voxel\VoxelWorld.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Model\ScreenManager.h">
+      <Filter>Header Files\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Graphics.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Input\Input.h">
+      <Filter>Header Files\Engine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\CheckLuaError.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameLoop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -321,6 +330,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Utils\stb_image.c">
       <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Input\Input.cpp">
+      <Filter>Source Files\Engine\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Graphics.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,16 +8,24 @@
 
 #include <vector>
 
+typedef unsigned short BlockID;
+typedef unsigned short BlockStrength;
+
+struct VoxelBlockProperties
+{
+	BlockStrength blockStrength;
+	bool isTransparant;
+	bool isAnimated;
+};
+
 //CRTP
-template <typename Derived, typename Data>
+template <typename Implementation, typename Data>
 class VoxelBlock
 {
 public:
 	VoxelBlock()
 	{
 		std::cout << "const: " << std::endl;
-		if (&VoxelBlock<Derived, Data>::onCreate != &Derived::onCreate)
-			static_cast<Derived*>(this)->onCreate();
 	};
 
 	VoxelBlock(const VoxelBlock& copy)
@@ -30,22 +38,27 @@ public:
 		std::cout << "dest" << std::endl;
 	};
 
+	VoxelBlockProperties registerType()
+	{
+		return static_cast<Implementation*>(this)->onRegisterType();
+	};
+
 	void place()
 	{
-		if (&VoxelBlock<Derived, Data>::onPlace != &Derived::onPlace)
-			static_cast<Derived*>(this)->onPlace();
+		if (&VoxelBlock<Implementation, Data>::onPlace != &Implementation::onPlace)
+			static_cast<Implementation*>(this)->onPlace();
 	};
 
 	void destroy()
 	{
-		if (&VoxelBlock<Derived, Data>::onDestroy != &Derived::onDestroy)
-			static_cast<Derived*>(this)->onDestroy();
+		if (&VoxelBlock<Implementation, Data>::onDestroy != &Implementation::onDestroy)
+			static_cast<Implementation*>(this)->onDestroy();
 	};
 
 	void blockUpdate()
 	{
-		if (&VoxelBlock<Derived, Data>::onBlockUpdate != &Derived::onBlockUpdate)
-			static_cast<Derived*>(this)->onBlockUpdate();
+		if (&VoxelBlock<Implementation, Data>::onBlockUpdate != &Implementation::onBlockUpdate)
+			static_cast<Implementation*>(this)->onBlockUpdate();
 	};
 
 private:

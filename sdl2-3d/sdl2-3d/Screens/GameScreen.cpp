@@ -13,10 +13,11 @@
 #include "..\Engine\Graphics\TextureRegion.h"
 #include "..\Engine\Graphics\Material.h"
 #include "..\Engine\Graphics\TextureArray.h"
-#include "..\GameLoop.h"
 
 #include "..\Voxel\StoneBlock.h"
 #include "..\Voxel\DirtBlock.h"
+
+#include "../Game.h"
 
 std::vector<VoxelCache::Cache*> caches;
 TextureArray* tileSet;
@@ -25,13 +26,13 @@ GameScreen::GameScreen()
 	: m_camera(glm::vec3(0, 0, 0))
 	, m_cameraController(m_camera)
 {
-	GameLoop::registerKeyListener(&m_cameraController);
-	GameLoop::registerMouseListener(&m_cameraController);
-	GameLoop::registerKeyListener(this);
+	Game::input.registerKeyListener(&m_cameraController);
+	Game::input.registerMouseListener(&m_cameraController);
+	Game::input.registerKeyListener(this);
+
 	glEnable(GL_DEPTH_TEST);
 
 	StoneBlock block;
-
 	StoneBlock block2;
 	DirtBlock block3;
 
@@ -46,6 +47,7 @@ GameScreen::GameScreen()
 	images.push_back("Assets/Textures/MinecraftBlocks/dirt.png");
 	images.push_back("Assets/Textures/MinecraftBlocks/cobblestone.png");
 	images.shrink_to_fit();
+
 	tileSet = new TextureArray(images, 16, 16);
 	tileSet->bind();
 
@@ -117,7 +119,7 @@ void GameScreen::render(float deltaSec)
 		m_voxelCache->renderCache(cache, tileSet, m_camera);
 	m_voxelCache->finishRender();
 
-	GameLoop::swap();
+	Game::graphics.swap();
 }
 
 GameScreen::~GameScreen() 
