@@ -17,7 +17,7 @@ public:
 	virtual void rotateRelative(float xRot, float yRot);
 	virtual void lookAt(float x, float y, float z);
 	virtual void lookAtDir(glm::vec3 dir);
-	virtual void resize(int width, int height) {};
+	virtual void resize(int width, int height);
 	virtual void update();
 
 	void setPosition(float x, float y, float z);

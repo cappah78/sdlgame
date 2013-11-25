@@ -126,3 +126,9 @@ void Camera::lookAtDir(glm::vec3 direction)
 {
 	m_direction = direction;
 }
+
+void Camera::resize(int width, int height)
+{
+	m_viewportWidth = width;
+	m_viewportHeight = height;
+}

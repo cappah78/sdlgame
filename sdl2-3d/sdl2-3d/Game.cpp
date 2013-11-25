@@ -22,6 +22,14 @@ void Game::startGameLoop()
 		{
 			switch (event.type)
 			{
+			case SDL_WINDOWEVENT:
+				switch (event.window.event)
+				{
+				case SDL_WINDOWEVENT_RESIZED:
+					Game::resize(event.window.data1, event.window.data2);
+					break;
+				}
+				break;
 			case SDL_MOUSEMOTION:
 				Game::input.mouseMoved(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
 				break;

@@ -44,5 +44,5 @@ void PerspectiveCamera::resize(int width, int height)
 {
 	m_viewportWidth = width;
 	m_viewportHeight = height;
-	m_projectionMatrix = glm::perspective(m_fieldOfView, (float) width / height, NEAR, FAR);
+	m_projectionMatrix = glm::perspective(m_fieldOfView, m_viewportWidth / m_viewportHeight, m_near, m_far);
 }

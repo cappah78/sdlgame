@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
  
 	mainwindow = SDL_CreateWindow(PROGRAM_NAME, INIT_WINDOW_XPOS, INIT_WINDOW_YPOS,
-        INIT_WINDOW_WIDTH, INIT_WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        INIT_WINDOW_WIDTH, INIT_WINDOW_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
     if (!mainwindow)
         sdldie("Unable to create window");
