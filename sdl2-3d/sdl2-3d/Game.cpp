@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include "Screens/GameScreen.h"
+#include "Engine\Utils\CheckLuaError.h"
 
 IScreen* Game::m_currScreen = NULL;
 bool Game::m_running = true;
@@ -91,8 +92,13 @@ void Game::setScreen(IScreen* screen)
 	m_currScreen = screen;
 }
 
-
 void Game::shutdownGameLoop()
 {
 	m_running = false;
+}
+
+void Game::initLua()
+{
+	luaL_openlibs(Game::L);
+	checkLuaError(Game::L, luaL_dofile(Game::L, "Scripts/Init.lua"));
 }

@@ -14,6 +14,10 @@
 #include "..\Engine\Graphics\Material.h"
 #include "..\Engine\Graphics\TextureArray.h"
 
+
+#include "../Voxel/StoneBlock.h"
+#include "../Voxel/DirtBlock.h"
+
 #include "../Game.h"
 
 std::vector<VoxelCache::Cache*> caches;
@@ -26,6 +30,9 @@ GameScreen::GameScreen()
 	Game::input.registerKeyListener(&m_cameraController);
 	Game::input.registerMouseListener(&m_cameraController);
 	Game::input.registerKeyListener(this);
+
+	StoneBlock block;
+	DirtBlock block2;
 
 	glEnable(GL_DEPTH_TEST);
 

@@ -340,6 +340,9 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Voxel\VoxelBlock.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\Test.lua">
@@ -413,6 +416,15 @@
     </None>
     <None Include="Assets\Shaders\voxelshaderinstanced.vert">
       <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Scripts\StoneBlock.lua">
+      <Filter>Source Files\Scripts</Filter>
+    </None>
+    <None Include="Scripts\Init.lua">
+      <Filter>Source Files\Scripts</Filter>
+    </None>
+    <None Include="Scripts\DirtBlock.lua">
+      <Filter>Source Files\Scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

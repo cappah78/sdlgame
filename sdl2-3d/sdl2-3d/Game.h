@@ -5,7 +5,14 @@
 #include "Engine/Graphics/Graphics.h"
 
 #include <SDL.h>
-#include <LuaUnityBuild.h>
+
+#include <cassert>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <typeinfo>
+
+#include <lua.hpp>
 #include <LuaBridge.h>
 
 class IScreen;
@@ -17,12 +24,15 @@ public:
 	static Graphics const graphics;
 	static lua_State* const L;
 
+
 	static void startGameLoop();
 	static void shutdownGameLoop();
 
 	static void render(float deltaSec);
 	static void resize(int width, int height);
 	static void setScreen(IScreen* screen);
+
+	static void initLua();
 
 private:
 	static bool m_running;

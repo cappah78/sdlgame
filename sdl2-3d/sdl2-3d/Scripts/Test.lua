@@ -1,1 +1,6 @@
-print(Game.window.screenWidth .. ":" .. Game.window.screenHeight)
+Block = {}
+Block.StoneBlock = {}
+
+Block.StoneBlock.test = function()
+	print("hai")
+end
