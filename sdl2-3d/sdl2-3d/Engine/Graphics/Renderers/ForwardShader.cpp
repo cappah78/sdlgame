@@ -2,6 +2,7 @@
 
 #include "..\..\Utils\ShaderManager.h"
 #include "..\Lighting\PointLight.h"
+#include "../../Utils/CheckGLError.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -9,14 +10,6 @@
 #include <gl/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-
-#define CHECK_GL_ERROR()												\
-{																		\
-	GLenum glError;														\
-	if ((glError = glGetError()) != GL_NO_ERROR) {						\
-		std::cerr << "OpenGL error code in '" << __FILE__ << "' at line " << __LINE__ << ": " << gluErrorString(glError) << std::endl;	\
-	}																	\
-}
 
 const int SHADOW_MAP_SIZE = 1024;
 const int SCREEN_WIDTH = 1024;

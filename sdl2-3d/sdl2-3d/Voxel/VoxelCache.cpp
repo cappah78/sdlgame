@@ -10,7 +10,7 @@ const unsigned int INDEX_BITS = 3 * SIZE_BITS;
 const unsigned int TEXTURE_ID_BITS = 12;
 const unsigned int OCCLUSION_BITS = 8;
 
-const char* CACHE_VERTEX_TRANSFORM_UNIFORM_NAME = "VoxelTransform";
+const char* CACHE_VERTEX_TRANSFORM_UNIFORM_NAME = "VoxelTransform2";
 const int CACHE_VERTEX_TRANSFORM_BINDING_POINT = 0;
 
 const unsigned int INDEX_MASK = 0x00000FFFu;
@@ -203,23 +203,25 @@ void VoxelCache::renderCache(Cache* const cache, const TextureArray* tileSet, co
 		return;
 
 	glBindVertexArray(cache->m_vao);
+
 	setUniforms(camera, cache->m_face, cache->m_xOffset, cache->m_yOffset, cache->m_zOffset);
+
 
 	tileSet->bind();
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, cache->m_amount);
+
 }
 
-glm::mat4 modelMat = glm::mat4(1);
+glm::mat4 modelMatrix = glm::mat4(1);
 
 void VoxelCache::setUniforms(const Camera& camera, Face face, float xOffset, float yOffset, float zOffset)
 {
-	m_cameraTransform.matrix = camera.m_combinedMatrix;
+	modelMatrix[3][0] = xOffset * 0.5f;	//TODO: figure out why / 2
+	modelMatrix[3][1] = yOffset * 0.5f;
+	modelMatrix[3][2] = zOffset * 0.5f;
+	m_cameraTransform.matrix = camera.m_combinedMatrix * modelMatrix;
 
-	m_cameraTransform.offset.x = xOffset;
-	m_cameraTransform.offset.y = yOffset;
-	m_cameraTransform.offset.z = zOffset;
-
-	switch (face)
+	switch (face)	//TODO: verify if normals are correct
 	{
 	case TOP:	 m_cameraTransform.normal = glm::vec3(0.0, 1.0, 0.0);	break;
 	case BOTTOM: m_cameraTransform.normal = glm::vec3(0.0, -1.0, 0.0);	break;
@@ -234,6 +236,7 @@ void VoxelCache::setUniforms(const Camera& camera, Face face, float xOffset, flo
 
 void VoxelCache::deleteCache(Cache* const cache)
 {
+	//TODO: clean up all the buffers
 	glDeleteBuffers(1, &cache->m_pointBuffer);
 	glDeleteVertexArrays(1, &cache->m_vao);
 	delete cache;

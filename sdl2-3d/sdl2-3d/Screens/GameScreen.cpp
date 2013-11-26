@@ -14,9 +14,6 @@
 #include "..\Engine\Graphics\Material.h"
 #include "..\Engine\Graphics\TextureArray.h"
 
-#include "..\Voxel\StoneBlock.h"
-#include "..\Voxel\DirtBlock.h"
-
 #include "../Game.h"
 
 std::vector<VoxelCache::Cache*> caches;
@@ -31,12 +28,6 @@ GameScreen::GameScreen()
 	Game::input.registerKeyListener(this);
 
 	glEnable(GL_DEPTH_TEST);
-
-	StoneBlock block;
-	StoneBlock block2;
-	DirtBlock block3;
-
-	std::cout << "size: " << sizeof(StoneBlock) << std::endl;
 
 	GLint maxTexLayers;
 	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTexLayers);
@@ -124,15 +115,10 @@ void GameScreen::render(float deltaSec)
 
 GameScreen::~GameScreen() 
 {
-	//delete m_voxelBatch;
 	for (VoxelCache::Cache* c : caches)
 		m_voxelCache->deleteCache(c);
 	delete m_voxelCache;
-	//delete m_texture;
-	//delete m_region;
 }
-
-
 
 void GameScreen::resize(int width, int height) 
 {

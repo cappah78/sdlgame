@@ -4,7 +4,6 @@
 
 layout(std140) uniform VoxelTransform {
 	mat4 VPMatrix;
-	vec3 offset;
 	vec3 normal;
 } transform;
 

@@ -19,7 +19,6 @@ const unsigned int UP_LEFT = 128u << (INDEX_BITS + TEXTURE_ID_BITS);
 
 layout(std140) uniform VoxelTransform {
 	mat4 VPMatrix;
-	vec3 offset;
 	vec3 normal;
 } transform;
 
@@ -33,12 +32,11 @@ out float occlusion;
 
 void main(void)
 {
-
 	uint index = in_data & INDEX_MASK;
 	float z = float((index >> (SIZE_BITS + SIZE_BITS)));
 	float y = float((index >> SIZE_BITS) & ((1u << SIZE_BITS) - 1u));
 	float x = float(index & ((1u << SIZE_BITS) - 1u));
-	gl_Position = transform.VPMatrix * (in_vertex + vec4(x, y, z, 1.0) + vec4(transform.offset, 0.0));
+	gl_Position = transform.VPMatrix * (in_vertex + vec4(x, y, z, 1.0));
 
 	float textureId = float((in_data & TEXTURE_ID_MASK) >> INDEX_BITS);
 	texCoord = vec3(in_texCoord, textureId);

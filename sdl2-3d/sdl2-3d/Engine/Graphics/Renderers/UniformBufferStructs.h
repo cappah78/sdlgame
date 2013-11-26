@@ -11,8 +11,14 @@ struct CameraTransform {
 
 struct VoxelTransform {
 	glm::mat4 matrix;
-	glm::vec3 offset;
 	glm::vec3 normal;
+};
+
+struct VoxelTransform2 {
+	glm::mat4 matrix;
+	glm::vec3 offset;
+	glm::mat4 matrix2;
+	glm::vec3 offset2;
 };
 
 struct VertexTransform{
