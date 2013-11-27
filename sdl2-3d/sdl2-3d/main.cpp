@@ -143,11 +143,11 @@ int main(int argc, char *argv[])
 
 	int width, height;
 	SDL_GetWindowSize(mainwindow, &width, &height);
+	Game::graphics.setWindow(mainwindow);
+	Game::graphics.resizeScreen(width, height);
 
 	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
 
-	Game::graphics.setWindow(mainwindow);
-	Game::graphics.resizeScreen(width, height);
 	Game::initLua();
 
 	glEnable(GL_CULL_FACE);	/* Back face culling gets enabled here!--*/

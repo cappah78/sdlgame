@@ -2,24 +2,11 @@
 
 #include <glm\gtc\matrix_transform.hpp>
 
-const float FOVY = 80.0f;
-const float NEAR = 0.25f;
-const float FAR = 200.0f;
-
-PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec3 direction)
-	: Camera(position, direction)
-	, m_fieldOfView(FOVY)
-	, m_near(NEAR)
-	, m_far(FAR)
+PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec3 direction, float viewportWidth, float viewportHeight, float verticalFOV, float near, float far)
+	: Camera(position, direction, viewportWidth, viewportHeight, near, far)
+	, m_fieldOfView(verticalFOV)
 {
 	m_projectionMatrix = glm::perspective(m_fieldOfView, m_viewportWidth / m_viewportHeight, m_near, m_far);
-}
-
-PerspectiveCamera::PerspectiveCamera(float fovy, float width, float height)
-	: Camera(width, height)
-	, m_fieldOfView(fovy)
-{
-	m_projectionMatrix = glm::perspective(fovy, width / height, NEAR, FAR);
 }
 
 void PerspectiveCamera::setFieldOfView(float fovy)

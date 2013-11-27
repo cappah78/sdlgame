@@ -27,9 +27,6 @@
     <Filter Include="Header Files\Engine\Utils">
       <UniqueIdentifier>{18bd5661-e502-4cc3-a79e-5172f004fb95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Scripts">
-      <UniqueIdentifier>{04c5ebfe-7b29-437e-a3d3-70156613f945}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Voxel">
       <UniqueIdentifier>{0180495f-82e3-4273-9e60-d833afae7c75}</UniqueIdentifier>
     </Filter>
@@ -86,6 +83,9 @@
     </Filter>
     <Filter Include="Source Files\Engine\Input">
       <UniqueIdentifier>{7340cd5f-3b6a-4be8-8af5-58351aafe7ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Scripts">
+      <UniqueIdentifier>{3bbe1b7f-ad0a-4a4c-a79f-6c40f9086332}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +236,9 @@
     <ClInclude Include="Engine\Utils\CheckLuaError.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="LuaHelper.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -343,11 +346,11 @@
     <ClCompile Include="Voxel\VoxelBlock.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
+    <ClCompile Include="Voxel\LuaHelper.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Test.lua">
-      <Filter>Source Files\Scripts</Filter>
-    </None>
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta">
       <Filter>Assets\Textures\MinecraftBlocks</Filter>
     </None>
@@ -417,14 +420,17 @@
     <None Include="Assets\Shaders\voxelshaderinstanced.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="Scripts\StoneBlock.lua">
-      <Filter>Source Files\Scripts</Filter>
+    <None Include="Assets\Scripts\DirtBlock.lua">
+      <Filter>Assets\Scripts</Filter>
     </None>
-    <None Include="Scripts\Init.lua">
-      <Filter>Source Files\Scripts</Filter>
+    <None Include="Assets\Scripts\Init.lua">
+      <Filter>Assets\Scripts</Filter>
     </None>
-    <None Include="Scripts\DirtBlock.lua">
-      <Filter>Source Files\Scripts</Filter>
+    <None Include="Assets\Scripts\StoneBlock.lua">
+      <Filter>Assets\Scripts</Filter>
+    </None>
+    <None Include="Assets\Scripts\Test.lua">
+      <Filter>Assets\Scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

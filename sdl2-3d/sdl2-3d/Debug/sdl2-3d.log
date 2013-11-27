@@ -1,49 +1,9 @@
-﻿Build started 26/11/2013 23:43:34.
+﻿Build started 27/11/2013 23:45:10.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Voxel\VoxelBlock.cpp
-         VoxelBlock.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.0\lib\x86" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Debug\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib\assimp_debug-dll_win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\LuaBridge\Debug" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\Lua-5.2.0\Debug" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32d.lib libpng16d.lib assimp.lib lua520.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.lib" /MACHINE:X86 Debug\Camera.obj
-         Debug\CubeMap.obj
-         Debug\Graphics.obj
-         Debug\HeightMap.obj
-         Debug\LightManager.obj
-         Debug\LightSorter.obj
-         Debug\ShadowCubeMap.obj
-         Debug\Material.obj
-         Debug\Mesh.obj
-         Debug\PerspectiveCamera.obj
-         Debug\Pixmap.obj
-         Debug\ForwardShader.obj
-         Debug\HeightMapRenderer.obj
-         Debug\SkyBox.obj
-         Debug\SpriteBatch.obj
-         Debug\Texture.obj
-         Debug\TextureArray.obj
-         Debug\Input.obj
-         Debug\Assert.obj
-         Debug\CheckGLError.obj
-         Debug\FPSCameraController.obj
-         Debug\NumberUtils.obj
-         Debug\PerlinGenerator.obj
-         Debug\ShaderManager.obj
-         Debug\stb_image.obj
-         Debug\Game.obj
-         Debug\main.obj
-         Debug\GameScreen.obj
-         Debug\DirtBlock.obj
-         Debug\StoneBlock.obj
-         Debug\VoxelBatch.obj
-         Debug\VoxelBlock.obj
-         Debug\VoxelCache.obj
-         Debug\VoxelChunk.obj
-         Debug\VoxelWorld.obj
-     1>Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
-     1>MSVCRTD.lib(cinitexe.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>Link:
          sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.exe
      1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.04
+Time Elapsed 00:00:00.17

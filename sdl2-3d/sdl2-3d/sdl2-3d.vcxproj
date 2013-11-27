@@ -51,6 +51,7 @@
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
     <ClInclude Include="Engine\Utils\stb_image.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="LuaHelper.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\DirtBlock.h" />
     <ClInclude Include="Voxel\StoneBlock.h" />
@@ -91,6 +92,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
     <ClCompile Include="Voxel\DirtBlock.cpp" />
+    <ClCompile Include="Voxel\LuaHelper.cpp" />
     <ClCompile Include="Voxel\StoneBlock.cpp" />
     <ClCompile Include="Voxel\VoxelBatch.cpp" />
     <ClCompile Include="Voxel\VoxelBlock.cpp" />
@@ -99,6 +101,10 @@
     <ClCompile Include="Voxel\VoxelWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Scripts\DirtBlock.lua" />
+    <None Include="Assets\Scripts\Init.lua" />
+    <None Include="Assets\Scripts\StoneBlock.lua" />
+    <None Include="Assets\Scripts\Test.lua" />
     <None Include="Assets\Shaders\forwardshader.frag" />
     <None Include="Assets\Shaders\forwardshader.vert" />
     <None Include="Assets\Shaders\fullscreenquad.geom" />
@@ -122,10 +128,6 @@
     <None Include="Assets\Textures\MinecraftBlocks\portal.png.mcmeta" />
     <None Include="Assets\Textures\MinecraftBlocks\water_flow.png.mcmeta" />
     <None Include="Assets\Textures\MinecraftBlocks\water_still.png.mcmeta" />
-    <None Include="Scripts\DirtBlock.lua" />
-    <None Include="Scripts\Init.lua" />
-    <None Include="Scripts\StoneBlock.lua" />
-    <None Include="Scripts\Test.lua" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Models\Skybox\back.bmp" />

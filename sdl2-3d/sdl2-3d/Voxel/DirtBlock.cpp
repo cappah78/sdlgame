@@ -1,5 +1,8 @@
 #include "DirtBlock.h"
 
+#include <stdio.h>
+#include <iostream>
+
 void DirtBlock::onCreate()
 {
 	std::cout << "onCreate" << std::endl;

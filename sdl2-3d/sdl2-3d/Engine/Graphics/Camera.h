@@ -6,8 +6,7 @@
 class Camera
 {
 public:
-	Camera(float viewportWidth, float viewportHeight);
-	Camera(glm::vec3 position, glm::vec3 direction = glm::vec3(0, 0, -1));
+	Camera(glm::vec3 position, glm::vec3 direction, float viewportWidth, float viewportHeight, float near, float  far);
 	virtual ~Camera();
 
 	virtual void translate(float x, float y, float z);
@@ -19,12 +18,8 @@ public:
 	virtual void lookAtDir(glm::vec3 dir);
 	virtual void resize(int width, int height);
 	virtual void update();
+	virtual void setNearFar(float near, float far);
 
-	void setPosition(float x, float y, float z);
-
-	float getX();
-	float getY();
-	float getZ();
 	/** rotation on the x/y plane from -180 to 180, 0 == up */
 	float getRotationRadXY();
 	/** rotation on the x/z plane from -180 to 180, 0 == up */
@@ -32,6 +27,7 @@ public:
 	/** rotation on the y/z plane from -180 to 180, 0 == up */
 	float getRotationRadYZ();
 
+	// public all the things because convenience > risk
 	glm::mat4 m_combinedMatrix;
 	glm::mat4 m_projectionMatrix;
 	glm::mat4 m_viewMatrix;
@@ -42,6 +38,8 @@ public:
 
 	float m_viewportWidth;
 	float m_viewportHeight;
+	float m_near;
+	float m_far;
 };
 
 #endif //CAMERA_H_

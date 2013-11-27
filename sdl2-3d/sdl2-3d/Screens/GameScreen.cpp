@@ -7,13 +7,11 @@
 #include <stdio.h>
 #include <vector>
 
-//#include "VoxelBatch.h"
-#include "..\Voxel\VoxelCache.h"
-#include "..\Engine\Graphics\Texture.h"
-#include "..\Engine\Graphics\TextureRegion.h"
-#include "..\Engine\Graphics\Material.h"
-#include "..\Engine\Graphics\TextureArray.h"
-
+#include "../Voxel/VoxelCache.h"
+#include "../Engine/Graphics/Texture.h"
+#include "../Engine/Graphics/TextureRegion.h"
+#include "../Engine/Graphics/Material.h"
+#include "../Engine/Graphics/TextureArray.h"
 
 #include "../Voxel/StoneBlock.h"
 #include "../Voxel/DirtBlock.h"
@@ -23,8 +21,20 @@
 std::vector<VoxelCache::Cache*> caches;
 TextureArray* tileSet;
 
+static const float CAMERA_VERTICAL_FOV = 80.0f;
+static const float CAMERA_NEAR = 0.5f;
+static const float CAMERA_FAR = 300.0f;
+static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 0, 0);
+static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(1, 0, 0);
+
 GameScreen::GameScreen()
-	: m_camera(glm::vec3(0, 0, 0))
+	: m_camera(CAMERA_SPAWN_POS,
+		CAMERA_SPAWN_DIR,
+		float(Game::graphics.getScreenWidth()), 
+		float(Game::graphics.getScreenHeight()), 
+		CAMERA_VERTICAL_FOV, 
+		CAMERA_NEAR, 
+		CAMERA_FAR)
 	, m_cameraController(m_camera)
 {
 	Game::input.registerKeyListener(&m_cameraController);
@@ -110,12 +120,14 @@ void GameScreen::render(float deltaSec)
 
 	m_cameraController.update(deltaSec);
 	m_camera.update();
-	m_skyBox.render(m_camera);
+
 
 	m_voxelCache->beginRender();
 	for (VoxelCache::Cache* cache : caches) 
 		m_voxelCache->renderCache(cache, tileSet, m_camera);
 	m_voxelCache->finishRender();
+
+	//m_skyBox.render(m_camera);
 
 	Game::graphics.swap();
 }

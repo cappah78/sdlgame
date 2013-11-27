@@ -1,4 +1,8 @@
 #include "StoneBlock.h"
+
+#include <stdio.h>
+#include <iostream>
+
 /*
 void StoneBlock::onCreate()
 {

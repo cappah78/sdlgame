@@ -10,18 +10,13 @@
 
 static const glm::vec3 UP(0, 1, 0);
 
-Camera::Camera(float viewportWidth, float viewportHeight)
-	: m_position(0, 0, 0)
-	, m_direction(1, 0, 0)
+Camera::Camera(glm::vec3 position, glm::vec3 direction, float viewportWidth, float viewportHeight, float near, float far)
+	: m_position(position)
+	, m_direction(direction)
 	, m_viewportWidth(viewportWidth)
 	, m_viewportHeight(viewportHeight)
-{
-
-}
-
-Camera::Camera(glm::vec3 position, glm::vec3 direction)
-	: m_position(position)
-	, m_direction(glm::normalize(direction))
+	, m_near(near)
+	, m_far(far)
 	, m_up(UP)
 {
 
@@ -31,7 +26,6 @@ Camera::~Camera()
 {
 
 }
-
 
 void Camera::translate(float x, float y, float z)
 {
@@ -47,28 +41,6 @@ void Camera::translateRelative(float x, float y, float z)
 	float zTrans = z * glm::cos(angle) - x * glm::sin(angle);
 
 	translate(-xTrans, y, -zTrans);
-}
-
-float Camera::getX()
-{
-	return m_position.x;
-}
-
-float Camera::getY()
-{
-	return m_position.y;
-}
-
-float Camera::getZ()
-{
-	return m_position.z;
-}
-
-void Camera::setPosition(float x, float y, float z)
-{
-	m_position.x = x;
-	m_position.y = y;
-	m_position.z = z;
 }
 
 float Camera::getRotationRadXY()
@@ -131,4 +103,10 @@ void Camera::resize(int width, int height)
 {
 	m_viewportWidth = float(width);
 	m_viewportHeight = float(height);
+}
+
+void Camera::setNearFar(float near, float far)
+{
+	m_near = near;
+	m_far = far;
 }
