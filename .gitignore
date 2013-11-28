@@ -1,4 +1,4 @@
-!Assets/*
+
 *.obj
 *.o
 *.tlog
@@ -12,3 +12,4 @@
 *.opensdf
 
 ipch/
+!Assets/*
