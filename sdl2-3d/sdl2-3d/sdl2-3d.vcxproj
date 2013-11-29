@@ -102,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\DirtBlock.lua" />
-    <None Include="Assets\Scripts\Hai.lua" />
+    <None Include="Assets\Scripts\Init.lua" />
     <None Include="Assets\Scripts\StoneBlock.lua" />
     <None Include="Assets\Scripts\Test.lua" />
     <None Include="Assets\Shaders\forwardshader.frag" />

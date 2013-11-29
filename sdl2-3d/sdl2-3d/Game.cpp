@@ -123,6 +123,5 @@ void Game::initLua()
 {
 	luaL_openlibs(Game::L);
 	lua_register(Game::L, "print", lua_CFunction(luaPrint));
-	luaL_dostring(Game::L, "print 'print works!'\n");
-	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Hai.lua"));
+	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Init.lua"));
 }

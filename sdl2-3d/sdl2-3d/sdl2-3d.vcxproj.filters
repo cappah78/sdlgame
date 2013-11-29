@@ -432,7 +432,7 @@
     <None Include="Assets\Scripts\Test.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
-    <None Include="Assets\Scripts\Hai.lua">
+    <None Include="Assets\Scripts\Init.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
   </ItemGroup>
