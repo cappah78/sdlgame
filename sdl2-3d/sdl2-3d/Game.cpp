@@ -97,13 +97,28 @@ void Game::shutdownGameLoop()
 	m_running = false;
 }
 
+int luaPrint(lua_State* L)
+{
+	int numArgs = lua_gettop(L);
+	lua_getglobal(L, "tostring");
+
+	for (int i = 0; i < numArgs; ++i)
+	{
+		lua_pushvalue(L, -1);		//TODO: verify that this is correct, just guessed
+		lua_pushvalue(L, i + 1);
+		lua_call(L, 1, 1);
+		const char* res = lua_tostring(L, -1);
+		std::cout << res << std::endl;
+		lua_pop(L, 1);
+	}
+
+	return 0;
+}
+
 void Game::initLua()
 {
 	luaL_openlibs(Game::L);
-	luaL_dostring(Game::L,
-		"print 'print works!'\n"
-		"io.write 'io.write works'"
-		);
-	checkLuaError(Game::L, luaL_dostring(Game::L, "da.da = 0"));
+	lua_register(Game::L, "print", lua_CFunction(luaPrint));
+	luaL_dostring(Game::L, "print 'print works!'\n");
 	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Hai.lua"));
 }
