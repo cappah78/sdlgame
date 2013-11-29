@@ -1,5 +1,4 @@
 #include <gl\glew.h>	//including these here to make sure they're not included out of order later on
-#include <gl\GL.h>
 
 #include "Game.h"
 #include "Screens/GameScreen.h"
@@ -61,8 +60,8 @@ void initGL()
 }
 
 
+//#ifdef _DEBUG
 // maximum mumber of lines the output console should have
-#ifdef _DEBUG
 static const WORD MAX_CONSOLE_LINES = 500;
 
 void redirectIOToConsole()
@@ -104,14 +103,14 @@ void redirectIOToConsole()
 	// point to console as well
 	std::ios::sync_with_stdio();
 }
-#endif //_DEBUG
+//#endif //_DEBUG
  
 /* Our program's entry point */
 int main(int argc, char *argv[])
 {
-	#ifdef _DEBUG
+	//#ifdef _DEBUG
 	redirectIOToConsole();
-	#endif //_DEBUG
+	//#endif //_DEBUG
 
     SDL_Window *mainwindow;
     SDL_GLContext maincontext;

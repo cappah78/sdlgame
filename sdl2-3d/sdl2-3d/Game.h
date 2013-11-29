@@ -24,7 +24,6 @@ public:
 	static Graphics const graphics;
 	static lua_State* const L;
 
-
 	static void startGameLoop();
 	static void shutdownGameLoop();
 

@@ -1,4 +1,4 @@
 Blocks = {}
 print("hai", "daaaa")
 print("hai")
-print("da")
+print("da", "another da")

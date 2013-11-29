@@ -108,7 +108,11 @@ int luaPrint(lua_State* L)
 		lua_pushvalue(L, i + 1);
 		lua_call(L, 1, 1);
 		const char* res = lua_tostring(L, -1);
-		std::cout << res << std::endl;
+		std::cout << res;
+		if (i == numArgs - 1)
+			std::cout << std::endl;
+		else
+			std::cout << "\t";
 		lua_pop(L, 1);
 	}
 

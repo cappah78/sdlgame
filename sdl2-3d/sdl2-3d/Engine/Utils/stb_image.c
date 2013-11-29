@@ -4583,6 +4583,8 @@ int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int
    return stbi_info_main(&s,x,y,comp);
 }
 
+#undef _CRT_SECURE_NO_WARNINGS // suppress bogus warnings about fopen()
+
 #endif // STBI_HEADER_FILE_ONLY
 
 /*
