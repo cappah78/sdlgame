@@ -1,3 +1,3 @@
- Should (hopefully) compile & run with visual studio 10/11/12/13
- 
- Code is in sdl2-3d folder, but just use the .sln
+Made with VS2013, but should hopefully compile with 10/11/12 too.
+
+A bunch of opengl stuff, right now making a simple voxel rendering framework with lua scripting.
