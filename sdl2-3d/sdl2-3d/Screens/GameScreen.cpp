@@ -36,13 +36,14 @@ GameScreen::GameScreen()
 		CAMERA_NEAR, 
 		CAMERA_FAR)
 	, m_cameraController(m_camera)
+	, m_skyBox(CAMERA_FAR)	// its a box, radius is from the middle to the center of a face, so to make sure edges are within far
 {
 	Game::input.registerKeyListener(&m_cameraController);
 	Game::input.registerMouseListener(&m_cameraController);
 	Game::input.registerKeyListener(this);
 
-	StoneBlock block;
-	DirtBlock block2;
+	//StoneBlock block;
+	//DirtBlock block2;
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -121,13 +122,12 @@ void GameScreen::render(float deltaSec)
 	m_cameraController.update(deltaSec);
 	m_camera.update();
 
-
 	m_voxelCache->beginRender();
 	for (VoxelCache::Cache* cache : caches) 
 		m_voxelCache->renderCache(cache, tileSet, m_camera);
 	m_voxelCache->finishRender();
 
-	//m_skyBox.render(m_camera);
+	m_skyBox.render(m_camera);
 
 	Game::graphics.swap();
 }

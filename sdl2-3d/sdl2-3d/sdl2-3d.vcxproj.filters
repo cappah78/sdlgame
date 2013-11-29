@@ -87,6 +87,15 @@
     <Filter Include="Assets\Scripts">
       <UniqueIdentifier>{3bbe1b7f-ad0a-4a4c-a79f-6c40f9086332}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Scripts\Blocks">
+      <UniqueIdentifier>{5b288424-fba1-4372-8046-865e97b66637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LuaExt">
+      <UniqueIdentifier>{d4ca0c7a-6942-4fcf-967b-c0916fdf92cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LuaExt">
+      <UniqueIdentifier>{001f477e-20f9-4daa-9b63-33d7d678b59d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h">
@@ -423,13 +432,13 @@
     <None Include="Assets\Scripts\DirtBlock.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
-    <None Include="Assets\Scripts\Init.lua">
-      <Filter>Assets\Scripts</Filter>
-    </None>
     <None Include="Assets\Scripts\StoneBlock.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
     <None Include="Assets\Scripts\Test.lua">
+      <Filter>Assets\Scripts</Filter>
+    </None>
+    <None Include="Assets\Scripts\Hai.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
   </ItemGroup>

@@ -1,7 +1,6 @@
 #ifndef SKYBOX_H_
 #define SKYBOX_H_
 
-
 #include "..\Mesh.h" 
 #include "..\CubeMap.h"
 
@@ -13,10 +12,13 @@ class Camera;
 
 class SkyBox {
 public:
-	SkyBox();
+	SkyBox(float radius);
 	~SkyBox();
 	void render(const Camera& camera);
 private:
+	glm::mat4 m_scale;
+	glm::mat4 m_translation;
+
 	GLuint m_skyBoxShader;
 	GLint m_mvpLoc;
 

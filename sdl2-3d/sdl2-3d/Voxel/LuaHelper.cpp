@@ -9,10 +9,11 @@
 #include <lua.hpp>
 #include <LuaBridge.h>
 
+
 static const std::string SCRIPT_PATH("Assets/Scripts/");
 static const std::string SCRIPT_FILE_EXT(".lua");
 static const std::string BLOCK_NAMESPACE("Blocks.");
-static const std::string LUA_INIT(" = {}");
+static const std::string LUA_OBJECT_INIT(" = {}");
 
 void LuaHelper::createBlockType(const char* implementationName)
 {
@@ -32,7 +33,7 @@ void LuaHelper::createBlockType(const char* implementationName)
 
 		std::string initLuaBlock(BLOCK_NAMESPACE);
 		initLuaBlock.append(name);
-		initLuaBlock.append(LUA_INIT);
+		initLuaBlock.append(LUA_OBJECT_INIT);
 		luaL_dostring(Game::L, initLuaBlock.c_str());
 
 		checkLuaError(Game::L, luaL_dofile(Game::L, scriptPath.c_str()));

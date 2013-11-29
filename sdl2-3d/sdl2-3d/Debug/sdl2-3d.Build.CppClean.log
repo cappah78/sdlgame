@@ -1,7 +1,5 @@
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\vc120.pdb
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\vc120.idb
-c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\skybox.obj
-c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\spritebatch.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\texture.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\texturearray.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\input.obj
@@ -17,6 +15,7 @@ c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\gamescreen.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\dirtblock.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\stoneblock.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\voxelbatch.obj
+c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\voxelblock.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\voxelcache.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\voxelchunk.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\voxelworld.obj
@@ -33,9 +32,11 @@ c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\perspectivecamera
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\pixmap.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\forwardshader.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\heightmaprenderer.obj
-c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\stb_image.obj
-c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\voxelblock.obj
+c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\skybox.obj
+c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\spritebatch.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\luahelper.obj
+c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\stb_image.obj
+c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\lfs.obj
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\debug\sdl2-3d.exe
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\debug\sdl2-3d.pdb
 c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\debug\sdl2-3d.tlog\cl.command.1.tlog

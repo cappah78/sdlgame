@@ -100,5 +100,6 @@ void Game::shutdownGameLoop()
 void Game::initLua()
 {
 	luaL_openlibs(Game::L);
-	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Init.lua"));
+
+	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Hai.lua"));
 }

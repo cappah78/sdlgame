@@ -1,0 +1,2 @@
+Blocks = {}
+print("hai")
