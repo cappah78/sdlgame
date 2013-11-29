@@ -22,7 +22,7 @@
 /****************************************************************************/
 #include "CheckGLError.h"
 #include "Assert.h"
-#include <GL/glew.h>
+#include <gl\glew.h>
 #include <sstream>
 #include <iostream>
 

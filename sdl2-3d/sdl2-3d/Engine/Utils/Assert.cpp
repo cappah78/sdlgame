@@ -29,7 +29,7 @@ void outputFailure(const char *file, const int line, const char *conditionString
 #ifdef _WIN32
 	const size_t bufferSize = 512;
 	char buffer[bufferSize];
-	_snprintf(buffer, bufferSize, "%s(%d): ASSERT FAILED: %s\n", file, line, conditionString);
+	_snprintf_s(buffer, bufferSize, "%s(%d): ASSERT FAILED: %s\n", file, line, conditionString);
 	buffer[bufferSize - 1] = 0;
 	fprintf(stderr, "%s", buffer);
 	std::cerr << buffer << std::endl;

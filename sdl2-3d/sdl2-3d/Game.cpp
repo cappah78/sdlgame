@@ -100,6 +100,10 @@ void Game::shutdownGameLoop()
 void Game::initLua()
 {
 	luaL_openlibs(Game::L);
-
+	luaL_dostring(Game::L,
+		"print 'print works!'\n"
+		"io.write 'io.write works'"
+		);
+	checkLuaError(Game::L, luaL_dostring(Game::L, "da.da = 0"));
 	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Hai.lua"));
 }

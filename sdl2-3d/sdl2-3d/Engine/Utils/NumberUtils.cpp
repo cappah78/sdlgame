@@ -30,13 +30,13 @@ float NumberUtils::intBitsToFloat (int value) {
 }
 
 long NumberUtils::doubleToLongBits (double value) {
-  union { double f; uint64_t i; } u;
+  union { double f; unsigned long i; } u;
   u.f = value;
   return u.i;
 }
 
 double NumberUtils::longBitsToDouble (long value) {
-  union { double f; uint64_t i; } u;
+  union { double f; unsigned long i; } u;
   u.i = value;
   return u.i;
 }

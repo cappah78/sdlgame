@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <stdio.h>
-
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\transform.hpp>
 #include <glm\gtx\rotate_vector.hpp>
