@@ -1,6 +1,11 @@
 #include "Game.h"
 
 #include <SDL.h>
+#include <windows.h>
+#include <string>
+#include <vector>
+#include <stack>
+#include <iostream>
 #include "Screens/GameScreen.h"
 #include "Engine\Utils\CheckLuaError.h"
 
@@ -122,6 +127,7 @@ int luaPrint(lua_State* L)
 void Game::initLua()
 {
 	luaL_openlibs(Game::L);
+
 	lua_register(Game::L, "print", lua_CFunction(luaPrint));
 	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Init.lua"));
 }
