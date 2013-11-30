@@ -1,0 +1,12 @@
+module("luarocks.site_config")
+LUA_INCDIR=[[C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\2.1\include]]
+LUA_LIBDIR=[[C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\2.1]]
+LUA_BINDIR=[[C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\2.1]]
+LUA_INTERPRETER=[[lua5.1]]
+LUAROCKS_UNAME_S=[[WindowsNT]]
+LUAROCKS_UNAME_M=[[x86]]
+LUAROCKS_SYSCONFIG=[[C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\luarocks\config.lua]]
+LUAROCKS_ROCKS_TREE=[[C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d]]
+LUAROCKS_PREFIX=[[C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d]]
+LUAROCKS_DOWNLOADER=[[wget]]
+LUAROCKS_MD5CHECKER=[[md5sum]]
