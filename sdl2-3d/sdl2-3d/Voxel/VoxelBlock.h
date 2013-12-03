@@ -1,16 +1,17 @@
 #ifndef VOXEL_BLOCK_H_
 #define VOXEL_BLOCK_H_
 
-#include "LuaHelper.h"
-
-typedef unsigned short BlockID;
-typedef unsigned short BlockStrength;
-
-struct VoxelBlockProperties
+struct VoxelBlockProperties	// 9 bytes;
 {
-	BlockStrength blockStrength;
-	bool isTransparant;
-	bool isAnimated;
+	unsigned topTexture : 10;
+	unsigned bottomTexture : 10;
+	unsigned leftTexture : 10;
+	unsigned rightTexture : 10;
+	unsigned frontTexture : 10;
+	unsigned backTexture : 10;
+	unsigned isTranspant : 1;
+	unsigned isSolid : 1;
+	unsigned strength : 10;
 };
 
 //CRTP
@@ -20,8 +21,7 @@ class VoxelBlock
 public:
 	VoxelBlock()
 	{
-		//typeid(T) works even with RTTI disabled
-		LuaHelper::createBlockType(typeid(Implementation).name());
+
 	};
 
 	VoxelBlock(const VoxelBlock& copy)

@@ -18,9 +18,8 @@ public:
 	using VoxelBlock::~VoxelBlock;
 
 	void onCreate();
-	static void onDestroy(int blockX, int blockY, int blockZ);
+	void onDestroy(int blockX, int blockY, int blockZ);
 	void onBlockUpdate();
-	static unsigned int da;
 };
 
 #endif //DIRT_BLOCK_H_

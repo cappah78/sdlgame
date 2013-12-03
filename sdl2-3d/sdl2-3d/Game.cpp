@@ -12,8 +12,6 @@
 IScreen* Game::m_currScreen = NULL;
 bool Game::m_running = true;
 
-lua_State* const Game::L = luaL_newstate();
-
 void Game::startGameLoop()
 {
 	Uint32 startTime = SDL_GetTicks();
@@ -124,10 +122,8 @@ int luaPrint(lua_State* L)
 	return 0;
 }
 
-void Game::initLua()
+void Game::initLua(lua_State* const L)
 {
-	luaL_openlibs(Game::L);
-
-	lua_register(Game::L, "print", lua_CFunction(luaPrint));
-	checkLuaError(Game::L, luaL_dofile(Game::L, "Assets/Scripts/Init.lua"));
+	luaL_openlibs(L);
+	lua_register(L, "print", lua_CFunction(luaPrint));	// Fix broken print by overriding with a new function
 }

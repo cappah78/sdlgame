@@ -239,9 +239,6 @@
     <ClInclude Include="Engine\Utils\CheckLuaError.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="LuaHelper.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -349,9 +346,6 @@
     <ClCompile Include="Voxel\VoxelBlock.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\LuaHelper.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta">
@@ -423,17 +417,14 @@
     <None Include="Assets\Shaders\voxelshaderinstanced.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="Assets\Scripts\DirtBlock.lua">
-      <Filter>Assets\Scripts</Filter>
-    </None>
-    <None Include="Assets\Scripts\StoneBlock.lua">
-      <Filter>Assets\Scripts</Filter>
-    </None>
-    <None Include="Assets\Scripts\Test.lua">
-      <Filter>Assets\Scripts</Filter>
-    </None>
     <None Include="Assets\Scripts\Init.lua">
       <Filter>Assets\Scripts</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\DirtBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\StoneBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

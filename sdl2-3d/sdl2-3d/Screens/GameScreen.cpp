@@ -15,6 +15,7 @@
 
 #include "../Voxel/StoneBlock.h"
 #include "../Voxel/DirtBlock.h"
+#include "../Voxel/VoxelWorld.h"
 
 #include "../Game.h"
 
@@ -44,6 +45,7 @@ GameScreen::GameScreen()
 
 	//StoneBlock block;
 	//DirtBlock block2;
+	VoxelWorld world;
 
 	glEnable(GL_DEPTH_TEST);
 

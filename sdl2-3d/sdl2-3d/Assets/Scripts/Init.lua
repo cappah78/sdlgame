@@ -1,9 +1,13 @@
+require "lfs"	--LuaFileSystem
+
 Blocks = {}
+Init = {}
 
---Testing print
-print("Print works!")
-print("Something", "another something", "moar")
-
-require "lfs"
-
-print(lfs.currentdir())
+Init.registerBlocks = function(folder)
+	for file in lfs.dir(folder) do
+		if file ~= "." and file ~= ".." then	-- TODO: fix, for some reason there is a "." and ".." listed
+			local blockID = World.registerBlockType(file)
+			print("Registered block: " .. blockID)
+		end
+	end
+end

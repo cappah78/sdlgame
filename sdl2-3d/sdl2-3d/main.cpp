@@ -14,6 +14,8 @@
 #define GL3_PROTOTYPES 1
 #define GLM_FORCE_RADIANS
 
+#define NULL 0
+
 const char* PROGRAM_NAME = "sdlgame";
 const unsigned int INIT_WINDOW_WIDTH = 1600;
 const unsigned int INIT_WINDOW_HEIGHT = 900;
@@ -146,8 +148,6 @@ int main(int argc, char *argv[])
 	Game::graphics.resizeScreen(width, height);
 
 	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
-
-	Game::initLua();
 
 	glEnable(GL_CULL_FACE);	/* Back face culling gets enabled here!--*/
 	glCullFace(GL_BACK);
