@@ -13,9 +13,9 @@
 #include "../Engine/Graphics/Material.h"
 #include "../Engine/Graphics/TextureArray.h"
 
-#include "../Voxel/StoneBlock.h"
-#include "../Voxel/DirtBlock.h"
 #include "../Voxel/VoxelWorld.h"
+#include "../Voxel/DefaultBlock.h"
+#include "../Voxel/VoxelBlock.h"
 
 #include "../Game.h"
 
@@ -43,9 +43,8 @@ GameScreen::GameScreen()
 	Game::input.registerMouseListener(&m_cameraController);
 	Game::input.registerKeyListener(this);
 
-	//StoneBlock block;
-	//DirtBlock block2;
-	VoxelWorld world;
+	TextureManager textureManager(16, 16);
+	VoxelWorld world(textureManager);
 
 	glEnable(GL_DEPTH_TEST);
 

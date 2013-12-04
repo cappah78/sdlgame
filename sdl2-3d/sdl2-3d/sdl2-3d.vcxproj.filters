@@ -200,19 +200,7 @@
     <ClInclude Include="Screens\GameScreen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\DirtBlock.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="Voxel\StoneBlock.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="Voxel\VoxelBatch.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel\VoxelBlock.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="Voxel\VoxelBlockData.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
     <ClInclude Include="Voxel\VoxelCache.h">
@@ -238,6 +226,24 @@
     </ClInclude>
     <ClInclude Include="Engine\Utils\CheckLuaError.h">
       <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\DefaultBlock.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\InventoryBlock.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\MeshBlock.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\LuaVoxelConfig.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\TextureManager.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\PropertyManager.h">
+      <Filter>Header Files\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -322,15 +328,6 @@
     <ClCompile Include="Voxel\VoxelCache.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\VoxelBatch.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="Voxel\StoneBlock.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="Voxel\DirtBlock.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Utils\stb_image.c">
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
@@ -343,7 +340,13 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\VoxelBlock.cpp">
+    <ClCompile Include="Voxel\DefaultBlock.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\TextureManager.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\PropertyManager.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
   </ItemGroup>

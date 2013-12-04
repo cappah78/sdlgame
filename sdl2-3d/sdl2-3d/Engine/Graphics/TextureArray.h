@@ -5,11 +5,13 @@ typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 
 #include <vector>
+#include <string>
 
 class TextureArray
 {
 public:
 	TextureArray(const std::vector<const char*>& imageNames, unsigned int textureWidth, unsigned int textureHeight);
+	TextureArray(const std::vector<const std::string*>& imageNames, unsigned int textureWidth, unsigned int textureHeight);
 	TextureArray(const TextureArray& copyMe);
 	~TextureArray();
 

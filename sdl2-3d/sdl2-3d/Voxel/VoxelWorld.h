@@ -1,10 +1,10 @@
 #ifndef VOXEL_WORLD_H_
 #define VOXEL_WORLD_H_
 
-#include "VoxelBatch.h"
 #include "VoxelChunk.h"
-
 #include "VoxelBlock.h"
+#include "TextureManager.h"
+#include "PropertyManager.h"
 
 #include <vector>
 #include <map>
@@ -14,28 +14,29 @@
 
 static const unsigned int CHUNK_LOAD_RANGE = 16;
 
-
 class VoxelWorld
 {
 public:
-	VoxelWorld();
-	VoxelWorld(const VoxelWorld& copyMe);
+	VoxelWorld(TextureManager& textureManager);
 	~VoxelWorld();
 
-	BlockID registerBlockType(const std::string& blockname);
-	void setBlock(BlockID blockId, int x, int y, int z);
-	lua_State* const L() { return m_L; };
+	const std::vector<const VoxelChunk>& getChunks() const;
+	TextureManager& getTextureManager();
+	const PropertyManager& getPropertyManager() const;
+
+	lua_State* const L() const { return m_L; };
+
 protected:
 	static std::map<lua_State* const, VoxelWorld*> stateWorldMap;
-
 private:
-	void initializeLuaWorld();
+	std::vector<VoxelChunk> chunks;
 	lua_State* m_L;
 
-	static int L_registerBlockType(lua_State* L);
+	TextureManager& m_textureManager;
+	PropertyManager m_propertyManager;
 
-	//VoxelBatch batch;
-	//VoxelChunk chunk;
+	void initializeLuaWorld();
+	static int L_registerBlockType(lua_State* L);
 };
 
 #endif //VOXEL_WORLD_H_
