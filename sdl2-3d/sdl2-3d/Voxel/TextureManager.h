@@ -1,7 +1,7 @@
 #ifndef TEXTURE_MANAGER_H_
 #define TEXTURE_MANAGER_H_
 
-#include "VoxelBlock.h"
+typedef unsigned short TextureID;
 
 #include <string>
 #include <map>
@@ -17,6 +17,7 @@ public:
 		, m_textureWidth(textureWidth)
 		, m_textureHeight(textureHeight)
 	{};
+	TextureManager(const TextureManager& copy) = delete;
 	~TextureManager() {};
 
 	TextureID getTextureID(const std::string& texturename);

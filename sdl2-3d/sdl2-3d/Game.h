@@ -47,8 +47,9 @@ private:
 	/** A global lua state which might be useful. */
 	static lua_State* m_L;
 
-	~Game();
-	Game(const Game& copy);
+	Game() {};
+	~Game() {};
+	Game(const Game& copy) = delete;
 };
 
 #endif //GAME_H_

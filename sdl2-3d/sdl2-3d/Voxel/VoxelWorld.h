@@ -2,7 +2,6 @@
 #define VOXEL_WORLD_H_
 
 #include "VoxelChunk.h"
-#include "VoxelBlock.h"
 #include "TextureManager.h"
 #include "PropertyManager.h"
 
@@ -18,6 +17,7 @@ class VoxelWorld
 {
 public:
 	VoxelWorld(TextureManager& textureManager);
+	VoxelWorld(const VoxelWorld& copy) = delete;
 	~VoxelWorld();
 
 	const std::vector<const VoxelChunk>& getChunks() const;
@@ -28,10 +28,10 @@ public:
 
 protected:
 	static std::map<lua_State* const, VoxelWorld*> stateWorldMap;
-private:
-	std::vector<VoxelChunk> chunks;
-	lua_State* m_L;
 
+private:
+	std::vector<VoxelChunk> m_chunks;
+	lua_State* m_L;
 	TextureManager& m_textureManager;
 	PropertyManager m_propertyManager;
 

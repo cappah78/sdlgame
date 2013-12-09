@@ -90,6 +90,9 @@
     <Filter Include="Assets\Scripts\Blocks">
       <UniqueIdentifier>{5b288424-fba1-4372-8046-865e97b66637}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Scripts\WorldGen">
+      <UniqueIdentifier>{1778dc14-c244-425a-8650-6e1ed032d739}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h">
@@ -200,9 +203,6 @@
     <ClInclude Include="Screens\GameScreen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\VoxelBlock.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel\VoxelCache.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
@@ -243,6 +243,12 @@
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
     <ClInclude Include="Voxel\PropertyManager.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\WorldRenderer.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\ChunkRenderer.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
@@ -347,6 +353,12 @@
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
     <ClCompile Include="Voxel\PropertyManager.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\WorldRenderer.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\ChunkRenderer.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
   </ItemGroup>

@@ -24,13 +24,6 @@ static const GLfloat g_texCoordData[] = {
 	0.0, 1.0
 };
 
-static const GLuint g_cornerData [] = {
-	VoxelCache::AO_UP_RIGHT << (TEXTURE_ID_BITS + INDEX_BITS),
-	VoxelCache::AO_UP_LEFT << (TEXTURE_ID_BITS + INDEX_BITS),
-	VoxelCache::AO_DOWN_RIGHT << (TEXTURE_ID_BITS + INDEX_BITS),
-	VoxelCache::AO_DOWN_LEFT << (TEXTURE_ID_BITS + INDEX_BITS)
-};
-
 static const GLfloat g_topFaceVertexData[] = {
 	1.0f, 1.0f, 0.0f,
 	0.0f, 1.0f, 0.0f,
@@ -73,20 +66,14 @@ static const GLfloat g_backFaceVertexData[] = {
 	0.0f, 0.0f, 0.0f
 };
 
-
-VoxelCache::VoxelCache(unsigned int sizeInFaces)
-	: m_sizeInFaces(sizeInFaces)
-	, m_drawing(false)
-	, m_buildingCache(false)
+VoxelCache::VoxelCache()
+	: m_drawing(false)
 	, m_blendEnabled(false)
-	, m_pointIdx(0)
 {
 	m_shaderId = ShaderManager::createShaderProgram("Assets/Shaders/voxelshaderinstanced.vert", NULL, "Assets/Shaders/voxelshaderinstanced.frag");
 	
+	glBindVertexArray(0);
 	glUseProgram(m_shaderId);
-
-	m_points = new unsigned int[sizeInFaces];
-	memset(m_points, 0, sizeInFaces * sizeof(int));
 
 	glGenBuffers(1, &m_cameraTransformBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
@@ -95,98 +82,48 @@ VoxelCache::VoxelCache(unsigned int sizeInFaces)
 
 	GLuint vertexTransformIdx = glGetUniformBlockIndex(m_shaderId, CACHE_VERTEX_TRANSFORM_UNIFORM_NAME);
 	glUniformBlockBinding(m_shaderId, vertexTransformIdx, CACHE_VERTEX_TRANSFORM_BINDING_POINT);
-}
-
-void VoxelCache::beginCache(Face face, float xOffset, float yOffset, float zOffset)
-{
-	assert(!m_buildingCache && "Call end() before begin()");
-	m_buildingCache = true;
-
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glGenBuffers(1, &m_vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-	switch (face)
-	{
-	case TOP:	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_topFaceVertexData), g_topFaceVertexData, GL_STATIC_DRAW);		break;
-	case BOTTOM: glBufferData(GL_ARRAY_BUFFER, sizeof(g_bottomFaceVertexData), g_bottomFaceVertexData, GL_STATIC_DRAW);	break;
-	case LEFT:	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_leftFaceVertexData), g_leftFaceVertexData, GL_STATIC_DRAW);		break;
-	case RIGHT:  glBufferData(GL_ARRAY_BUFFER, sizeof(g_rightFaceVertexData), g_rightFaceVertexData, GL_STATIC_DRAW);	break;
-	case FRONT:  glBufferData(GL_ARRAY_BUFFER, sizeof(g_frontFaceVertexData), g_frontFaceVertexData, GL_STATIC_DRAW);	break;
-	case BACK:	 glBufferData(GL_ARRAY_BUFFER, sizeof(g_backFaceVertexData), g_backFaceVertexData, GL_STATIC_DRAW);		break;
-	}
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-
-	glGenBuffers(1, &m_cornerIndexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_cornerIndexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_cornerData), g_cornerData, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glVertexAttribIPointer(1, 1, GL_UNSIGNED_INT, sizeof(int), 0);
 
 	glGenBuffers(1, &m_texCoordBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_texCoordBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_texCoordData), g_texCoordData, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	glGenBuffers(1, &m_positionBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, m_sizeInFaces * sizeof(int), NULL, GL_STREAM_DRAW);
-	glEnableVertexAttribArray(3);
-	glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, sizeof(int), 0);
-
-	glVertexAttribDivisor(0, 0); // vertices : always reuse the same 4 vertices -> 0
-	glVertexAttribDivisor(1, 0); // corner nr : always reuse the same 4 values -> 0
-	glVertexAttribDivisor(2, 0); // texcoords : always reuse the same 4 texcoords -> 0
-	glVertexAttribDivisor(3, 1); // position : one per quad (its center) -> 1
-
-	m_currentCache = new Cache(vao, m_positionBuffer, face, xOffset, yOffset, zOffset);
-
-	glUseProgram(m_shaderId);
+	glGenBuffers(1, &m_topFaceVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_topFaceVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_topFaceVertexData), g_topFaceVertexData, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_bottomFaceVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_bottomFaceVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_bottomFaceVertexData), g_bottomFaceVertexData, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_leftFaceVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_leftFaceVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_leftFaceVertexData), g_leftFaceVertexData, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_rightFaceVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_rightFaceVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_rightFaceVertexData), g_rightFaceVertexData, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_frontFaceVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_frontFaceVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_frontFaceVertexData), g_frontFaceVertexData, GL_STATIC_DRAW);
+	glGenBuffers(1, &m_backFaceVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_backFaceVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_backFaceVertexData), g_backFaceVertexData, GL_STATIC_DRAW);
 }
 
-void VoxelCache::addFace(int x, int y, int z, int textureID, unsigned char occlusionBits)
+void VoxelCache::Cache::addFace(int x, int y, int z, int textureID, float color1, float color2, float color3, float color4)
 {
-	assert(m_buildingCache && "Call beginCache() before addFace()");
-
-	assert(m_currentCache->m_amount < m_sizeInFaces && "Amount of draw calls exceeded size");
-	m_currentCache->m_amount++;
+	assert(m_size > (m_pointIdx + 1) && "Amount of draw calls exceeded size");
 
 	// position+texId+occlusionbits are being packed in one int here
 	unsigned int index = x | (y | z << SIZE_BITS) << SIZE_BITS;
-	unsigned int vertexData = occlusionBits << (TEXTURE_ID_BITS + INDEX_BITS);
-	vertexData |= textureID << INDEX_BITS;
-	vertexData |= index;
+	unsigned int vertexData = index;
+	vertexData |= textureID << INDEX_BITS;;
 	m_points[m_pointIdx++] = vertexData;
 }
 
-VoxelCache::Cache* const VoxelCache::endCache()
-{
-	assert(m_buildingCache && "Call begin() before end()");
-	m_buildingCache = false;
-
-	glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, m_sizeInFaces * sizeof(int), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-	glBufferSubData(GL_ARRAY_BUFFER, 0, m_pointIdx * sizeof(int), m_points);
-
-	glUseProgram(0);
-	m_pointIdx = 0;
-
-	Cache* const currentCache = m_currentCache;
-	m_currentCache = NULL;
-
-	return currentCache;
-}
 
 void VoxelCache::beginRender()
 {
 	assert(!m_drawing && "Call end() before begin()");
 	m_drawing = true;
 	glUseProgram(m_shaderId);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
 }
 
 void VoxelCache::finishRender()
@@ -199,17 +136,17 @@ void VoxelCache::finishRender()
 void VoxelCache::renderCache(Cache* const cache, const TextureArray* tileSet, const Camera& camera)
 {
 	assert(m_drawing);
-	if (cache->m_amount == 0)
+	if (cache->m_size == 0)
 		return;
 
 	glBindVertexArray(cache->m_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, cache->m_positionBuffer);
+	glBufferData(GL_ARRAY_BUFFER, cache->m_size * sizeof(int), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferSubData(GL_ARRAY_BUFFER, 0, cache->m_pointIdx * sizeof(int), cache->m_points);
 
 	setUniforms(camera, cache->m_face, cache->m_xOffset, cache->m_yOffset, cache->m_zOffset);
-
-
 	tileSet->bind();
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, cache->m_amount);
-
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, cache->m_pointIdx);
 }
 
 glm::mat4 modelMatrix = glm::mat4(1);
@@ -231,34 +168,19 @@ void VoxelCache::setUniforms(const Camera& camera, Face face, float xOffset, flo
 	case BACK:	 m_cameraTransform.normal = glm::vec3(0.0, 0.0, -1.0);	break;
 	}
 
+	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(VoxelTransform), &m_cameraTransform, GL_STATIC_DRAW);
 }
 
 void VoxelCache::deleteCache(Cache* const cache)
 {
-	//TODO: clean up all the buffers
-	glDeleteBuffers(1, &cache->m_pointBuffer);
+	//TODO: clean up all the buffers!!
+	glDeleteBuffers(1, &cache->m_positionBuffer);
 	glDeleteVertexArrays(1, &cache->m_vao);
 	delete cache;
 }
 
-void VoxelCache::beginCache(Cache* const cache, Face face, float xOffset, float yOffset, float zOffset)
-{
-	assert(!m_drawing && "Call end() before begin()");
-	m_drawing = true;
-	cache->m_amount = 0;
-	cache->m_face = face;
-	cache->m_xOffset = xOffset;
-	cache->m_yOffset = yOffset;
-	cache->m_zOffset = zOffset;
-	m_currentCache = cache;
-
-	glBindVertexArray(cache->m_vao);
-
-	glUseProgram(m_shaderId);
-}
-
-VoxelCache::Cache* const VoxelCache::createCache(Face face, float xOffset, float yOffset, float zOffset)
+VoxelCache::Cache* const VoxelCache::createCache(Face face, unsigned int size, float xOffset, float yOffset, float zOffset)
 {
 	assert(!m_drawing && "Cannot create a new cache in between begin() and end()");
 
@@ -266,39 +188,39 @@ VoxelCache::Cache* const VoxelCache::createCache(Face face, float xOffset, float
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	glGenBuffers(1, &m_vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_topFaceVertexData), NULL, GL_STATIC_DRAW);
+	//reuse constant buffers from voxelcache
+	switch (face)
+	{
+	case TOP:	glBindBuffer(GL_ARRAY_BUFFER, m_topFaceVertexBuffer);	break;
+	case BOTTOM:glBindBuffer(GL_ARRAY_BUFFER, m_bottomFaceVertexBuffer);break;
+	case LEFT:	glBindBuffer(GL_ARRAY_BUFFER, m_leftFaceVertexBuffer);	break;
+	case RIGHT: glBindBuffer(GL_ARRAY_BUFFER, m_rightFaceVertexBuffer); break;
+	case FRONT: glBindBuffer(GL_ARRAY_BUFFER, m_frontFaceVertexBuffer); break;
+	case BACK:	glBindBuffer(GL_ARRAY_BUFFER, m_backFaceVertexBuffer);	break;
+	}
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	glGenBuffers(1, &m_cornerIndexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_cornerIndexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_cornerData), g_cornerData, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glVertexAttribIPointer(1, 1, GL_UNSIGNED_INT, sizeof(int), 0);
-
-	glGenBuffers(1, &m_texCoordBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_texCoordBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_texCoordData), g_texCoordData, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	glGenBuffers(1, &m_positionBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, m_sizeInFaces * sizeof(int), NULL, GL_STREAM_DRAW);
-	glEnableVertexAttribArray(3);
-	glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, sizeof(int), 0);
+	//create position buffer unique to cache
+	GLuint positionBuffer;
+	glGenBuffers(1, &positionBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+	glBufferData(GL_ARRAY_BUFFER, size * sizeof(int), NULL, GL_STREAM_DRAW);
+	glEnableVertexAttribArray(2);
+	glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, sizeof(int), 0);
 
 	glVertexAttribDivisor(0, 0); // vertices : always reuse the same 4 vertices -> 0
-	glVertexAttribDivisor(1, 0); // corner nr : always reuse the same 4 values -> 0
-	glVertexAttribDivisor(2, 0); // texcoords : always reuse the same 4 texcoords -> 0
-	glVertexAttribDivisor(3, 1); // position : one per quad (its center) -> 1
+	glVertexAttribDivisor(1, 0); // texcoords : always reuse the same 4 texcoords -> 0
+	glVertexAttribDivisor(2, 1); // position : one per quad (its center) -> 1
 
-	return new Cache(vao, m_positionBuffer, face, xOffset, yOffset, zOffset);
+	return new Cache(vao, size, positionBuffer, face, xOffset, yOffset, zOffset);
 }
 
 VoxelCache::~VoxelCache()
 {
-	delete[] m_points;
+	glDeleteShader(m_shaderId);
 }

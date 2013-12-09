@@ -1,11 +1,12 @@
 #ifndef DEFAULT_BLOCK_H_
 #define DEFAULT_BLOCK_H_
 
-#include "VoxelBlock.h"
 #include <string>
 
+class VoxelWorld;
+
 /** Basic unanimated block */
-class DefaultBlock : public VoxelBlock<DefaultBlock>
+class DefaultBlock
 {
 public:
 	struct DefaultBlockProperties	// 9 bytes;
@@ -41,18 +42,8 @@ public:
 		unsigned isSolid : 1;
 		unsigned strength : 10;
 	};
-
-	using VoxelBlock::VoxelBlock;
-	using VoxelBlock::~VoxelBlock;
-
-	void onCreate(VoxelWorld& world, int x, int y, int z);
-	void onPlace(VoxelWorld& world, int x, int y, int z);
-	void onDestroy(VoxelWorld& world, int x, int y, int z);
-	void onBlockUpdate(VoxelWorld& world, int x, int y, int z);
-
-	const DefaultBlockProperties& getProperties() { return m_properties; };
 private:
-	DefaultBlockProperties m_properties;
+
 };
 
 #endif //DEFAULT_BLOCK_H_

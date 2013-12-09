@@ -15,7 +15,7 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	, m_textureManager(textureManager)
 	, m_propertyManager(textureManager)
 {
-	stateWorldMap.insert(std::make_pair(m_L, this));
+	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
 
 	Game::initLua(m_L);
 	initializeLuaWorld();
@@ -61,7 +61,7 @@ int VoxelWorld::L_registerBlockType(lua_State* L)
 	checkLuaError(L, luaL_dofile(L, scriptDir.c_str()));
 	VoxelWorld::stateWorldMap.at(L)->m_propertyManager.registerBlockType(L, blockname);
 
-	return 0;
+	return 0;	// nothing returned
 }
 
 VoxelWorld::~VoxelWorld()

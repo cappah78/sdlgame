@@ -13,51 +13,56 @@ class Camera;
 class VoxelCache
 {
 public:
-
-	enum Occlusion
-	{
-		AO_UP = 1, AO_UP_RIGHT = 2, AO_RIGHT = 4, AO_DOWN_RIGHT = 8, AO_DOWN = 16, AO_DOWN_LEFT = 32, AO_LEFT = 64, AO_UP_LEFT = 128
-	};
-
 	enum Face
 	{
-		TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT
+		TOP = 0, BOTTOM = 1, LEFT = 2, RIGHT = 3, FRONT = 4, BACK = 5
 	};
 
 	class Cache
 	{
 		friend class VoxelCache;
+	public:
+		float m_xOffset, m_yOffset, m_zOffset;
+
+		void addFace(int x, int y, int z, int textureIdx, float color1, float color2, float color3, float color4);
+
 	private:
-		Cache(GLuint vao, GLuint pointBuffer,
+		Cache(GLuint vao, unsigned int size, GLuint positionBuffer,
 			Face face,
 			float xOffset, float yOffset, float zOffset)
 			: m_vao(vao)
-			, m_pointBuffer(pointBuffer)
+			, m_positionBuffer(positionBuffer)
 			, m_face(face)
-			, m_amount(0)
+			, m_size(size)
+			, m_pointIdx(0)
 			, m_xOffset(xOffset)
 			, m_yOffset(yOffset)
 			, m_zOffset(zOffset)
-		{};
+		{
+			m_points = new unsigned int[size];
+		};
+		~Cache()
+		{
+			delete[] m_points;
+		};
 
-		GLuint m_vao, m_pointBuffer;
+		// cache specific data
+		GLuint m_vao, m_positionBuffer;
+		//type of this cache
 		Face m_face;
-		unsigned int m_amount;
-	public:
-		float m_xOffset, m_yOffset, m_zOffset;
+		//max amount of points
+		unsigned int m_size;
+		//index of last added point
+		unsigned int m_pointIdx;
+		//array containing the positions
+		unsigned int* m_points;
 	};
 
-	VoxelCache(unsigned int sizeInFaces = 40000);
-	VoxelCache(const VoxelCache& copyMe);
+	VoxelCache();
+	VoxelCache(const VoxelCache& copyMe) = delete;
 	~VoxelCache();
 
-	Cache* const createCache(Face face, float xOffset = 0.0f, float yOffset = 0.0f, float zOffset = 0.0f);
-
-	void beginCache(Cache* const cache, Face face, float xOffset, float yOffset, float zOffset);
-	void beginCache(Face face, float xOffset, float yOffset, float zOffset);
-	Cache* const endCache();
-
-	void addFace(int x, int y, int z, int textureIdx, unsigned char occlusionBits);
+	Cache* const createCache(Face face, unsigned int size, float xOffset = 0.0f, float yOffset = 0.0f, float zOffset = 0.0f);
 
 	void beginRender();
 	void renderCache(Cache* const cache, const TextureArray* tileSet, const Camera& camera);
@@ -66,25 +71,20 @@ public:
 private:
 	void setUniforms(const Camera& camera, Face face, float xOffset, float yOffset, float zOffset);
 
-	unsigned int m_sizeInFaces;
-	bool m_buildingCache;
 	bool m_drawing;
 	bool m_blendEnabled;
 
-	VoxelTransform m_cameraTransform;
-	GLuint m_cameraTransformBuffer;
-
-	GLuint m_vertexBuffer;
-	GLuint m_cornerIndexBuffer;
-	GLuint m_texCoordBuffer;
-	GLuint m_positionBuffer;
-
 	GLuint m_shaderId;
 
-	Cache* m_currentCache;
-
-	unsigned int m_pointIdx;
-	unsigned int* m_points;
+	VoxelTransform m_cameraTransform;
+	GLuint m_cameraTransformBuffer;
+	GLuint m_texCoordBuffer;
+	GLuint m_topFaceVertexBuffer;
+	GLuint m_bottomFaceVertexBuffer;
+	GLuint m_leftFaceVertexBuffer;
+	GLuint m_rightFaceVertexBuffer;
+	GLuint m_frontFaceVertexBuffer;
+	GLuint m_backFaceVertexBuffer;
 };
 
 #endif //VOXEL_CACHE_H_
