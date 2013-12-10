@@ -346,9 +346,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\DefaultBlock.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
     <ClCompile Include="Voxel\TextureManager.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>

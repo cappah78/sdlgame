@@ -10,10 +10,8 @@ const unsigned int POSITION_BITS_MASK = 0x00000FFFu;
 const unsigned int TEXTURE_ID_MASK = 0x00FFF000u;
 const unsigned int UNUSED_BITS_MASK = 0xFF000000u;
 
-layout(std140) uniform VoxelTransform {
-	mat4 MVPMatrix;	// Camera view projection matrix already translated by the chunk offset.
-	vec3 normal;	// Normal of the faces that are currently being rendered.
-} transform;
+uniform mat4 u_mvp;
+uniform vec3 u_normal;
 
 layout(location = 0) in vec4 in_vertex;		// vertices reused for every quad
 layout(location = 1) in vec2 in_texCoord;	// texcoords reused for every quad
@@ -33,9 +31,9 @@ void main(void)
 	float x = float(index & POSITION_BITS_BITMASK_OFFSET);
 
 	// offset the vertices by the position
-	gl_Position = transform.MVPMatrix * (in_vertex + vec4(x, y, z, 1.0));
+	gl_Position = u_mvp * (in_vertex + vec4(x, y, z, 1.0));
 
 	float textureId = float((in_data & TEXTURE_ID_MASK) >> POSITION_BITS_3);
-	// supply 3d texcoord to fragment shader so it can; vec4 texCol = texture2DArray(texArr, texCoord);
+	// supply 3d texcoord to fragment shader so it can; 
 	texCoord = vec3(in_texCoord, textureId);
 }

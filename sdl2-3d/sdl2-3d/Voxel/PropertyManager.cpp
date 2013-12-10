@@ -40,6 +40,7 @@ void PropertyManager::parseProperties(lua_State* const L, const std::string& blo
 	const char* typeCStr = block["type"];
 	std::string type(typeCStr);
 
+	// select block type and call right parse function
 	if (type == DEFAULT_BLOCK)
 		parseDefault(block, blockname, blockID);
 	else

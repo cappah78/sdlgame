@@ -12,6 +12,9 @@ const unsigned int TEXTURE_ID_BITS = 12;
 const char* CACHE_VERTEX_TRANSFORM_UNIFORM_NAME = "VoxelTransform2";
 const int CACHE_VERTEX_TRANSFORM_BINDING_POINT = 0;
 
+const char* MVP_UNIFORM_NAME = "u_mvp";
+const char* NORMAL_UNIFORM_NAME = "u_normal";
+
 const unsigned int INDEX_MASK = 0x00000FFFu;
 const unsigned int TEXTURE_ID_MASK = 0x00FFF000u;
 const unsigned int LIGHT_LEVEL_MASK = 0xFF000000u;
@@ -65,10 +68,8 @@ VoxelCache::VoxelCache()
 	glBindVertexArray(0);
 	glUseProgram(m_shaderId);
 
-	glGenBuffers(1, &m_cameraTransformBuffer);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(m_cameraTransform), &m_cameraTransform, GL_STREAM_DRAW);
-	glBindBufferBase(GL_UNIFORM_BUFFER, CACHE_VERTEX_TRANSFORM_BINDING_POINT, m_cameraTransformBuffer);
+	m_mvpUniformLoc = glGetUniformLocation(m_shaderId, MVP_UNIFORM_NAME);
+	m_normalUniformLoc = glGetUniformLocation(m_shaderId, MVP_UNIFORM_NAME);
 
 	GLuint vertexTransformIdx = glGetUniformBlockIndex(m_shaderId, CACHE_VERTEX_TRANSFORM_UNIFORM_NAME);
 	glUniformBlockBinding(m_shaderId, vertexTransformIdx, CACHE_VERTEX_TRANSFORM_BINDING_POINT);
@@ -85,54 +86,6 @@ VoxelCache::VoxelCache()
 	}
 }
 
-#include <iostream>
-#include <stdio.h>
-void VoxelCache::beginCache(VoxelCache::Cache* const cache)
-{
-	assert(!m_cacheData[cache->m_face].m_begun && "A cache with this face is already begun");
-	assert(!cache->m_data && "Cache has already begun");
-
-	cache->m_data = &m_cacheData[cache->m_face];
-	m_cacheData[cache->m_face].m_begun = true;
-}
-
-void VoxelCache::Cache::addFace(int x, int y, int z, int textureID, int color1, int color2, int color3, int color4)
-{
-	assert(m_data && "Cache has not yet begun");
-	assert(m_amount < MAX_FACES_PER_CACHE);
-
-	m_amount++;
-	// position+texId are being packed in one int here
-	unsigned int index = x | (y | z << SIZE_BITS) << SIZE_BITS;
-	unsigned int vertexData = index;
-	vertexData |= textureID << INDEX_BITS;
-
-	m_data->m_points[m_data->m_pointIdx++] = vertexData;
-	m_data->m_colorBits[m_data->m_colorIdx++] = color1;
-	m_data->m_colorBits[m_data->m_colorIdx++] = color2;
-	m_data->m_colorBits[m_data->m_colorIdx++] = color3;
-	m_data->m_colorBits[m_data->m_colorIdx++] = color4;
-}
-
-void VoxelCache::endCache(VoxelCache::Cache* const cache)
-{
-	assert(m_cacheData[cache->m_face].m_begun && "A cache with this face has not begun");
-	assert(cache->m_data && "Cache has not yet begun");
-	m_cacheData[cache->m_face].m_begun = false;
-
-	//upload position data
-	glBindVertexArray(cache->m_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, cache->m_positionBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-	glBufferSubData(GL_ARRAY_BUFFER, 0, cache->m_data->m_pointIdx * sizeof(int), &cache->m_data->m_points);
-	//TODO: color data
-	m_cacheData[cache->m_face].m_pointIdx = 0;
-	m_cacheData[cache->m_face].m_colorIdx = 0;
-
-	cache->m_data = NULL;
-}
-
-
 void VoxelCache::beginRender(const TextureArray* tileSet)
 {
 	assert(!m_drawing && "Call end() before begin()");
@@ -144,12 +97,11 @@ void VoxelCache::beginRender(const TextureArray* tileSet)
 void VoxelCache::renderCache(Cache* const cache, const Camera& camera)
 {
 	assert(m_drawing);
-	if (cache->m_amount == 0)
+	if (cache->m_numFaces == 0)
 		return;
 
 	glBindVertexArray(cache->m_vao); 
-	setUniforms(camera, cache->m_face, cache->m_xOffset, cache->m_yOffset, cache->m_zOffset);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, cache->m_amount);
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, cache->m_numFaces);
 }
 
 void VoxelCache::finishRender()
@@ -159,38 +111,7 @@ void VoxelCache::finishRender()
 	glUseProgram(0);
 }
 
-glm::mat4 modelMatrix = glm::mat4(1);
-
-void VoxelCache::setUniforms(const Camera& camera, Face face, float xOffset, float yOffset, float zOffset)
-{
-	modelMatrix[3][0] = xOffset * 0.5f;	//TODO: figure out why / 2
-	modelMatrix[3][1] = yOffset * 0.5f;
-	modelMatrix[3][2] = zOffset * 0.5f;
-	m_cameraTransform.matrix = camera.m_combinedMatrix * modelMatrix;
-
-	switch (face)	//TODO: verify if normals are correct
-	{
-	case TOP:	 m_cameraTransform.normal = glm::vec3(0.0, 1.0, 0.0);	break;
-	case BOTTOM: m_cameraTransform.normal = glm::vec3(0.0, -1.0, 0.0);	break;
-	case LEFT:	 m_cameraTransform.normal = glm::vec3(-1.0, 0.0, 0.0);	break;
-	case RIGHT:  m_cameraTransform.normal = glm::vec3(1.0, 0.0, 0.0);	break;
-	case FRONT:  m_cameraTransform.normal = glm::vec3(0.0, 0.0, 1.0);	break;
-	case BACK:	 m_cameraTransform.normal = glm::vec3(0.0, 0.0, -1.0);	break;
-	}
-
-	glBindBuffer(GL_UNIFORM_BUFFER, m_cameraTransformBuffer);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(VoxelTransform), &m_cameraTransform, GL_STREAM_DRAW);
-}
-
-void VoxelCache::deleteCache(Cache* const cache)
-{
-	//TODO: clean up all the buffers!!
-	glDeleteBuffers(1, &cache->m_positionBuffer);
-	glDeleteVertexArrays(1, &cache->m_vao);
-	delete cache;
-}
-
-VoxelCache::Cache* const VoxelCache::createCache(Face face, float xOffset, float yOffset, float zOffset)
+VoxelCache::Cache* const VoxelCache::createCache(Face face)
 {
 	assert(!m_drawing && "Cannot create a new cache in between begin() and end()");
 
@@ -214,14 +135,83 @@ VoxelCache::Cache* const VoxelCache::createCache(Face face, float xOffset, float
 	glEnableVertexAttribArray(2);
 	glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, sizeof(int), 0);
 
+	//TODO: color buffer and attrib
+
 	glVertexAttribDivisor(0, 0); // vertices : always reuse the same 4 vertices -> 0
 	glVertexAttribDivisor(1, 0); // texcoords : always reuse the same 4 texcoords -> 0
 	glVertexAttribDivisor(2, 1); // position : one per quad (its center) -> 1
 
-	return new Cache(vao, positionBuffer, face, xOffset, yOffset, zOffset);
+	return new Cache(vao, positionBuffer, face);
 }
 
 VoxelCache::~VoxelCache()
 {
 	glDeleteShader(m_shaderId);
+	glDeleteBuffers(6, &m_faceVertexBuffer[0]);
+	glDeleteBuffers(1, &m_texCoordBuffer);
+}
+
+void VoxelCache::beginCache(VoxelCache::Cache* const cache)
+{
+	assert(!m_cacheData[cache->m_face].m_begun && "A cache with this face is already begun");
+	assert(!cache->m_data && "Cache has already begun");
+
+	cache->m_data = &m_cacheData[cache->m_face];
+	m_cacheData[cache->m_face].m_begun = true;
+}
+
+void VoxelCache::Cache::addFace(int x, int y, int z, int textureID, int color1, int color2, int color3, int color4)
+{
+	assert(m_data && "Cache has not yet begun");
+
+	m_numFaces++;
+	// position+texId are being packed in one int here
+	unsigned int index = x | (y | z << SIZE_BITS) << SIZE_BITS;
+	unsigned int vertexData = index;
+	vertexData |= textureID << INDEX_BITS;
+
+	m_data->m_points[m_data->m_pointIdx++] = vertexData;
+
+	m_data->m_colorBits[m_data->m_colorIdx++] = color1;
+	m_data->m_colorBits[m_data->m_colorIdx++] = color2;
+	m_data->m_colorBits[m_data->m_colorIdx++] = color3;
+	m_data->m_colorBits[m_data->m_colorIdx++] = color4;
+}
+
+void VoxelCache::endCache(VoxelCache::Cache* const cache)
+{
+	assert(m_cacheData[cache->m_face].m_begun && "A cache with this face has not begun");
+	assert(cache->m_data && "Cache has not yet begun");
+	m_cacheData[cache->m_face].m_begun = false;
+
+	//upload position data
+	glBindVertexArray(cache->m_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, cache->m_positionBuffer);
+	//glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferSubData(GL_ARRAY_BUFFER, 0, cache->m_data->m_pointIdx * sizeof(int), &cache->m_data->m_points);
+
+	//TODO: update color buffer
+
+	m_cacheData[cache->m_face].m_pointIdx = 0;
+	m_cacheData[cache->m_face].m_colorIdx = 0;
+
+	cache->m_data = NULL;
+}
+
+void VoxelCache::setMVPUniform(glm::mat4 mvpMatrix)
+{
+	assert(m_drawing);
+	glUniformMatrix4fv(m_mvpUniformLoc, 1, GL_FALSE, &mvpMatrix[0][0]);
+}
+void VoxelCache::setNormalUniform(glm::vec3 normal)
+{
+	assert(m_drawing);
+	glUniform3fv(m_normalUniformLoc, 1, &normal[0]);
+}
+
+void VoxelCache::deleteCache(Cache* const cache)
+{
+	glDeleteBuffers(1, &cache->m_positionBuffer);
+	glDeleteVertexArrays(1, &cache->m_vao);
+	delete cache;
 }

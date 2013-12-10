@@ -8,6 +8,23 @@
 class TextureArray;
 class Camera;
 
+class ChunkRenderData
+{
+	friend class ChunkRenderer;
+public:
+	float m_xOffset, m_yOffset, m_zOffset;
+	void addFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, int color1, int color2, int color3, int color4);
+private:
+	ChunkRenderData(float xOffset, float yOffset, float zOffset)
+		: m_xOffset(xOffset), m_yOffset(yOffset), m_zOffset(zOffset), m_begun(false)
+	{};
+	~ChunkRenderData() {};
+	ChunkRenderData(const ChunkRenderData& copy) = delete;
+
+	bool m_begun;
+	VoxelCache::Cache* m_caches[6];
+};
+
 /** Abstraction for 6 voxel caches to simplify rendering */
 class ChunkRenderer
 {
@@ -16,15 +33,17 @@ public:
 	ChunkRenderer(const ChunkRenderer& copy) = delete;
 	~ChunkRenderer();
 
-	void begin(const TextureArray* tileSet, float xOffset, float yOffset, float zOffset, const Camera* camera);
-	void renderFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, int color1, int color2, int color3, int color4);
-	void end();
+	ChunkRenderData* const createChunkRenderData(float xOffset, float yOffset, float zOffset);
+	void deleteChunkRenderData(ChunkRenderData* const chunkRenderData);
+	void beginAdd(ChunkRenderData* const chunkRenderData);
+	void endAdd(ChunkRenderData* const chunkRenderData);
 
+	void beginRender(const TextureArray* tileSet);
+	void renderChunk(const ChunkRenderData* const renderData, const Camera& camera);
+	void endRender();
 private:
-	const Camera* m_currCamera;
 	VoxelCache m_voxelCache;
-	const TextureArray* m_tileSet;
-	VoxelCache::Cache* m_caches[6];
+
 };
 
 #endif //CHUNK_RENDERER_H_

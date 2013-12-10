@@ -18,9 +18,6 @@
 
 #include "../Game.h"
 
-std::vector<VoxelCache::Cache*> caches;
-TextureArray* tileSet;
-
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
 static const float CAMERA_FAR = 300.0f;
@@ -62,32 +59,26 @@ GameScreen::GameScreen()
 	images.push_back("Assets/Textures/MinecraftBlocks/netherrack.png");
 	images.push_back("Assets/Textures/MinecraftBlocks/gravel.png");
 	images.push_back("Assets/Textures/MinecraftBlocks/sand.png");
-	images.shrink_to_fit();
+	m_tileSet = new TextureArray(images, 16, 16);
 
-	tileSet = new TextureArray(images, 16, 16);
-	tileSet->bind();
-
-	m_voxelCache = new VoxelCache();
-
-	int y = 0;
 	for (int i = 0; i < 16; ++i) {
-		for (int j = 0; j < 16; ++j) {
-			for (int k = 0; k < 1; ++k) {
+		for (int j = 0; j < 1; ++j) {
+			for (int k = 0; k < 16; ++k) {
 				for (int face = 0; face < 6; ++face)	//iterate over the 6 different faces
 				{
-					VoxelCache::Cache* cache = m_voxelCache->createCache((VoxelCache::Face)(VoxelCache::TOP + face), float(i * 16), float(k * 16), float(j * 16));
-					m_voxelCache->beginCache(cache);
+					ChunkRenderData* data = m_chunkRenderer.createChunkRenderData(i * 16.0f, j * 16.0f, k * 16.0f);
+					m_chunkRenderer.beginAdd(data);
 					for (int x = 0; x < 16; x += 2)
 					for (int y = 0; y < 16; y += 2)
 					for (int z = 0; z < 16; z += 2)
-						cache->addFace(x, y, z, (x + y + z + i + j + k) % images.size(), 1, 1, 1, 1);
-					m_voxelCache->endCache(cache);
-					caches.push_back(cache);
+						data->addFace((VoxelCache::Face)face, x, y, z, (x + y + z + i + j + k) % images.size(), 1, 1, 1, 1);
+					m_chunkRenderer.endAdd(data);
+
+					m_chunkRenderData.push_back(data);
 				}
 			}
 		}
 	}
-	caches.shrink_to_fit();
 }
 
 void GameScreen::render(float deltaSec)
@@ -98,10 +89,10 @@ void GameScreen::render(float deltaSec)
 	m_cameraController.update(deltaSec);
 	m_camera.update();
 
-	m_voxelCache->beginRender(tileSet);
-	for (VoxelCache::Cache* cache : caches) 
-		m_voxelCache->renderCache(cache, m_camera);
-	m_voxelCache->finishRender();
+	m_chunkRenderer.beginRender(m_tileSet);
+	for (ChunkRenderData* data : m_chunkRenderData)
+		m_chunkRenderer.renderChunk(data, m_camera);
+	m_chunkRenderer.endRender();
 
 	m_skyBox.render(m_camera);
 
@@ -110,9 +101,8 @@ void GameScreen::render(float deltaSec)
 
 GameScreen::~GameScreen() 
 {
-	for (VoxelCache::Cache* c : caches)
-		m_voxelCache->deleteCache(c);
-	delete m_voxelCache;
+	for (ChunkRenderData* data : m_chunkRenderData)
+		m_chunkRenderer.deleteChunkRenderData(data);
 }
 
 void GameScreen::resize(int width, int height) 

@@ -94,7 +94,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
     <ClCompile Include="Voxel\ChunkRenderer.cpp" />
-    <ClCompile Include="Voxel\DefaultBlock.cpp" />
     <ClCompile Include="Voxel\TextureManager.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
     <ClCompile Include="Voxel\VoxelCache.cpp" />
