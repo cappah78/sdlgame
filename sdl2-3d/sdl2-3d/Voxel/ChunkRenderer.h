@@ -8,6 +8,7 @@
 class TextureArray;
 class Camera;
 
+/** Abstraction for 6 voxel caches to simplify rendering */
 class ChunkRenderData
 {
 	friend class ChunkRenderer;
@@ -25,7 +26,6 @@ private:
 	VoxelCache::Cache* m_caches[6];
 };
 
-/** Abstraction for 6 voxel caches to simplify rendering */
 class ChunkRenderer
 {
 public:
@@ -41,9 +41,9 @@ public:
 	void beginRender(const TextureArray* tileSet);
 	void renderChunk(const ChunkRenderData* const renderData, const Camera& camera);
 	void endRender();
+
 private:
 	VoxelCache m_voxelCache;
-
 };
 
 #endif //CHUNK_RENDERER_H_

@@ -52,9 +52,9 @@ void ChunkRenderer::endAdd(ChunkRenderData* const chunkRenderData)
 		m_voxelCache.endCache(chunkRenderData->m_caches[i]);
 }
 
-glm::mat4 modelMatrix = glm::mat4(1);
 void ChunkRenderer::renderChunk(const ChunkRenderData* const chunkRenderData, const Camera& camera)
 {
+	glm::mat4 modelMatrix = glm::mat4(1);
 	modelMatrix[3][0] = chunkRenderData->m_xOffset * 0.5f;        //TODO: figure out why / 2
 	modelMatrix[3][1] = chunkRenderData->m_yOffset * 0.5f;
 	modelMatrix[3][2] = chunkRenderData->m_zOffset * 0.5f;
@@ -72,11 +72,9 @@ void ChunkRenderer::renderChunk(const ChunkRenderData* const chunkRenderData, co
 		case VoxelCache::FRONT: m_voxelCache.setNormalUniform(glm::vec3(0.0, 0.0, 1.0));	break;
 		case VoxelCache::BACK:	m_voxelCache.setNormalUniform(glm::vec3(0.0, 0.0, -1.0));	break;
 		}
-
 		m_voxelCache.renderCache(chunkRenderData->m_caches[face], camera);
 	}
 }
-
 
 void ChunkRenderer::beginRender(const TextureArray* tileSet)
 {

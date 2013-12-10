@@ -187,7 +187,7 @@ void VoxelCache::endCache(VoxelCache::Cache* const cache)
 	//upload position data
 	glBindVertexArray(cache->m_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, cache->m_positionBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
 	glBufferSubData(GL_ARRAY_BUFFER, 0, cache->m_data->m_pointIdx * sizeof(int), &cache->m_data->m_points);
 
 	//TODO: update color buffer

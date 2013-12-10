@@ -25,6 +25,7 @@ void main(void)
 {
 	// grab the position bits from the data
 	uint index = in_data & POSITION_BITS_MASK;
+
 	// extract the position using black magic
 	float z = float(index >> POSITION_BITS_2);
 	float y = float((index >> POSITION_BITS) & POSITION_BITS_BITMASK_OFFSET);
@@ -33,7 +34,9 @@ void main(void)
 	// offset the vertices by the position
 	gl_Position = u_mvp * (in_vertex + vec4(x, y, z, 1.0));
 
+	//extract textureId using black magic
 	float textureId = float((in_data & TEXTURE_ID_MASK) >> POSITION_BITS_3);
-	// supply 3d texcoord to fragment shader so it can; 
+
+	// supply 3d texcoord to fragment shader
 	texCoord = vec3(in_texCoord, textureId);
 }
