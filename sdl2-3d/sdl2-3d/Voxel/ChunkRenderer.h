@@ -4,6 +4,7 @@
 #include "VoxelChunk.h"
 #include "VoxelCache.h"
 #include "PropertyManager.h"
+#include "../Engine/Graphics/Color8888.h"
 
 class TextureArray;
 class Camera;
@@ -14,7 +15,7 @@ class ChunkRenderData
 	friend class ChunkRenderer;
 public:
 	float m_xOffset, m_yOffset, m_zOffset;
-	void addFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, int color1, int color2, int color3, int color4);
+	void addFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4);
 private:
 	ChunkRenderData(float xOffset, float yOffset, float zOffset)
 		: m_xOffset(xOffset), m_yOffset(yOffset), m_zOffset(zOffset), m_begun(false)

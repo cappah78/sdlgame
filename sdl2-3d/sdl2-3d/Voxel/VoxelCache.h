@@ -5,9 +5,11 @@
 #include <glm\glm.hpp>
 
 #include "..\Engine\Graphics\TextureArray.h"
+#include "../Engine/Graphics/Color8888.h"
 
 #include "VoxelChunk.h"
 #include <glm\glm.hpp>
+
 
 class Material;
 class Camera;
@@ -36,7 +38,7 @@ private:
 		unsigned int m_pointIdx;
 		unsigned int m_points[MAX_FACES_PER_CACHE];
 		unsigned int m_colorIdx;
-		unsigned int m_colorBits[MAX_FACES_PER_CACHE * 4];
+		Color8888 m_colorBits[MAX_FACES_PER_CACHE * 4];
 	};
 
 public:
@@ -50,13 +52,14 @@ public:
 	{
 		friend class VoxelCache;
 	public:
-		void addFace(int x, int y, int z, int textureIdx, int color1, int color2, int color3, int color4);
+		void addFace(int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4);
 		Face getFace() { return m_face; };
 		unsigned int getNumFaces() { return m_numFaces; };
 	private:
-		Cache(GLuint vao, GLuint positionBuffer, Face face)
+		Cache(GLuint vao, GLuint positionBuffer, GLuint colorBuffer, Face face)
 			: m_vao(vao)
 			, m_positionBuffer(positionBuffer)
+			, m_colorBuffer(colorBuffer)
 			, m_face(face)
 			, m_numFaces(0)
 			, m_data(0)

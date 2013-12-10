@@ -131,9 +131,18 @@ VoxelCache::Cache* const VoxelCache::createCache(Face face)
 	GLuint positionBuffer;
 	glGenBuffers(1, &positionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, CHUNK_SIZE_CUBED * sizeof(int), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int), NULL, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(2);
 	glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, sizeof(int), 0);
+
+	//create color buffer unique to cache
+	GLuint colorBuffer;
+	glGenBuffers(1, &colorBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+	glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int) * 4, NULL, GL_STREAM_DRAW);
+	glEnableVertexAttribArray(3);
+	// only use rgb
+	glVertexAttribPointer(3, 4, GL_UNSIGNED_BYTE, GL_TRUE, 4, NULL);
 
 	//TODO: color buffer and attrib
 
@@ -141,7 +150,7 @@ VoxelCache::Cache* const VoxelCache::createCache(Face face)
 	glVertexAttribDivisor(1, 0); // texcoords : always reuse the same 4 texcoords -> 0
 	glVertexAttribDivisor(2, 1); // position : one per quad (its center) -> 1
 
-	return new Cache(vao, positionBuffer, face);
+	return new Cache(vao, positionBuffer, colorBuffer, face);
 }
 
 VoxelCache::~VoxelCache()
@@ -160,7 +169,7 @@ void VoxelCache::beginCache(VoxelCache::Cache* const cache)
 	m_cacheData[cache->m_face].m_begun = true;
 }
 
-void VoxelCache::Cache::addFace(int x, int y, int z, int textureID, int color1, int color2, int color3, int color4)
+void VoxelCache::Cache::addFace(int x, int y, int z, int textureID, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4)
 {
 	assert(m_data && "Cache has not yet begun");
 
@@ -189,6 +198,10 @@ void VoxelCache::endCache(VoxelCache::Cache* const cache)
 	glBindBuffer(GL_ARRAY_BUFFER, cache->m_positionBuffer);
 	glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
 	glBufferSubData(GL_ARRAY_BUFFER, 0, cache->m_data->m_pointIdx * sizeof(int), &cache->m_data->m_points);
+
+	glBindBuffer(GL_ARRAY_BUFFER, cache->m_colorBuffer);
+	glBufferData(GL_ARRAY_BUFFER, MAX_FACES_PER_CACHE * sizeof(int) * 4, NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferSubData(GL_ARRAY_BUFFER, 0, cache->m_data->m_colorIdx * sizeof(int), &cache->m_data->m_colorBits);
 
 	//TODO: update color buffer
 

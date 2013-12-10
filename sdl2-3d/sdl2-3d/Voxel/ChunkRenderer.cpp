@@ -38,7 +38,7 @@ void ChunkRenderer::beginAdd(ChunkRenderData* const chunkRenderData)
 		m_voxelCache.beginCache(chunkRenderData->m_caches[i]);
 }
 
-void ChunkRenderData::addFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, int color1, int color2, int color3, int color4)
+void ChunkRenderData::addFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4)
 {
 	assert(m_begun);
 	m_caches[face]->addFace(x, y, z, textureIdx, color1, color2, color3, color4);

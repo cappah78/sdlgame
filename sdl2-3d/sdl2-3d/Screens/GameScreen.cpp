@@ -17,6 +17,7 @@
 #include "../Voxel/DefaultBlock.h"
 
 #include "../Game.h"
+#include "../Engine/Graphics/Color8888.h"
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
@@ -61,9 +62,11 @@ GameScreen::GameScreen()
 	images.push_back("Assets/Textures/MinecraftBlocks/sand.png");
 	m_tileSet = new TextureArray(images, 16, 16);
 
-	for (int i = 0; i < 16; ++i) {
+	Color8888 color = { 0, 0, 0, 255 };
+
+	for (int i = 0; i < 2; ++i) {
 		for (int j = 0; j < 1; ++j) {
-			for (int k = 0; k < 16; ++k) {
+			for (int k = 0; k < 2; ++k) {
 				for (int face = 0; face < 6; ++face)	//iterate over the 6 different faces
 				{
 					ChunkRenderData* data = m_chunkRenderer.createChunkRenderData(i * 16.0f, j * 16.0f, k * 16.0f);
@@ -71,7 +74,7 @@ GameScreen::GameScreen()
 					for (int x = 0; x < 16; x += 2)
 					for (int y = 0; y < 16; y += 2)
 					for (int z = 0; z < 16; z += 2)
-						data->addFace((VoxelCache::Face)face, x, y, z, (x + y + z + i + j + k) % images.size(), 1, 1, 1, 1);
+						data->addFace((VoxelCache::Face)face, x, y, z, (x + y + z + i + j + k) % images.size(), color, color, color, color);
 					m_chunkRenderer.endAdd(data);
 
 					m_chunkRenderData.push_back(data);

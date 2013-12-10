@@ -251,6 +251,9 @@
     <ClInclude Include="Voxel\ChunkRenderer.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\Color8888.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

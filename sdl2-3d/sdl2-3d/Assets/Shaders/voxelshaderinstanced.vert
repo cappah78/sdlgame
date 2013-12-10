@@ -16,10 +16,12 @@ uniform vec3 u_normal;
 layout(location = 0) in vec4 in_vertex;		// vertices reused for every quad
 layout(location = 1) in vec2 in_texCoord;	// texcoords reused for every quad
 layout(location = 2) in uint in_data;		// data containing texture id and position, unique for every block
+layout(location = 3) in vec4 in_color;
 // additional per vertex properties like color for lighting can be added easily
 
 
 out vec3 texCoord;
+out vec4 color;
 
 void main(void)
 {
@@ -39,4 +41,5 @@ void main(void)
 
 	// supply 3d texcoord to fragment shader
 	texCoord = vec3(in_texCoord, textureId);
+	color = in_color;
 }

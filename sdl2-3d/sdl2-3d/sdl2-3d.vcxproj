@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h" />
+    <ClInclude Include="Engine\Graphics\Color8888.h" />
     <ClInclude Include="Engine\Graphics\CubeMap.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\HeightMap.h" />
