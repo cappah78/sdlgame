@@ -15,7 +15,7 @@ typedef unsigned short BlockID;
 struct VoxelBlockData
 {
 	BlockID blockId;
-	void* dataPointer;
+	unsigned int dataIndex;
 };
 
 struct VoxelChunk
@@ -27,6 +27,9 @@ struct VoxelChunk
 	float m_chunkX;
 	float m_chunkY;
 	float m_chunkZ;
+
+	//template <struct T>
+	//T* getData<T>(unsigned int dataIndex);
 
 	VoxelBlockData m_blocks[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
 	std::vector<unsigned char> m_blockData;

@@ -5,29 +5,26 @@
 #include "VoxelCache.h"
 #include "PropertyManager.h"
 
-/** Abstraction for 6 voxel caches to simplify rendering cubes */
+class TextureArray;
+class Camera;
+
+/** Abstraction for 6 voxel caches to simplify rendering */
 class ChunkRenderer
 {
 public:
-	ChunkRenderer(float offsetX, float offsetY, float offsetZ);
+	ChunkRenderer();
 	ChunkRenderer(const ChunkRenderer& copy) = delete;
 	~ChunkRenderer();
 
-	void begin();
-	void renderFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, float color1, float color2, float color3, float color4);
+	void begin(const TextureArray* tileSet, float xOffset, float yOffset, float zOffset, const Camera* camera);
+	void renderFace(VoxelCache::Face face, int x, int y, int z, int textureIdx, int color1, int color2, int color3, int color4);
 	void end();
 
 private:
-	float m_offsetX, m_offsetY, m_offsetZ;
-
+	const Camera* m_currCamera;
 	VoxelCache m_voxelCache;
-
-	VoxelCache::Cache* m_topFaceCache;
-	VoxelCache::Cache* m_bottomFaceCache;
-	VoxelCache::Cache* m_leftFaceCache;
-	VoxelCache::Cache* m_rightFaceCache;
-	VoxelCache::Cache* m_frontFaceCache;
-	VoxelCache::Cache* m_backFaceCache;
+	const TextureArray* m_tileSet;
+	VoxelCache::Cache* m_caches[6];
 };
 
 #endif //CHUNK_RENDERER_H_

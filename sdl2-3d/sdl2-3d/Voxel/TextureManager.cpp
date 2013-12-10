@@ -21,9 +21,7 @@ TextureArray* TextureManager::generateTextureArray()
 {
 	std::vector<const std::string*> imageNames;
 	for (auto it = m_textureNameIDMap.begin(); it != m_textureNameIDMap.end(); ++it)
-	{
 		imageNames.push_back(&(it->first));
-	}
 
 	return new TextureArray(imageNames, m_textureWidth, m_textureHeight);
 }
