@@ -230,12 +230,6 @@
     <ClInclude Include="Voxel\DefaultBlock.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\InventoryBlock.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="Voxel\MeshBlock.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel\LuaVoxelConfig.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
@@ -253,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Color8888.h">
       <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\ChunkManager.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\LuaChunkGenerator.h">
+      <Filter>Header Files\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -331,9 +331,6 @@
     <ClCompile Include="Voxel\VoxelWorld.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\VoxelChunk.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
     <ClCompile Include="Voxel\VoxelCache.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
@@ -359,6 +356,12 @@
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
     <ClCompile Include="Voxel\ChunkRenderer.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\ChunkManager.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\LuaChunkGenerator.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
   </ItemGroup>
@@ -440,6 +443,9 @@
     </None>
     <None Include="Assets\Scripts\Blocks\StoneBlock.lua">
       <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\WorldGen\GenTest.lua">
+      <Filter>Assets\Scripts\WorldGen</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

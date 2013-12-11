@@ -14,19 +14,21 @@ typedef unsigned short BlockID;
 
 struct VoxelBlockData
 {
-	BlockID blockId;
-	unsigned int dataIndex;
+	BlockID m_blockId;
+	unsigned int m_dataIndex;
 };
 
 struct VoxelChunk
 {
-	VoxelChunk();
+	VoxelChunk(int x, int y, int z)
+		: m_chunkX(x), m_chunkY(y), m_chunkZ(z)
+	{};
 	VoxelChunk(const VoxelChunk& copyMe) = delete;
-	~VoxelChunk();
+	~VoxelChunk() {};
 
-	float m_chunkX;
-	float m_chunkY;
-	float m_chunkZ;
+	int m_chunkX;
+	int m_chunkY;
+	int m_chunkZ;
 
 	//template <struct T>
 	//T* getData<T>(unsigned int dataIndex);

@@ -20,10 +20,11 @@ public:
 	VoxelWorld(const VoxelWorld& copy) = delete;
 	~VoxelWorld();
 
+	void setBlock(BlockID blockID, int x, int y, int z);
+
 	const std::vector<const VoxelChunk>& getChunks() const;
 	TextureManager& getTextureManager();
 	const PropertyManager& getPropertyManager() const;
-
 	lua_State* const L() const { return m_L; };
 
 protected:
@@ -37,6 +38,7 @@ private:
 
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);
+	static int L_setBlock(lua_State* L);
 };
 
 #endif //VOXEL_WORLD_H_

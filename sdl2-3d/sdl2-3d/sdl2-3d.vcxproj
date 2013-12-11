@@ -53,11 +53,11 @@
     <ClInclude Include="Engine\Utils\stb_image.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
+    <ClInclude Include="Voxel\ChunkManager.h" />
     <ClInclude Include="Voxel\ChunkRenderer.h" />
     <ClInclude Include="Voxel\DefaultBlock.h" />
-    <ClInclude Include="Voxel\InventoryBlock.h" />
+    <ClInclude Include="Voxel\LuaChunkGenerator.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
-    <ClInclude Include="Voxel\MeshBlock.h" />
     <ClInclude Include="Voxel\TextureManager.h" />
     <ClInclude Include="Voxel\PropertyManager.h" />
     <ClInclude Include="Voxel\VoxelCache.h" />
@@ -94,11 +94,12 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
+    <ClCompile Include="Voxel\ChunkManager.cpp" />
     <ClCompile Include="Voxel\ChunkRenderer.cpp" />
+    <ClCompile Include="Voxel\LuaChunkGenerator.cpp" />
     <ClCompile Include="Voxel\TextureManager.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
     <ClCompile Include="Voxel\VoxelCache.cpp" />
-    <ClCompile Include="Voxel\VoxelChunk.cpp" />
     <ClCompile Include="Voxel\VoxelWorld.cpp" />
     <ClCompile Include="Voxel\WorldRenderer.cpp" />
   </ItemGroup>
@@ -106,6 +107,7 @@
     <None Include="Assets\Scripts\Blocks\DirtBlock.lua" />
     <None Include="Assets\Scripts\Blocks\StoneBlock.lua" />
     <None Include="Assets\Scripts\Init.lua" />
+    <None Include="Assets\Scripts\WorldGen\GenTest.lua" />
     <None Include="Assets\Shaders\forwardshader.frag" />
     <None Include="Assets\Shaders\forwardshader.vert" />
     <None Include="Assets\Shaders\fullscreenquad.geom" />
