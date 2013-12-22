@@ -23,10 +23,10 @@
 #ifndef CHECKGLERROR_H_
 #define CHECKGLERROR_H_
 
+void outputFailure(const char *file, const int line, const char *conditionString);
+
 #ifdef _WIN32
 #ifdef _DEBUG
-
-void outputFailure(const char *file, const int line, const char *conditionString);
 
 #define DBG_BREAK() __debugbreak()
 #define ASSERT(_condition_) \
@@ -63,6 +63,7 @@ if (!(_condition_)) \
 #else // !_DEBUG
 #define CHECK_GL_ERROR() {  }
 #endif // _DEBUG
+
 /**
 * Internal function used by macro CHECK_GL_ERROR, use that instead.
 */

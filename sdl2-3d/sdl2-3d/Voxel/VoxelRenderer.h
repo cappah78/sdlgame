@@ -1,30 +1,59 @@
-#ifndef VOXEL_CACHE_H_
-#define VOXEL_CACHE_H_
+#ifndef VOXEL_RENDERER_H_
+#define VOXEL_RENDERER_H_
 
 #include <gl\glew.h>
 #include <glm\glm.hpp>
 
-#include "..\Engine\Graphics\TextureArray.h"
+#include <assert.h>
+
+#include "../Engine/Graphics/TextureArray.h"
 #include "../Engine/Graphics/Color8888.h"
 
 #include "VoxelChunk.h"
 
-class Material;
 class Camera;
 
-/**
- Imagine a filled chunk with a 16x16x1 slice removed every other block, 
- max amount of faces same that should be possible with proper culling
+static const unsigned int MAX_FACES_PER_CACHE = 2048u; // == CHUNK_SIZE_CUBED / 2;
+static_assert(CHUNK_SIZE == 16, "This class requires chunk size of 16 to function, change once fixed");
 
- //static const unsigned int MAX_FACES_PER_CACHE = CHUNK_SIZE_CUBED / 2;
+static const unsigned int SIZE_BITS = 4; //2^sizebits == chunksize or sqrt(chunkSize)
+static const unsigned int TEXTURE_ID_BITS = 12;
+static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Face Point Data must be <= 32 bits");
+
+/** 
+Efficiently renders textured/colored cubes minecraft style.
+Uses VoxelRenderer::Cache objects to store, render and add faces.
+
+General usage:
+VoxelRenderer::Cache* cache = voxelRenderer.createCache(xOffset, yOffset, zOffset);
+voxelRenderer.beginCache(cache);
+// for every visible face that fits within this cache (size is VoxelChunk::CHUNK_SIZE)
+cache->addFace(Face::TOP, x, y, z, textureIdx, color, color, color, color);
+
+voxelRenderer.beginRender(textureArray);
+voxelRenderer.renderCache(cache, camera);
+voxelRenderer.endRender();
 */
-static const unsigned int MAX_FACES_PER_CACHE = 2048u;
-
-/** Manages and renders 'Cache' objects which are a collection of faces */
 class VoxelRenderer
 {
 private:
 	typedef unsigned int GLuint;
+
+	struct FacePointData
+	{
+		FacePointData() {};
+		FacePointData(unsigned int x, unsigned int y, unsigned int z, unsigned int textureIdx)
+			: x(x)
+			, y(y)
+			, z(z)
+			, textureIdx(textureIdx)
+		{};
+		unsigned x : SIZE_BITS;
+		unsigned y : SIZE_BITS;
+		unsigned z : SIZE_BITS;
+		unsigned textureIdx : TEXTURE_ID_BITS;
+		unsigned padding : 32 - SIZE_BITS * 3 - TEXTURE_ID_BITS;	// unused bits
+	};
 
 	/** Is used internally to add faces and update vertex buffers */
 	struct PerFaceVertexData
@@ -32,7 +61,7 @@ private:
 		/** position counter */
 		unsigned int m_pointIdx;
 		/** positions, one per face*/
-		unsigned int m_points[MAX_FACES_PER_CACHE];
+		FacePointData m_points[MAX_FACES_PER_CACHE];
 		/** color counter*/
 		unsigned int m_colorIdx;
 		/** colors, 4 per face */
@@ -52,14 +81,23 @@ public:
 		TOP = 0, BOTTOM = 1, LEFT = 2, RIGHT = 3, FRONT = 4, BACK = 5
 	};
 
-	/** Contains the vao/buffers and holds information to draw it, can add faces to this object */
+	/** Contains the vao/buffers and holds information to draw them, can add faces to this object */
 	class Cache
 	{
 		friend class VoxelRenderer;
 	public:
+		/** 
+		Add a cube face at the given position, must be in between VoxelRenderer::beginCache and VoxelRenderer::endCache 
+		- int x/y/z : position within this cache, must be within 0 to CHUNK_SIZE
+		- int textureIdx : texture index witin the TextureArray used for VoxelRenderer::beginRender
+		- Color8888 1-4 : color tint for the corners of this face
+		*/
 		void addFace(Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4);
+		/** Offset to render with*/
 		float m_xOffset, m_yOffset, m_zOffset;
+
 	private:
+		/** This object is managed by VoxelRenderer::createCache and VoxelRenderer::deleteCache */
 		Cache(float xOffset, float yOffset, float zOffset) 
 			: m_data(NULL) 
 			, m_xOffset(xOffset)
@@ -80,11 +118,16 @@ public:
 	Cache* const createCache(float xOffset = 0, float yOffset = 0, float zOffset = 0);
 	void deleteCache(Cache* const cache);
 
+	/** Ready a cache to add faces */
 	void beginCache(VoxelRenderer::Cache* const cache);
+	/** Finish adding faces to a cache and upload the vertex data */
 	void endCache(VoxelRenderer::Cache* const cache);
 
+	/** Prepare the renderer for rendering using the given tileset */
 	void beginRender(const TextureArray* tileSet);
+	/** Draw the given cache with its offset, must be in between VoxelRenderer::beginRender and VoxelRenderer::endRender */
 	void renderCache(Cache* const cache, const Camera& camera);
+	/** Finish rendering */
 	void endRender();
 
 private:
@@ -109,4 +152,4 @@ private:
 	PerFaceVertexData m_data[6];
 };
 
-#endif //VOXEL_CACHE_H_
+#endif //VOXEL_RENDERER_H_

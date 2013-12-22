@@ -1,13 +1,8 @@
 #include "VoxelRenderer.h"
 
 #include "..\Engine\Graphics\Camera.h"
-#include "..\Engine\Graphics\Material.h"
 #include "..\Engine\Utils\ShaderManager.h"
 #include <glm/gtx/transform.hpp>
-
-const unsigned int SIZE_BITS = 4; //2^sizebits == chunksize or sqrt(chunkSize)
-const unsigned int INDEX_BITS = 3 * SIZE_BITS;
-const unsigned int TEXTURE_ID_BITS = 12;
 
 const char* MVP_UNIFORM_NAME = "u_mvp";
 const char* NORMAL_UNIFORM_NAME = "u_normal";
@@ -197,14 +192,9 @@ void VoxelRenderer::Cache::addFace(Face face, int x, int y, int z, int textureID
 {
 	assert(m_data && "Cache has not yet begun");
 
-	// position+texId are being packed in one int here
-	unsigned int index = x | (y | z << SIZE_BITS) << SIZE_BITS;
-	unsigned int vertexData = index;
-	vertexData |= textureID << INDEX_BITS;
-
 	PerFaceVertexData& data = m_data[face];
-
-	data.m_points[data.m_pointIdx++] = vertexData;
+	FacePointData pointData(x, y, z, textureID);
+	data.m_points[data.m_pointIdx++] = pointData;
 	data.m_colorBits[data.m_colorIdx++] = color1;
 	data.m_colorBits[data.m_colorIdx++] = color2;
 	data.m_colorBits[data.m_colorIdx++] = color3;
@@ -215,7 +205,7 @@ void VoxelRenderer::Cache::addFace(Face face, int x, int y, int z, int textureID
 
 void VoxelRenderer::endCache(VoxelRenderer::Cache* const cache)
 {
-	assert(m_begunCache && "Cache has not yet begun");
+	assert(m_begunCache && m_data && "Cache has not yet begun");
 	m_begunCache = false;
 
 	for (int i = 0; i < 6; ++i) 

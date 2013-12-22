@@ -3,18 +3,18 @@
 #include <assert.h>
 #include "PropertyManager.h"
 
-
-
 VoxelChunk::ChunkDataContainer::ChunkDataContainer(unsigned int initialSize)
 : m_size(initialSize)
 , m_used(0)
 {
 	m_dataBegin = malloc(initialSize);
 	assert(m_dataBegin && "Failed to allocate");
-};
+}
 
 VoxelChunk::ChunkDataContainer::~ChunkDataContainer()
-{};
+{
+
+}
 
 /** copy the data to the list, returning its start index */
 unsigned int VoxelChunk::ChunkDataContainer::add(void* data, unsigned int size)
@@ -32,13 +32,13 @@ unsigned int VoxelChunk::ChunkDataContainer::add(void* data, unsigned int size)
 	m_used += size;
 
 	return position;
-};
+}
 
 void* VoxelChunk::ChunkDataContainer::get(unsigned int position, unsigned int size)
 {
 	void* at = (void*) ((char*) m_dataBegin + position);
 	return at;
-};
+}
 
 /** invalidates all returned positions*/
 void VoxelChunk::ChunkDataContainer::remove(unsigned int position, unsigned int size)
@@ -51,7 +51,7 @@ void VoxelChunk::ChunkDataContainer::remove(unsigned int position, unsigned int 
 	m_used -= size;
 
 	shiftPositionData(position, size);
-};
+}
 
 void VoxelChunk::ChunkDataContainer::shiftPositionData(unsigned int position, unsigned int amount)
 {
@@ -60,7 +60,7 @@ void VoxelChunk::ChunkDataContainer::shiftPositionData(unsigned int position, un
 		if (blockData > position)
 			blockData -= amount;
 	}
-};
+}
 
 void VoxelChunk::ChunkDataContainer::resize(unsigned int newSize)
 {
@@ -72,7 +72,7 @@ void VoxelChunk::ChunkDataContainer::resize(unsigned int newSize)
 
 	m_dataBegin = newBegin;
 	m_size = newSize;
-};
+}
 
 void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, unsigned int dataSize)
 {
@@ -101,7 +101,6 @@ void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, u
 
 	}
 }
-
 
 BlockID VoxelChunk::getBlockID(int x, int y, int z)
 {

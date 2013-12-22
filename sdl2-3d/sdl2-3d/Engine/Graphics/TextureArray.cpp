@@ -1,12 +1,11 @@
 #include "TextureArray.h"
 
 #include "Pixmap.h"
-
-
 #include <assert.h>
 #include <string>
 
-TextureArray::TextureArray(const std::vector<const char*>& imageNames, unsigned int textureWidth, unsigned int textureHeight,
+TextureArray::TextureArray(const std::vector<const char*>& imageNames, 
+	unsigned int textureWidth, unsigned int textureHeight,
 	bool generateMipMaps,
 	GLint minFilter, GLint magFilter,
 	GLint textureWrapS, GLint textureWrapT)
@@ -36,7 +35,8 @@ TextureArray::TextureArray(const std::vector<const char*>& imageNames, unsigned 
 	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }
 
-TextureArray::TextureArray(const std::vector<const std::string*>& imageNames, unsigned int textureWidth, unsigned int textureHeight,
+TextureArray::TextureArray(const std::vector<const std::string*>& imageNames, 
+	unsigned int textureWidth, unsigned int textureHeight,
 	bool generateMipMaps,
 	GLint minFilter, GLint magFilter,
 	GLint textureWrapS, GLint textureWrapT)

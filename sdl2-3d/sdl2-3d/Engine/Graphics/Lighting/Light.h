@@ -11,7 +11,6 @@ public:
 		, m_enabled(true)
 		, m_updated(false)
 	{};
-
 	virtual ~Light() {};
 
 	glm::vec3 m_color;
