@@ -3,13 +3,26 @@
 
 #include <glm\glm.hpp>
 
-typedef unsigned int GLuint;
-
 class HeightMap;
 
+/** 
+Renders a heightmap using the following vertex attributes locations:
+
+position			0 vec3
+texture coordinate	1 vec2
+normal				2 vec3
+
+Does not manage the shader used to render.
+*/
 class HeightMapRenderer
 {
 public:
+	typedef unsigned int GLuint;
+
+	static const unsigned int IN_POSITION_LOC = 0;	//vec3
+	static const unsigned int IN_TEXCOORD_LOC = 1;	//vec2
+	static const unsigned int IN_NORMAL_LOC = 2;	//vec3
+
 	HeightMapRenderer(HeightMap& heightMap, float scale, float heightScale);
 	~HeightMapRenderer();
 
@@ -28,24 +41,12 @@ private:
 
 	unsigned int m_numVertices;
 	unsigned int m_numIndices;
-	unsigned int m_numPointLights;
 
 	GLuint m_vao;
+	enum Buffers { INDICES, POSITION, TEXCOORD, NORMAL, NUM_BUFFERS };
+	GLuint m_buffers[NUM_BUFFERS];
 
-	glm::vec3 m_PointLightPos;
-	bool m_followCam;
-
-	GLuint m_shininess;
-	GLuint m_strength;
-	GLuint m_eyeDirection;
-
-	//buffers
-	GLuint m_indexBuffer;
-	GLuint m_positionBuffer;
-	GLuint m_texCoordBuffer;
-	GLuint m_normalBuffer;
-
-	GLuint* m_indices;
+	unsigned int* m_indices;
 	glm::vec3* m_positions;
 	glm::vec2* m_texCoords;
 	glm::vec3* m_normals;

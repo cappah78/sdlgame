@@ -3,6 +3,9 @@
 
 #include <SDL.h>
 
+/** 
+Manages rendering related global variables and objects.
+*/
 class Graphics
 {
 public:

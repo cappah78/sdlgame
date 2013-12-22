@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 
+/** Can register to the Input class to receive mouse events */
 class IMouseListener
 {
 public:

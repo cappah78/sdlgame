@@ -170,14 +170,8 @@
     <ClInclude Include="Engine\Model\IMouseListener.h">
       <Filter>Header Files\Engine\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Model\IntTypes.h">
-      <Filter>Header Files\Engine\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Model\IScreen.h">
       <Filter>Header Files\Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Utils\Assert.h">
-      <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\CheckGLError.h">
       <Filter>Header Files\Engine\Utils</Filter>
@@ -203,17 +197,11 @@
     <ClInclude Include="Screens\GameScreen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\VoxelCache.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel\VoxelChunk.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
     <ClInclude Include="Voxel\VoxelWorld.h">
       <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\ScreenManager.h">
-      <Filter>Header Files\Engine\Model</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
@@ -227,9 +215,6 @@
     <ClInclude Include="Engine\Utils\CheckLuaError.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\DefaultBlock.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel\LuaVoxelConfig.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
@@ -242,9 +227,6 @@
     <ClInclude Include="Voxel\WorldRenderer.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\ChunkRenderer.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Color8888.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
@@ -252,6 +234,15 @@
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
     <ClInclude Include="Voxel\LuaChunkGenerator.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelBlock.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\BlockRenderProperties.h">
+      <Filter>Header Files\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\VoxelRenderer.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
@@ -322,16 +313,10 @@
     <ClCompile Include="Engine\Utils\CheckGLError.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Utils\Assert.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Screens\GameScreen.cpp">
       <Filter>Source Files\Screens</Filter>
     </ClCompile>
     <ClCompile Include="Voxel\VoxelWorld.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="Voxel\VoxelCache.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\stb_image.c">
@@ -355,13 +340,19 @@
     <ClCompile Include="Voxel\WorldRenderer.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\ChunkRenderer.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
     <ClCompile Include="Voxel\ChunkManager.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
     <ClCompile Include="Voxel\LuaChunkGenerator.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\VoxelChunk.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\BlockRenderProperties.cpp">
+      <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\VoxelRenderer.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
   </ItemGroup>

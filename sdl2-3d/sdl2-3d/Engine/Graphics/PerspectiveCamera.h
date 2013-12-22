@@ -3,6 +3,9 @@
 
 #include "Camera.h"
 
+/** 
+Camera for a 3d perspective projection
+*/
 class PerspectiveCamera : public Camera
 {
 public:

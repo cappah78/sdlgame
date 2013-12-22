@@ -5,17 +5,9 @@
 #include "..\HeightMap.h"
 #include "..\Camera.h"
 
-
-const int IN_POSITION_LOC = 0;	//vec3
-const int IN_TEXCOORD_LOC = 1;	//vec2
-const int IN_NORMAL_LOC = 2;	//vec3
-
 HeightMapRenderer::HeightMapRenderer(HeightMap& heightMap, float scale, float heightScale)
 	: m_scale(scale)
 	, m_heightScale(heightScale)
-	, m_PointLightPos(0, 10, 0)
-	, m_followCam(true)
-	, m_numPointLights(10)
 {
 	m_width = heightMap.getWidth();
 	m_height = heightMap.getHeight();
@@ -23,6 +15,8 @@ HeightMapRenderer::HeightMapRenderer(HeightMap& heightMap, float scale, float he
 
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
+
+	glGenBuffers(NUM_BUFFERS, &m_buffers[0]);
 
 	generateIndices();
 	generateVertices(heightMap);
@@ -59,8 +53,8 @@ void HeightMapRenderer::generateIndices()
 		}
 	}
 
-	glGenBuffers(1, &m_indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffers[INDICES]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_numIndices * sizeof(GLuint), m_indices, GL_STATIC_DRAW);
 }
 
@@ -97,14 +91,12 @@ void HeightMapRenderer::generateVertices(HeightMap& heightMap)
 		}
 	}
 
-	glGenBuffers(1, &m_positionBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[POSITION]);
 	glBufferData(GL_ARRAY_BUFFER, m_numVertices * sizeof(glm::vec3), m_positions, GL_STATIC_DRAW);
 	glVertexAttribPointer(IN_POSITION_LOC, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
 	
-	glGenBuffers(1, &m_texCoordBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_texCoordBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[TEXCOORD]);
 	glBufferData(GL_ARRAY_BUFFER, m_numVertices * sizeof(glm::vec2), m_texCoords, GL_STATIC_DRAW);
 	glVertexAttribPointer(IN_TEXCOORD_LOC, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
@@ -132,8 +124,8 @@ void HeightMapRenderer::generateNormals()
 		m_normals[i] = glm::normalize(m_normals[i]);
 	}
 		
-	glGenBuffers(1, &m_normalBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_normalBuffer);
+	glGenBuffers(1, &m_buffers[NORMAL]);
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[NORMAL]);
 	glBufferData(GL_ARRAY_BUFFER, m_numVertices * sizeof(glm::vec3), m_normals, GL_STATIC_DRAW);
 	glVertexAttribPointer(IN_NORMAL_LOC, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(2);
@@ -141,7 +133,6 @@ void HeightMapRenderer::generateNormals()
 
 void HeightMapRenderer::render()
 {
-	//glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_width * m_height * 6, GL_UNSIGNED_INT, 0);
 }
@@ -155,13 +146,12 @@ float HeightMapRenderer::getHeightAt(const glm::vec3& position)
 	float halfTerrainWidth = terrainWidth * 0.5f;
 	float halfTerrainHeight = terrainHeight * 0.5f;
 
-	glm::vec3 terrainPos = glm::vec3(position);
 	glm::vec3 offset(halfTerrainWidth, 0.0f, halfTerrainHeight);
-	glm::vec3 vertexIndices = ( terrainPos + offset ) * (1.0f / m_scale);
+	glm::vec3 vertexIndices = (position + offset) * (1.0f / m_scale);
 
-	int u0 = (int)floorf(vertexIndices.x);
+	int u0 = (int) floorf(vertexIndices.x);
     int u1 = u0 + 1;
-    int v0 = (int)floorf(vertexIndices.z);
+    int v0 = (int) floorf(vertexIndices.z);
     int v1 = v0 + 1;
 
 	if ( u0 >= 0 && u1 < (int) m_width && v0 >= 0 && v1 < (int) m_height )

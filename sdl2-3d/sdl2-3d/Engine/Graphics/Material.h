@@ -3,6 +3,11 @@
 
 #include "TextureRegion.h"
 
+/** 
+-WIP-
+
+Material properties for 3d objects.
+*/
 class Material
 {
 	friend class VoxelBatch;

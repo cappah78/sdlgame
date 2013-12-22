@@ -6,40 +6,25 @@
 #include "Pixmap.h"
 #include <gl\glew.h>
 
-Texture::Texture(const Pixmap& pixmap)
+Texture::Texture(const Pixmap& pixmap, bool generateMipMaps,
+	GLint minFilter, GLint magFilter,
+	GLint textureWrapS, GLint textureWrapT)
 	: m_width(pixmap.m_width)
 	, m_height(pixmap.m_height)
 	, m_numComponents(pixmap.m_numComponents)
 {
-	setupGLTexture(pixmap);
+	setupGLTexture(pixmap, generateMipMaps, minFilter, magFilter, textureWrapS, textureWrapT);
 }
 
-Texture::Texture(const Pixmap& pixmap, GLuint& textureID)
-	: m_width(pixmap.m_width)
-	, m_height(pixmap.m_height)
-	, m_numComponents(pixmap.m_numComponents)
-{
-	setupGLTexture(pixmap);
-	m_textureID = textureID;
-}
-
-Texture::Texture(const char* const fileName)
+Texture::Texture(const char* const fileName, bool generateMipMaps,
+	GLint minFilter, GLint magFilter,
+	GLint textureWrapS, GLint textureWrapT)
 {
 	Pixmap p(fileName);
 	m_width = p.m_width;
 	m_height = p.m_height;
 	m_numComponents = p.m_numComponents;
-	setupGLTexture(p);
-}
-
-Texture::Texture(const char* const fileName, GLuint& textureID)
-{
-	Pixmap p(fileName);
-	m_width = p.m_width;
-	m_height = p.m_height;
-	m_numComponents = p.m_numComponents;
-	setupGLTexture(p);
-	m_textureID = textureID;
+	setupGLTexture(p, generateMipMaps, minFilter, magFilter, textureWrapS, textureWrapT);
 }
 
 Texture::~Texture()
@@ -64,7 +49,8 @@ void Texture::bind(GLenum textureUnit) const
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
-void Texture::setupGLTexture(const Pixmap& pixmap)
+void Texture::setupGLTexture(const Pixmap& pixmap, bool generateMipMaps, GLint minFilter, GLint magFilter,
+	GLint textureWrapS, GLint textureWrapT)
 {
 	glGenTextures(1, &m_textureID);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
@@ -86,11 +72,12 @@ void Texture::setupGLTexture(const Pixmap& pixmap)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, pixmap.m_data);
  
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrapS);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrapT);
 
-	glGenerateMipmap(GL_TEXTURE_2D);
+	if (generateMipMaps)
+		glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

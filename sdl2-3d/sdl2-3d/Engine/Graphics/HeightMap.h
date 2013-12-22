@@ -3,6 +3,11 @@
 
 #include "..\Utils\PerlinGenerator.h"
 
+
+/** 
+Height map which has functions to generate itself using perlin noise.
+Can be rendered with HeightMapRenderer and a shader
+*/
 class HeightMap
 {
 public:

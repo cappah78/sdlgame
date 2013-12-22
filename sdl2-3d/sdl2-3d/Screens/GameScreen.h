@@ -9,11 +9,12 @@
 #include "..\Engine\Graphics\PerspectiveCamera.h"
 #include "..\Engine\Utils\FPSCameraController.h"
 
-#include "../Voxel/ChunkRenderer.h"
+#include "..\Voxel\VoxelRenderer.h"
 
 class VoxelCache;
 class TextureArray;
 
+/** Main screen containing executing the render and managing all entities */
 class GameScreen : public IScreen, public IKeyListener
 {
 public:
@@ -28,8 +29,8 @@ private:
 	FPSCameraController m_cameraController;
 	PerspectiveCamera m_camera;
 
-	ChunkRenderer m_chunkRenderer;
-	std::vector<ChunkRenderData*> m_chunkRenderData;
+	VoxelRenderer m_voxelRenderer;
+	std::vector<VoxelRenderer::Cache*> m_chunkRenderData;
 	TextureArray* m_tileSet;
 };
 

@@ -1,42 +1,38 @@
 #include "ChunkManager.h"
 
-template <typename ChunkGenerator>
-ChunkManager<ChunkGenerator>::ChunkManager(ChunkGenerator* generator)
-	: m_generator(generator)
-	, m_loadedChunks(IVec3Cmp())
+VoxelChunk* ChunkManager::getChunk(glm::ivec3& pos)
 {
-
-}
-
-template <typename ChunkGenerator>
-VoxelChunk* ChunkManager<ChunkGenerator>::getChunk(int x, int y, int z)
-{
-	auto it = m_loadedChunks.find(glm::ivec3(x, y, z));
+	auto it = m_loadedChunks.find(pos);
 	if (it != m_loadedChunks.end())
 	{
 		return it->second;
 	}
 	else
 	{
-		return loadChunk(x, y, z);
+		return loadChunk(pos);
 	}
 }
 
-template <typename ChunkGenerator>
-VoxelChunk* ChunkManager<ChunkGenerator>::loadChunk(int x, int y, int z)
+VoxelChunk* ChunkManager::loadChunk(glm::ivec3& pos)
 {
-	VoxelChunk* chunk = new VoxelChunk(x, y, z);
-	generateChunk(chunk);
+	if (pos == m_lastLoadedChunkPos)
+	{
+		return m_lastLoadedChunk;
+	}
+	else
+	{
+		m_lastLoadedChunkPos = pos;
+		VoxelChunk* chunk = new VoxelChunk(m_propertyManager, pos);
+		generateChunk(chunk);
 
-	m_loadedChunks.insert(std::make_pair(glm::ivec3(x, y, z), chunk));
-
-	return chunk;
+		m_loadedChunks.insert(std::make_pair(pos, chunk));
+		return chunk;
+	}
 }
 
-template <typename ChunkGenerator>
-void ChunkManager<ChunkGenerator>::unloadChunk(VoxelChunk* chunk)
+void ChunkManager::unloadChunk(VoxelChunk* chunk)
 {
-	auto it = m_loadedChunks.find(glm::ivec3(chunk->m_chunkX, chunk->m_chunkY, chunk->m_chunkZ));
+	auto it = m_loadedChunks.find(chunk->m_pos);
 	if (it != m_loadedChunks.end())
 		m_loadedChunks.erase(it);
 

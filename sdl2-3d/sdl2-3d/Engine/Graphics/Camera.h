@@ -3,6 +3,9 @@
 
 #include <glm\glm.hpp>
 
+/** 
+Based camera class, updates the projection-view matrix for rendering.
+*/
 class Camera
 {
 public:

@@ -8,11 +8,23 @@ struct aiMesh;
 struct aiScene;
 class Texture;
 
-typedef unsigned int GLuint;
-
+/** 
+-WIP-
+Renderable mesh
+*/
 class Mesh
 {
 public:
+	typedef unsigned int GLuint;
+
+	static const unsigned int POSITION_LOCATION = 0;
+	static const unsigned int TEX_COORD_LOCATION = 1;
+	static const unsigned int NORMAL_LOCATION = 2;
+	static const unsigned int WORLD_MAT_LOCATION_R1 = 3;
+	static const unsigned int WORLD_MAT_LOCATION_R2 = 4;
+	static const unsigned int WORLD_MAT_LOCATION_R3 = 5;
+	static const unsigned int WORLD_MAT_LOCATION_R4 = 6;
+
     Mesh();
 	Mesh(const std::string& fileName);
     ~Mesh();
@@ -39,6 +51,8 @@ private:
 	};
 
 	struct MeshEntry {
+		static const unsigned int INVALID_MATERIAL = 0xFFFFFFFF;
+
 		MeshEntry()
 		: numIndices(0)
 		, baseVertex(0)
@@ -52,10 +66,9 @@ private:
 		unsigned int materialIndex;
 	};
 
-	enum BufferIndex { INDEX_BUFFER = 0, POS_VB = 1, NORMAL_VB = 2, TEXCOORD_VB = 3, WVP_MAT_VB = 4, WORLD_MAT_VB = 5 };
-	static const unsigned int INVALID_MATERIAL = 0xFFFFFFFF;
 
     bool initFromScene(const aiScene* scene, const std::string& filename);
+	/** Create a mesh from the given vertex data*/
     void initMesh(const aiMesh* aiMesh,
                   std::vector<glm::vec3>& positions,
                   std::vector<glm::vec3>& normals,
@@ -66,13 +79,13 @@ private:
     void clear();
 
 
+	enum Buffers { INDICES, POSITION, NORMAL, TEXCOORD, WORLD_MAT, NUM_BUFFERS };
 
     GLuint m_vao;
-    GLuint m_buffers[6];
+	GLuint m_buffers[NUM_BUFFERS];
 
-    
-    
     std::vector<MeshEntry> m_entries;
+	//TODO: refactor into Material
     std::vector<Texture*> m_textures;
 };
 

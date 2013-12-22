@@ -10,8 +10,17 @@ typedef int GLint;
 class CubeMap;
 class Camera;
 
-class SkyBox {
+/** 
+Skybox renderer which renders a cube map texture(hardcoded) on a cube mesh.
+*/
+class SkyBox 
+{
 public:
+	/** 
+	- float radius : distance from center of cube(camera pos) to corners,
+	make sure this is within camera.far but not close enough that it cuts away
+	too much geometry
+	*/
 	SkyBox(float radius);
 	~SkyBox();
 	void render(const Camera& camera);

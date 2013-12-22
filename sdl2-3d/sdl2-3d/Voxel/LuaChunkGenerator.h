@@ -4,6 +4,7 @@
 class VoxelChunk;
 struct lua_State;
 
+/** Executes lua scripts to generate the world */
 class LuaChunkGenerator
 {
 public:

@@ -6,12 +6,22 @@ typedef unsigned int GLenum;
 
 #include <vector>
 #include <string>
+#include <gl\glew.h>
 
+/** Wrapper for OpenGL Texture Array */
 class TextureArray
 {
 public:
-	TextureArray(const std::vector<const char*>& imageNames, unsigned int textureWidth, unsigned int textureHeight);
-	TextureArray(const std::vector<const std::string*>& imageNames, unsigned int textureWidth, unsigned int textureHeight);
+	TextureArray(const std::vector<const char*>& imageNames, unsigned int textureWidth, unsigned int textureHeight, 
+		bool generateMipMaps = true,
+		GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_NEAREST,
+		GLint textureWrapS = GL_CLAMP_TO_EDGE, GLint textureWrapT = GL_CLAMP_TO_EDGE);
+
+	TextureArray(const std::vector<const std::string*>& imageNames, unsigned int textureWidth, unsigned int textureHeight,
+		bool generateMipMaps = true,
+		GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_NEAREST,
+		GLint textureWrapS = GL_CLAMP_TO_EDGE, GLint textureWrapT = GL_CLAMP_TO_EDGE);
+
 	TextureArray(const TextureArray& copyMe);
 	~TextureArray();
 

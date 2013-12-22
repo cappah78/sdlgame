@@ -23,7 +23,28 @@
 #ifndef CHECKGLERROR_H_
 #define CHECKGLERROR_H_
 
-#include "Assert.h"
+#ifdef _WIN32
+#ifdef _DEBUG
+
+void outputFailure(const char *file, const int line, const char *conditionString);
+
+#define DBG_BREAK() __debugbreak()
+#define ASSERT(_condition_) \
+if (!(_condition_)) \
+{ \
+	outputFailure(__FILE__, __LINE__, #_condition_); \
+	__debugbreak(); \
+}
+#else // _DEBUG
+#define DBG_BREAK()
+#define ASSERT(_condition_)
+#endif //_DEBUG
+
+#elif defined(__linux__)
+#        include <cassert>
+
+#        define DBG_BREAK() assert(0)
+#endif // !_WIN32 && !__linux__
 
 /**
 * This macro checks for gl errors using glGetError, it is useful to sprinkle it around the code base, especially
@@ -46,6 +67,5 @@
 * Internal function used by macro CHECK_GL_ERROR, use that instead.
 */
 bool checkGLError(const char *file, int line);
-
 
 #endif //CHECKGLERROR_H_

@@ -21,8 +21,7 @@ private:
 	float lerp(float t, float val0, float val1);
 	float smooth(float x);
 
-
-	Random m_random;
+	Random<float> m_random;
 	float m_gradients[GRADIENTS_TABLE_SIZE * 3];
 };
 

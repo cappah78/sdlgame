@@ -10,11 +10,15 @@ typedef unsigned short GLushort;
 struct TextureRegion;
 class Texture;
 
+/** 
+Renderer batching draw calls/vertex data to efficiently draw textures on the xy plane
+*/
 class SpriteBatch
 {
 public:
-	/** Batched rendering object used to efficiently draw textures in 2D
-		- int size: max amount of draw calls per begin/end */	//(using the same texture)
+	/** 
+	- int size: max amount of draw calls per begin/end 
+	*/
 	SpriteBatch(int size);
 	~SpriteBatch();
 

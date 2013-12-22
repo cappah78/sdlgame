@@ -1,40 +1,64 @@
 #ifndef VOXEL_CHUNK_H_
 #define VOXEL_CHUNK_H_
 
-#include "VoxelCache.h"
+#include <glm\glm.hpp>
 
-#include <vector>
+#include "VoxelBlock.h"
 
 /** Chunk size in one dimension */
 static const unsigned int CHUNK_SIZE = 16;
 static const unsigned int CHUNK_SIZE_SQUARED = CHUNK_SIZE * CHUNK_SIZE;
 static const unsigned int CHUNK_SIZE_CUBED = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
 
-typedef unsigned short BlockID;
+#include <stdio.h>
+#include <iostream>
 
-struct VoxelBlockData
-{
-	BlockID m_blockId;
-	unsigned int m_dataIndex;
-};
+static const float RESIZE_MULTIPLIER = 1.5f;
 
-struct VoxelChunk
+class PropertyManager;
+
+class VoxelChunk
 {
-	VoxelChunk(int x, int y, int z)
-		: m_chunkX(x), m_chunkY(y), m_chunkZ(z)
+public:
+	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
+		: m_pos(pos)
+		, m_propertyManager(propertyManager)
 	{};
 	VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
 
-	int m_chunkX;
-	int m_chunkY;
-	int m_chunkZ;
+	void setBlock(BlockID blockID, int x, int y, int z, void* dataPtr = NULL, unsigned int dataSize = 0);
+	BlockID getBlockID(int x, int y, int z);
 
-	//template <struct T>
-	//T* getData<T>(unsigned int dataIndex);
+	const glm::ivec3 m_pos;
+private:
 
-	VoxelBlockData m_blocks[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
-	std::vector<unsigned char> m_blockData;
+	class ChunkDataContainer
+	{
+	public:
+		BlockID m_blockIDs[CHUNK_SIZE_CUBED];
+		unsigned int m_blockDataPositions[CHUNK_SIZE_CUBED];
+
+		ChunkDataContainer(unsigned int initialSize = 0);
+		~ChunkDataContainer();
+		/** copy the data to the list, returning its start index */
+		unsigned int add(void* data, unsigned int size);
+		void* get(unsigned int position, unsigned int size);
+		/** invalidates all returned positions*/
+		void remove(unsigned int position, unsigned int size);
+		unsigned int getSize() { return m_size; };
+
+	private:
+		void* m_dataBegin;
+		unsigned int m_size;
+		unsigned int m_used;
+
+		void shiftPositionData(unsigned int position, unsigned int amount);
+		void resize(unsigned int newSize);
+	};
+
+	ChunkDataContainer m_data;
+	PropertyManager& m_propertyManager;
 };
 
 #endif //VOXEL_CHUNK_H_

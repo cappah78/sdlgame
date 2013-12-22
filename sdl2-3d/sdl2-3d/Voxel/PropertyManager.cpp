@@ -8,6 +8,8 @@
 #include <iostream>
 #include <stdio.h>
 
+#include <unordered_map>
+
 static const char* LUA_BLOCKS_NAMESPACE = "Blocks";
 static const std::string DEFAULT_BLOCK("defaultblock");
 
@@ -28,25 +30,50 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 	{
 		++m_lastRegisteredId;
 		m_blockNameIDMap.insert(std::make_pair(blockname, m_lastRegisteredId));
-		parseProperties(L, blockname, m_lastRegisteredId);
+
+		luabridge::LuaRef blocks = luabridge::getGlobal(L, LUA_BLOCKS_NAMESPACE);
+		luabridge::LuaRef block = blocks[blockname];
+
+		LuaTableData tableData = getTableData(L, block);
+
 		return m_lastRegisteredId;
 	}
 }
 
-void PropertyManager::parseProperties(lua_State* const L, const std::string& blockname, BlockID blockID)
-{
-	luabridge::LuaRef blocks = luabridge::getGlobal(L, LUA_BLOCKS_NAMESPACE);
-	luabridge::LuaRef block = blocks[blockname];
-	const char* typeCStr = block["type"];
-	std::string type(typeCStr);
 
-	// select block type and call right parse function
-	if (type == DEFAULT_BLOCK)
-		parseDefault(block, blockname, blockID);
-	else
-		assert(false);
+LuaTableData PropertyManager::getTableData(lua_State* const L, luabridge::LuaRef ref)
+{
+	LuaTableData properties(ref);
+
+	ref.push(L);
+	luabridge::push(L, luabridge::Nil());
+	while (lua_next(L, -2))
+	{
+		luabridge::LuaRef& key = luabridge::LuaRef::fromStack(L, -2);
+		luabridge::LuaRef& val = luabridge::LuaRef::fromStack(L, -1);
+		properties.data.push_back(std::make_pair(key, val));
+		lua_pop(L, 1);
+	}
+
+	for (auto pair : properties.data) {
+		std::cout << (pair.first) << ":" << (pair.second) << std::endl;
+	}
+
+	return properties;
 }
 
+void PropertyManager::parseBlock(LuaTableData data)
+{
+	luabridge::LuaRef type = data.ref["type"];
+	std::string typeStr = type.tostring();
+	
+	if (typeStr == DEFAULT_BLOCK) {
+		BlockRenderProperties::DefaultRenderProperties defaultRenderProperties(data);
+	}
+
+	assert(false && "Unrecognized block type");
+}
+/*
 void PropertyManager::parseDefault(luabridge::LuaRef block, const std::string& blockname, BlockID blockID)
 {
 	block["id"] = blockID;	//set the id field
@@ -93,4 +120,9 @@ void PropertyManager::parseDefault(luabridge::LuaRef block, const std::string& b
 		isTransparent, isSolid, blockStrength);
 
 	m_defaultBlockProperties.insert(std::make_pair(blockID, properties));
+}
+*/
+BlockDataSize PropertyManager::getBlockDataSize(BlockID blockID)
+{
+	return 0;
 }

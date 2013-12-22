@@ -14,12 +14,6 @@
 #define SAFE_DELETE(p) if (p) { delete p; p = NULL; }
 #define GLCheckError() (glGetError() == GL_NO_ERROR)
 
-static const unsigned int POSITION_LOCATION = 0;
-static const unsigned int TEX_COORD_LOCATION = 1;
-static const unsigned int NORMAL_LOCATION = 2;
-static const unsigned int WVP_LOCATION = 3;
-static const unsigned int WORLD_LOCATION = 7;
-
 static const aiVector3D ZERO_VEC(0.0f, 0.0f, 0.0f);
 
 Mesh::Mesh() : m_vao(0)
@@ -118,44 +112,34 @@ bool Mesh::initFromScene(const aiScene* scene, const std::string& filename)
     }
 
     if (!initMaterials(scene, filename)) 
-	{
         return false;
-    }
 
     // Generate and populate the buffers with vertex attributes and the indices
-  	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[POS_VB]);
+  	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[POSITION]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), &positions[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(POSITION_LOCATION);
     glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);    
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[TEXCOORD_VB]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[TEXCOORD]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords[0]) * texCoords.size(), &texCoords[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(TEX_COORD_LOCATION);
     glVertexAttribPointer(TEX_COORD_LOCATION, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-   	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[NORMAL_VB]);
+   	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[NORMAL]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normals[0]) * normals.size(), &normals[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(NORMAL_LOCATION);
     glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffers[INDEX_BUFFER]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffers[INDICES]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[WVP_MAT_VB]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[WORLD_MAT]);
     
+	//put every row of the matrix in a seperate vec4 attribute
     for (unsigned int i = 0; i < 4 ; i++) {
-        glEnableVertexAttribArray(WVP_LOCATION + i);
-        glVertexAttribPointer(WVP_LOCATION + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
-        glVertexAttribDivisor(WVP_LOCATION + i, 1);
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[WORLD_MAT_VB]);
-
-    for (unsigned int i = 0; i < 4 ; i++) 
-	{
-        glEnableVertexAttribArray(WORLD_LOCATION + i);
-        glVertexAttribPointer(WORLD_LOCATION + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
-        glVertexAttribDivisor(WORLD_LOCATION + i, 1);
+        glEnableVertexAttribArray(WORLD_MAT_LOCATION_R1 + i);
+		glVertexAttribPointer(WORLD_MAT_LOCATION_R1 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*) (sizeof(GLfloat) * 4 * i));
+		glVertexAttribDivisor(WORLD_MAT_LOCATION_R1 + i, 1);
     }
     
     return GLCheckError();
@@ -217,9 +201,10 @@ bool Mesh::initMaterials(const aiScene* scene, const std::string& filename)
         if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
             aiString Path;
 
-            if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) 
+            if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path) == AI_SUCCESS) 
 			{
 				std::string p(Path.data);
+				printf(p.c_str());
                 
                 if (p.substr(0, 2) == ".\\")                   
                     p = p.substr(2, p.size() - 2);
@@ -271,13 +256,11 @@ void Mesh::render()
 
 void Mesh::render(unsigned int numInstances, const glm::mat4* wvpMats, const glm::mat4* worldMats)
 {        
-    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[WVP_MAT_VB]);
+    glBindVertexArray(m_vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[WORLD_MAT]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * numInstances, wvpMats, GL_DYNAMIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[WORLD_MAT_VB]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * numInstances, worldMats, GL_DYNAMIC_DRAW);
-
-    glBindVertexArray(m_vao);
     
     for (unsigned int i = 0; i < m_entries.size(); ++i) 
 	{

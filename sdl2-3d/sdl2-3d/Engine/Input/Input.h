@@ -8,6 +8,10 @@ class Game;
 
 struct SDL_Keysym;
 
+/** 
+Manages input related data, listeners can register to this and 
+receive notifications of input.
+*/
 class Input
 {
 	friend class Game;

@@ -4,23 +4,24 @@
 #include <string>
 
 class VoxelWorld;
+struct LuaTableData;
 
 /** Basic unanimated block */
-class DefaultBlock
+class BlockRenderProperties
 {
 public:
-	struct DefaultBlockProperties	// 9 bytes;
+	struct DefaultRenderProperties	// 8 bytes;
 	{
-		DefaultBlockProperties(
+		DefaultRenderProperties(LuaTableData& data);
+
+		DefaultRenderProperties(
 		short topTex,
 		short bottomTex,
 		short leftTex,
 		short rightTex,
 		short frontTex,
 		short backTex,
-		bool transparant,
-		bool solid,
-		short strength)
+		bool transparant)
 		: topTexture(topTex)
 		, bottomTexture(bottomTex)
 		, leftTexture(leftTex)
@@ -28,8 +29,6 @@ public:
 		, frontTexture(frontTex)
 		, backTexture(backTex)
 		, isTranspant(transparant)
-		, isSolid(solid)
-		, strength(strength)
 		{};
 
 		unsigned topTexture : 10;
@@ -39,8 +38,6 @@ public:
 		unsigned frontTexture : 10;
 		unsigned backTexture : 10;
 		unsigned isTranspant : 1;
-		unsigned isSolid : 1;
-		unsigned strength : 10;
 	};
 private:
 

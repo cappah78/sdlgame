@@ -37,12 +37,9 @@
     <ClInclude Include="Engine\Graphics\TextureArray.h" />
     <ClInclude Include="Engine\Graphics\TextureRegion.h" />
     <ClInclude Include="Engine\Input\Input.h" />
-    <ClInclude Include="Engine\Model\ScreenManager.h" />
     <ClInclude Include="Engine\Model\IKeyListener.h" />
     <ClInclude Include="Engine\Model\IMouseListener.h" />
-    <ClInclude Include="Engine\Model\IntTypes.h" />
     <ClInclude Include="Engine\Model\IScreen.h" />
-    <ClInclude Include="Engine\Utils\Assert.h" />
     <ClInclude Include="Engine\Utils\CheckGLError.h" />
     <ClInclude Include="Engine\Utils\CheckLuaError.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
@@ -54,13 +51,13 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
-    <ClInclude Include="Voxel\ChunkRenderer.h" />
-    <ClInclude Include="Voxel\DefaultBlock.h" />
+    <ClInclude Include="Voxel\BlockRenderProperties.h" />
     <ClInclude Include="Voxel\LuaChunkGenerator.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
     <ClInclude Include="Voxel\TextureManager.h" />
     <ClInclude Include="Voxel\PropertyManager.h" />
-    <ClInclude Include="Voxel\VoxelCache.h" />
+    <ClInclude Include="Voxel\VoxelBlock.h" />
+    <ClInclude Include="Voxel\VoxelRenderer.h" />
     <ClInclude Include="Voxel\VoxelChunk.h" />
     <ClInclude Include="Voxel\VoxelWorld.h" />
     <ClInclude Include="Voxel\WorldRenderer.h" />
@@ -84,7 +81,6 @@
     <ClCompile Include="Engine\Graphics\Texture.cpp" />
     <ClCompile Include="Engine\Graphics\TextureArray.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
-    <ClCompile Include="Engine\Utils\Assert.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp" />
     <ClCompile Include="Engine\Utils\NumberUtils.cpp" />
@@ -94,12 +90,13 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
+    <ClCompile Include="Voxel\BlockRenderProperties.cpp" />
     <ClCompile Include="Voxel\ChunkManager.cpp" />
-    <ClCompile Include="Voxel\ChunkRenderer.cpp" />
     <ClCompile Include="Voxel\LuaChunkGenerator.cpp" />
     <ClCompile Include="Voxel\TextureManager.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
-    <ClCompile Include="Voxel\VoxelCache.cpp" />
+    <ClCompile Include="Voxel\VoxelRenderer.cpp" />
+    <ClCompile Include="Voxel\VoxelChunk.cpp" />
     <ClCompile Include="Voxel\VoxelWorld.cpp" />
     <ClCompile Include="Voxel\WorldRenderer.cpp" />
   </ItemGroup>

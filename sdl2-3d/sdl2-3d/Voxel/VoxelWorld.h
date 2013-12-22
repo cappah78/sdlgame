@@ -5,11 +5,13 @@
 #include "TextureManager.h"
 #include "PropertyManager.h"
 
+#include "LuaChunkGenerator.h"
+#include "ChunkManager.h"
+
 #include <vector>
-#include <map>
-#include <string>
-#include <lua.hpp>
-#include <LuaBridge.h>
+#include <glm\glm.hpp>
+
+struct lua_State;
 
 static const unsigned int CHUNK_LOAD_RANGE = 16;
 
@@ -20,7 +22,7 @@ public:
 	VoxelWorld(const VoxelWorld& copy) = delete;
 	~VoxelWorld();
 
-	void setBlock(BlockID blockID, int x, int y, int z);
+	void setBlock(BlockID blockID, glm::ivec3& pos);
 
 	const std::vector<const VoxelChunk>& getChunks() const;
 	TextureManager& getTextureManager();
@@ -31,10 +33,13 @@ protected:
 	static std::map<lua_State* const, VoxelWorld*> stateWorldMap;
 
 private:
-	std::vector<VoxelChunk> m_chunks;
 	lua_State* m_L;
+
 	TextureManager& m_textureManager;
 	PropertyManager m_propertyManager;
+
+	LuaChunkGenerator m_generator;
+	ChunkManager m_chunkManager;
 
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);

@@ -11,26 +11,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-const int SHADOW_MAP_SIZE = 1024;
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
-
-const int CAMERA_TRANSFORM_BINDING_POINT = 0;
-const int POINT_LIGHT_DATA_BINDING_POINT = 1;
-const int SPOT_LIGHT_DATA_BINDING_POINT = 2;
-const int DIRECTIONAL_LIGHT_DATA_BINDING_POINT = 3;
-
-const float LIGHT_NEAR = 1.0f;
-const float LIGHT_FAR = 1200.0f;
-
 ForwardShader::ForwardShader()
 {
 	CHECK_GL_ERROR();
 	m_forwardShaderProgram = ShaderManager::createShaderProgram("Shaders/forwardshader.vert", 0, "Shaders/forwardshader.frag");
-	m_shadowProgram = ShaderManager::createShaderProgram("Shaders/shadowmulti.vert", "Shaders/shadowmulti.geom", 0);
 	setupUniforms();
 	setupBuffers();
-	//setupShadowFramebuffer();
+	CHECK_GL_ERROR();
 }
 
 ForwardShader::~ForwardShader()
@@ -93,30 +80,7 @@ void ForwardShader::setupBuffers()
 	CHECK_GL_ERROR();
 }
 
-/*
-void ForwardShader::setupShadowFramebuffer()
-{
-	glGenTextures(1, &m_shadowArrayTex);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, m_shadowArrayTex);
-	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT16,
-		SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, MAX_LIGHTS,
-		0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-
-	// Create FBO to render depth into
-	glGenFramebuffers(1, &m_shadowFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFBO);
-	// Attach the depth texture to it
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_shadowArrayTex, 0);
-	// Disable color rendering as there are no color attachments
-	glDrawBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-*/
 
 void ForwardShader::use(const Camera& camera)
 {
@@ -191,7 +155,14 @@ void ForwardShader::updateLights(const Camera& camera, LightManager& lightManage
 	glUniform3f(m_ambientLightUniformLoc, ambient.r, ambient.g, ambient.b);
 }
 
-/*
+
+/* //shadow map stuffs, will reimplement properly later
+const int SHADOW_MAP_SIZE = 1024;
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 768;
+const float LIGHT_NEAR = 1.0f;
+const float LIGHT_FAR = 1200.0f;
+
 void ForwardShader::generateShadowMaps()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFBO);
@@ -209,5 +180,30 @@ void ForwardShader::finishShadowMaps()
 
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT);
+}
+*/
+
+/*
+void ForwardShader::setupShadowFramebuffer()
+{
+glGenTextures(1, &m_shadowArrayTex);
+glBindTexture(GL_TEXTURE_2D_ARRAY, m_shadowArrayTex);
+glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT16,
+SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, MAX_LIGHTS,
+0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+
+// Create FBO to render depth into
+glGenFramebuffers(1, &m_shadowFBO);
+glBindFramebuffer(GL_FRAMEBUFFER, m_shadowFBO);
+// Attach the depth texture to it
+glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_shadowArrayTex, 0);
+// Disable color rendering as there are no color attachments
+glDrawBuffer(GL_NONE);
+glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 */

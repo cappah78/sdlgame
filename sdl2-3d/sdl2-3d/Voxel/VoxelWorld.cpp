@@ -5,22 +5,29 @@
 #include "../Game.h"
 #include "../Engine/Utils/CheckLuaError.h"
 
+#include <lua.hpp>
+#include <LuaBridge.h>
+
+#include "../Engine/Graphics/Color8888.h"
+
 std::map<lua_State* const, VoxelWorld*> VoxelWorld::stateWorldMap;
 
 //TODO: remove constant
 static const unsigned int BLOCK_TEX_RES = 16;
 
+static const int SEED = 23;
+
 VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	: m_L(luaL_newstate())
+	, m_generator(m_L, SEED)
 	, m_textureManager(textureManager)
 	, m_propertyManager(textureManager)
+	, m_chunkManager(m_propertyManager, m_generator)
 {
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
 
 	Game::initLua(m_L);
 	initializeLuaWorld();
-	BlockID id = m_propertyManager.getBlockID("StoneBlock");
-	std::cout << id << std::endl;
 }
 
 void VoxelWorld::initializeLuaWorld()
@@ -43,6 +50,7 @@ void VoxelWorld::initializeLuaWorld()
 	}
 }
 
+
 int VoxelWorld::L_registerBlockType(lua_State* L)
 {
 	int numArgs = lua_gettop(L);
@@ -63,6 +71,17 @@ int VoxelWorld::L_registerBlockType(lua_State* L)
 
 	return 0;	// nothing returned
 }
+
+
+void VoxelWorld::setBlock(BlockID blockID, glm::ivec3& pos)
+{
+	glm::ivec3 chunkPos = pos / (int) CHUNK_SIZE;
+	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
+
+	glm::ivec3 blockPos = pos % (int) CHUNK_SIZE;
+	chunk->setBlock(blockID, blockPos.x, blockPos.y, blockPos.z);
+}
+
 
 VoxelWorld::~VoxelWorld()
 {
