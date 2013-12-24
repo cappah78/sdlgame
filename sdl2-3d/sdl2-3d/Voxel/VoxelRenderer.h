@@ -14,35 +14,6 @@
 
 class Camera;
 
-
-static const unsigned int POSITION_LOC = 0;
-static const unsigned int TEXCOORD_LOC = 1;
-static const unsigned int COLOR_LOC = 2;
-
-static const unsigned int MAX_FACES_PER_CACHE = 2048 * 6; // == CHUNK_SIZE_CUBED / 2;
-static_assert(CHUNK_SIZE == 16, "This class requires chunk size of 16 to function, change once fixed");
-
-static const unsigned int SIZE_BITS = 4; //2^sizebits == chunksize or sqrt(chunkSize)
-static const unsigned int TEXTURE_ID_BITS = 12;
-static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Face Point Data must be <= 32 bits");
-
-struct VoxelVertex
-{
-	VoxelVertex() : x(0), y(0), z(0), textureIdx(0) {};
-	VoxelVertex(unsigned int x, unsigned int y, unsigned int z, unsigned int textureIdx)
-		: x(x)
-		, y(y)
-		, z(z)
-		, textureIdx(textureIdx)
-	{};
-	unsigned x : SIZE_BITS;
-	unsigned y : SIZE_BITS;
-	unsigned z : SIZE_BITS;
-	unsigned textureIdx : TEXTURE_ID_BITS;
-	unsigned padding : 8;	// unused bits
-};
-
-
 /** 
 Efficiently renders textured/colored cubes minecraft style.
 Uses VoxelRenderer::Chunk objects to store, render and add faces.
@@ -60,9 +31,33 @@ voxelRenderer.endRender();
 class VoxelRenderer
 {
 private:
-	typedef unsigned int GLuint;
+	static const unsigned int POSITION_LOC = 0;
+	static const unsigned int TEXCOORD_LOC = 1;
+	static const unsigned int COLOR_LOC = 2;
 
+	static const unsigned int MAX_FACES_PER_CACHE = 2048 * 6; // == CHUNK_SIZE_CUBED / 2;
+	static_assert(CHUNK_SIZE == 16, "This class requires chunk size of 16 to function, change once fixed");
 
+	static const unsigned int SIZE_BITS = 4; //2^sizebits == chunksize or sqrt(chunkSize)
+	static const unsigned int TEXTURE_ID_BITS = 12;
+	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Face Point Data must be <= 32 bits");
+
+	/** block x/y/z/textureid packed into one integer */
+	struct VoxelVertex
+	{
+		VoxelVertex() : x(0), y(0), z(0), textureIdx(0) {};
+		VoxelVertex(unsigned int x, unsigned int y, unsigned int z, unsigned int textureIdx)
+			: x(x)
+			, y(y)
+			, z(z)
+			, textureIdx(textureIdx)
+		{};
+		unsigned x : SIZE_BITS;
+		unsigned y : SIZE_BITS;
+		unsigned z : SIZE_BITS;
+		unsigned textureIdx : TEXTURE_ID_BITS;
+		unsigned padding : 8;	// unused bits
+	};
 public:
 	enum Face
 	{

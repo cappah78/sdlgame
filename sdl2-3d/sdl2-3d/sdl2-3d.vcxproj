@@ -116,11 +116,11 @@
     <None Include="Assets\Shaders\skybox.vert" />
     <None Include="Assets\Shaders\spritebatch.frag" />
     <None Include="Assets\Shaders\spritebatch.vert" />
-    <None Include="Assets\Shaders\voxelshader.frag" />
-    <None Include="Assets\Shaders\voxelshader.geom" />
-    <None Include="Assets\Shaders\voxelshader.vert" />
     <None Include="Assets\Shaders\voxelshaderinstanced.frag" />
+    <None Include="Assets\Shaders\voxelshaderinstanced.geom" />
     <None Include="Assets\Shaders\voxelshaderinstanced.vert" />
+    <None Include="Assets\Shaders\voxelshader.frag" />
+    <None Include="Assets\Shaders\voxelshader.vert" />
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta" />
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_1.png.mcmeta" />
     <None Include="Assets\Textures\MinecraftBlocks\lava_flow.png.mcmeta" />

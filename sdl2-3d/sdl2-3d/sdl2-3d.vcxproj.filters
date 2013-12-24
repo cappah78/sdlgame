@@ -414,21 +414,6 @@
     <None Include="Assets\Shaders\spritebatch.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="Assets\Shaders\voxelshader.frag">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\voxelshader.geom">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\voxelshader.vert">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\voxelshaderinstanced.frag">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\voxelshaderinstanced.vert">
-      <Filter>Assets\Shaders</Filter>
-    </None>
     <None Include="Assets\Scripts\Init.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
@@ -440,6 +425,21 @@
     </None>
     <None Include="Assets\Scripts\WorldGen\GenTest.lua">
       <Filter>Assets\Scripts\WorldGen</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshader.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshader.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshaderinstanced.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshaderinstanced.geom">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshaderinstanced.vert">
+      <Filter>Assets\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

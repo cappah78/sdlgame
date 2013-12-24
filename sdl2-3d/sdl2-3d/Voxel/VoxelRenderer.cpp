@@ -7,6 +7,9 @@
 const char* MVP_UNIFORM_NAME = "u_mvp";
 const char* NORMAL_UNIFORM_NAME = "u_normal";
 
+const char* VERT_SHADER_PATH = "Assets/Shaders/voxelshader.vert";
+const char* FRAG_SHADER_PATH = "Assets/Shaders/voxelshader.frag";
+
 const unsigned int INDEX_MASK = 0x00000FFFu;
 const unsigned int TEXTURE_ID_MASK = 0x00FFF000u;
 
@@ -106,7 +109,7 @@ VoxelRenderer::VoxelRenderer()
 	m_pointData.resize(MAX_FACES_PER_CACHE * 4);
 	m_colorData.resize(MAX_FACES_PER_CACHE * 4);
 
-	m_shaderId = ShaderManager::createShaderProgram("Assets/Shaders/voxelshaderinstanced.vert", NULL, "Assets/Shaders/voxelshaderinstanced.frag");
+	m_shaderId = ShaderManager::createShaderProgram(VERT_SHADER_PATH, NULL, FRAG_SHADER_PATH);
 	
 	glBindVertexArray(0);
 	glUseProgram(m_shaderId);
@@ -144,7 +147,6 @@ void VoxelRenderer::beginRender(const TextureArray* tileSet)
 	glUseProgram(m_shaderId);
 }
 
-
 void VoxelRenderer::renderChunk(Chunk* const chunk, const Camera& camera)
 {
 	assert(m_begunRender);
@@ -177,10 +179,9 @@ VoxelRenderer::Chunk* const VoxelRenderer::createChunk(float xOffset, float yOff
 	glBindVertexArray(chunk->m_vao);
 
 	m_indiceBuffer.bind();
-	chunk->m_pointBuffer.setAttribPointer(0, GL_UNSIGNED_INT, 1, GL_FALSE, GL_TRUE);
+	chunk->m_pointBuffer.setAttribPointer(POSITION_LOC, GL_UNSIGNED_INT, 1, GL_FALSE, GL_TRUE);
 	chunk->m_colorBuffer.setAttribPointer(COLOR_LOC, GL_UNSIGNED_BYTE, 4, GL_TRUE);
 	m_texcoordBuffer.setAttribPointer(TEXCOORD_LOC, GL_FLOAT, 2);
-
 
 	return chunk;
 }
@@ -227,7 +228,6 @@ void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID
 	m_colorBuffer.add(color2);
 	m_colorBuffer.add(color3);
 	m_colorBuffer.add(color4);
-	//std::cout << (int) color1.r << ":" << (int) color1.g << ":" << (int) color1.b << ":" << (int) color1.a << std::endl;
 }
 
 void VoxelRenderer::endChunk(Chunk* const chunk)

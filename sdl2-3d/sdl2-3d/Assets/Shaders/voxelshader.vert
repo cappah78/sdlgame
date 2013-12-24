@@ -1,29 +1,42 @@
 #version 330 core
 
-const unsigned int SIZE_BITS = 4u; //2^sizebits == chunksize or sqrt(chunkSize)
-const unsigned int INDEX_BITS = 3u * SIZE_BITS;
+const unsigned int POSITION_BITS = 4u; // sqrt(CHUNK_SIZE), must be power of 2.
+const unsigned int POSITION_BITS_2 = POSITION_BITS * 2u;
+const unsigned int POSITION_BITS_3 = POSITION_BITS * 3u;
+const unsigned int POSITION_BITS_BITMASK_OFFSET = ((1u << POSITION_BITS) - 1u);
+
 const unsigned int TEXTURE_ID_BITS = 12u;
-const unsigned int OCCLUSION_BITS = 8u;
-
-const unsigned int INDEX_MASK = 0x00000FFFu;
+const unsigned int POSITION_BITS_MASK = 0x00000FFFu;
 const unsigned int TEXTURE_ID_MASK = 0x00FFF000u;
-const unsigned int OCCLUSION_MASK = 0xFF000000u;
+const unsigned int UNUSED_BITS_MASK = 0xFF000000u;
 
-layout(location = 0) in uint in_pointData;
+uniform mat4 u_mvp;
+uniform vec3 u_normal;
 
-out vec4 pos;
-out uint occlusionBits;
-out float texId;
+layout(location = 0) in uint in_point;
+layout(location = 1) in vec2 in_texCoord;
+layout(location = 2) in vec4 in_color;
+
+out vec3 texCoord;
+out vec4 color;
 
 void main(void)
 {
-	uint index = in_pointData & INDEX_MASK;
-	occlusionBits = in_pointData & OCCLUSION_MASK;
-	texId = float((in_pointData & TEXTURE_ID_MASK) >> INDEX_BITS);
+	// grab the position bits from the data
+	uint index = in_point & POSITION_BITS_MASK;
 
-	float z = float((index >> (SIZE_BITS + SIZE_BITS)));
-	float y = float((index >> SIZE_BITS) & ((1u << SIZE_BITS) - 1u));
-	float x = float(index & ((1u << SIZE_BITS) - 1u));
+	// extract the position using black magic
+	float z = float(index >> POSITION_BITS_2);
+	float y = float((index >> POSITION_BITS) & POSITION_BITS_BITMASK_OFFSET);
+	float x = float(index & POSITION_BITS_BITMASK_OFFSET);
 
-	pos = vec4(x, y, z, 1.0);
+	//extract textureId using black magic
+	float textureId = float((in_point & TEXTURE_ID_MASK) >> POSITION_BITS_3);
+
+	// offset the vertices by the position
+	gl_Position = u_mvp * vec4(x, y, z, 1.0);
+
+	// supply 3d texcoord to fragment shader
+	texCoord = vec3(in_texCoord, textureId);
+	color = in_color;
 }
