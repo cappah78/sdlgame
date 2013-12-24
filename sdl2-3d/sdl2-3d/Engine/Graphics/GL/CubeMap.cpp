@@ -3,7 +3,7 @@
 #include <gl\glew.h>
 #include <string>
 
-#include "Pixmap.h"
+#include "../Pixmap.h"
 
 CubeMap::CubeMap(const char** textureNames)
 {

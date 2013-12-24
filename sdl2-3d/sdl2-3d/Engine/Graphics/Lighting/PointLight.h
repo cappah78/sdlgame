@@ -1,6 +1,8 @@
 #ifndef POINT_LIGHT_H_
 #define POINT_LIGHT_H_
 
+//TODO: Rewrite lighting
+
 #include "Light.h"
 
 /* Equivalent to uniform buffer struct, includes padding */

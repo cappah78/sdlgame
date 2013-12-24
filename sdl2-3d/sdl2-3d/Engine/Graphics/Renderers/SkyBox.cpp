@@ -5,7 +5,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\transform.hpp>
 
-#include "..\CubeMap.h"
+#include "..\GL\CubeMap.h"
 #include "..\..\Utils\ShaderManager.h"
 #include "../Camera.h"
 
@@ -26,7 +26,7 @@ static const char* SKYBOX_FRAGMENT_SHADER_PATH = "Assets/Shaders/skybox.frag";
 
 SkyBox::SkyBox(float radius)
 	: m_mesh(SKYBOX_MODEL_PATH)
-	, m_translation(glm::mat4(1))
+	, m_transform(1)
 	, m_scale(glm::scale(radius * CORNER_RADIUS_MULTIPLIER, radius * CORNER_RADIUS_MULTIPLIER, radius * CORNER_RADIUS_MULTIPLIER))
 	, m_cubeMap(&SKYBOX_FACE_NAMES[0])
 {
@@ -42,11 +42,12 @@ SkyBox::~SkyBox()
 void SkyBox::render(const Camera& camera)
 {
 	glUseProgram(m_skyBoxShader);
-	m_translation[3][0] = camera.m_position.x; //to negate camera movement relative to skybox
-	m_translation[3][1] = camera.m_position.y;
-	m_translation[3][2] = camera.m_position.z;
+	// translate
+	m_transform[3][0] = camera.m_position.x; //to negate camera movement relative to skybox
+	m_transform[3][1] = camera.m_position.y;
+	m_transform[3][2] = camera.m_position.z;
 	
-	glm::mat4 mvp = camera.m_combinedMatrix * m_translation * m_scale;
+	glm::mat4 mvp = camera.m_combinedMatrix * m_transform * m_scale;
 
 	glUniformMatrix4fv(m_mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
@@ -54,4 +55,9 @@ void SkyBox::render(const Camera& camera)
 	m_mesh.render();
 
 	glUseProgram(0);
+}
+
+void SkyBox::setToRotation(float angle, const glm::vec3& axis)
+{
+	m_transform = glm::rotate(angle, axis);
 }

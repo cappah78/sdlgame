@@ -1,6 +1,8 @@
 #ifndef AMBIENT_LIGHT_H_
 #define AMBIENT_LIGHT_H_
 
+//TODO: Rewrite lighting
+
 #include "Light.h"
 
 class AmbientLight : public Light 

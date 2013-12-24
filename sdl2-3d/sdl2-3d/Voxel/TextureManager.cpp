@@ -1,6 +1,6 @@
 #include "TextureManager.h"
 
-#include "../Engine/Graphics/TextureArray.h"
+#include "../Engine/Graphics/GL/TextureArray.h"
 
 TextureID TextureManager::getTextureID(const std::string& texturename)
 {

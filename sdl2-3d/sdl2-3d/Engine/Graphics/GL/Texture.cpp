@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "Pixmap.h"
+#include "../Pixmap.h"
 #include <gl\glew.h>
 
 Texture::Texture(const Pixmap& pixmap, bool generateMipMaps,

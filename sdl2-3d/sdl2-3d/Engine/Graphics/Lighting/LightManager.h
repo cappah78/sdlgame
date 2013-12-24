@@ -1,6 +1,8 @@
 #ifndef LIGHT_MANAGER_H_
 #define LIGHT_MANAGER_H_
 
+//TODO: Rewrite lighting
+
 #include <vector>
 #include <glm/glm.hpp>
 

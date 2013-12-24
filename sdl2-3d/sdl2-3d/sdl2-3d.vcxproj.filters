@@ -66,9 +66,6 @@
     <Filter Include="Source Files\Engine\Graphics\Renderers">
       <UniqueIdentifier>{bb9864ae-0a7f-4d19-b45c-c6643eaa5ed0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\Graphics\Renderers\Shaders">
-      <UniqueIdentifier>{78d194e5-d03b-4034-ac3e-6ff0b33b95ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Models">
       <UniqueIdentifier>{27e1ad42-302a-4d18-aa65-d700b7a7773f}</UniqueIdentifier>
     </Filter>
@@ -93,36 +90,24 @@
     <Filter Include="Assets\Scripts\WorldGen">
       <UniqueIdentifier>{1778dc14-c244-425a-8650-6e1ed032d739}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Graphics\GL">
+      <UniqueIdentifier>{5b2fd093-bd5e-42d8-b786-4b6e7273ff9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Graphics\GL">
+      <UniqueIdentifier>{3298f005-bda8-426e-a8d7-4575d65643a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\CubeMap.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\HeightMap.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Material.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Mesh.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Pixmap.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Texture.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\TextureArray.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\TextureRegion.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Lighting\AmbientLight.h">
@@ -245,16 +230,28 @@
     <ClInclude Include="Voxel\VoxelRenderer.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\VertexBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\TextureArray.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\CubeMap.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\Material.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\Mesh.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\Texture.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\TextureArray.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\Texture.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Pixmap.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
@@ -262,16 +259,7 @@
     <ClCompile Include="Engine\Graphics\PerspectiveCamera.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\Mesh.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\Material.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\HeightMap.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\CubeMap.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Camera.cpp">
@@ -354,6 +342,21 @@
     </ClCompile>
     <ClCompile Include="Voxel\VoxelRenderer.cpp">
       <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\TextureArray.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\CubeMap.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\Material.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\Mesh.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\Texture.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

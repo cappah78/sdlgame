@@ -1,6 +1,8 @@
 #ifndef DIRECTIONAL_LIGHT_H_
 #define DIRECTIONAL_LIGHT_H_
 
+//TODO: Rewrite lighting
+
 #include "Light.h"
 
 struct DirectionalLightData

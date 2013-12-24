@@ -30,7 +30,7 @@ private:
 	PerspectiveCamera m_camera;
 
 	VoxelRenderer m_voxelRenderer;
-	std::vector<VoxelRenderer::Cache*> m_chunkRenderData;
+	std::vector<VoxelRenderer::Chunk*> m_chunkRenderData;
 	TextureArray* m_tileSet;
 };
 

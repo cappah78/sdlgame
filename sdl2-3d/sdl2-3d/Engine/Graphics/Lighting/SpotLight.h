@@ -1,6 +1,8 @@
 #ifndef SPOT_LIGHT_H_
 #define SPOT_LIGHT_H_
 
+//TODO: Rewrite lighting
+
 #include "Light.h"
 #include <glm\glm.hpp>
 

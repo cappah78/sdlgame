@@ -6,32 +6,55 @@
 
 #include <assert.h>
 
-#include "../Engine/Graphics/TextureArray.h"
+#include "../Engine/Graphics/GL/TextureArray.h"
 #include "../Engine/Graphics/Color8888.h"
+#include "../Engine/Graphics/GL/VertexBuffer.h"
 
 #include "VoxelChunk.h"
 
 class Camera;
 
-static const unsigned int MAX_FACES_PER_CACHE = 2048u; // == CHUNK_SIZE_CUBED / 2;
+
+static const unsigned int POSITION_LOC = 0;
+static const unsigned int TEXCOORD_LOC = 1;
+static const unsigned int COLOR_LOC = 2;
+
+static const unsigned int MAX_FACES_PER_CACHE = 2048 * 6; // == CHUNK_SIZE_CUBED / 2;
 static_assert(CHUNK_SIZE == 16, "This class requires chunk size of 16 to function, change once fixed");
 
 static const unsigned int SIZE_BITS = 4; //2^sizebits == chunksize or sqrt(chunkSize)
 static const unsigned int TEXTURE_ID_BITS = 12;
 static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Face Point Data must be <= 32 bits");
 
+struct VoxelVertex
+{
+	VoxelVertex() : x(0), y(0), z(0), textureIdx(0) {};
+	VoxelVertex(unsigned int x, unsigned int y, unsigned int z, unsigned int textureIdx)
+		: x(x)
+		, y(y)
+		, z(z)
+		, textureIdx(textureIdx)
+	{};
+	unsigned x : SIZE_BITS;
+	unsigned y : SIZE_BITS;
+	unsigned z : SIZE_BITS;
+	unsigned textureIdx : TEXTURE_ID_BITS;
+	unsigned padding : 8;	// unused bits
+};
+
+
 /** 
 Efficiently renders textured/colored cubes minecraft style.
-Uses VoxelRenderer::Cache objects to store, render and add faces.
+Uses VoxelRenderer::Chunk objects to store, render and add faces.
 
 General usage:
-VoxelRenderer::Cache* cache = voxelRenderer.createCache(xOffset, yOffset, zOffset);
-voxelRenderer.beginCache(cache);
+VoxelRenderer::Chunk* chunk = voxelRenderer.createChunk(xOffset, yOffset, zOffset);
+voxelRenderer.beginChunk(chunk);
 // for every visible face that fits within this cache (size is VoxelChunk::CHUNK_SIZE)
-cache->addFace(Face::TOP, x, y, z, textureIdx, color, color, color, color);
+chunk->addFace(Face::TOP, x, y, z, textureIdx, color, color, color, color);
 
 voxelRenderer.beginRender(textureArray);
-voxelRenderer.renderCache(cache, camera);
+voxelRenderer.renderChunk(chunk, camera);
 voxelRenderer.endRender();
 */
 class VoxelRenderer
@@ -39,41 +62,6 @@ class VoxelRenderer
 private:
 	typedef unsigned int GLuint;
 
-	struct FacePointData
-	{
-		FacePointData() {};
-		FacePointData(unsigned int x, unsigned int y, unsigned int z, unsigned int textureIdx)
-			: x(x)
-			, y(y)
-			, z(z)
-			, textureIdx(textureIdx)
-		{};
-		unsigned x : SIZE_BITS;
-		unsigned y : SIZE_BITS;
-		unsigned z : SIZE_BITS;
-		unsigned textureIdx : TEXTURE_ID_BITS;
-		unsigned padding : 32 - SIZE_BITS * 3 - TEXTURE_ID_BITS;	// unused bits
-	};
-
-	/** Is used internally to add faces and update vertex buffers */
-	struct PerFaceVertexData
-	{
-		/** position counter */
-		unsigned int m_pointIdx;
-		/** positions, one per face*/
-		FacePointData m_points[MAX_FACES_PER_CACHE];
-		/** color counter*/
-		unsigned int m_colorIdx;
-		/** colors, 4 per face */
-		Color8888 m_colorBits[MAX_FACES_PER_CACHE * 4];
-	};
-
-	struct PerFaceBufferData
-	{
-		GLuint m_vao, m_positionBuffer, m_colorBuffer;
-		// amount of faces to render
-		unsigned int m_numFaces;
-	};
 
 public:
 	enum Face
@@ -82,12 +70,12 @@ public:
 	};
 
 	/** Contains the vao/buffers and holds information to draw them, can add faces to this object */
-	class Cache
+	class Chunk
 	{
 		friend class VoxelRenderer;
 	public:
 		/** 
-		Add a cube face at the given position, must be in between VoxelRenderer::beginCache and VoxelRenderer::endCache 
+		Add a cube face at the given position, must be in between VoxelRenderer::beginChunk and VoxelRenderer::endChunk
 		- int x/y/z : position within this cache, must be within 0 to CHUNK_SIZE
 		- int textureIdx : texture index witin the TextureArray used for VoxelRenderer::beginRender
 		- Color8888 1-4 : color tint for the corners of this face
@@ -98,35 +86,41 @@ public:
 
 	private:
 		/** This object is managed by VoxelRenderer::createCache and VoxelRenderer::deleteCache */
-		Cache(float xOffset, float yOffset, float zOffset) 
-			: m_data(NULL) 
+		Chunk(float xOffset, float yOffset, float zOffset)
+			: m_colorBuffer(0)
+			, m_pointBuffer(0)
 			, m_xOffset(xOffset)
 			, m_yOffset(yOffset)
 			, m_zOffset(zOffset)
+			, m_numFaces(0)
+			, m_begun(false)
 		{};
-		~Cache() {};
+		~Chunk() {};
 
-		PerFaceBufferData m_faceBuffers[6];
-		// pointer to array of size 6
-		PerFaceVertexData* m_data;
+		bool m_begun;
+		GLuint m_vao;
+		unsigned int m_numFaces;
+
+		VertexBuffer<VoxelVertex> m_pointBuffer;
+		VertexBuffer<Color8888> m_colorBuffer;
 	};
 
 	VoxelRenderer();
 	VoxelRenderer(const VoxelRenderer& copyMe) = delete;
 	~VoxelRenderer();
 
-	Cache* const createCache(float xOffset = 0, float yOffset = 0, float zOffset = 0);
-	void deleteCache(Cache* const cache);
+	Chunk* const createChunk(float xOffset = 0, float yOffset = 0, float zOffset = 0);
+	void deleteChunk(Chunk* chunk);
 
-	/** Ready a cache to add faces */
-	void beginCache(VoxelRenderer::Cache* const cache);
-	/** Finish adding faces to a cache and upload the vertex data */
-	void endCache(VoxelRenderer::Cache* const cache);
+	/** Ready a chunk to add faces */
+	void beginChunk(Chunk* const chunk);
+	/** Finish adding faces to a chunk and upload the vertex data */
+	void endChunk(Chunk* const chunk);
 
 	/** Prepare the renderer for rendering using the given tileset */
 	void beginRender(const TextureArray* tileSet);
-	/** Draw the given cache with its offset, must be in between VoxelRenderer::beginRender and VoxelRenderer::endRender */
-	void renderCache(Cache* const cache, const Camera& camera);
+	/** Draw the given chunk with its offset, must be in between VoxelRenderer::beginRender and VoxelRenderer::endRender */
+	void renderChunk(Chunk* const chunk, const Camera& camera);
 	/** Finish rendering */
 	void endRender();
 
@@ -143,13 +137,13 @@ private:
 
 	GLuint m_mvpUniformLoc;
 	GLuint m_normalUniformLoc;
+	GLuint m_offsetUniformLoc;
 
-	/** One for each face of a cube */
-	GLuint m_faceVertexBuffer[6];
-	GLuint m_texCoordBuffer;
+	VertexBuffer<glm::vec2> m_texcoordBuffer;
+	VertexBuffer<unsigned short> m_indiceBuffer;
 
-	/** Shared by all caches to add faces before updating the buffers */
-	PerFaceVertexData m_data[6];
+	std::vector<Color8888> m_colorData;
+	std::vector<VoxelVertex> m_pointData;
 };
 
 #endif //VOXEL_RENDERER_H_

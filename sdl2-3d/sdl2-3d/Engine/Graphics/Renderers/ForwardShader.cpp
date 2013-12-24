@@ -80,8 +80,6 @@ void ForwardShader::setupBuffers()
 	CHECK_GL_ERROR();
 }
 
-
-
 void ForwardShader::use(const Camera& camera)
 {
 	m_cameraTransform.VPMatrix = camera.m_combinedMatrix;

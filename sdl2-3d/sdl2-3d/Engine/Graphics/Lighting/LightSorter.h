@@ -1,6 +1,8 @@
 #ifndef LIGHT_SORTER_H_
 #define LIGHT_SORTER_H_
 
+//TODO: Rewrite lighting
+
 class Camera;
 class PointLight;
 class SpotLight;

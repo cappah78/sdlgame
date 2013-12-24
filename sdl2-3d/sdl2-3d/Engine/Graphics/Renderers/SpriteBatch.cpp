@@ -3,8 +3,8 @@
 #include <assert.h>
 #include <gl\glew.h>
 
-#include "..\Texture.h"
-#include "..\TextureRegion.h"
+#include "..\GL\Texture.h"
+#include "..\GL\TextureRegion.h"
 #include "..\..\Utils\ShaderManager.h"
 
 #define FLOATS_PER_SPRITE 16

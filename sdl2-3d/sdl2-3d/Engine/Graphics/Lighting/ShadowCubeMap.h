@@ -1,6 +1,8 @@
 #ifndef SHADOW_CUBE_MAP_H_
 #define SHADOW_CUBE_MAP_H_
 
+//TODO: Rewrite lighting
+
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 

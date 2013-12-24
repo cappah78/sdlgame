@@ -13,7 +13,12 @@
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h" />
     <ClInclude Include="Engine\Graphics\Color8888.h" />
-    <ClInclude Include="Engine\Graphics\CubeMap.h" />
+    <ClInclude Include="Engine\Graphics\GL\CubeMap.h" />
+    <ClInclude Include="Engine\Graphics\GL\Material.h" />
+    <ClInclude Include="Engine\Graphics\GL\Mesh.h" />
+    <ClInclude Include="Engine\Graphics\GL\Texture.h" />
+    <ClInclude Include="Engine\Graphics\GL\TextureArray.h" />
+    <ClInclude Include="Engine\Graphics\GL\VertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\HeightMap.h" />
     <ClInclude Include="Engine\Graphics\Lighting\AmbientLight.h" />
@@ -24,8 +29,6 @@
     <ClInclude Include="Engine\Graphics\Lighting\PointLight.h" />
     <ClInclude Include="Engine\Graphics\Lighting\ShadowCubeMap.h" />
     <ClInclude Include="Engine\Graphics\Lighting\SpotLight.h" />
-    <ClInclude Include="Engine\Graphics\Material.h" />
-    <ClInclude Include="Engine\Graphics\Mesh.h" />
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h" />
     <ClInclude Include="Engine\Graphics\Pixmap.h" />
     <ClInclude Include="Engine\Graphics\Renderers\ForwardShader.h" />
@@ -33,9 +36,6 @@
     <ClInclude Include="Engine\Graphics\Renderers\SkyBox.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SpriteBatch.h" />
     <ClInclude Include="Engine\Graphics\Renderers\UniformBufferStructs.h" />
-    <ClInclude Include="Engine\Graphics\Texture.h" />
-    <ClInclude Include="Engine\Graphics\TextureArray.h" />
-    <ClInclude Include="Engine\Graphics\TextureRegion.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Model\IKeyListener.h" />
     <ClInclude Include="Engine\Model\IMouseListener.h" />
@@ -64,22 +64,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Graphics\Camera.cpp" />
-    <ClCompile Include="Engine\Graphics\CubeMap.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\CubeMap.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\Material.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\Mesh.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\Texture.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\TextureArray.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />
     <ClCompile Include="Engine\Graphics\HeightMap.cpp" />
     <ClCompile Include="Engine\Graphics\Lighting\LightManager.cpp" />
     <ClCompile Include="Engine\Graphics\Lighting\LightSorter.cpp" />
     <ClCompile Include="Engine\Graphics\Lighting\ShadowCubeMap.cpp" />
-    <ClCompile Include="Engine\Graphics\Material.cpp" />
-    <ClCompile Include="Engine\Graphics\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\PerspectiveCamera.cpp" />
     <ClCompile Include="Engine\Graphics\Pixmap.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\ForwardShader.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SkyBox.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SpriteBatch.cpp" />
-    <ClCompile Include="Engine\Graphics\Texture.cpp" />
-    <ClCompile Include="Engine\Graphics\TextureArray.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp" />

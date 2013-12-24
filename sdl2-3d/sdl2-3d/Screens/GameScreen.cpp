@@ -8,13 +8,12 @@
 #include <vector>
 
 #include "../Voxel/VoxelRenderer.h"
-#include "../Engine/Graphics/Texture.h"
-#include "../Engine/Graphics/TextureRegion.h"
-#include "../Engine/Graphics/Material.h"
-#include "../Engine/Graphics/TextureArray.h"
+#include "../Engine/Graphics/GL/Texture.h"
+#include "../Engine/Graphics/GL/TextureRegion.h"
+#include "../Engine/Graphics/GL/Material.h"
+#include "../Engine/Graphics/GL/TextureArray.h"
 
 #include "../Voxel/VoxelWorld.h"
-
 
 #include "../Game.h"
 #include "../Engine/Graphics/Color8888.h"
@@ -24,6 +23,10 @@ static const float CAMERA_NEAR = 0.5f;
 static const float CAMERA_FAR = 300.0f;
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 0, 0);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(1, 0, 0);
+
+static const int NUM_CHUNKS_X = 25;
+static const int NUM_CHUNKS_Y = 1;
+static const int NUM_CHUNKS_Z = 25;
 
 GameScreen::GameScreen()
 	: m_camera(CAMERA_SPAWN_POS,
@@ -62,24 +65,40 @@ GameScreen::GameScreen()
 	images.push_back("Assets/Textures/MinecraftBlocks/sand.png");
 	m_tileSet = new TextureArray(images, 16, 16);
 
-	Color8888 color(0, 0, 0, 255);
+	//Color8888 color(26, 79, 57, 255);
 
-	for (int i = 0; i < 15; ++i) {
-		for (int j = 0; j < 1; ++j) {
-			for (int k = 0; k < 15; ++k) {
-				for (int face = 0; face < 6; ++face)	//iterate over the 6 different faces
+
+	for (int i = 0; i < NUM_CHUNKS_X; ++i) 
+	{
+		for (int j = 0; j < NUM_CHUNKS_Y; ++j)
+		{
+			for (int k = 0; k < NUM_CHUNKS_Z; ++k) 
+			{
+				VoxelRenderer::Chunk* chunk = m_voxelRenderer.createChunk(i * (float) CHUNK_SIZE, j * (float) CHUNK_SIZE, k * (float) CHUNK_SIZE);
+
+				m_voxelRenderer.beginChunk(chunk);
+
+				for (int x = 0; x < CHUNK_SIZE; x += 2) 
 				{
-					VoxelRenderer::Cache* cache = m_voxelRenderer.createCache(i * 16.0f, j * 16.0f, k * 16.0f);
+					for (int y = 0; y < CHUNK_SIZE; y += 2)
+					{
+						for (int z = 0; z < CHUNK_SIZE; z += 2)
+						{
+							for (int face = 0; face < 6; ++face)	//iterate over the 6 different faces
+							{
+								// random-ish color
+								int tot = i * 2 + j * 3+ k * 4 + x * 5 + y * 6 + z * 7;
+								Color8888 col = Color8888(tot * 44, tot * 55, tot * 66, tot * 10);
 
-					m_voxelRenderer.beginCache(cache);
-					for (int x = 0; x < 16; x += 2)
-					for (int y = 0; y < 16; y += 2)
-					for (int z = 0; z < 16; z += 2)
-						cache->addFace((VoxelRenderer::Face) face, x, y, z, (x + y + z + i + j + k) % images.size(), color, color, color, color);
-					m_voxelRenderer.endCache(cache);
-
-					m_chunkRenderData.push_back(cache);
+								int textureId = (x + y + z + i + j + k) % images.size();
+								chunk->addFace((VoxelRenderer::Face) face, x, y, z, textureId, col, col, col, col);
+							}
+						}
+					}
 				}
+
+				m_voxelRenderer.endChunk(chunk);
+				m_chunkRenderData.push_back(chunk);
 			}
 		}
 	}
@@ -94,10 +113,10 @@ void GameScreen::render(float deltaSec)
 	m_camera.update();
 
 	m_voxelRenderer.beginRender(m_tileSet);
-	for (VoxelRenderer::Cache* cache : m_chunkRenderData)
-		m_voxelRenderer.renderCache(cache, m_camera);
+	for (VoxelRenderer::Chunk* chunk : m_chunkRenderData)
+		m_voxelRenderer.renderChunk(chunk, m_camera);
 	m_voxelRenderer.endRender();
-
+	
 	m_skyBox.render(m_camera);
 
 	Game::graphics.swap();
@@ -105,8 +124,8 @@ void GameScreen::render(float deltaSec)
 
 GameScreen::~GameScreen() 
 {
-	for (VoxelRenderer::Cache* cache : m_chunkRenderData)
-		m_voxelRenderer.deleteCache(cache);
+	for (VoxelRenderer::Chunk* chunk : m_chunkRenderData)
+		m_voxelRenderer.deleteChunk(chunk);
 }
 
 void GameScreen::resize(int width, int height) 

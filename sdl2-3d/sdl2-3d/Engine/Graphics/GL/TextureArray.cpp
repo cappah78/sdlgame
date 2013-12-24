@@ -1,6 +1,6 @@
 #include "TextureArray.h"
 
-#include "Pixmap.h"
+#include "../Pixmap.h"
 #include <assert.h>
 #include <string>
 

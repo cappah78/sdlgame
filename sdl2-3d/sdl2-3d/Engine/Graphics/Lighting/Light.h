@@ -1,6 +1,8 @@
 #ifndef LIGHT_H_
 #define LIGHT_H_
 
+//TODO: Rewrite lighting
+
 #include <glm/glm.hpp>
 
 class Light 
