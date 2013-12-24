@@ -10,17 +10,7 @@ const char* NORMAL_UNIFORM_NAME = "u_normal";
 const char* VERT_SHADER_PATH = "Assets/Shaders/voxelshader.vert";
 const char* FRAG_SHADER_PATH = "Assets/Shaders/voxelshader.frag";
 
-const unsigned int INDEX_MASK = 0x00000FFFu;
-const unsigned int TEXTURE_ID_MASK = 0x00FFF000u;
-
-static const GLfloat g_texCoordData[] = {
-	1.0, 0.0,
-	0.0, 0.0,
-	1.0, 1.0,
-	0.0, 1.0
-};
 // face, corner, vertices
-
 static const int g_faceVertexOffsetsInt[6][4][3] = {
 	{ //top
 		{ 1, 1, 0 },
@@ -57,45 +47,6 @@ static const int g_faceVertexOffsetsInt[6][4][3] = {
 		{ 0, 1, 0 },
 		{ 0, 0, 1 },
 		{ 0, 0, 0 }
-	}
-};
-
-static const GLfloat g_faceVertexData [6][4][3] = {
-	{	//top
-		{ 1.0f, 1.0f, 0.0f },
-		{ 0.0f, 1.0f, 0.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 0.0f, 1.0f, 1.0f }
-	},
-	{	//bottom
-		{ 1.0f, 0.0f, 1.0f },
-		{ 0.0f, 0.0f, 1.0f },
-		{ 1.0f, 0.0f, 0.0f },
-		{ 0.0f, 0.0f, 0.0f } 
-	},
-	{	//left
-		{ 0.0f, 1.0f, 0.0f },
-		{ 1.0f, 1.0f, 0.0f },
-		{ 0.0f, 0.0f, 0.0f },
-		{ 1.0f, 0.0f, 0.0f }
-	},
-	{	//right
-		{ 1.0f, 1.0f, 1.0f },
-		{ 0.0f, 1.0f, 1.0f },
-		{ 1.0f, 0.0f, 1.0f },
-		{ 0.0f, 0.0f, 1.0f }
-	},
-	{	//front
-		{ 1.0f, 1.0f, 0.0f },
-		{ 1.0f, 1.0f, 1.0f },
-		{ 1.0f, 0.0f, 0.0f },
-		{ 1.0f, 0.0f, 1.0f }
-	},
-	{	//back
-		{ 0.0f, 1.0f, 1.0f },
-		{ 0.0f, 1.0f, 0.0f },
-		{ 0.0f, 0.0f, 1.0f },
-		{ 0.0f, 0.0f, 0.0f }
 	}
 };
 
