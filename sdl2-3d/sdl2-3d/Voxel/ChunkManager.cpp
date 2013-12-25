@@ -1,6 +1,6 @@
 #include "ChunkManager.h"
 
-VoxelChunk* ChunkManager::getChunk(glm::ivec3& pos)
+VoxelChunk* const ChunkManager::getChunk(glm::ivec3& pos)
 {
 	auto it = m_loadedChunks.find(pos);
 	if (it != m_loadedChunks.end())
@@ -15,19 +15,13 @@ VoxelChunk* ChunkManager::getChunk(glm::ivec3& pos)
 
 VoxelChunk* ChunkManager::loadChunk(glm::ivec3& pos)
 {
-	if (pos == m_lastLoadedChunkPos)
-	{
-		return m_lastLoadedChunk;
-	}
-	else
-	{
-		m_lastLoadedChunkPos = pos;
-		VoxelChunk* chunk = new VoxelChunk(m_propertyManager, pos);
-		generateChunk(chunk);
+	printf("loadchunk: %i, %i, %i \n", pos.x, pos.y, pos.z);
+	VoxelChunk* chunk = new VoxelChunk(m_propertyManager, pos);
 
-		m_loadedChunks.insert(std::make_pair(pos, chunk));
-		return chunk;
-	}
+	m_loadedChunks.insert(std::make_pair(pos, chunk));
+	//generateChunk(chunk);
+
+	return chunk;
 }
 
 void ChunkManager::unloadChunk(VoxelChunk* chunk)

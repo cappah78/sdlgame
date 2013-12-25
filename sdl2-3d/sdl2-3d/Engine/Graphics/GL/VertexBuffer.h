@@ -35,16 +35,20 @@ public:
 	VertexBuffer(const VertexBuffer& copy) = delete;
 	
 	/** Set and enable glVertexAttrib(I)Pointer with the given properties, binds the buffer */
-	void setAttribPointer(GLuint attributeIdx, GLenum type, unsigned int valuesPerVertex, GLboolean normalized = false, GLboolean isIntegerType = false)
+	void setAttribPointer(GLuint attributeIdx, GLenum type, unsigned int valuesPerVertex, GLboolean normalized = false, GLboolean isIntegerType = false, GLuint stride = 0, GLuint offsetBytes = 0)
 	{
 		glBindBuffer(m_bufferType, m_id);
 		if (isIntegerType)
-			glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, 0, 0);
+			glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, (const GLvoid*) offsetBytes);
 		else
-			glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, 0, 0);
-
+			glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, stride, (const GLvoid*) offsetBytes);
 		glEnableVertexAttribArray(attributeIdx);
 	};
+
+	inline void bindBufferBase(GLuint blockIndex , GLenum target = GL_UNIFORM_BUFFER)
+	{
+		glBindBufferBase(target, blockIndex, m_id);
+	}
 
 	inline void bind()
 	{

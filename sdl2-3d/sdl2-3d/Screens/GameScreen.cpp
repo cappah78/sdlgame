@@ -1,32 +1,25 @@
 ﻿#include "GameScreen.h"
 
 #include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtx\transform.hpp>
 #include <iostream>
 #include <stdio.h>
 #include <vector>
 
 #include "../Voxel/VoxelRenderer.h"
-#include "../Engine/Graphics/GL/Texture.h"
-#include "../Engine/Graphics/GL/TextureRegion.h"
-#include "../Engine/Graphics/GL/Material.h"
 #include "../Engine/Graphics/GL/TextureArray.h"
-
-#include "../Voxel/VoxelWorld.h"
 
 #include "../Game.h"
 #include "../Engine/Graphics/Color8888.h"
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
-static const float CAMERA_FAR = 300.0f;
-static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 0, 0);
-static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(1, 0, 0);
+static const float CAMERA_FAR = 500.0f;
+static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 0, -10);
+static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
-static const int NUM_CHUNKS_X = 25;
-static const int NUM_CHUNKS_Y = 1;
-static const int NUM_CHUNKS_Z = 25;
+static const int NUM_CHUNKS_X = 11;
+static const int NUM_CHUNKS_Y = 11;
+static const int NUM_CHUNKS_Z = 11;
 
 GameScreen::GameScreen()
 	: m_camera(CAMERA_SPAWN_POS,
@@ -36,15 +29,15 @@ GameScreen::GameScreen()
 		CAMERA_VERTICAL_FOV, 
 		CAMERA_NEAR, 
 		CAMERA_FAR)
-	, m_cameraController(m_camera)
-	, m_skyBox(CAMERA_FAR)	// its a box, radius is from the middle to the center of a face, so to make sure edges are within far
+	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
+	, m_skyBox(CAMERA_FAR)
+	, m_textureManager(16, 16)
+	, m_world(m_textureManager)
 {
 	Game::input.registerKeyListener(&m_cameraController);
 	Game::input.registerMouseListener(&m_cameraController);
 	Game::input.registerKeyListener(this);
 
-	TextureManager textureManager(16, 16);
-	VoxelWorld world(textureManager);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -111,11 +104,13 @@ void GameScreen::render(float deltaSec)
 
 	m_cameraController.update(deltaSec);
 	m_camera.update();
-
+	
 	m_voxelRenderer.beginRender(m_tileSet);
 	for (VoxelRenderer::Chunk* chunk : m_chunkRenderData)
 		m_voxelRenderer.renderChunk(chunk, m_camera);
 	m_voxelRenderer.endRender();
+
+	//m_worldRenderer.render(m_world, m_camera);
 	
 	m_skyBox.render(m_camera);
 

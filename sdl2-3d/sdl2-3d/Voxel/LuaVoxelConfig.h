@@ -6,6 +6,8 @@ static const char* LUA_BLOCK_SCRIPT_DIR = "Assets\\Scripts\\Blocks\\";
 
 static const char* LUA_WORLD_NAMESPACE = "World";
 static const char* LUA_WORLD_REGISTER_FUNCTION = "registerBlockType";
+static const char* LUA_WORLD_SETBLOCK_FUNCTION = "setBlock";
+
 
 static const char* LUA_INIT_SCRIPT = "Assets\\Scripts\\Init.lua";
 static const char* LUA_INIT_NAMESPACE = "Init";

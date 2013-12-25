@@ -2,6 +2,7 @@
 #define SPRITEBATCH_H_
 
 #include <glm\glm.hpp>
+#include "../GL/VertexBuffer.h"
 
 typedef int GLint;
 typedef unsigned int GLuint;
@@ -11,7 +12,7 @@ struct TextureRegion;
 class Texture;
 
 /** 
-Renderer batching draw calls/vertex data to efficiently draw textures on the xy plane
+Renderer batching draw calls/vertex data to efficiently draw textures on the xy plane, in the (0, 0, -1) direction
 */
 class SpriteBatch
 {
@@ -53,22 +54,18 @@ private:
 
 	GLuint m_shader;
 	GLuint m_vao;
-	GLuint m_vertexBuffer;
-	GLuint m_indexBuffer;
+
+	VertexBuffer<float> m_verticeBuffer;
+	VertexBuffer<unsigned short> m_indiceBuffer;
 
 	GLint m_mvpLoc; // model view projection matrix uniform
 
 	bool m_drawing;	//wether the batch is drawing or not
 
-	float* m_vertices;	//vertex buffer array
-	GLushort* m_indices;	//index buffer array
-
 	int m_size;	// max amount of draw calls
-	int m_bufferByteSize; //size of vertex buffer in bytes
 	int m_drawCalls;	// amount of draw calls used since begin()
 
 	GLuint m_lastTexture;	//texture used by last draw call.
-	int m_idx;	//last unused vertex index
 	bool m_blendEnabled;
 };
 

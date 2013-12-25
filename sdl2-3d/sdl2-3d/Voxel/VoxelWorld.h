@@ -12,6 +12,7 @@
 #include <glm\glm.hpp>
 
 struct lua_State;
+class TextureArray;
 
 static const unsigned int CHUNK_LOAD_RANGE = 16;
 
@@ -24,17 +25,19 @@ public:
 
 	void setBlock(BlockID blockID, glm::ivec3& pos);
 
-	const std::vector<const VoxelChunk>& getChunks() const;
+	const ChunkManager::ChunkMap& getChunks() const;
 	TextureManager& getTextureManager();
-	const PropertyManager& getPropertyManager() const;
+	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 	lua_State* const L() const { return m_L; };
 
+	const TextureArray* const getTileSet() const { return m_textureArray; };
+
 protected:
-	static std::map<lua_State* const, VoxelWorld*> stateWorldMap;
+	static std::map<lua_State* const, VoxelWorld* const> stateWorldMap;
 
 private:
 	lua_State* m_L;
-
+	TextureArray* m_textureArray;
 	TextureManager& m_textureManager;
 	PropertyManager m_propertyManager;
 

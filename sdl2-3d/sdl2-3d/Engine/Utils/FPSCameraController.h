@@ -13,7 +13,7 @@ Mouse/key listener which moves the given camera like a first person game would.
 class FPSCameraController : public IMouseListener, public IKeyListener
 {
 public:
-	FPSCameraController(PerspectiveCamera& camera);
+	FPSCameraController(PerspectiveCamera& camera, const glm::vec3& startDir);
 	~FPSCameraController();
 
 	void update(float deltaSec);

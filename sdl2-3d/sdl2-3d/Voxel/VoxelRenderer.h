@@ -38,7 +38,7 @@ private:
 	static const unsigned int MAX_FACES_PER_CACHE = 2048 * 6; // == CHUNK_SIZE_CUBED / 2;
 	static_assert(CHUNK_SIZE == 16, "This class requires chunk size of 16 to function, change once fixed");
 
-	static const unsigned int SIZE_BITS = 4; //2^sizebits == chunksize or sqrt(chunkSize)
+	static const unsigned int SIZE_BITS = 5; //2^sizebits == chunksize or sqrt(chunkSize) + 1
 	static const unsigned int TEXTURE_ID_BITS = 12;
 	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Face Point Data must be <= 32 bits");
 
@@ -56,7 +56,7 @@ private:
 		unsigned y : SIZE_BITS;
 		unsigned z : SIZE_BITS;
 		unsigned textureIdx : TEXTURE_ID_BITS;
-		unsigned padding : 8;	// unused bits
+		unsigned padding : 5;	// unused bits
 	};
 public:
 	enum Face

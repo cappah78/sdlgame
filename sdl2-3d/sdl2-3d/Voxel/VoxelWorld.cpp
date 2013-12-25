@@ -10,7 +10,9 @@
 
 #include "../Engine/Graphics/Color8888.h"
 
-std::map<lua_State* const, VoxelWorld*> VoxelWorld::stateWorldMap;
+#include "../Engine/Graphics/GL/TextureArray.h"
+
+std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 
 //TODO: remove constant
 static const unsigned int BLOCK_TEX_RES = 16;
@@ -28,6 +30,10 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 
 	Game::initLua(m_L);
 	initializeLuaWorld();
+	m_textureArray = m_textureManager.generateTextureArray();
+
+	m_generator.generateMap();
+	m_chunkManager.getChunk(glm::ivec3(0, 0, 0));
 }
 
 void VoxelWorld::initializeLuaWorld()
@@ -35,6 +41,7 @@ void VoxelWorld::initializeLuaWorld()
 	luabridge::getGlobalNamespace(m_L)
 		.beginNamespace(LUA_WORLD_NAMESPACE)
 		.addCFunction(LUA_WORLD_REGISTER_FUNCTION, &L_registerBlockType)
+		.addCFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)
 		.endNamespace();
 
 	checkLuaError(m_L, luaL_dofile(m_L, LUA_INIT_SCRIPT));
@@ -72,16 +79,43 @@ int VoxelWorld::L_registerBlockType(lua_State* L)
 	return 0;	// nothing returned
 }
 
+int VoxelWorld::L_setBlock(lua_State* L)
+{
+	int numArgs = lua_gettop(L);
+	assert(numArgs == 4);
+
+	int blockID = lua_tointeger(L, 1);
+
+	int x = lua_tointeger(L, -1);
+	int y = lua_tointeger(L, -2);
+	int z = lua_tointeger(L, -3);
+
+	//std::cout << "setblock: " << blockID << ":" << x << ":" << y << ":" << z << std::endl;
+	VoxelWorld* world = VoxelWorld::stateWorldMap.at(L);
+	world->setBlock(blockID, glm::ivec3(x, y, z));
+
+	return 0;
+}
 
 void VoxelWorld::setBlock(BlockID blockID, glm::ivec3& pos)
 {
-	glm::ivec3 chunkPos = pos / (int) CHUNK_SIZE;
+	int chunkX = (int) glm::floor((pos.x / (float) CHUNK_SIZE));
+	int chunkY = (int) glm::floor((pos.y / (float) CHUNK_SIZE));
+	int chunkZ = (int) glm::floor((pos.z / (float) CHUNK_SIZE));
+
+	glm::ivec3 chunkPos(chunkX, chunkY, chunkZ);	
+	//std::cout << "chunkPos: " << chunkPos.x << ":" << chunkPos.y << ":" << chunkPos.z << std::endl;
 	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
 
 	glm::ivec3 blockPos = pos % (int) CHUNK_SIZE;
+
 	chunk->setBlock(blockID, blockPos.x, blockPos.y, blockPos.z);
 }
 
+const ChunkManager::ChunkMap& VoxelWorld::getChunks() const
+{
+	return m_chunkManager.getLoadedChunkMap();
+}
 
 VoxelWorld::~VoxelWorld()
 {

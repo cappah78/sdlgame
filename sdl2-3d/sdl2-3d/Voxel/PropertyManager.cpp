@@ -28,18 +28,21 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 	}
 	else
 	{
+		//TODO: some sort of persistent block id manager thing.
 		++m_lastRegisteredId;
 		m_blockNameIDMap.insert(std::make_pair(blockname, m_lastRegisteredId));
 
 		luabridge::LuaRef blocks = luabridge::getGlobal(L, LUA_BLOCKS_NAMESPACE);
 		luabridge::LuaRef block = blocks[blockname];
+		block["id"] = m_lastRegisteredId;
 
 		LuaTableData tableData = getTableData(L, block);
+
+		parseBlock(tableData, m_lastRegisteredId);
 
 		return m_lastRegisteredId;
 	}
 }
-
 
 LuaTableData PropertyManager::getTableData(lua_State* const L, luabridge::LuaRef ref)
 {
@@ -62,66 +65,33 @@ LuaTableData PropertyManager::getTableData(lua_State* const L, luabridge::LuaRef
 	return properties;
 }
 
-void PropertyManager::parseBlock(LuaTableData data)
+void PropertyManager::parseBlock(LuaTableData data, BlockID blockID)
 {
 	luabridge::LuaRef type = data.ref["type"];
 	std::string typeStr = type.tostring();
-	
-	if (typeStr == DEFAULT_BLOCK) {
-		BlockRenderProperties::DefaultRenderProperties defaultRenderProperties(data);
+
+	if (typeStr.compare(DEFAULT_BLOCK)) {
+		DefaultBlockRenderProperties properties(data, m_textureManager);
+		m_defaultBlockProperties.insert(std::make_pair(blockID, properties));
+		if (m_renderTypes.size() < (unsigned int) blockID + 1)
+			m_renderTypes.resize((int) (blockID * 1.5f + 1));
+		m_renderTypes[blockID] = BlockRenderType::DEFAULT;
+		return;
 	}
 
 	assert(false && "Unrecognized block type");
 }
-/*
-void PropertyManager::parseDefault(luabridge::LuaRef block, const std::string& blockname, BlockID blockID)
+
+DefaultBlockRenderProperties PropertyManager::getDefaultRenderProperties(BlockID blockID) const
 {
-	block["id"] = blockID;	//set the id field
-
-	const luabridge::LuaRef& texture = block["texture"];	//grab the texture table
-	const char* topTexCStr = texture["top"];				//read the texture paths
-	const char* bottomTexCStr = texture["bottom"];
-	const char* leftTexCStr = texture["left"];
-	const char* rightTexCStr = texture["right"];
-	const char* frontTexCStr = texture["front"];
-	const char* backTexCStr = texture["back"];
-
-	bool isTransparent;
-	if (block["transparent"].isNil())
-		isTransparent = false;	//default transparency is false
-	else
-		isTransparent = block["transparent"];
-
-	bool isSolid;
-	if (block["solid"].isNil())
-		isSolid = false;	//default solidity is true
-	else
-		isSolid = block["solid"];
-
-	assert(!block["strength"].isNil() && "Block strength not declared");
-	assert(topTexCStr != NULL && "Top face texture not declared");
-	assert(bottomTexCStr != NULL && "Bottom face texture not declared");
-	assert(leftTexCStr != NULL && "Left face texture not declared");
-	assert(rightTexCStr != NULL && "Right face texture not declared");
-	assert(frontTexCStr != NULL && "Front face texture not declared");
-	assert(backTexCStr != NULL && "Back face texture not declared");
-
-	short blockStrength = block["strength"];
-
-	TextureID topID = m_textureManager.getTextureID(topTexCStr);
-	TextureID bottomID = m_textureManager.getTextureID(bottomTexCStr);
-	TextureID leftID = m_textureManager.getTextureID(leftTexCStr);
-	TextureID rightID = m_textureManager.getTextureID(rightTexCStr);
-	TextureID frontID = m_textureManager.getTextureID(frontTexCStr);
-	TextureID backID = m_textureManager.getTextureID(backTexCStr);
-
-	DefaultBlock::DefaultBlockProperties properties = DefaultBlock::DefaultBlockProperties(
-		topID, bottomID, leftID, rightID, frontID, backID, 
-		isTransparent, isSolid, blockStrength);
-
-	m_defaultBlockProperties.insert(std::make_pair(blockID, properties));
+	return m_defaultBlockProperties.at(blockID);
 }
-*/
+
+BlockRenderType PropertyManager::getRenderType(BlockID blockID) const
+{
+	return m_renderTypes.at(blockID);
+}
+
 BlockDataSize PropertyManager::getBlockDataSize(BlockID blockID)
 {
 	return 0;

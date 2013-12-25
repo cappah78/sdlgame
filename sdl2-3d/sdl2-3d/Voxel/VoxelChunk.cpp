@@ -3,10 +3,16 @@
 #include <assert.h>
 #include "PropertyManager.h"
 
+#include <iostream>
+#include <stdio.h>
+
 VoxelChunk::ChunkDataContainer::ChunkDataContainer(unsigned int initialSize)
 : m_size(initialSize)
 , m_used(0)
 {
+	m_blockIDs.resize(CHUNK_SIZE_CUBED);
+	m_blockDataPositions.resize(CHUNK_SIZE_CUBED);
+
 	m_dataBegin = malloc(initialSize);
 	assert(m_dataBegin && "Failed to allocate");
 }
@@ -80,26 +86,31 @@ void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, u
 	assert(y >= 0 && y < CHUNK_SIZE);
 	assert(z >= 0 && z < CHUNK_SIZE);
 
+	m_updated = false;
+
 	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
 	BlockID& id = m_data.m_blockIDs[idx];
 
+	//TODO: all the things
 	if (id != 0)//there was already a block here
 	{
 		//handle on block remove
 	}
 
-	unsigned int& dataPos = m_data.m_blockDataPositions[idx];
-	if (dataPos != 0)//There was already a block here with data
+	//unsigned int& dataPos = m_data.m_blockDataPositions[idx];
+//	if (dataPos != 0)//There was already a block here with data
 	{
 		//clean up old data
 		//get size of old data
 
 	}
 
-	if (dataSize != 0 && dataPtr != NULL)
+//	if (dataSize != 0 && dataPtr != NULL)
 	{
 
 	}
+
+	id = blockID;
 }
 
 BlockID VoxelChunk::getBlockID(int x, int y, int z)
@@ -109,6 +120,5 @@ BlockID VoxelChunk::getBlockID(int x, int y, int z)
 	assert(z >= 0 && z < CHUNK_SIZE);
 
 	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
-
 	return m_data.m_blockIDs[idx];
 }

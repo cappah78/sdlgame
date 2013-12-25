@@ -5,34 +5,30 @@
 #include "LuaChunkGenerator.h"
 
 #include <glm\glm.hpp>
-#include <map>
+#include <unordered_map>
 #include <assert.h>
 
-#include "PropertyManager.h"
+#include "../Engine/Utils/Comparables.h"
 
-/** Comparable so ivec3 can be used in maps*/
-struct IVec3Cmp
-{
-	bool operator()(const glm::ivec3& vec1, const glm::ivec3& vec2) const
-	{
-		return (vec1.x + vec1.y + vec1.z) > (vec2.x + vec2.y + vec2.z);
-	}
-};
+#include "PropertyManager.h"
 
 class ChunkManager
 {
 public:
+	typedef std::unordered_map<const glm::ivec3, VoxelChunk* const, IVec3Hash> ChunkMap;
+
 	ChunkManager(PropertyManager& propertyManager, LuaChunkGenerator& generator) 
 		: m_propertyManager(propertyManager)
 		, m_generator(generator)
-		, m_loadedChunks(IVec3Cmp()) 
+		, m_lastLoadedChunkPos(-99999999, -99999999, -9999999)
 	{};
 	ChunkManager(const ChunkManager& copy) = delete;
 	~ChunkManager() {};
 
-	VoxelChunk* getChunk(glm::ivec3& pos);
+	VoxelChunk* const getChunk(glm::ivec3& pos);
 	void unloadChunk(VoxelChunk* chunk);
 	VoxelChunk* loadChunk(glm::ivec3& pos);
+	const ChunkMap& getLoadedChunkMap() const { return m_loadedChunks; };
 
 private:
 
@@ -45,7 +41,7 @@ private:
 	glm::ivec3 m_lastLoadedChunkPos;
 	VoxelChunk* m_lastLoadedChunk;
 
-	std::map<glm::ivec3, VoxelChunk*, IVec3Cmp> m_loadedChunks;
+	ChunkMap m_loadedChunks;
 	LuaChunkGenerator& m_generator;
 	PropertyManager& m_propertyManager;
 };

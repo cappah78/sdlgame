@@ -42,6 +42,7 @@
     <ClInclude Include="Engine\Model\IScreen.h" />
     <ClInclude Include="Engine\Utils\CheckGLError.h" />
     <ClInclude Include="Engine\Utils\CheckLuaError.h" />
+    <ClInclude Include="Engine\Utils\Comparables.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
     <ClInclude Include="Engine\Utils\NumberUtils.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
@@ -51,7 +52,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
-    <ClInclude Include="Voxel\BlockRenderProperties.h" />
+    <ClInclude Include="Voxel\DefaultBlockRenderProperties.h" />
     <ClInclude Include="Voxel\LuaChunkGenerator.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
     <ClInclude Include="Voxel\TextureManager.h" />

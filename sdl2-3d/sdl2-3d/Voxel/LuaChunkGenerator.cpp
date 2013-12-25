@@ -1,6 +1,8 @@
 #include "LuaChunkGenerator.h"
 
-static const char* LUA_GEN_SCRIPT_PATH = "Assets/Scripts/WorldGen/";
+#include "../Engine/Utils/CheckLuaError.h"
+
+static const char* LUA_GEN_SCRIPT_PATH = "Assets/Scripts/WorldGen/GenTest.lua";
 
 #include <lua.hpp>
 #include <LuaBridge.h>
@@ -22,5 +24,10 @@ LuaChunkGenerator::~LuaChunkGenerator()
 
 void LuaChunkGenerator::generateChunk(VoxelChunk* const chunk)
 {
-	std::cout << "gananarantatg" << std::endl;
+	//luaL_dofile(m_L, LUA_GEN_SCRIPT_PATH);
+}
+
+void LuaChunkGenerator::generateMap()
+{
+	checkLuaError(m_L, luaL_dofile(m_L, LUA_GEN_SCRIPT_PATH));
 }

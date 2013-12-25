@@ -1,12 +1,12 @@
-#include "BlockRenderProperties.h"
+#include "DefaultBlockRenderProperties.h"
 
 #include "PropertyManager.h"
 #include "TextureManager.h"
 
-BlockRenderProperties::DefaultRenderProperties::DefaultRenderProperties(LuaTableData& data)
+DefaultBlockRenderProperties::DefaultBlockRenderProperties(LuaTableData& data, TextureManager& textureManager)
 {
-	/*
 	luabridge::LuaRef block = data.ref;
+	luabridge::LuaRef texture = block["texture"];
 	const char* topTexCStr = texture["top"];				//read the texture paths
 	const char* bottomTexCStr = texture["bottom"];
 	const char* leftTexCStr = texture["left"];
@@ -14,18 +14,8 @@ BlockRenderProperties::DefaultRenderProperties::DefaultRenderProperties(LuaTable
 	const char* frontTexCStr = texture["front"];
 	const char* backTexCStr = texture["back"];
 
-
-	bool isTransparent;
-	if (block["transparent"].isNil())
-		isTransparent = false;	//default transparency is false
-	else
-		isTransparent = block["transparent"];
-
-	bool isSolid;
-	if (block["solid"].isNil())
-		isSolid = false;	//default solidity is true
-	else
-		isSolid = block["solid"];
+	isTransparent = block["transparent"].isNil() ? block["transparent"] : false;
+	isAnimated = block["animated"].isNil() ? block["animated"] : false;
 
 	assert(!block["strength"].isNil() && "Block strength not declared");
 	assert(topTexCStr != NULL && "Top face texture not declared");
@@ -35,13 +25,10 @@ BlockRenderProperties::DefaultRenderProperties::DefaultRenderProperties(LuaTable
 	assert(frontTexCStr != NULL && "Front face texture not declared");
 	assert(backTexCStr != NULL && "Back face texture not declared");
 
-	short blockStrength = block["strength"];
-
-	TextureID topID = m_textureManager.getTextureID(topTexCStr);
-	TextureID bottomID = m_textureManager.getTextureID(bottomTexCStr);
-	TextureID leftID = m_textureManager.getTextureID(leftTexCStr);
-	TextureID rightID = m_textureManager.getTextureID(rightTexCStr);
-	TextureID frontID = m_textureManager.getTextureID(frontTexCStr);
-	TextureID backID = m_textureManager.getTextureID(backTexCStr);
-	*/
+	topTexture = textureManager.getTextureID(topTexCStr);
+	bottomTexture = textureManager.getTextureID(bottomTexCStr);
+	leftTexture = textureManager.getTextureID(leftTexCStr);
+	rightTexture = textureManager.getTextureID(rightTexCStr);
+	frontTexture = textureManager.getTextureID(frontTexCStr);
+	backTexture = textureManager.getTextureID(backTexCStr);
 }

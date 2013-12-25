@@ -13,6 +13,7 @@ public:
 	LuaChunkGenerator(const LuaChunkGenerator& copy) = delete;
 
 	void generateChunk(VoxelChunk* const chunk);
+	void generateMap();
 
 private:
 	lua_State* m_L;

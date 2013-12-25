@@ -10,8 +10,7 @@ static const unsigned int CHUNK_SIZE = 16;
 static const unsigned int CHUNK_SIZE_SQUARED = CHUNK_SIZE * CHUNK_SIZE;
 static const unsigned int CHUNK_SIZE_CUBED = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
 
-#include <stdio.h>
-#include <iostream>
+#include <vector>
 
 static const float RESIZE_MULTIPLIER = 1.5f;
 
@@ -23,12 +22,17 @@ public:
 	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 		: m_pos(pos)
 		, m_propertyManager(propertyManager)
+		, m_data(0)
+		, m_updated(false)
 	{};
 	VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
 
+	bool m_updated;
+
 	void setBlock(BlockID blockID, int x, int y, int z, void* dataPtr = NULL, unsigned int dataSize = 0);
 	BlockID getBlockID(int x, int y, int z);
+	BlockID* getBlocks() { return &m_data.m_blockIDs[0]; };
 
 	const glm::ivec3 m_pos;
 private:
@@ -36,8 +40,8 @@ private:
 	class ChunkDataContainer
 	{
 	public:
-		BlockID m_blockIDs[CHUNK_SIZE_CUBED];
-		unsigned int m_blockDataPositions[CHUNK_SIZE_CUBED];
+		std::vector<BlockID> m_blockIDs;
+		std::vector<unsigned int> m_blockDataPositions;
 
 		ChunkDataContainer(unsigned int initialSize = 0);
 		~ChunkDataContainer();

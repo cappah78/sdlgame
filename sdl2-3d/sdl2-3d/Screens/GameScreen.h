@@ -10,6 +10,9 @@
 #include "..\Engine\Utils\FPSCameraController.h"
 
 #include "..\Voxel\VoxelRenderer.h"
+#include "../Voxel/VoxelWorld.h"
+#include "../Voxel/WorldRenderer.h"
+
 
 class VoxelCache;
 class TextureArray;
@@ -28,6 +31,11 @@ private:
 	SkyBox m_skyBox;
 	FPSCameraController m_cameraController;
 	PerspectiveCamera m_camera;
+
+	TextureManager m_textureManager;
+	VoxelWorld m_world;
+	WorldRenderer m_worldRenderer;
+	
 
 	VoxelRenderer m_voxelRenderer;
 	std::vector<VoxelRenderer::Chunk*> m_chunkRenderData;

@@ -7,9 +7,8 @@ TextureID TextureManager::getTextureID(const std::string& texturename)
 	auto it = m_textureNameIDMap.find(texturename);
 	if (it == m_textureNameIDMap.end())
 	{	//not contained
-		++m_lastTextureID;
 		m_textureNameIDMap.insert(std::make_pair(texturename, m_lastTextureID));
-		return m_lastTextureID;
+		return m_lastTextureID++;
 	}
 	else
 	{
@@ -20,6 +19,7 @@ TextureID TextureManager::getTextureID(const std::string& texturename)
 TextureArray* TextureManager::generateTextureArray()
 {
 	std::vector<const std::string*> imageNames;
+
 	for (auto it = m_textureNameIDMap.begin(); it != m_textureNameIDMap.end(); ++it)
 		imageNames.push_back(&(it->first));
 

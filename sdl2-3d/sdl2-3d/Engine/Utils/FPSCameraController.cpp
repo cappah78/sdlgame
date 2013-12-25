@@ -11,9 +11,9 @@ static const float DIAGONAL_SPEED = sqrt(pow(CAMERA_SPEED, 2) + pow(CAMERA_SPEED
 
 static const glm::vec3 UP(0, 1, 0);
 
-FPSCameraController::FPSCameraController(PerspectiveCamera& camera)
+FPSCameraController::FPSCameraController(PerspectiveCamera& camera, const glm::vec3& startDir)
 	: m_camera(camera)
-	, m_lookDir(1, 0, 0)
+	, m_lookDir(startDir)
 	, m_lmbPressed(false)
 	, m_rmbPressed(false)
 	, m_isWPressed(false), m_isAPressed(false), m_isSPressed(false), m_isDPressed(false)

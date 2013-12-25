@@ -224,9 +224,6 @@
     <ClInclude Include="Voxel\VoxelBlock.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\BlockRenderProperties.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel\VoxelRenderer.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
@@ -247,6 +244,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\GL\Texture.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils\Comparables.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel\DefaultBlockRenderProperties.h">
+      <Filter>Header Files\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
