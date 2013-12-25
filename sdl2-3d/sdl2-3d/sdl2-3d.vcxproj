@@ -123,9 +123,6 @@
     <None Include="Assets\Shaders\skybox.vert" />
     <None Include="Assets\Shaders\spritebatch.frag" />
     <None Include="Assets\Shaders\spritebatch.vert" />
-    <None Include="Assets\Shaders\voxelshaderinstanced.frag" />
-    <None Include="Assets\Shaders\voxelshaderinstanced.geom" />
-    <None Include="Assets\Shaders\voxelshaderinstanced.vert" />
     <None Include="Assets\Shaders\voxelshader.frag" />
     <None Include="Assets\Shaders\voxelshader.vert" />
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta" />
@@ -508,7 +505,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;libpng16.lib;lua51.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;libpng16.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\SDL2-2.0.1\lib;$(ProjectDir)..\glew-1.10.0\lib\Release\Win32;$(ProjectDir)..\libpng;$(ProjectDir)..\assimp\lib;$(ProjectDir)..\LuaBridge\Release;%(AdditionalLibraryDirectories);$(ProjectDir)..\2.1</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

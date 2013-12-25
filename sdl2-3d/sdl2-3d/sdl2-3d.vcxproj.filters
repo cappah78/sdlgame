@@ -435,15 +435,6 @@
     <None Include="Assets\Shaders\voxelshader.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="Assets\Shaders\voxelshaderinstanced.frag">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\voxelshaderinstanced.geom">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\voxelshaderinstanced.vert">
-      <Filter>Assets\Shaders</Filter>
-    </None>
     <None Include="Assets\Scripts\Blocks\GravelBlock.lua">
       <Filter>Assets\Scripts\Blocks</Filter>
     </None>

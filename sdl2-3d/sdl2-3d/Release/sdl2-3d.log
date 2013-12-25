@@ -1,10 +1,47 @@
-﻿Build started 25/12/2013 23:09:35.
-     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
+﻿Build started 25/12/2013 23:21:08.
+     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Voxel\DefaultBlockRenderProperties.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\Camera.cpp Engine\Graphics\GL\CubeMap.cpp Engine\Graphics\GL\Material.cpp Engine\Graphics\GL\Mesh.cpp Engine\Graphics\GL\Texture.cpp Engine\Graphics\GL\TextureArray.cpp Engine\Graphics\Graphics.cpp Engine\Graphics\HeightMap.cpp Engine\Graphics\Lighting\LightManager.cpp Engine\Graphics\Lighting\LightSorter.cpp Engine\Graphics\Lighting\ShadowCubeMap.cpp Engine\Graphics\PerspectiveCamera.cpp Engine\Graphics\Pixmap.cpp Engine\Graphics\Renderers\ForwardShader.cpp Engine\Graphics\Renderers\HeightMapRenderer.cpp Engine\Graphics\Renderers\SkyBox.cpp Engine\Graphics\Renderers\SpriteBatch.cpp Engine\Input\Input.cpp Engine\Utils\CheckGLError.cpp Engine\Utils\FPSCameraController.cpp Engine\Utils\NumberUtils.cpp Engine\Utils\PerlinGenerator.cpp Engine\Utils\ShaderManager.cpp Game.cpp main.cpp Screens\GameScreen.cpp Voxel\DefaultBlockRenderProperties.cpp Voxel\ChunkManager.cpp Voxel\LuaChunkGenerator.cpp Voxel\TextureManager.cpp Voxel\PropertyManager.cpp Voxel\VoxelRenderer.cpp Voxel\VoxelChunk.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp
+         Camera.cpp
+         CubeMap.cpp
+         Material.cpp
+         Mesh.cpp
+         Texture.cpp
+         TextureArray.cpp
+         Graphics.cpp
+         HeightMap.cpp
+         LightManager.cpp
+         LightSorter.cpp
+         ShadowCubeMap.cpp
+         PerspectiveCamera.cpp
+         Pixmap.cpp
+         ForwardShader.cpp
+         HeightMapRenderer.cpp
+         SkyBox.cpp
+         SpriteBatch.cpp
+         Input.cpp
+         CheckGLError.cpp
+         FPSCameraController.cpp
+         Compiling...
+         NumberUtils.cpp
+         PerlinGenerator.cpp
+         ShaderManager.cpp
+         Game.cpp
+         main.cpp
+         GameScreen.cpp
          DefaultBlockRenderProperties.cpp
+         ChunkManager.cpp
+         LuaChunkGenerator.cpp
+         TextureManager.cpp
+         PropertyManager.cpp
+         VoxelRenderer.cpp
+         VoxelChunk.cpp
+         VoxelWorld.cpp
+         WorldRenderer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt Engine\Utils\stb_image.c
+         stb_image.c
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.1\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\LuaBridge\Release" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\2.1" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib lua51.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Camera.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.1\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\LuaBridge\Release" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\2.1" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib lua5.1.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Camera.obj
          Release\CubeMap.obj
          Release\Material.obj
          Release\Mesh.obj
@@ -43,8 +80,8 @@
          Generating code
          Finished generating code
          sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
-     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.52
+Time Elapsed 00:00:15.41
