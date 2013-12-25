@@ -91,7 +91,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
-    <ClCompile Include="Voxel\BlockRenderProperties.cpp" />
+    <ClCompile Include="Voxel\DefaultBlockRenderProperties.cpp" />
     <ClCompile Include="Voxel\ChunkManager.cpp" />
     <ClCompile Include="Voxel\LuaChunkGenerator.cpp" />
     <ClCompile Include="Voxel\TextureManager.cpp" />
@@ -102,7 +102,13 @@
     <ClCompile Include="Voxel\WorldRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Scripts\Blocks\CoalOreBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\CobbleStoneBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\DiamondOreBlock.lua" />
     <None Include="Assets\Scripts\Blocks\DirtBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\GoldOreBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\GravelBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\IronOreBlock.lua" />
     <None Include="Assets\Scripts\Blocks\StoneBlock.lua" />
     <None Include="Assets\Scripts\Init.lua" />
     <None Include="Assets\Scripts\WorldGen\GenTest.lua" />

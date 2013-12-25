@@ -2,14 +2,23 @@
 
 VoxelChunk* const ChunkManager::getChunk(glm::ivec3& pos)
 {
+	if (pos == m_lastReturnedChunkPos)
+		return m_lastReturnedChunk;
+
 	auto it = m_loadedChunks.find(pos);
 	if (it != m_loadedChunks.end())
 	{
-		return it->second;
+		VoxelChunk* chunk = it->second;
+		m_lastReturnedChunk = chunk;
+		m_lastReturnedChunkPos = pos;
+		return chunk;
 	}
 	else
 	{
-		return loadChunk(pos);
+		VoxelChunk* chunk = loadChunk(pos);
+		m_lastReturnedChunk = chunk;
+		m_lastReturnedChunkPos = pos;
+		return chunk;
 	}
 }
 

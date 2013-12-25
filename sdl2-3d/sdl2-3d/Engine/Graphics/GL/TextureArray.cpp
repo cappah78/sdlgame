@@ -23,8 +23,8 @@ TextureArray::TextureArray(const std::vector<const char*>& imageNames,
 	for (const char* imageName : imageNames)
 	{
 		Pixmap p(imageName);
-		assert(p.m_width == textureWidth);
-		assert(p.m_height == textureHeight);
+		assert(p.m_width == textureWidth && "Image width does not match with the width of this array");
+		assert(p.m_height == textureHeight && "Image height does not match with the height of this array");
 		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, textureWidth, textureHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE, p.m_data);
 		++i;
 	}

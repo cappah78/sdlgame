@@ -5,30 +5,16 @@
 #include "../Engine/Graphics/GL/TextureArray.h"
 #include "../Engine/Graphics/Color8888.h"
 #include "PropertyManager.h"
-#include <iostream>
-#include <stdio.h>
-
 
 WorldRenderer::WorldRenderer()
 {
-	std::vector<const char*> images;
-	images.push_back("Assets/Textures/MinecraftBlocks/stone.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/dirt.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/cobblestone.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/brick.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/diamond_block.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/planks_oak.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/obsidian.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/netherrack.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/gravel.png");
-	images.push_back("Assets/Textures/MinecraftBlocks/sand.png");
-	m_tileSet = new TextureArray(images, 16, 16);
+
 	
 }
 
 WorldRenderer::~WorldRenderer()
 {
-	delete m_tileSet;
+
 }
 
 void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
@@ -39,7 +25,6 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 	int chunkX = (int) glm::floor(camPos.x / (float) CHUNK_SIZE);
 	int chunkY = (int) glm::floor(camPos.y / (float) CHUNK_SIZE);
 	int chunkZ = (int) glm::floor(camPos.z / (float) CHUNK_SIZE);
-	//glm::ivec3 chunkPos(chunkX, chunkY, chunkZ);
 	
 	for (auto it = chunks.begin(); it != chunks.end(); ++it)
 	{
@@ -51,8 +36,6 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 		chunk->m_updated = true;
 		VoxelRenderer::Chunk* renderChunk = getRenderChunk(chunkPos);
 		m_renderer.beginChunk(renderChunk);
-		printf("pos: %f, %f, %f : %i, %i, %i \n", camPos.x, camPos.y, camPos.z, chunkPos.x, chunkPos.y, chunkPos.z);
-
 
 		BlockID* blocks = chunk->getBlocks();
 		for (int x = 0; x < CHUNK_SIZE; ++x)
@@ -66,23 +49,39 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 					if (id == 0)
 						continue;
 
-					BlockRenderType type = world.getPropertyManager().getRenderType(id);
+					const PropertyManager& propertyManager = world.getPropertyManager();
+					BlockRenderType type = propertyManager.getRenderType(id);
 					Color8888 color(0, 0, 0, 255);
 
 					switch (type)
 					{
 					case DEFAULT:
 					{
-							DefaultBlockRenderProperties properties = world.getPropertyManager().getDefaultRenderProperties(id);
-							//TODO: face culling
-							renderChunk->addFace(VoxelRenderer::TOP, x, y, z, (TextureID) properties.topTexture, color, color, color, color);
-							renderChunk->addFace(VoxelRenderer::BOTTOM, x, y, z, (TextureID)  properties.bottomTexture, color, color, color, color);
-							renderChunk->addFace(VoxelRenderer::LEFT, x, y, z, (TextureID)  properties.leftTexture, color, color, color, color);
-							renderChunk->addFace(VoxelRenderer::RIGHT, x, y, z, (TextureID) properties.rightTexture, color, color, color, color);
-							renderChunk->addFace(VoxelRenderer::FRONT, x, y, z, (TextureID) properties.frontTexture, color, color, color, color);
-							renderChunk->addFace(VoxelRenderer::BACK, x, y, z, (TextureID) properties.backTexture, color, color, color, color);
-					}
+							DefaultBlockRenderProperties properties = propertyManager.getDefaultRenderProperties(id);
+							int worldX = chunkPos.x * CHUNK_SIZE + x;
+							int worldY = chunkPos.y * CHUNK_SIZE + y;
+							int worldZ = chunkPos.z * CHUNK_SIZE + z;
 
+							BlockID above = world.getBlockID(glm::ivec3(worldX, worldY + 1, worldZ));
+							BlockID below = world.getBlockID(glm::ivec3(worldX, worldY - 1, worldZ));
+							BlockID front = world.getBlockID(glm::ivec3(worldX + 1, worldY, worldZ));
+							BlockID back = world.getBlockID(glm::ivec3(worldX - 1, worldY, worldZ));
+							BlockID left = world.getBlockID(glm::ivec3(worldX, worldY, worldZ - 1));
+							BlockID right = world.getBlockID(glm::ivec3(worldX, worldY, worldZ + 1));
+
+							if (above == 0 || propertyManager.getDefaultRenderProperties(above).isTransparent)
+								renderChunk->addFace(VoxelRenderer::TOP, x, y, z, properties.topTexture, color, color, color, color);
+							if (below == 0 || propertyManager.getDefaultRenderProperties(below).isTransparent)
+								renderChunk->addFace(VoxelRenderer::BOTTOM, x, y, z, properties.bottomTexture, color, color, color, color);
+							if (left == 0 || propertyManager.getDefaultRenderProperties(left).isTransparent)
+								renderChunk->addFace(VoxelRenderer::LEFT, x, y, z, properties.leftTexture, color, color, color, color);
+							if (right == 0 || propertyManager.getDefaultRenderProperties(right).isTransparent)
+								renderChunk->addFace(VoxelRenderer::RIGHT, x, y, z, properties.rightTexture, color, color, color, color);
+							if (front == 0 || propertyManager.getDefaultRenderProperties(front).isTransparent)
+								renderChunk->addFace(VoxelRenderer::FRONT, x, y, z, properties.frontTexture, color, color, color, color);
+							if (back == 0 || propertyManager.getDefaultRenderProperties(back).isTransparent)
+								renderChunk->addFace(VoxelRenderer::BACK, x, y, z, properties.backTexture, color, color, color, color);
+					}
 						break;
 					case MESH:
 						break;
@@ -113,7 +112,7 @@ VoxelRenderer::Chunk* WorldRenderer::getRenderChunk(const glm::ivec3& pos)
 		return it->second;
 	else
 	{
-		printf("createchunk: %i, %i, %i \n", pos.x, pos.y, pos.z);
+		//printf("createchunk: %i, %i, %i \n", pos.x, pos.y, pos.z);
 		VoxelRenderer::Chunk* chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE);
 		m_renderChunks.insert(std::make_pair(pos, chunk));
 		return chunk;

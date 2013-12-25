@@ -340,9 +340,6 @@
     <ClCompile Include="Voxel\VoxelChunk.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\BlockRenderProperties.cpp">
-      <Filter>Source Files\Voxel</Filter>
-    </ClCompile>
     <ClCompile Include="Voxel\VoxelRenderer.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
@@ -360,6 +357,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\Texture.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Voxel\DefaultBlockRenderProperties.cpp">
+      <Filter>Source Files\Voxel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,6 +443,24 @@
     </None>
     <None Include="Assets\Shaders\voxelshaderinstanced.vert">
       <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\GravelBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\CobbleStoneBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\CoalOreBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\IronOreBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\GoldOreBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\DiamondOreBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,4 @@ Blocks.StoneBlock = {
 		left = "Assets\\Textures\\MinecraftBlocks\\stone.png",
 		right = "Assets\\Textures\\MinecraftBlocks\\stone.png"
 	},
-	toolType = { "pickaxe" },
-	strength = 20
 }

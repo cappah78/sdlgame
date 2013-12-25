@@ -17,9 +17,9 @@ static const float CAMERA_FAR = 500.0f;
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 0, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
-static const int NUM_CHUNKS_X = 11;
-static const int NUM_CHUNKS_Y = 11;
-static const int NUM_CHUNKS_Z = 11;
+static const int NUM_CHUNKS_X = 10;
+static const int NUM_CHUNKS_Y = 10;
+static const int NUM_CHUNKS_Z = 10;
 
 GameScreen::GameScreen()
 	: m_camera(CAMERA_SPAWN_POS,
@@ -45,6 +45,7 @@ GameScreen::GameScreen()
 	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTexLayers);
 	std::cout << "Max texture layers: " << maxTexLayers << std::endl;
 
+#ifdef BLOCK_TEST
 	std::vector<const char*> images;
 	images.push_back("Assets/Textures/MinecraftBlocks/stone.png");
 	images.push_back("Assets/Textures/MinecraftBlocks/dirt.png");
@@ -95,6 +96,7 @@ GameScreen::GameScreen()
 			}
 		}
 	}
+#endif //BLOCK_TEST
 }
 
 void GameScreen::render(float deltaSec)
@@ -104,13 +106,15 @@ void GameScreen::render(float deltaSec)
 
 	m_cameraController.update(deltaSec);
 	m_camera.update();
-	
+
+#ifdef BLOCK_TEST
 	m_voxelRenderer.beginRender(m_tileSet);
 	for (VoxelRenderer::Chunk* chunk : m_chunkRenderData)
 		m_voxelRenderer.renderChunk(chunk, m_camera);
 	m_voxelRenderer.endRender();
+#endif //BLOCK_TEST
 
-	//m_worldRenderer.render(m_world, m_camera);
+	m_worldRenderer.render(m_world, m_camera);
 	
 	m_skyBox.render(m_camera);
 

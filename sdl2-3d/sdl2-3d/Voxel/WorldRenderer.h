@@ -23,16 +23,13 @@ public:
 
 	void render(const VoxelWorld& world, const Camera& camera);
 
-
 private:
 
 	void renderDefault(const VoxelWorld& world, const Camera& camera, BlockID blockID, int x, int y, int z);
 
 	VoxelRenderer::Chunk* getRenderChunk(const glm::ivec3& pos);
-
 	RenderChunkMap m_renderChunks;
 	VoxelRenderer m_renderer;
-	TextureArray* m_tileSet;
 };
 
 #endif //WORLD_RENDERER_H_

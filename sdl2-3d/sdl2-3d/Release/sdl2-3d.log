@@ -1,27 +1,26 @@
-﻿Build started 23/12/2013 01:58:45.
+﻿Build started 25/12/2013 23:09:35.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Voxel\VoxelRenderer.cpp
-         VoxelRenderer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Voxel\DefaultBlockRenderProperties.cpp
+         DefaultBlockRenderProperties.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.1\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\LuaBridge\Release" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\2.1" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib lua51.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Camera.obj
          Release\CubeMap.obj
-         Release\VertexBuffer.obj
+         Release\Material.obj
+         Release\Mesh.obj
+         Release\Texture.obj
+         Release\TextureArray.obj
          Release\Graphics.obj
          Release\HeightMap.obj
          Release\LightManager.obj
          Release\LightSorter.obj
          Release\ShadowCubeMap.obj
-         Release\Material.obj
-         Release\Mesh.obj
          Release\PerspectiveCamera.obj
          Release\Pixmap.obj
          Release\ForwardShader.obj
          Release\HeightMapRenderer.obj
          Release\SkyBox.obj
          Release\SpriteBatch.obj
-         Release\Texture.obj
-         Release\TextureArray.obj
          Release\Input.obj
          Release\CheckGLError.obj
          Release\FPSCameraController.obj
@@ -32,7 +31,7 @@
          Release\Game.obj
          Release\main.obj
          Release\GameScreen.obj
-         Release\BlockRenderProperties.obj
+         Release\DefaultBlockRenderProperties.obj
          Release\ChunkManager.obj
          Release\LuaChunkGenerator.obj
          Release\TextureManager.obj
@@ -41,27 +40,11 @@
          Release\VoxelChunk.obj
          Release\VoxelWorld.obj
          Release\WorldRenderer.obj
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct VoxelRenderer::FacePointData>::clearBackingArray(void)" (?clearBackingArray@?$VertexBuffer@UFacePointData@VoxelRenderer@@@@QAEXXZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct VoxelRenderer::FacePointData>::setBackingArray(struct VoxelRenderer::FacePointData *)" (?setBackingArray@?$VertexBuffer@UFacePointData@VoxelRenderer@@@@QAEXPAUFacePointData@VoxelRenderer@@@Z)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct VoxelRenderer::FacePointData>::reset(void)" (?reset@?$VertexBuffer@UFacePointData@VoxelRenderer@@@@QAEXXZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct VoxelRenderer::FacePointData>::update(void)" (?update@?$VertexBuffer@UFacePointData@VoxelRenderer@@@@QAEXXZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct VoxelRenderer::FacePointData>::add(struct VoxelRenderer::FacePointData)" (?add@?$VertexBuffer@UFacePointData@VoxelRenderer@@@@QAEXUFacePointData@VoxelRenderer@@@Z)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: __thiscall VertexBuffer<struct VoxelRenderer::FacePointData>::~VertexBuffer<struct VoxelRenderer::FacePointData>(void)" (??1?$VertexBuffer@UFacePointData@VoxelRenderer@@@@QAE@XZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: __thiscall VertexBuffer<struct VoxelRenderer::FacePointData>::VertexBuffer<struct VoxelRenderer::FacePointData>(unsigned int,unsigned int,unsigned int,unsigned int,unsigned char,unsigned char)" (??0?$VertexBuffer@UFacePointData@VoxelRenderer@@@@QAE@IIIIEE@Z)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct Color8888>::clearBackingArray(void)" (?clearBackingArray@?$VertexBuffer@UColor8888@@@@QAEXXZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct Color8888>::setBackingArray(struct Color8888 *)" (?setBackingArray@?$VertexBuffer@UColor8888@@@@QAEXPAUColor8888@@@Z)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct Color8888>::reset(void)" (?reset@?$VertexBuffer@UColor8888@@@@QAEXXZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct Color8888>::update(void)" (?update@?$VertexBuffer@UColor8888@@@@QAEXXZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct Color8888>::add(struct Color8888)" (?add@?$VertexBuffer@UColor8888@@@@QAEXUColor8888@@@Z)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: __thiscall VertexBuffer<struct Color8888>::~VertexBuffer<struct Color8888>(void)" (??1?$VertexBuffer@UColor8888@@@@QAE@XZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: __thiscall VertexBuffer<struct Color8888>::VertexBuffer<struct Color8888>(unsigned int,unsigned int,unsigned int,unsigned int,unsigned char,unsigned char)" (??0?$VertexBuffer@UColor8888@@@@QAE@IIIIEE@Z)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct glm::detail::tvec2<float> >::update(void)" (?update@?$VertexBuffer@U?$tvec2@M@detail@glm@@@@QAEXXZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: void __thiscall VertexBuffer<struct glm::detail::tvec2<float> >::add(void *,unsigned int)" (?add@?$VertexBuffer@U?$tvec2@M@detail@glm@@@@QAEXPAXI@Z)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: __thiscall VertexBuffer<struct glm::detail::tvec2<float> >::~VertexBuffer<struct glm::detail::tvec2<float> >(void)" (??1?$VertexBuffer@U?$tvec2@M@detail@glm@@@@QAE@XZ)
-     1>VoxelRenderer.obj : error LNK2001: unresolved external symbol "public: __thiscall VertexBuffer<struct glm::detail::tvec2<float> >::VertexBuffer<struct glm::detail::tvec2<float> >(unsigned int,unsigned int,unsigned int,unsigned int,unsigned char,unsigned char)" (??0?$VertexBuffer@U?$tvec2@M@detail@glm@@@@QAE@IIIIEE@Z)
-     1>C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe : fatal error LNK1120: 18 unresolved externals
-     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)) -- FAILED.
+         Generating code
+         Finished generating code
+         sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
+     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:01.11
+Time Elapsed 00:00:02.52

@@ -21,6 +21,7 @@ public:
 	~TextureManager() {};
 
 	TextureID getTextureID(const std::string& texturename);
+	/** Generate the texture array matching with the id's, returned object must be deleted by user */
 	TextureArray* generateTextureArray();
 private:
 	unsigned int m_textureWidth;

@@ -20,7 +20,8 @@ public:
 	ChunkManager(PropertyManager& propertyManager, LuaChunkGenerator& generator) 
 		: m_propertyManager(propertyManager)
 		, m_generator(generator)
-		, m_lastLoadedChunkPos(-99999999, -99999999, -9999999)
+		, m_lastReturnedChunkPos(-99999999999, -99999999999, -99999999999)	//just some bogus initial value for performance sake
+		, m_lastReturnedChunk(NULL)
 	{};
 	ChunkManager(const ChunkManager& copy) = delete;
 	~ChunkManager() {};
@@ -38,8 +39,8 @@ private:
 	};
 
 	/** Keeping track of the last returned chunk because its common to retrieve the same chunk multiple times */
-	glm::ivec3 m_lastLoadedChunkPos;
-	VoxelChunk* m_lastLoadedChunk;
+	glm::ivec3 m_lastReturnedChunkPos;
+	VoxelChunk* m_lastReturnedChunk;
 
 	ChunkMap m_loadedChunks;
 	LuaChunkGenerator& m_generator;

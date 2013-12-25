@@ -18,10 +18,10 @@ TextureID TextureManager::getTextureID(const std::string& texturename)
 
 TextureArray* TextureManager::generateTextureArray()
 {
-	std::vector<const std::string*> imageNames;
+	std::vector<const std::string*> imageNames(m_textureNameIDMap.size());
 
 	for (auto it = m_textureNameIDMap.begin(); it != m_textureNameIDMap.end(); ++it)
-		imageNames.push_back(&(it->first));
+		imageNames.at(it->second) = &it->first;
 
 	return new TextureArray(imageNames, m_textureWidth, m_textureHeight);
 }

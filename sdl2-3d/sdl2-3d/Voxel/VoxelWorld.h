@@ -23,7 +23,8 @@ public:
 	VoxelWorld(const VoxelWorld& copy) = delete;
 	~VoxelWorld();
 
-	void setBlock(BlockID blockID, glm::ivec3& pos);
+	void setBlock(BlockID blockID, const glm::ivec3& pos);
+	BlockID getBlockID(const glm::ivec3& pos) const;
 
 	const ChunkManager::ChunkMap& getChunks() const;
 	TextureManager& getTextureManager();
@@ -42,7 +43,7 @@ private:
 	PropertyManager m_propertyManager;
 
 	LuaChunkGenerator m_generator;
-	ChunkManager m_chunkManager;
+	mutable ChunkManager m_chunkManager;
 
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);
