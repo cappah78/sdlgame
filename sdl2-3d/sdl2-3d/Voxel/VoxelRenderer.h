@@ -5,6 +5,8 @@
 #include <glm\glm.hpp>
 
 #include <assert.h>
+#include <memory>
+
 
 #include "../Engine/Graphics/GL/TextureArray.h"
 #include "../Engine/Graphics/Color8888.h"
@@ -44,7 +46,7 @@ private:
 	static_assert(CHUNK_SIZE == 16, "This class hardcodes an amount of bits to use for x/y/z, dependant on CHUNK_SIZE");//change assert once fixd
 	static const unsigned int SIZE_BITS = 5; //2^sizebits == chunksize or sqrt(chunkSize) + 1
 	static const unsigned int TEXTURE_ID_BITS = 12;
-	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Face Point Data must be <= 32 bits");
+	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Vertex Data must be <= 32 bits");
 
 	/** block x/y/z/textureid packed into one integer */
 	struct VoxelVertex
@@ -83,8 +85,10 @@ public:
 		/** Offset to render with*/
 		float m_xOffset, m_yOffset, m_zOffset;
 
+		~Chunk();
+
 	private:
-		/** This object is managed by VoxelRenderer::createCache and VoxelRenderer::deleteCache */
+
 		Chunk(float xOffset, float yOffset, float zOffset)
 			: m_colorBuffer(0)
 			, m_pointBuffer(0)
@@ -94,7 +98,6 @@ public:
 			, m_numFaces(0)
 			, m_begun(false)
 		{};
-		~Chunk() {};
 
 		bool m_begun;
 		GLuint m_vao;
@@ -108,18 +111,17 @@ public:
 	VoxelRenderer(const VoxelRenderer& copyMe) = delete;
 	~VoxelRenderer();
 
-	Chunk* const createChunk(float xOffset = 0, float yOffset = 0, float zOffset = 0);
-	void deleteChunk(Chunk* chunk);
+	const std::shared_ptr<VoxelRenderer::Chunk> createChunk(float xOffset = 0, float yOffset = 0, float zOffset = 0);
 
 	/** Ready a chunk to add faces */
-	void beginChunk(Chunk* const chunk);
+	void beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk);
 	/** Finish adding faces to a chunk and upload the vertex data */
-	void endChunk(Chunk* const chunk);
+	void endChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk);
 
 	/** Prepare the renderer for rendering using the given tileset */
 	void beginRender(const TextureArray* tileSet);
 	/** Draw the given chunk with its offset, must be in between VoxelRenderer::beginRender and VoxelRenderer::endRender */
-	void renderChunk(Chunk* const chunk, const Camera& camera);
+	void renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk, const Camera& camera);
 	/** Finish rendering */
 	void endRender();
 

@@ -98,7 +98,7 @@ void VoxelRenderer::beginRender(const TextureArray* tileSet)
 	glUseProgram(m_shaderId);
 }
 
-void VoxelRenderer::renderChunk(Chunk* const chunk, const Camera& camera)
+void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk, const Camera& camera)
 {
 	assert(m_begunRender);
 	glm::mat4 modelMatrix = glm::mat4(1);
@@ -121,11 +121,12 @@ void VoxelRenderer::endRender()
 	glUseProgram(0);
 }
 
-VoxelRenderer::Chunk* const VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset)
+const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset)
 {
+
 	assert(!m_begunRender && "Cannot create a new chunk in between beginRender() and endRender()");
 
-	Chunk* chunk = new Chunk(xOffset, yOffset, zOffset);
+	std::shared_ptr<VoxelRenderer::Chunk> chunk(new Chunk(xOffset, yOffset, zOffset));
 	glGenVertexArrays(1, &chunk->m_vao);
 	glBindVertexArray(chunk->m_vao);
 
@@ -142,7 +143,7 @@ VoxelRenderer::~VoxelRenderer()
 	glDeleteShader(m_shaderId);
 }
 
-void VoxelRenderer::beginChunk(Chunk* const chunk)
+void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
 {
 	assert(!chunk->m_begun && "This chunk has already begun");
 	assert(!m_begunCache && "A chunk has already begun");
@@ -181,7 +182,7 @@ void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID
 	m_colorBuffer.add(color4);
 }
 
-void VoxelRenderer::endChunk(Chunk* const chunk)
+void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
 {
 	assert(m_begunCache && chunk->m_begun && "Cache has not yet begun");
 	m_begunCache = false;
@@ -206,9 +207,7 @@ void VoxelRenderer::setNormalUniform(glm::vec3 normal)
 	glUniform3fv(m_normalUniformLoc, 1, &normal[0]);
 }
 
-void VoxelRenderer::deleteChunk(Chunk* chunk)
+VoxelRenderer::Chunk::~Chunk()
 {
-	glDeleteVertexArrays(1, &chunk->m_vao);
-	delete chunk;
-	chunk = NULL;
+	glDeleteVertexArrays(1, &m_vao);
 }

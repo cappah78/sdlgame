@@ -44,7 +44,7 @@ GameScreen::GameScreen()
 	GLint maxTexLayers;
 	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTexLayers);
 	std::cout << "Max texture layers: " << maxTexLayers << std::endl;
-
+#define BLOCK_TEST
 #ifdef BLOCK_TEST
 	std::vector<const char*> images;
 	images.push_back("Assets/Textures/MinecraftBlocks/stone.png");
@@ -68,7 +68,7 @@ GameScreen::GameScreen()
 		{
 			for (int k = 0; k < NUM_CHUNKS_Z; ++k) 
 			{
-				VoxelRenderer::Chunk* chunk = m_voxelRenderer.createChunk(i * (float) CHUNK_SIZE, j * (float) CHUNK_SIZE, k * (float) CHUNK_SIZE);
+				std::shared_ptr<VoxelRenderer::Chunk> chunk = m_voxelRenderer.createChunk(i * (float) CHUNK_SIZE, j * (float) CHUNK_SIZE, k * (float) CHUNK_SIZE);
 
 				m_voxelRenderer.beginChunk(chunk);
 
@@ -109,13 +109,13 @@ void GameScreen::render(float deltaSec)
 
 #ifdef BLOCK_TEST
 	m_voxelRenderer.beginRender(m_tileSet);
-	for (VoxelRenderer::Chunk* chunk : m_chunkRenderData)
+	for (std::shared_ptr<VoxelRenderer::Chunk> chunk : m_chunkRenderData)
 		m_voxelRenderer.renderChunk(chunk, m_camera);
 	m_voxelRenderer.endRender();
+#elif //BLOCK_TEST
+	m_worldRenderer.render(m_world, m_camera);
 #endif //BLOCK_TEST
 
-	m_worldRenderer.render(m_world, m_camera);
-	
 	m_skyBox.render(m_camera);
 
 	Game::graphics.swap();
@@ -123,8 +123,7 @@ void GameScreen::render(float deltaSec)
 
 GameScreen::~GameScreen() 
 {
-	for (VoxelRenderer::Chunk* chunk : m_chunkRenderData)
-		m_voxelRenderer.deleteChunk(chunk);
+	m_chunkRenderData.clear();
 }
 
 void GameScreen::resize(int width, int height) 

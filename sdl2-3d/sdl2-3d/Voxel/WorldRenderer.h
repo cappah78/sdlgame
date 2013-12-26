@@ -15,7 +15,7 @@ class TextureArray;
 class WorldRenderer
 {
 public:
-	typedef std::unordered_map<glm::ivec3, VoxelRenderer::Chunk*, IVec3Hash> RenderChunkMap;
+	typedef std::unordered_map<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>, IVec3Hash> RenderChunkMap;
 
 	WorldRenderer();
 	~WorldRenderer();
@@ -25,9 +25,7 @@ public:
 
 private:
 
-	void renderDefault(const VoxelWorld& world, const Camera& camera, BlockID blockID, int x, int y, int z);
-
-	VoxelRenderer::Chunk* getRenderChunk(const glm::ivec3& pos);
+	const std::shared_ptr<VoxelRenderer::Chunk> getRenderChunk(const glm::ivec3& pos);
 	RenderChunkMap m_renderChunks;
 	VoxelRenderer m_renderer;
 };

@@ -3,6 +3,8 @@
 #include <assert.h>
 #include "PropertyManager.h"
 
+static const float RESIZE_MULTIPLIER = 1.5f;
+
 VoxelChunk::ChunkDataContainer::ChunkDataContainer(unsigned int initialSize)
 	: m_size(initialSize)
 	, m_used(0)

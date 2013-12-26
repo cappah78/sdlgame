@@ -27,12 +27,12 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 	for (auto it = chunks.begin(); it != chunks.end(); ++it)
 	{
 		VoxelChunk* chunk = it->second;
-		glm::ivec3 chunkPos = it->first;
+		const glm::ivec3& chunkPos = chunk->m_pos;
 
 		if (chunk->m_updated)
 			continue;
 		chunk->m_updated = true;
-		VoxelRenderer::Chunk* renderChunk = getRenderChunk(chunkPos);
+		const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk = getRenderChunk(chunkPos);
 		m_renderer.beginChunk(renderChunk);
 
 		BlockID* blocks = chunk->getBlocks();
@@ -88,7 +88,7 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 	m_renderer.endRender();
 }
 
-VoxelRenderer::Chunk* WorldRenderer::getRenderChunk(const glm::ivec3& pos)
+const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos)
 {
 	auto it = m_renderChunks.find(pos);
 	if (it != m_renderChunks.end())
@@ -96,7 +96,7 @@ VoxelRenderer::Chunk* WorldRenderer::getRenderChunk(const glm::ivec3& pos)
 	else
 	{
 		//printf("createchunk: %i, %i, %i \n", pos.x, pos.y, pos.z);
-		VoxelRenderer::Chunk* chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE);
+		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE);
 		m_renderChunks.insert(std::make_pair(pos, chunk));
 		return chunk;
 	}

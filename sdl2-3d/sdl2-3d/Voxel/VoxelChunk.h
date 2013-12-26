@@ -12,7 +12,6 @@ static const unsigned int CHUNK_SIZE_CUBED = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZ
 
 #include <vector>
 
-static const float RESIZE_MULTIPLIER = 1.5f;
 
 class PropertyManager;
 

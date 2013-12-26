@@ -38,7 +38,7 @@ private:
 	
 
 	VoxelRenderer m_voxelRenderer;
-	std::vector<VoxelRenderer::Chunk*> m_chunkRenderData;
+	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_chunkRenderData;
 	TextureArray* m_tileSet;
 };
 
