@@ -44,7 +44,7 @@ GameScreen::GameScreen()
 	GLint maxTexLayers;
 	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTexLayers);
 	std::cout << "Max texture layers: " << maxTexLayers << std::endl;
-#define BLOCK_TEST
+//#define BLOCK_TEST
 #ifdef BLOCK_TEST
 	std::vector<const char*> images;
 	images.push_back("Assets/Textures/MinecraftBlocks/stone.png");
@@ -112,7 +112,7 @@ void GameScreen::render(float deltaSec)
 	for (std::shared_ptr<VoxelRenderer::Chunk> chunk : m_chunkRenderData)
 		m_voxelRenderer.renderChunk(chunk, m_camera);
 	m_voxelRenderer.endRender();
-#elif //BLOCK_TEST
+#else
 	m_worldRenderer.render(m_world, m_camera);
 #endif //BLOCK_TEST
 
