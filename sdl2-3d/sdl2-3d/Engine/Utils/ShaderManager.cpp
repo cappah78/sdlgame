@@ -34,8 +34,10 @@ const std::string* ShaderManager::getStringFromFile(const char* fileName)
 	if (fileName == NULL)
 		return 0;
 
-	std::string actualFileName = findFileOrThrow(fileName);
-	std::ifstream file(actualFileName);
+	std::ifstream file(fileName);
+	if (!file.is_open())
+		std::cerr << "Could not find or open the file " << fileName << std::endl;
+
 	std::stringstream data;
 	data << file.rdbuf();
 	file.close();
@@ -53,8 +55,9 @@ void ShaderManager::attachShaderSource(GLuint prog, GLenum type, const char * so
 
 	if (sh == 0)
 	{
-		std::cout << "Could not create shader: " << type << std::endl;
+		std::cerr << "Could not create shader: " << type << std::endl;
 	}
+
     glShaderSource(sh, 1, &source, NULL);
     glCompileShader(sh);
 
@@ -79,25 +82,9 @@ void ShaderManager::attachShaderSource(GLuint prog, GLenum type, const char * so
 			typeString = "nan";
 			break;
 		}
-		std::cout << "Error in " << typeString << " shader: " << buffer << " : " << source << std::endl;
+		std::cerr << "Error in " << typeString << " shader: " << buffer << " : " << source << std::endl;
 	}
 
     glAttachShader(prog, sh);
     glDeleteShader(sh);
-}
-
-std::string ShaderManager::findFileOrThrow( const std::string &strBasename )
-{
-
-	std::string strFilename = LOCAL_FILE_DIR + strBasename;
-	std::ifstream testFile(strFilename.c_str());
-	if(testFile.is_open())
-		return strFilename;
-
-	strFilename = GLOBAL_FILE_DIR + strBasename;
-	testFile.open(strFilename.c_str());
-	if(testFile.is_open())
-		return strFilename;
-
-	throw std::runtime_error("Could not find the file " + strBasename);
 }

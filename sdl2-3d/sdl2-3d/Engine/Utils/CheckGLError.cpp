@@ -21,46 +21,26 @@
 */
 /****************************************************************************/
 #include "CheckGLError.h"
-#include "Assert.h"
-#include <gl\glew.h>
-#include <sstream>
-#include <iostream>
 
-void outputFailure(const char *file, const int line, const char *conditionString)
-{
-#ifdef _WIN32
-	const size_t bufferSize = 512;
-	char buffer[bufferSize];
-	_snprintf_s(buffer, bufferSize, "%s(%d): ASSERT FAILED: %s\n", file, line, conditionString);
-	buffer[bufferSize - 1] = 0;
-	fprintf(stderr, "%s", buffer);
-	std::cerr << buffer << std::endl;
-#else // !_WIN32
-	fprintf(stderr, "%s(%d): ASSERT FAILED: %s\n", file, line, conditionString);
-#endif // _WIN32
-}
+#include <gl\glew.h>
+#include <iostream>
 
 bool checkGLError(const char *file, int line)
 {
-	bool wasError = false;
+	bool error = false;
 
-	std::stringstream ss;
 	for (GLenum glErr = glGetError(); glErr != GL_NO_ERROR; glErr = glGetError())
 	{
-		wasError = true;
-		const GLubyte* sError = gluErrorString(glErr);
+		error = true;
+		const GLubyte* str = gluErrorString(glErr);
 
-		if (!sError)
+		if (!str)
 		{
-			sError = reinterpret_cast<const GLubyte *>(" (no message available)");
+			str = reinterpret_cast<const GLubyte *>("No Error message available.");
 		}
 
-		ss << "  GL Error #" << glErr << "(" << sError << ") " << std::endl;
+		fprintf(stderr, "GL Error in file: %s at line %i Error %i: %s \n", file, line, glErr, str);
 	}
 
-	if (wasError)
-	{
-		outputFailure(file, line, ss.str().c_str());
-	}
-	return wasError;
+	return error;
 }

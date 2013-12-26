@@ -1,6 +1,6 @@
 #version 330 core
 
-const unsigned int POSITION_BITS = 5u; // sqrt(CHUNK_SIZE), must be power of 2.
+const unsigned int POSITION_BITS = 5u; // sqrt(chunkSize) + 1
 const unsigned int POSITION_BITS_2 = POSITION_BITS * 2u;
 const unsigned int POSITION_BITS_3 = POSITION_BITS * 3u;
 const unsigned int POSITION_BITS_BITMASK_OFFSET = ((1u << POSITION_BITS) - 1u);

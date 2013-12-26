@@ -48,9 +48,6 @@
     <Filter Include="Source Files\Engine\Graphics\Lighting">
       <UniqueIdentifier>{df1e2546-7022-4cfe-9d38-6aae0e913d19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Model">
-      <UniqueIdentifier>{2d458583-f48e-4dbc-8ffb-0e761607fe2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{61951764-42a0-4d7e-b5c0-5ab7af34a28d}</UniqueIdentifier>
     </Filter>
@@ -110,28 +107,7 @@
     <ClInclude Include="Engine\Graphics\Pixmap.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\AmbientLight.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\DirectionalLight.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\Light.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\LightManager.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\LightSorter.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\PointLight.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Lighting\ShadowCubeMap.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\SpotLight.h">
       <Filter>Header Files\Engine\Graphics\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Renderers\ForwardShader.h">
@@ -248,7 +224,7 @@
     <ClInclude Include="Engine\Utils\Comparables.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\DefaultBlockRenderProperties.h">
+    <ClInclude Include="Voxel\BlockRenderData.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
@@ -277,16 +253,7 @@
     <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp">
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\Renderers\ForwardShader.cpp">
-      <Filter>Source Files\Engine\Graphics\Renderers</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Lighting\ShadowCubeMap.cpp">
-      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\Lighting\LightSorter.cpp">
-      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\Lighting\LightManager.cpp">
       <Filter>Source Files\Engine\Graphics\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\ShaderManager.cpp">
@@ -358,7 +325,7 @@
     <ClCompile Include="Engine\Graphics\GL\Texture.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\DefaultBlockRenderProperties.cpp">
+    <ClCompile Include="Voxel\BlockRenderData.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
   </ItemGroup>
@@ -391,18 +358,6 @@
       <Filter>Assets\Shaders</Filter>
     </None>
     <None Include="Assets\Shaders\fullscreenquad.geom">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\geometrypass.frag">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\geometrypass.vert">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\shadowmulti.geom">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\shadowmulti.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
     <None Include="Assets\Shaders\skybox.frag">
@@ -452,6 +407,18 @@
     </None>
     <None Include="Assets\Scripts\Blocks\DiamondOreBlock.lua">
       <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Shaders\gbuffer.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\gbuffer.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\multishadowmap.geom">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\multishadowmap.vert">
+      <Filter>Assets\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

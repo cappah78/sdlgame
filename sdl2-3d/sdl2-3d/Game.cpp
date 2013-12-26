@@ -1,13 +1,14 @@
 #include "Game.h"
 
 #include <SDL.h>
-#include <windows.h>
-#include <string>
-#include <vector>
-#include <stack>
+#include <lua.hpp>
+
+#include <stdio.h>
 #include <iostream>
+
+#include "Engine\Utils\CheckGLError.h"
+
 #include "Screens/GameScreen.h"
-#include "Engine\Utils\CheckLuaError.h"
 
 IScreen* Game::m_currScreen = NULL;
 bool Game::m_running = true;
@@ -74,6 +75,7 @@ void Game::startGameLoop()
 		}
 
 		render(deltaSec);
+		CHECK_GL_ERROR();
 	}
 }
 

@@ -27,6 +27,10 @@ chunk->addFace(Face::TOP, x, y, z, textureIdx, color, color, color, color);
 voxelRenderer.beginRender(textureArray);
 voxelRenderer.renderChunk(chunk, camera);
 voxelRenderer.endRender();
+
+Implementation details:
+A single index and texcoord buffer is shared by all caches. Only a single vertex and a single color
+array will be used to construct the data on the gpu, its shared by all caches.
 */
 class VoxelRenderer
 {
@@ -36,8 +40,8 @@ private:
 	static const unsigned int COLOR_LOC = 2;
 
 	static const unsigned int MAX_FACES_PER_CACHE = 2048 * 6; // == CHUNK_SIZE_CUBED / 2;
-	static_assert(CHUNK_SIZE == 16, "This class requires chunk size of 16 to function, change once fixed");
 
+	static_assert(CHUNK_SIZE == 16, "This class hardcodes an amount of bits to use for x/y/z, dependant on CHUNK_SIZE");//change assert once fixd
 	static const unsigned int SIZE_BITS = 5; //2^sizebits == chunksize or sqrt(chunkSize) + 1
 	static const unsigned int TEXTURE_ID_BITS = 12;
 	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Face Point Data must be <= 32 bits");

@@ -4,13 +4,11 @@
 
 #include "../Game.h"
 #include "../Engine/Utils/CheckLuaError.h"
+#include "../Engine/Graphics/Color8888.h"
+#include "../Engine/Graphics/GL/TextureArray.h"
 
 #include <lua.hpp>
 #include <LuaBridge.h>
-
-#include "../Engine/Graphics/Color8888.h"
-
-#include "../Engine/Graphics/GL/TextureArray.h"
 
 std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 
@@ -53,7 +51,7 @@ void VoxelWorld::initializeLuaWorld()
 	}
 	catch (luabridge::LuaException const& e) 
 	{
-		std::cout && e.what();
+		std::cerr << e.what() << std::endl;
 	}
 }
 
@@ -90,7 +88,6 @@ int VoxelWorld::L_setBlock(lua_State* L)
 	int y = lua_tointeger(L, -2);
 	int z = lua_tointeger(L, -3);
 
-	//std::cout << "setblock: " << blockID << ":" << x << ":" << y << ":" << z << std::endl;
 	VoxelWorld* world = VoxelWorld::stateWorldMap.at(L);
 	world->setBlock(blockID, glm::ivec3(x, y, z));
 
@@ -104,7 +101,6 @@ void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 	int chunkZ = (int) glm::floor((pos.z / (float) CHUNK_SIZE));
 
 	glm::ivec3 chunkPos(chunkX, chunkY, chunkZ);	
-	//std::cout << "chunkPos: " << chunkPos.x << ":" << chunkPos.y << ":" << chunkPos.z << std::endl;
 	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
 
 	int blockX = pos.x % (int) CHUNK_SIZE;

@@ -1,9 +1,9 @@
-#include "DefaultBlockRenderProperties.h"
+#include "BlockRenderData.h"
 
 #include "PropertyManager.h"
 #include "TextureManager.h"
 
-DefaultBlockRenderProperties::DefaultBlockRenderProperties(LuaTableData& data, TextureManager& textureManager)
+BlockRenderData::BlockRenderData(LuaTableData& data, TextureManager& textureManager)
 {
 	luabridge::LuaRef block = data.ref;
 	luabridge::LuaRef texture = block["texture"];

@@ -3,12 +3,9 @@
 #include <assert.h>
 #include "PropertyManager.h"
 
-#include <iostream>
-#include <stdio.h>
-
 VoxelChunk::ChunkDataContainer::ChunkDataContainer(unsigned int initialSize)
-: m_size(initialSize)
-, m_used(0)
+	: m_size(initialSize)
+	, m_used(0)
 {
 	m_blockIDs.resize(CHUNK_SIZE_CUBED);
 	m_blockDataPositions.resize(CHUNK_SIZE_CUBED);
@@ -70,8 +67,6 @@ void VoxelChunk::ChunkDataContainer::shiftPositionData(unsigned int position, un
 
 void VoxelChunk::ChunkDataContainer::resize(unsigned int newSize)
 {
-	std::cout << "allocating: " << newSize << std::endl;
-
 	void* newBegin = malloc(newSize);
 	memcpy(newBegin, m_dataBegin, m_used);
 	free(m_dataBegin);

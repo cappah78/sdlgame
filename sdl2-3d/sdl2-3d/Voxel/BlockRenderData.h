@@ -1,5 +1,5 @@
-#ifndef DEFAULT_BLOCK_RENDER_PROPERTIES_H_
-#define DEFAULT_BLOCK_RENDER_PROPERTIES_H_
+#ifndef BLOCK_RENDER_DATA_H_
+#define BLOCK_RENDER_DATA_H_
 
 #include <string>
 
@@ -7,9 +7,9 @@ class VoxelWorld;
 struct LuaTableData;
 class TextureManager;
 
-struct DefaultBlockRenderProperties	// 8 bytes;
+struct BlockRenderData	// 8 bytes;
 {
-	DefaultBlockRenderProperties(LuaTableData& data, TextureManager& textureManager);
+	BlockRenderData(LuaTableData& data, TextureManager& textureManager);
 
 	unsigned topTexture : 10;
 	unsigned bottomTexture : 10;
@@ -22,4 +22,4 @@ struct DefaultBlockRenderProperties	// 8 bytes;
 	unsigned padding : 2;
 };
 
-#endif //DEFAULT_BLOCK_RENDER_PROPERTIES_H_
+#endif //BLOCK_RENDER_DATA_H_

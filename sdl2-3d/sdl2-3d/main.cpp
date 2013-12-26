@@ -156,6 +156,10 @@ int main(int argc, char *argv[])
 	Game::setScreen(&gameScreen);
 
 	Game::startGameLoop(); // blocks untill Game::shutdownGameLoop()
+	CHECK_GL_ERROR();
+
+	if (checkGLError(__FILE__, __LINE__))
+		SDL_Delay(5000);
 
     SDL_GL_DeleteContext(maincontext);
     SDL_DestroyWindow(mainwindow);

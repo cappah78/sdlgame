@@ -5,9 +5,6 @@
 #include <lua.hpp>
 #include <LuaBridge.h>
 
-#include <iostream>
-#include <stdio.h>
-
 #include <unordered_map>
 
 static const char* LUA_BLOCKS_NAMESPACE = "Blocks";
@@ -23,7 +20,6 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 	auto it = m_blockNameIDMap.find(blockname);
 	if (it != m_blockNameIDMap.end())
 	{	//already contained
-		std::cout << "Blocktype already registered: " << blockname << std::endl;
 		return it->second;
 	}
 	else
@@ -58,10 +54,6 @@ LuaTableData PropertyManager::getTableData(lua_State* const L, luabridge::LuaRef
 		lua_pop(L, 1);
 	}
 
-	for (auto pair : properties.data) {
-		std::cout << (pair.first) << ":" << (pair.second) << std::endl;
-	}
-
 	return properties;
 }
 
@@ -71,25 +63,17 @@ void PropertyManager::parseBlock(LuaTableData data, BlockID blockID)
 	std::string typeStr = type.tostring();
 
 	if (typeStr.compare(DEFAULT_BLOCK)) {
-		DefaultBlockRenderProperties properties(data, m_textureManager);
-		m_defaultBlockProperties.insert(std::make_pair(blockID, properties));
-		if (m_renderTypes.size() < (unsigned int) blockID + 1)
-			m_renderTypes.resize((int) (blockID * 1.5f + 1));
-		m_renderTypes[blockID] = BlockRenderType::DEFAULT;
+		BlockRenderData renderData(data, m_textureManager);
+		m_blockRenderDataMap.insert(std::make_pair(blockID, renderData));
 		return;
 	}
 
-	assert(false && "Unrecognized block type");
+	assert(false && "Unrecognized/unimplemented block type");
 }
 
-DefaultBlockRenderProperties PropertyManager::getDefaultRenderProperties(BlockID blockID) const
+BlockRenderData PropertyManager::getBlockRenderData(BlockID blockID) const
 {
-	return m_defaultBlockProperties.at(blockID);
-}
-
-BlockRenderType PropertyManager::getRenderType(BlockID blockID) const
-{
-	return m_renderTypes.at(blockID);
+	return m_blockRenderDataMap.at(blockID);
 }
 
 BlockDataSize PropertyManager::getBlockDataSize(BlockID blockID)

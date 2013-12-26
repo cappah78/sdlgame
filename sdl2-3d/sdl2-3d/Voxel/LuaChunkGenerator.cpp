@@ -24,6 +24,7 @@ LuaChunkGenerator::~LuaChunkGenerator()
 
 void LuaChunkGenerator::generateChunk(VoxelChunk* const chunk)
 {
+	//TODO: per chunk map generation
 	//luaL_dofile(m_L, LUA_GEN_SCRIPT_PATH);
 }
 

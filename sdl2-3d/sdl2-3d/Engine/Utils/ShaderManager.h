@@ -4,8 +4,6 @@
 #include <string>
 #include <gl\glew.h>
 
-typedef unsigned int GLuint;
-typedef unsigned int GLenum;
 
 /** Helper class to easily create OpenGL Shaders */
 class ShaderManager
@@ -16,7 +14,6 @@ public:
 private:
 	static void attachShaderSource(GLuint prog, GLenum type, const char * source);
 	static const std::string* getStringFromFile(const char* fileName);
-	static std::string findFileOrThrow(const std::string &strBasename);
 };
 
 #endif //SHADERMANAGER_H_

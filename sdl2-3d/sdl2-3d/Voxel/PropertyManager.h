@@ -2,7 +2,7 @@
 #define PROPERTY_MANAGER_H_
 
 #include "VoxelBlock.h"
-#include "DefaultBlockRenderProperties.h"
+#include "BlockRenderData.h"
 #include "TextureManager.h"
 
 #include <assert.h>
@@ -14,7 +14,7 @@
 
 struct lua_State;
 
-
+/** contains a list of key-value pairs, and the base reference */
 struct LuaTableData
 {
 	typedef std::vector<std::pair<luabridge::LuaRef, luabridge::LuaRef>> TableDataList;
@@ -25,10 +25,6 @@ struct LuaTableData
 	TableDataList data;
 };
 
-enum BlockRenderType
-{
-	DEFAULT = 0, MESH = 1
-};
 
 /** Used to keep track of constant data of blocks parsed from lua files */
 class PropertyManager
@@ -37,7 +33,6 @@ public:
 	PropertyManager(TextureManager& textureManager)
 		: m_textureManager(textureManager) 
 		, m_lastRegisteredId(0) 
-		, m_renderTypes(0)
 	{};
 	PropertyManager(const PropertyManager& copy) = delete;
 	~PropertyManager() {};
@@ -47,8 +42,7 @@ public:
 
 	BlockID registerBlockType(lua_State* const L, const std::string& blockname);
 
-	BlockRenderType getRenderType(BlockID blockID) const;
-	DefaultBlockRenderProperties getDefaultRenderProperties(BlockID blockID) const;
+	BlockRenderData getBlockRenderData(BlockID blockID) const;
 
 private:
 
@@ -62,11 +56,7 @@ private:
 	/** Maps Block name to its id */
 	std::map<const std::string, BlockID> m_blockNameIDMap;
 
-
-	/** Index: BlockID. Used to know what renderer to use for what block.*/
-	std::vector<BlockRenderType> m_renderTypes;
-
-	std::map<BlockID, DefaultBlockRenderProperties> m_defaultBlockProperties;
+	std::map<BlockID, BlockRenderData> m_blockRenderDataMap;
 };
 
 #endif // PROPERTY_MANAGER_H_
