@@ -134,6 +134,8 @@ void GameScreen::resize(int width, int height)
 
 bool GameScreen::keyDown(SDL_Keysym key)
 {
+	if (key.sym == SDLK_r)
+		printf("campos: %f, %f, %f \n", m_camera.m_position.x, m_camera.m_position.y, m_camera.m_position.z);
 	return false;
 }
 bool GameScreen::keyUp(SDL_Keysym key)

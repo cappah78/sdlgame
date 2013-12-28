@@ -25,6 +25,7 @@ public:
 
 	void setBlock(BlockID blockID, const glm::ivec3& pos);
 	BlockID getBlockID(const glm::ivec3& pos) const;
+	BlockIDColor getBlockIDColor(const glm::ivec3& pos) const;
 
 	const ChunkManager::ChunkMap& getChunks() const;
 	TextureManager& getTextureManager();
@@ -48,6 +49,9 @@ private:
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);
 	static int L_setBlock(lua_State* L);
+
+	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
+	inline static glm::ivec3 toChunkBlockPos(const glm::ivec3& blockPos);
 };
 
 #endif //VOXEL_WORLD_H_

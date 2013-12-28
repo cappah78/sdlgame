@@ -5,21 +5,105 @@
 
 static const float RESIZE_MULTIPLIER = 1.5f;
 
+VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
+	: m_pos(pos)
+	, m_propertyManager(propertyManager)
+	, m_data(0)
+	, m_updated(false)
+{
+	m_blockColors.resize(CHUNK_SIZE_CUBED);
+	m_blockIDs.resize(CHUNK_SIZE_CUBED);
+}
+
+void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, unsigned int dataSize)
+{
+	assert(x >= 0 && x < CHUNK_SIZE);
+	assert(y >= 0 && y < CHUNK_SIZE);
+	assert(z >= 0 && z < CHUNK_SIZE);
+
+	m_updated = false;
+
+	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
+	BlockID& id = m_blockIDs[idx];
+	m_blockColors[idx] = Color8888(0, 0, 0, 0);
+
+
+	//TODO: all the things
+	if (id != 0)//there was already a block here
+	{
+		//handle on block remove
+	}
+
+	//unsigned int& dataPos = m_data.m_blockDataPositions[idx];
+//	if (dataPos != 0)//There was already a block here with data
+	{
+		//clean up old data
+		//get size of old data
+	}
+
+//	if (dataSize != 0 && dataPtr != NULL)
+	{
+		//insert new block data
+	}
+
+	id = blockID;
+}
+
+void VoxelChunk::setBlockColor(int x, int y, int z, BlockColor color)
+{
+	assert(x >= 0 && x < CHUNK_SIZE);
+	assert(y >= 0 && y < CHUNK_SIZE);
+	assert(z >= 0 && z < CHUNK_SIZE);
+
+	m_updated = false;
+
+	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
+	m_blockColors[idx] = color;
+}
+
+BlockID VoxelChunk::getBlockID(const glm::ivec3& pos) const
+{
+	assert(pos.x >= 0 && pos.x < CHUNK_SIZE);
+	assert(pos.y >= 0 && pos.y < CHUNK_SIZE);
+	assert(pos.z >= 0 && pos.z < CHUNK_SIZE);
+
+	unsigned int idx = pos.x * CHUNK_SIZE_SQUARED + pos.y * CHUNK_SIZE + pos.z;
+	return m_blockIDs[idx];
+}
+
+BlockColor VoxelChunk::getBlockColor(const glm::ivec3& pos) const
+{
+	assert(pos.x >= 0 && pos.x < CHUNK_SIZE);
+	assert(pos.y >= 0 && pos.y < CHUNK_SIZE);
+	assert(pos.z >= 0 && pos.z < CHUNK_SIZE);
+
+	unsigned int idx = pos.x * CHUNK_SIZE_SQUARED + pos.y * CHUNK_SIZE + pos.z;
+	return m_blockColors[idx];
+}
+
+BlockIDColor VoxelChunk::getBlockIDColor(const glm::ivec3& pos) const
+{
+	assert(pos.x >= 0 && pos.x < CHUNK_SIZE);
+	assert(pos.y >= 0 && pos.y < CHUNK_SIZE);
+	assert(pos.z >= 0 && pos.z < CHUNK_SIZE);
+
+	unsigned int idx = pos.x * CHUNK_SIZE_SQUARED + pos.y * CHUNK_SIZE + pos.z;
+	return { m_blockIDs[idx], m_blockColors[idx] };
+}
+
+//--
+
 VoxelChunk::ChunkDataContainer::ChunkDataContainer(unsigned int initialSize)
 	: m_size(initialSize)
 	, m_used(0)
 {
-	m_blockIDs.resize(CHUNK_SIZE_CUBED);
 	m_blockDataPositions.resize(CHUNK_SIZE_CUBED);
 
 	m_dataBegin = malloc(initialSize);
 	assert(m_dataBegin && "Failed to allocate");
 }
 
-VoxelChunk::ChunkDataContainer::~ChunkDataContainer()
-{
-
-}
+VoxelChunk::ChunkDataContainer::~ChunkDataContainer(){}
 
 /** copy the data to the list, returning its start index */
 unsigned int VoxelChunk::ChunkDataContainer::add(void* data, unsigned int size)
@@ -75,47 +159,4 @@ void VoxelChunk::ChunkDataContainer::resize(unsigned int newSize)
 
 	m_dataBegin = newBegin;
 	m_size = newSize;
-}
-
-void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, unsigned int dataSize)
-{
-	assert(x >= 0 && x < CHUNK_SIZE);
-	assert(y >= 0 && y < CHUNK_SIZE);
-	assert(z >= 0 && z < CHUNK_SIZE);
-
-	m_updated = false;
-
-	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
-	BlockID& id = m_data.m_blockIDs[idx];
-
-	//TODO: all the things
-	if (id != 0)//there was already a block here
-	{
-		//handle on block remove
-	}
-
-	//unsigned int& dataPos = m_data.m_blockDataPositions[idx];
-//	if (dataPos != 0)//There was already a block here with data
-	{
-		//clean up old data
-		//get size of old data
-
-	}
-
-//	if (dataSize != 0 && dataPtr != NULL)
-	{
-
-	}
-
-	id = blockID;
-}
-
-BlockID VoxelChunk::getBlockID(int x, int y, int z)
-{
-	assert(x >= 0 && x < CHUNK_SIZE);
-	assert(y >= 0 && y < CHUNK_SIZE);
-	assert(z >= 0 && z < CHUNK_SIZE);
-
-	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
-	return m_data.m_blockIDs[idx];
 }

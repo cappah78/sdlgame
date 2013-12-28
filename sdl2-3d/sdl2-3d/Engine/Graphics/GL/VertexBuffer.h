@@ -35,13 +35,17 @@ public:
 	VertexBuffer(const VertexBuffer& copy) = delete;
 	
 	/** Set and enable glVertexAttrib(I)Pointer with the given properties, binds the buffer */
-	void setAttribPointer(GLuint attributeIdx, GLenum type, unsigned int valuesPerVertex, GLboolean normalized = false, GLboolean isIntegerType = false, GLuint stride = 0, GLuint offsetBytes = 0)
+	void setAttribPointer(GLuint attributeIdx, GLenum type, unsigned int valuesPerVertex, 
+		GLboolean normalized = false, GLboolean isIntegerType = false, GLuint stride = 0, 
+		GLuint offsetBytes = 0)
 	{
 		glBindBuffer(m_bufferType, m_id);
 		if (isIntegerType)
-			glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, (const GLvoid*) offsetBytes);
+			glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, 
+			(const GLvoid*) offsetBytes);
 		else
-			glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, stride, (const GLvoid*) offsetBytes);
+			glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, 
+			stride, (const GLvoid*) offsetBytes);
 		glEnableVertexAttribArray(attributeIdx);
 	};
 
@@ -56,11 +60,12 @@ public:
 	};
 
 	/** Copy size amount of bytes from data to the buffer */
-	inline void add(void* data, unsigned int size)
+	inline void add(void* data, unsigned int sizeBytes)
 	{
-		assert(m_sizeInElements > m_counter + size);
-		memcpy(&m_data[m_counter], data, size);
-		m_counter += size;
+		unsigned int numObjects = sizeBytes / sizeof(T);
+		assert(m_sizeInElements > m_counter + numObjects);
+		memcpy(&m_data[m_counter], data, sizeBytes);
+		m_counter += numObjects;
 	};
 
 	/** Add data to the buffer, copied by value since it assumed that vertex buffer elements are generally very small */
@@ -106,7 +111,7 @@ public:
 
 	inline GLuint getID() { return m_id; };
 	inline T* getBackingArray() { return m_data; };
-	inline unsigned int getSizeInElements() { return m_sizeInElements; };
+	inline unsigned int getSizeInElements() { return m_counter; };
 
 private:
 

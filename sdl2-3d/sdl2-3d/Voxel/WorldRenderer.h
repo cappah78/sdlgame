@@ -25,6 +25,7 @@ public:
 
 private:
 
+	inline static unsigned char getAO(bool side, bool side2, bool corner);
 	const std::shared_ptr<VoxelRenderer::Chunk> getRenderChunk(const glm::ivec3& pos);
 	RenderChunkMap m_renderChunks;
 	VoxelRenderer m_renderer;

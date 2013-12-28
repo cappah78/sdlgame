@@ -118,27 +118,48 @@ void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 
 BlockID VoxelWorld::getBlockID(const glm::ivec3& pos) const
 {
+	glm::ivec3& chunkPos = toChunkPos(pos);
+	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
+	glm::ivec3& blockPos = toChunkBlockPos(pos);
+
+	return chunk->getBlockID(blockPos);
+}
+
+BlockIDColor VoxelWorld::getBlockIDColor(const glm::ivec3& pos) const
+{
 	int chunkX = (int) glm::floor((pos.x / (float) CHUNK_SIZE));
 	int chunkY = (int) glm::floor((pos.y / (float) CHUNK_SIZE));
 	int chunkZ = (int) glm::floor((pos.z / (float) CHUNK_SIZE));
 
-	glm::ivec3 chunkPos(chunkX, chunkY, chunkZ);
+	glm::ivec3& chunkPos = toChunkPos(pos);
 	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
+	glm::ivec3& blockPos = toChunkBlockPos(pos);
 
-	int blockX = pos.x % (int) CHUNK_SIZE;
-	int blockY = pos.y % (int) CHUNK_SIZE;
-	int blockZ = pos.z % (int) CHUNK_SIZE;
+	return chunk->getBlockIDColor(blockPos);
+}
 
+inline glm::ivec3 VoxelWorld::toChunkPos(const glm::ivec3& blockPos)
+{
+	int chunkX = (int) glm::floor((blockPos.x / (float) CHUNK_SIZE));
+	int chunkY = (int) glm::floor((blockPos.y / (float) CHUNK_SIZE));
+	int chunkZ = (int) glm::floor((blockPos.z / (float) CHUNK_SIZE));
+	return glm::ivec3(chunkX, chunkY, chunkZ);
+}
+
+inline glm::ivec3 VoxelWorld::toChunkBlockPos(const glm::ivec3& blockPos)
+{
+	int blockX = blockPos.x % (int) CHUNK_SIZE;
+	int blockY = blockPos.y % (int) CHUNK_SIZE;
+	int blockZ = blockPos.z % (int) CHUNK_SIZE;
 	if (blockX < 0)
 		blockX += (int) CHUNK_SIZE;
 	if (blockY < 0)
 		blockY += (int) CHUNK_SIZE;
 	if (blockZ < 0)
 		blockZ += (int) CHUNK_SIZE;
-
-
-	return chunk->getBlockID(blockX, blockY, blockZ);
+	return glm::ivec3(blockX, blockY, blockZ);
 }
+
 
 const ChunkManager::ChunkMap& VoxelWorld::getChunks() const
 {

@@ -16,6 +16,157 @@ WorldRenderer::~WorldRenderer()
 
 }
 
+//face, vertex, offsetvec
+static const char AO_CHECKS_OFFSET[6][4][3][3] =
+{
+	{ //above
+		{ //v1
+			{ 0, 1, -1 },	//left
+			{ 1, 1, 0 },	//front
+			{ 1, 1, -1 }	//frontleft
+		},
+		{ //v2
+			{ 1, 1, 0 },	//front
+			{ 0, 1, 1 },	//right
+			{ 1, 1, 1 }		//frontright
+		},
+		{ //v3
+			{ 0, 1, 1 },	//right
+			{ -1, 1, 0 },	//back
+			{ -1, 1, 1 }	//backright
+		},
+		{ //v4
+			{ 0, 1, -1 },	//left
+			{ -1, 1, 0 },	//back
+			{ -1, 1, -1 }	//backleft
+		}
+	},
+	{ //below
+		{ //v1
+			{ 0, -1, 1 },	//left
+			{ 1, -1, 0 },	//front
+			{ 1, -1, 1 }	//frontleft
+		},
+		{ //v2
+			{ 1, -1, 0 },	//front
+			{ 0, -1, -1 },	//right
+			{ 1, -1, -1 }		//frontright
+		},
+		{ //v3
+			{ 0, -1, -1 },	//right
+			{ -1, -1, 0 },	//back
+			{ -1, -1, -1 }	//backright
+		},
+		{ //v4
+			{ 0, -1, 1 },	//left
+			{ -1, -1, 0 },	//back
+			{ -1, -1, 1 }	//backleft
+		}
+	},
+	{ //left //TODO:
+		{ //v1
+			{ 0, 1, -1 },	//left
+			{ -1, 0, -1 },	//front
+			{ -1, 1, -1 }	//frontleft
+		},
+		{ //v2
+			{ -1, 0, -1 },	//front
+			{ 0, -1, -1 },	//right
+			{ -1, -1, -1 }	//frontright
+		},
+		{ //v3
+			{ 0, -1, -1 },	//right
+			{ 1, 0, -1 },	//back
+			{ 1, -1, -1 }	//backright
+		},
+		{ //v4
+			{ 0, 1, -1 },	//left
+			{ 1, 0, -1 },	//back
+			{ 1, 1, -1 }	//backleft
+		}
+	},
+	{ //right
+		{ //v1
+			{ 0, 1, 1 },	//left
+			{ 1, 0, 1 },	//front
+			{ 1, 1, 1 }		//frontleft
+		},
+		{ //v2
+			{ 1, 0, 1 },	//front
+			{ 0, -1, 1 },	//right
+			{ 1, -1, 1 }	//frontright
+		},
+		{ //v3
+			{ 0, -1, 1 },	//right
+			{ -1, 0, 1 },	//back
+			{ -1, -1, 1 }	//backright
+		},
+		{ //v4
+			{ 0, 1, 1 },	//left
+			{ -1, 0, 1 },	//back
+			{ -1, 1, 1 }	//backleft
+		}
+	},
+	{ //front
+		{ //v2
+			{ 1, 1, 0 },	//front
+			{ 1, 0, -1 },	//right
+			{ 1, 1, -1 }		//frontright
+		},
+		{ //v3
+			{ 1, 0, -1 },	//right
+			{ 1, -1, 0 },	//back
+			{ 1, -1, -1 }	//backright
+		},
+		{ //v4
+			{ 1, 0, 1 },	//left
+			{ 1, -1, 0 },	//back
+			{ 1, -1, 1 }	//backleft
+		},
+		{ //v1
+			{ 1, 0, 1 },	//left
+			{ 1, 1, 0 },	//front
+			{ 1, 1, 1 }	//frontleft
+		}
+
+	},
+	{ //back
+		{ //v2
+			{ -1, 1, 0 },	//front
+			{ -1, 0, 1 },	//right
+			{ -1, 1, 1 }		//frontright
+		},
+		{ //v3
+			{ -1, 0, 1 },	//right
+			{ -1, -1, 0 },	//back
+			{ -1, -1, 1 }	//backright
+		},
+		{ //v4
+			{ -1, 0, -1 },	//left
+			{ -1, -1, 0 },	//back
+			{ -1, -1, -1 }	//backleft
+		},
+		{ //v1
+			{ -1, 0, -1 },	//left
+			{ -1, 1, 0 },	//front
+			{ -1, 1, -1 }	//frontleft
+		}
+	}
+};
+
+static const unsigned char AO_STRENGTH = 100;
+
+inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
+{
+	return side && side2 ? 2 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH;
+	/* == 
+	if (side && side2)
+		return 2 * AO_STRENGTH;
+	else
+		return (side + side2 + corner) * AO_STRENGTH;
+	*/
+}
+
 void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 {
 	const ChunkManager::ChunkMap& chunks = world.getChunks();
@@ -48,32 +199,90 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 						continue;
 
 					const PropertyManager& propertyManager = world.getPropertyManager();
-					Color8888 color(0, 0, 0, 255);
-
 					BlockRenderData properties = propertyManager.getBlockRenderData(id);
+
 					int worldX = chunkPos.x * CHUNK_SIZE + x;
 					int worldY = chunkPos.y * CHUNK_SIZE + y;
 					int worldZ = chunkPos.z * CHUNK_SIZE + z;
 
-					BlockID above = world.getBlockID(glm::ivec3(worldX, worldY + 1, worldZ));
-					BlockID below = world.getBlockID(glm::ivec3(worldX, worldY - 1, worldZ));
-					BlockID front = world.getBlockID(glm::ivec3(worldX + 1, worldY, worldZ));
-					BlockID back = world.getBlockID(glm::ivec3(worldX - 1, worldY, worldZ));
-					BlockID left = world.getBlockID(glm::ivec3(worldX, worldY, worldZ - 1));
-					BlockID right = world.getBlockID(glm::ivec3(worldX, worldY, worldZ + 1));
+					BlockIDColor idColors[3][3][3];
+					for (int i = 0; i < 3; ++i)
+					{
+						for (int j = 0; j < 3; ++j)
+						{
+							for (int k = 0; k < 3; ++k)
+							{
+								glm::ivec3 pos(worldX + (i - 1), worldY + (j - 1), worldZ + (k - 1));
+								idColors[i][j][k] = world.getBlockIDColor(pos);
+							}
+						}
+					}
 
-					if (above == 0 || propertyManager.getBlockRenderData(above).isTransparent)
-						renderChunk->addFace(VoxelRenderer::TOP, x, y, z, properties.topTexture, color, color, color, color);
-					if (below == 0 || propertyManager.getBlockRenderData(below).isTransparent)
-						renderChunk->addFace(VoxelRenderer::BOTTOM, x, y, z, properties.bottomTexture, color, color, color, color);
-					if (left == 0 || propertyManager.getBlockRenderData(left).isTransparent)
-						renderChunk->addFace(VoxelRenderer::LEFT, x, y, z, properties.leftTexture, color, color, color, color);
-					if (right == 0 || propertyManager.getBlockRenderData(right).isTransparent)
-						renderChunk->addFace(VoxelRenderer::RIGHT, x, y, z, properties.rightTexture, color, color, color, color);
-					if (front == 0 || propertyManager.getBlockRenderData(front).isTransparent)
-						renderChunk->addFace(VoxelRenderer::FRONT, x, y, z, properties.frontTexture, color, color, color, color);
-					if (back == 0 || propertyManager.getBlockRenderData(back).isTransparent)
-						renderChunk->addFace(VoxelRenderer::BACK, x, y, z, properties.backTexture, color, color, color, color);
+					BlockIDColor above = idColors[1][2][1];
+					BlockIDColor below = idColors[1][0][1];
+					BlockIDColor front = idColors[2][1][1];
+					BlockIDColor back = idColors[0][1][1];
+					BlockIDColor right = idColors[1][1][2];
+					BlockIDColor left = idColors[1][1][0];
+					BlockIDColor faceValues[6] = { above, below, left, right, front, back };
+
+					//------------
+					for (int face = 0; face < 6; ++face)
+					{
+						if (faceValues[face].id == 0 || faceValues[face].color.a != 0)
+						{
+							Color8888 perFaceCols[4];
+							unsigned char vertexAO[4];
+
+							for (int i = 0; i < 4; ++i)	//for every vertex
+							{
+								Color8888 perVertexCols[3];
+								bool isSolid[3] = { false, false, false };
+								int r = 0, g = 0, b = 0, a = 0, numTransparent = 0;
+
+								for (int j = 0; j < 3; ++j)	//3 times per vertex, order should be side, side, corner
+								{
+									char xOffset = AO_CHECKS_OFFSET[face][i][j][0];
+									char yOffset = AO_CHECKS_OFFSET[face][i][j][1];
+									char zOffset = AO_CHECKS_OFFSET[face][i][j][2];
+
+									BlockIDColor idCol = idColors[xOffset + 1][yOffset + 1][zOffset + 1];
+									perVertexCols[j] = idCol.color;
+									r += idCol.color.r;
+									g += idCol.color.g;
+									b += idCol.color.b;
+
+									if (idCol.color.a != 0)//alpha 0 is solid block
+									{
+										a += idCol.color.a;
+										numTransparent++;
+									}
+									else
+									{
+										isSolid[j] = true;
+									}
+								}
+
+								r += faceValues[face].color.r;
+								g += faceValues[face].color.g;
+								b += faceValues[face].color.b;
+								a += faceValues[face].color.a;
+								numTransparent++;
+
+								unsigned char alpha = (a / numTransparent);
+								vertexAO[i] = getAO(isSolid[0], isSolid[1], isSolid[2]);
+								perFaceCols[i] = Color8888(r / 4, g / 4, b / 4, (a / numTransparent));
+							}
+
+							perFaceCols[0].a = vertexAO[0] > perFaceCols[0].a ? 0 : perFaceCols[0].a - vertexAO[0];
+							perFaceCols[1].a = vertexAO[1] > perFaceCols[1].a ? 0 : perFaceCols[1].a - vertexAO[1];
+							perFaceCols[2].a = vertexAO[2] > perFaceCols[2].a ? 0 : perFaceCols[2].a - vertexAO[2];
+							perFaceCols[3].a = vertexAO[3] > perFaceCols[3].a ? 0 : perFaceCols[3].a - vertexAO[3];
+
+							bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
+							renderChunk->addFace((VoxelRenderer::Face) face, x, y, z, properties.topTexture, perFaceCols[0], perFaceCols[3], perFaceCols[1], perFaceCols[2], flipQuad);
+						}
+					}
 				}
 			}
 		}

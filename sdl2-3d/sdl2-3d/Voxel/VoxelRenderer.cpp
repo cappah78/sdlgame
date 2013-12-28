@@ -55,10 +55,10 @@ VoxelRenderer::VoxelRenderer()
 	, m_begunCache(false)
 	, m_blendEnabled(false)
 	, m_texcoordBuffer(MAX_FACES_PER_CACHE * 4)
-	, m_indiceBuffer(MAX_FACES_PER_CACHE * 6, GL_ELEMENT_ARRAY_BUFFER)
 {
 	m_pointData.resize(MAX_FACES_PER_CACHE * 4);
 	m_colorData.resize(MAX_FACES_PER_CACHE * 4);
+	m_indiceData.resize(MAX_FACES_PER_CACHE * 6);
 
 	m_shaderId = ShaderManager::createShaderProgram(VERT_SHADER_PATH, NULL, FRAG_SHADER_PATH);
 	
@@ -76,18 +76,6 @@ VoxelRenderer::VoxelRenderer()
 		m_texcoordBuffer.add(glm::vec2(0.0f, 1.0f));
 	}
 	m_texcoordBuffer.update();
-
-	unsigned short j = 0;
-	for (int i = 0; i < MAX_FACES_PER_CACHE * 6; i += 6, j += 4)
-	{
-		m_indiceBuffer.add(j + 0);
-		m_indiceBuffer.add(j + 1);
-		m_indiceBuffer.add(j + 2);
-		m_indiceBuffer.add(j + 1);
-		m_indiceBuffer.add(j + 3);
-		m_indiceBuffer.add(j + 2);
-	}
-	m_indiceBuffer.update();
 }
 
 void VoxelRenderer::beginRender(const TextureArray* tileSet)
@@ -111,6 +99,7 @@ void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chun
 	setMVPUniform(mvpMatrix);
 
 	glBindVertexArray(chunk->m_vao);
+	chunk->m_indiceBuffer.bind();
 	glDrawElements(GL_TRIANGLES, chunk->m_numFaces * 6, GL_UNSIGNED_SHORT, 0);
 }
 
@@ -130,7 +119,7 @@ const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOf
 	glGenVertexArrays(1, &chunk->m_vao);
 	glBindVertexArray(chunk->m_vao);
 
-	m_indiceBuffer.bind();
+	//chunk->m_indiceBuffer.bind();
 	chunk->m_pointBuffer.setAttribPointer(POSITION_LOC, GL_UNSIGNED_INT, 1, GL_FALSE, GL_TRUE);
 	chunk->m_colorBuffer.setAttribPointer(COLOR_LOC, GL_UNSIGNED_BYTE, 4, GL_TRUE);
 	m_texcoordBuffer.setAttribPointer(TEXCOORD_LOC, GL_FLOAT, 2);
@@ -151,20 +140,44 @@ void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk
 
 	chunk->m_numFaces = 0;
 
+	chunk->m_indiceBuffer.reset();
 	chunk->m_pointBuffer.reset();
 	chunk->m_colorBuffer.reset();
 
+	chunk->m_indiceBuffer.setBackingArray(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
 	chunk->m_pointBuffer.setBackingArray(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
 	chunk->m_colorBuffer.setBackingArray(&m_colorData[0], m_colorData.size() * sizeof(m_colorData[0]));
 
 	chunk->m_begun = true;
 }
 
-void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4)
+void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4, bool flipQuad)
 {
 	assert(m_begun && "Chunk has not yet begun");
 
 	m_numFaces++;
+
+	unsigned int indiceIdx = m_indiceBuffer.getSizeInElements();
+	unsigned short j = (indiceIdx / 6) * 4;
+
+	if (flipQuad)
+	{
+		m_indiceBuffer.add(j + 1);
+		m_indiceBuffer.add(j + 3);
+		m_indiceBuffer.add(j + 0);
+		m_indiceBuffer.add(j + 2);
+		m_indiceBuffer.add(j + 0);
+		m_indiceBuffer.add(j + 3);
+	}
+	else
+	{
+		m_indiceBuffer.add(j + 1);
+		m_indiceBuffer.add(j + 3);
+		m_indiceBuffer.add(j + 2);
+		m_indiceBuffer.add(j + 0);
+		m_indiceBuffer.add(j + 1);
+		m_indiceBuffer.add(j + 2);
+	}
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -187,9 +200,11 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
 	assert(m_begunCache && chunk->m_begun && "Cache has not yet begun");
 	m_begunCache = false;
 
+	chunk->m_indiceBuffer.update();
 	chunk->m_pointBuffer.update();
 	chunk->m_colorBuffer.update();
 
+	chunk->m_indiceBuffer.clearBackingArray();
 	chunk->m_pointBuffer.clearBackingArray();
 	chunk->m_colorBuffer.clearBackingArray();
 

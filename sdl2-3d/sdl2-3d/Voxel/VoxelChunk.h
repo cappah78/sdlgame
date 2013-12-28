@@ -12,38 +12,20 @@ static const unsigned int CHUNK_SIZE_CUBED = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZ
 
 #include <vector>
 
-
 class PropertyManager;
 
 class VoxelChunk
 {
-public:
-	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
-		: m_pos(pos)
-		, m_propertyManager(propertyManager)
-		, m_data(0)
-		, m_updated(false)
-	{};
-	VoxelChunk(const VoxelChunk& copyMe) = delete;
-	~VoxelChunk() {};
-
-	bool m_updated;
-
-	void setBlock(BlockID blockID, int x, int y, int z, void* dataPtr = NULL, unsigned int dataSize = 0);
-	BlockID getBlockID(int x, int y, int z);
-	BlockID* getBlocks() { return &m_data.m_blockIDs[0]; };
-
-	const glm::ivec3 m_pos;
 private:
-
+	/** Container for any amount of random per-block data*/
 	class ChunkDataContainer
 	{
 	public:
-		std::vector<BlockID> m_blockIDs;
-		std::vector<unsigned int> m_blockDataPositions;
-
 		ChunkDataContainer(unsigned int initialSize = 0);
 		~ChunkDataContainer();
+
+		std::vector<unsigned int> m_blockDataPositions;
+
 		/** copy the data to the list, returning its start index */
 		unsigned int add(void* data, unsigned int size);
 		void* get(unsigned int position, unsigned int size);
@@ -60,8 +42,36 @@ private:
 		void resize(unsigned int newSize);
 	};
 
+public:
+	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos);
+	VoxelChunk(const VoxelChunk& copyMe) = delete;
+	~VoxelChunk() {};
+
+	bool m_updated;
+	const glm::ivec3 m_pos;
+
+	void setBlock(BlockID blockID, int x, int y, int z, void* dataPtr = NULL, unsigned int dataSize = 0);
+	void setBlockColor(int x, int y, int z, BlockColor color);
+
+	/** Get the block at the given position inside this chunk (0-chunksize) */
+	BlockID getBlockID(const glm::ivec3& pos) const;
+	/** Return the backing array of id's, index = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z */
+	BlockID* getBlocks() { return &m_blockIDs[0]; };
+
+	/** Get the color at the given position inside this chunk (0-chunksize) */
+	BlockColor getBlockColor(const glm::ivec3& pos) const;
+	/** Return the backing array of colors, index = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z */
+	BlockColor* getColors() { return &m_blockColors[0]; };
+
+	BlockIDColor getBlockIDColor(const glm::ivec3& pos) const;
+
+private:
+
 	ChunkDataContainer m_data;
 	PropertyManager& m_propertyManager;
+
+	std::vector<BlockColor> m_blockColors;
+	std::vector<BlockID> m_blockIDs;
 };
 
 #endif //VOXEL_CHUNK_H_

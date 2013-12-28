@@ -2,7 +2,7 @@
 #extension GL_ARB_gpu_shader5 : enable
 
 layout(std140) uniform LightData {
-	vec4 light[32];
+	vec4 lightPositions[32];
 } lightData;
 
 layout(std140) uniform LightTransform {
@@ -14,12 +14,13 @@ layout(triangle_strip, max_vertices = 3) out;
 
 in vec3 position[];
 
+/** Used to generate depth buffer for up to 32 lights at a time with a single draw call. */
 void main() 
 {
 	//calculate triangle normal
 	vec3 normal = cross(position[2]-position[0], position[0]-position[1]);
 	//calculate light angle
-	vec3 light = vec3(lightData.light[gl_InvocationID].position) - position[0];
+	vec3 light = vec3(lightData.lightPositions[gl_InvocationID]) - position[0];
 
 	// backface culling
 	if (dot(normal, light) > 0.f) 
