@@ -11,10 +11,11 @@ class Camera;
 class TextureArray;
 
 
-
 class WorldRenderer
 {
 public:
+	static const unsigned char AO_STRENGTH = 80;
+
 	typedef std::unordered_map<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>, IVec3Hash> RenderChunkMap;
 
 	/** Renders a VoxelWorld, will manage all the rendering related objects */

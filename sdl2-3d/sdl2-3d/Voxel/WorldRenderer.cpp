@@ -154,8 +154,6 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 	}
 };
 
-static const unsigned char AO_STRENGTH = 100;
-
 inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 {
 	return side && side2 ? 2 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH;
