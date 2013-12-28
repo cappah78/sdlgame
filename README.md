@@ -41,8 +41,19 @@ The texture coordinate buffer is a static buffer shared by all chunks.
 
 <b> TODO: </b>
 
-...
+- Vertex based mincraft like lighting.
+- Actual chunk generation (currently using a single call to a lua method to build the world)
+- More Lua bindings between c++/lua (to script things like controls and interactions)
+- System to memory efficiently do block logic in lua scripts.
+- Higher detail Ambient Occlusion like Cube World, sampling from a larger radius.
+- Chunk saving/loading
 
+<b> Done: </b>
 
+- Basic World/Chunk layout
+- Basic high efficienty voxel renderer
+- Basic Ambient occlusion calculations for voxels
+- Basic Lua bindings to setblock and create new block types from scripts.
+- Learn OpenGL/GLSL/C++
 
 
