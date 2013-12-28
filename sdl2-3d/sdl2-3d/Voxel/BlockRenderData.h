@@ -3,7 +3,8 @@
 
 #include <string>
 #include "VoxelRenderer.h"
-#include "TextureManager.h"
+
+typedef unsigned short TextureID;
 
 class VoxelWorld;
 struct LuaTableData;
@@ -29,26 +30,19 @@ struct BlockRenderData	// 8 bytes;
 		{
 		case VoxelRenderer::Face::TOP:
 			return topTexture;
-			break;
 		case VoxelRenderer::Face::BOTTOM:
 			return bottomTexture;
-			break;
 		case VoxelRenderer::Face::LEFT:
 			return leftTexture;
-			break;
 		case VoxelRenderer::Face::RIGHT:
 			return rightTexture;
-			break;
 		case VoxelRenderer::Face::FRONT:
 			return frontTexture;
-			break;
 		case VoxelRenderer::Face::BACK:
 			return backTexture;
-			break;
 		default:
-			return 0;
 			assert(false && "invalid face id");
-			break;
+			return 0;
 		}
 	}
 };

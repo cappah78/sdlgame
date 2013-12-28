@@ -30,5 +30,6 @@ void LuaChunkGenerator::generateChunk(VoxelChunk* const chunk)
 
 void LuaChunkGenerator::generateMap()
 {
+	//TODO: temp world gen..
 	checkLuaError(m_L, luaL_dofile(m_L, LUA_GEN_SCRIPT_PATH));
 }
