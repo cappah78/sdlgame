@@ -2,6 +2,7 @@
 #define BLOCK_RENDER_DATA_H_
 
 #include <string>
+#include "VoxelRenderer.h"
 
 class VoxelWorld;
 struct LuaTableData;
@@ -20,6 +21,31 @@ struct BlockRenderData	// 8 bytes;
 	unsigned isTransparent : 1;
 	unsigned isAnimated : 1;
 	unsigned padding : 2;
+
+	TextureID getTextureID(VoxelRenderer::Face face)
+	{
+		switch (face)
+		{
+		case VoxelRenderer::Face::TOP:
+			return topTexture;
+			break;
+		case VoxelRenderer::Face::BOTTOM:
+			return bottomTexture;
+			break;
+		case VoxelRenderer::Face::LEFT:
+			return leftTexture;
+			break;
+		case VoxelRenderer::Face::RIGHT:
+			return rightTexture;
+			break;
+		case VoxelRenderer::Face::FRONT:
+			return frontTexture;
+			break;
+		case VoxelRenderer::Face::BACK:
+			return backTexture;
+			break;
+		}
+	}
 };
 
 #endif //BLOCK_RENDER_DATA_H_
