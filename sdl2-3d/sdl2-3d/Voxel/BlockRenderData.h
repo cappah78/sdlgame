@@ -3,6 +3,7 @@
 
 #include <string>
 #include "VoxelRenderer.h"
+#include "TextureManager.h"
 
 class VoxelWorld;
 struct LuaTableData;
@@ -43,6 +44,10 @@ struct BlockRenderData	// 8 bytes;
 			break;
 		case VoxelRenderer::Face::BACK:
 			return backTexture;
+			break;
+		default:
+			return 0;
+			assert(false && "invalid face id");
 			break;
 		}
 	}

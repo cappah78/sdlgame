@@ -1,58 +1,55 @@
-﻿Build started 28/12/2013 16:57:45.
+﻿Build started 28/12/2013 17:22:23.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp Screens\GameScreen.cpp Voxel\BlockRenderData.cpp Voxel\ChunkManager.cpp Voxel\PropertyManager.cpp Voxel\VoxelChunk.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp main.cpp
          Game.cpp
          GameScreen.cpp
          BlockRenderData.cpp
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2061: syntax error : identifier 'Face'
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2065: 'face' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2050: switch expression not integral
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2065: 'TOP' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2051: case expression not constant
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(30): warning C4060: switch statement contains no 'case' or 'default' labels
          ChunkManager.cpp
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2061: syntax error : identifier 'Face'
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2065: 'face' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2050: switch expression not integral
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2065: 'TOP' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2051: case expression not constant
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(30): warning C4060: switch statement contains no 'case' or 'default' labels
          PropertyManager.cpp
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2061: syntax error : identifier 'Face'
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2065: 'face' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2050: switch expression not integral
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2065: 'TOP' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2051: case expression not constant
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(30): warning C4060: switch statement contains no 'case' or 'default' labels
          VoxelChunk.cpp
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2061: syntax error : identifier 'Face'
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2065: 'face' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2050: switch expression not integral
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2065: 'TOP' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2051: case expression not constant
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(30): warning C4060: switch statement contains no 'case' or 'default' labels
          VoxelWorld.cpp
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(24): error C2061: syntax error : identifier 'Face'
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2065: 'face' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(26): error C2050: switch expression not integral
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2653: 'VoxelRenderer' : is not a class or namespace name
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2065: 'TOP' : undeclared identifier
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(28): error C2051: case expression not constant
-     1>c:\users\enrico\documents\github\sdlgame\sdl2-3d\sdl2-3d\voxel\BlockRenderData.h(30): warning C4060: switch statement contains no 'case' or 'default' labels
          WorldRenderer.cpp
          main.cpp
-     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)) -- FAILED.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\SDL2-2.0.1\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\glew-1.10.0\lib\Release\Win32" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\libpng" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\assimp\lib" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\LuaBridge\Release" /LIBPATH:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\..\2.1" SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib libpng16.lib lua5.1.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH Release\Camera.obj
+         Release\CubeMap.obj
+         Release\Material.obj
+         Release\Mesh.obj
+         Release\Texture.obj
+         Release\TextureArray.obj
+         Release\Graphics.obj
+         Release\HeightMap.obj
+         Release\ShadowCubeMap.obj
+         Release\PerspectiveCamera.obj
+         Release\Pixmap.obj
+         Release\HeightMapRenderer.obj
+         Release\SkyBox.obj
+         Release\SpriteBatch.obj
+         Release\Input.obj
+         Release\CheckGLError.obj
+         Release\FPSCameraController.obj
+         Release\NumberUtils.obj
+         Release\PerlinGenerator.obj
+         Release\ShaderManager.obj
+         Release\stb_image.obj
+         Release\Game.obj
+         Release\main.obj
+         Release\GameScreen.obj
+         Release\BlockRenderData.obj
+         Release\ChunkManager.obj
+         Release\LuaChunkGenerator.obj
+         Release\TextureManager.obj
+         Release\PropertyManager.obj
+         Release\VoxelRenderer.obj
+         Release\VoxelChunk.obj
+         Release\VoxelWorld.obj
+         Release\WorldRenderer.obj
+         Generating code
+         Finished generating code
+         sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
+     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:04.72
+Time Elapsed 00:00:07.36
