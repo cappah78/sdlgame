@@ -3,9 +3,6 @@
 #include <SDL.h>
 #include <lua.hpp>
 
-#include <stdio.h>
-#include <iostream>
-
 #include "Engine\Utils\CheckGLError.h"
 
 #include "Screens/GameScreen.h"
@@ -113,11 +110,11 @@ int luaPrint(lua_State* L)
 		lua_pushvalue(L, i + 1);
 		lua_call(L, 1, 1);
 		const char* res = lua_tostring(L, -1);
-		std::cout << res;
+		printf(res);
 		if (i == numArgs - 1)
-			std::cout << std::endl;
+			printf("\n");
 		else
-			std::cout << "\t";
+			printf("\t");
 		lua_pop(L, 1);
 	}
 

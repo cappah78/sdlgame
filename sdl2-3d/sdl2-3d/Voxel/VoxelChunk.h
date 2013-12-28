@@ -72,6 +72,7 @@ private:
 
 	std::vector<BlockColor> m_blockColors;
 	std::vector<BlockID> m_blockIDs;
+	std::vector<bool> m_skyVisible;
 };
 
 #endif //VOXEL_CHUNK_H_

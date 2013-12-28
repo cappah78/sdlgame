@@ -94,24 +94,22 @@ bool FPSCameraController::mouseUp(Uint8 key, int xPos, int yPos)
 
 bool FPSCameraController::mouseMoved(int xPos, int yPos, int xMove, int yMove)
 {
-	if (m_lmbPressed)
-	{
-		//rotate horizontally
-		m_lookDir = glm::rotate(m_lookDir, -xMove * MOUSE_LOOK_SENSITIVITY, UP);
+	//rotate horizontally
+	m_lookDir = glm::rotate(m_lookDir, -xMove * MOUSE_LOOK_SENSITIVITY, UP);
 
-		//calculate axis to rotate vertically on
-		float xzAngle = glm::atan2(m_lookDir.x, m_lookDir.z);
+	//calculate axis to rotate vertically on
+	float xzAngle = glm::atan2(m_lookDir.x, m_lookDir.z);
 	
-		glm::vec3 yRotAxis(-glm::cos(xzAngle), 0.0f, glm::sin(xzAngle));
+	glm::vec3 yRotAxis(-glm::cos(xzAngle), 0.0f, glm::sin(xzAngle));
 
-		//rotate vertically
-		glm::vec3 tmp = m_lookDir;
-		m_lookDir = glm::rotate(m_lookDir, -yMove * MOUSE_LOOK_SENSITIVITY, yRotAxis);
-		//limit vertical look movement
+	//rotate vertically
+	glm::vec3 tmp = m_lookDir;
+	m_lookDir = glm::rotate(m_lookDir, -yMove * MOUSE_LOOK_SENSITIVITY, yRotAxis);
+	//limit vertical look movement
 
-		if (m_lookDir.y > 0.99f || m_lookDir.y < -0.99f)
-			m_lookDir = tmp;
-	}
+	if (m_lookDir.y > 0.99f || m_lookDir.y < -0.99f)
+		m_lookDir = tmp;
+
 	return false;
 }
 

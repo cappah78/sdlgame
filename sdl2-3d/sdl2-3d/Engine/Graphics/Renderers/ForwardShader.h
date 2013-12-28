@@ -3,15 +3,17 @@
 
 //TODO: Rewrite lighting
 
+/*
+
 #include "UniformBufferStructs.h"
 #include <glm/glm.hpp>
 
 #include "..\Camera.h"
 #include "..\Lighting\LightManager.h"
 
-/**
+
 Shader with simple Phong lighting
-*/
+
 class ForwardShader
 {
 public:
@@ -37,7 +39,6 @@ private:
 	void setupUniforms();
 	void setupBuffers();
 
-	/** Program ID*/
 	GLuint m_forwardShaderProgram;
 
 	CameraTransform m_cameraTransform;			// transformation data
@@ -54,5 +55,7 @@ private:
 
 	GLint m_ambientLightUniformLoc;
 };
+
+*/
 
 #endif //FORWARD_SHADER_H_

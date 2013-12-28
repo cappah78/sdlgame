@@ -28,7 +28,7 @@ VoxelChunk* ChunkManager::loadChunk(glm::ivec3& pos)
 	VoxelChunk* chunk = new VoxelChunk(m_propertyManager, pos);
 
 	m_loadedChunks.insert(std::make_pair(pos, chunk));
-	//TODO:..
+	//TODO: chunk generation
 	//generateChunk(chunk);
 
 	return chunk;

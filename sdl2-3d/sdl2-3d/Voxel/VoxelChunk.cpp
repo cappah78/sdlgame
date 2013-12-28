@@ -5,13 +5,16 @@
 
 static const float RESIZE_MULTIPLIER = 1.5f;
 
+static const Color8888 DEFAULT_LIGHT_LEVEL(0, 0, 0, 255);
+static const Color8888 SOLID_BLOCK_COLOR(0, 0, 0, 0);
+
 VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 	: m_pos(pos)
 	, m_propertyManager(propertyManager)
 	, m_data(0)
 	, m_updated(false)
 {
-	m_blockColors.resize(CHUNK_SIZE_CUBED);
+	m_blockColors.resize(CHUNK_SIZE_CUBED, DEFAULT_LIGHT_LEVEL);
 	m_blockIDs.resize(CHUNK_SIZE_CUBED);
 }
 
@@ -25,11 +28,11 @@ void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, u
 
 	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
 	BlockID& id = m_blockIDs[idx];
-	m_blockColors[idx] = Color8888(0, 0, 0, 0);
-
+	//TODO: solid checking
+	m_blockColors[idx] = SOLID_BLOCK_COLOR;
 
 	//TODO: all the things
-	if (id != 0)//there was already a block here
+	//if (id != 0)//there was already a block here
 	{
 		//handle on block remove
 	}
