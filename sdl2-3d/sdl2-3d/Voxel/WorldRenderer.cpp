@@ -16,7 +16,7 @@ WorldRenderer::~WorldRenderer()
 
 }
 
-//face, vertex, offsetvec
+//face, vertex, offsetvec	//TODO: refactor so offsets are calculated programmatically instead of from this array.
 static const char AO_CHECKS_OFFSET[6][4][3][3] =
 {
 	{ //above
@@ -63,7 +63,7 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 			{ -1, -1, 1 }	//backleft
 		}
 	},
-	{ //left //TODO:
+	{ //left
 		{ //v1
 			{ 0, 1, -1 },	//left
 			{ -1, 0, -1 },	//front
@@ -234,20 +234,21 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 							Color8888 perFaceCols[4];
 							unsigned char vertexAO[4];
 
-							for (int i = 0; i < 4; ++i)	//for every vertex
+							for (int vertex = 0; vertex < 4; ++vertex)	//for every vertex
 							{
 								Color8888 perVertexCols[3];
 								bool isSolid[3] = { false, false, false };
 								int r = 0, g = 0, b = 0, a = 0, numTransparent = 0;
 
-								for (int j = 0; j < 3; ++j)	//3 times per vertex, order should be side, side, corner
+								for (int sample = 0; sample < 3; ++sample)	//3 times per vertex, order should be side, side, corner
 								{
-									char xOffset = AO_CHECKS_OFFSET[face][i][j][0];
-									char yOffset = AO_CHECKS_OFFSET[face][i][j][1];
-									char zOffset = AO_CHECKS_OFFSET[face][i][j][2];
+									char sampleXOffset = AO_CHECKS_OFFSET[face][vertex][sample][0];
+									char sampleYOffset = AO_CHECKS_OFFSET[face][vertex][sample][1];
+									char sampleZOffset = AO_CHECKS_OFFSET[face][vertex][sample][2];
 
-									BlockIDColor idCol = idColors[xOffset + 1][yOffset + 1][zOffset + 1];
-									perVertexCols[j] = idCol.color;
+									BlockIDColor idCol = idColors[sampleXOffset + 1][sampleYOffset + 1][sampleZOffset + 1];
+									perVertexCols[sampleZOffset] = idCol.color;
+
 									r += idCol.color.r;
 									g += idCol.color.g;
 									b += idCol.color.b;
@@ -258,9 +259,7 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 										numTransparent++;
 									}
 									else
-									{
-										isSolid[j] = true;
-									}
+										isSolid[sample] = true;
 								}
 
 								r += faceValues[face].color.r;
@@ -270,8 +269,8 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 								numTransparent++;
 
 								unsigned char alpha = (a / numTransparent);
-								vertexAO[i] = getAO(isSolid[0], isSolid[1], isSolid[2]);
-								perFaceCols[i] = Color8888(r / 4, g / 4, b / 4, (a / numTransparent));
+								vertexAO[vertex] = getAO(isSolid[0], isSolid[1], isSolid[2]);
+								perFaceCols[vertex] = Color8888(r / 4, g / 4, b / 4, (a / numTransparent));
 							}
 
 							perFaceCols[0].a = vertexAO[0] > perFaceCols[0].a ? 0 : perFaceCols[0].a - vertexAO[0];

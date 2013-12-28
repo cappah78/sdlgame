@@ -13,5 +13,5 @@ void main()
 {
 	vec4 texCol = texture2DArray(texArr, texCoord);
 	out_color = vec4((texCol.rgb + color.rgb) * color.a , texCol.a);
-	//out_color = vec4(color.a);
+	//out_color = vec4(color.a);	//only show lightlevel/ao
 }

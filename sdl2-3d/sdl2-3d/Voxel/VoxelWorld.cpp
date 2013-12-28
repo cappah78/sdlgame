@@ -31,15 +31,14 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	m_textureArray = m_textureManager.generateTextureArray();
 
 	m_generator.generateMap();
-	m_chunkManager.getChunk(glm::ivec3(0, 0, 0));
 }
 
 void VoxelWorld::initializeLuaWorld()
 {
 	luabridge::getGlobalNamespace(m_L)
 		.beginNamespace(LUA_WORLD_NAMESPACE)
-		.addCFunction(LUA_WORLD_REGISTER_FUNCTION, &L_registerBlockType)
-		.addCFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)
+		.addCFunction(LUA_WORLD_REGISTER_FUNCTION, &L_registerBlockType)	//Add World.registerBlockType
+		.addCFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)				//add World.setBlock
 		.endNamespace();
 
 	checkLuaError(m_L, luaL_dofile(m_L, LUA_INIT_SCRIPT));
