@@ -2,6 +2,8 @@ Simple high performance work in progress Minecraft like Voxel Renderer with lua 
 
 Should be instantly compileable/runnable with VS2013/12 and perhaps older versions.
 
+Random screenshot of last finished feature:
+https://dl.dropboxusercontent.com/u/18555381/Permanent/aowithtextures.png
 
 <b> Design </b>
 
