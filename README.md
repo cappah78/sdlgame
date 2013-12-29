@@ -5,6 +5,8 @@ Should be instantly compileable/runnable with VS2013/12 and perhaps older versio
 Random screenshot of last finished feature:
 https://dl.dropboxusercontent.com/u/18555381/Permanent/aowithtextures.png
 
+To run the game as a standalone, copy the sdl2-3d/Assets folder to the Release (or Debug) folder.
+
 <b> Design </b>
 
 The engine will be using a data oriented design, meaning a lot of focus is around making the data easily iterateable with as few cache misses as possible.
