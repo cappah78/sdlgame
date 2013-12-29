@@ -15,7 +15,7 @@
 class ChunkManager
 {
 public:
-	typedef std::unordered_map<const glm::ivec3, VoxelChunk* const, IVec3Hash> ChunkMap;
+	typedef std::unordered_map<const glm::ivec3, std::shared_ptr<VoxelChunk> const, IVec3Hash> ChunkMap;
 
 	ChunkManager(PropertyManager& propertyManager, LuaChunkGenerator& generator) 
 		: m_propertyManager(propertyManager)
@@ -26,9 +26,9 @@ public:
 	ChunkManager(const ChunkManager& copy) = delete;
 	~ChunkManager() {};
 
-	VoxelChunk* const getChunk(glm::ivec3& pos);
-	void unloadChunk(VoxelChunk* chunk);
-	VoxelChunk* loadChunk(glm::ivec3& pos);
+	std::shared_ptr<VoxelChunk> const getChunk(const glm::ivec3& pos);
+	void unloadChunk(std::shared_ptr<VoxelChunk> chunk);
+	std::shared_ptr<VoxelChunk> loadChunk(const glm::ivec3& pos);
 	const ChunkMap& getLoadedChunkMap() const { return m_loadedChunks; };
 
 private:
@@ -40,7 +40,7 @@ private:
 
 	/** Keeping track of the last returned chunk because its common to retrieve the same chunk multiple times */
 	glm::ivec3 m_lastReturnedChunkPos;
-	VoxelChunk* m_lastReturnedChunk;
+	std::shared_ptr<VoxelChunk> m_lastReturnedChunk;
 
 	ChunkMap m_loadedChunks;
 	LuaChunkGenerator& m_generator;

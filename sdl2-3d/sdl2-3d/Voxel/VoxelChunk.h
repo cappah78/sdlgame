@@ -43,23 +43,25 @@ private:
 	};
 
 public:
-	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos);
+	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& blockPos);
 	VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
 
 	bool m_updated;
 	const glm::ivec3 m_pos;
 
-	void setBlock(BlockID blockID, int x, int y, int z, void* dataPtr = NULL, unsigned int dataSize = 0);
-	void setBlockColor(int x, int y, int z, BlockColor color);
+	/** Set the block at the given position inside this chunk (0-chunksize) with optional additional data for this block */
+	void setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr = NULL, unsigned int dataSize = 0);
+	/** Set the color at the given position inside this chunk (0-chunksize) */
+	void setBlockColor(const glm::ivec3& blockPos, BlockColor color);
 
 	/** Get the block at the given position inside this chunk (0-chunksize) */
-	BlockID getBlockID(const glm::ivec3& pos) const;
+	BlockID getBlockID(const glm::ivec3& blockPos) const;
 	/** Return the backing array of id's, index = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z */
 	BlockID* getBlocks() { return &m_blockIDs[0]; };
 
 	/** Get the color at the given position inside this chunk (0-chunksize) */
-	BlockColor getBlockColor(const glm::ivec3& pos) const;
+	BlockColor getBlockColor(const glm::ivec3& blockPos) const;
 	/** Return the backing array of colors, index = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z */
 	BlockColor* getColors() { return &m_blockColors[0]; };
 

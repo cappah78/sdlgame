@@ -34,6 +34,9 @@ public:
 
 	const TextureArray* const getTileSet() const { return m_textureArray; };
 
+	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
+	inline static glm::ivec3 toChunkBlockPos(const glm::ivec3& blockPos);
+
 protected:
 	static std::map<lua_State* const, VoxelWorld* const> stateWorldMap;
 
@@ -46,12 +49,16 @@ private:
 	LuaChunkGenerator m_generator;
 	mutable ChunkManager m_chunkManager;
 
+	inline static int fastFloor(float x)
+	{
+		int i = (int) x;
+		return i - (i > x);
+	};
+
+
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);
 	static int L_setBlock(lua_State* L);
-
-	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
-	inline static glm::ivec3 toChunkBlockPos(const glm::ivec3& blockPos);
 };
 
 #endif //VOXEL_WORLD_H_

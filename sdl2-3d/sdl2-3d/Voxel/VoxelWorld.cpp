@@ -14,6 +14,7 @@ std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 
 //TODO: remove constant
 static const unsigned int BLOCK_TEX_RES = 16;
+static const float BLOCK_TO_CHUNK = 1 / (float) CHUNK_SIZE;
 
 static const int SEED = 23;
 
@@ -53,7 +54,6 @@ void VoxelWorld::initializeLuaWorld()
 		std::cerr << e.what() << std::endl;
 	}
 }
-
 
 int VoxelWorld::L_registerBlockType(lua_State* L)
 {
@@ -95,53 +95,37 @@ int VoxelWorld::L_setBlock(lua_State* L)
 
 void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 {
-	int chunkX = (int) glm::floor((pos.x / (float) CHUNK_SIZE));
-	int chunkY = (int) glm::floor((pos.y / (float) CHUNK_SIZE));
-	int chunkZ = (int) glm::floor((pos.z / (float) CHUNK_SIZE));
+	const glm::ivec3& chunkPos = toChunkPos(pos);
+	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+	const glm::ivec3& blockPos = toChunkBlockPos(pos);
 
-	glm::ivec3 chunkPos(chunkX, chunkY, chunkZ);	
-	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
-
-	int blockX = pos.x % (int) CHUNK_SIZE;
-	int blockY = pos.y % (int) CHUNK_SIZE;
-	int blockZ = pos.z % (int) CHUNK_SIZE;
-	if (blockX < 0)
-		blockX += (int) CHUNK_SIZE;
-	if (blockY < 0)
-		blockY += (int) CHUNK_SIZE;
-	if (blockZ < 0)
-		blockZ += (int) CHUNK_SIZE;
-
-	chunk->setBlock(blockID, blockX, blockY, blockZ);
+	chunk->setBlock(blockID, blockPos);
 }
 
 BlockID VoxelWorld::getBlockID(const glm::ivec3& pos) const
 {
-	glm::ivec3& chunkPos = toChunkPos(pos);
-	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
-	glm::ivec3& blockPos = toChunkBlockPos(pos);
+	const glm::ivec3& chunkPos = toChunkPos(pos);
+	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+	const glm::ivec3& blockPos = toChunkBlockPos(pos);
 
 	return chunk->getBlockID(blockPos);
 }
 
 BlockIDColor VoxelWorld::getBlockIDColor(const glm::ivec3& pos) const
 {
-	int chunkX = (int) glm::floor((pos.x / (float) CHUNK_SIZE));
-	int chunkY = (int) glm::floor((pos.y / (float) CHUNK_SIZE));
-	int chunkZ = (int) glm::floor((pos.z / (float) CHUNK_SIZE));
-
-	glm::ivec3& chunkPos = toChunkPos(pos);
-	VoxelChunk* chunk = m_chunkManager.getChunk(chunkPos);
-	glm::ivec3& blockPos = toChunkBlockPos(pos);
+	const glm::ivec3& chunkPos = toChunkPos(pos);
+	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+	const glm::ivec3& blockPos = toChunkBlockPos(pos);
 
 	return chunk->getBlockIDColor(blockPos);
 }
 
+
 inline glm::ivec3 VoxelWorld::toChunkPos(const glm::ivec3& blockPos)
 {
-	int chunkX = (int) glm::floor((blockPos.x / (float) CHUNK_SIZE));
-	int chunkY = (int) glm::floor((blockPos.y / (float) CHUNK_SIZE));
-	int chunkZ = (int) glm::floor((blockPos.z / (float) CHUNK_SIZE));
+	int chunkX = fastFloor(blockPos.x * BLOCK_TO_CHUNK);
+	int chunkY = fastFloor(blockPos.y * BLOCK_TO_CHUNK);
+	int chunkZ = fastFloor(blockPos.z * BLOCK_TO_CHUNK);
 	return glm::ivec3(chunkX, chunkY, chunkZ);
 }
 

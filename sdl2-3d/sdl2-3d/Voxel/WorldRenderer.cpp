@@ -168,10 +168,9 @@ inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 {
 	const ChunkManager::ChunkMap& chunks = world.getChunks();
-	
 	for (auto it : chunks)
 	{
-		VoxelChunk* chunk = it.second;
+		const std::shared_ptr<VoxelChunk>& chunk = it.second;
 		const glm::ivec3& chunkPos = chunk->m_pos;
 
 		if (chunk->m_updated)
@@ -296,6 +295,7 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 	}
 
 	m_renderer.beginRender(world.getTileSet());
+
 	for (auto it : m_renderChunks)
 	{
 		m_renderer.renderChunk(it.second, camera);

@@ -19,79 +19,82 @@ VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 	m_skyVisible.resize(CHUNK_SIZE_CUBED, false);
 }
 
-void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, unsigned int dataSize)
+void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr, unsigned int dataSize)
 {
-	assert(x >= 0 && x < CHUNK_SIZE);
-	assert(y >= 0 && y < CHUNK_SIZE);
-	assert(z >= 0 && z < CHUNK_SIZE);
+	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
+	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
+	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
 
 	m_updated = false;
 
-	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
+	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
 	BlockID& id = m_blockIDs[idx];
+
 	//TODO: solid checking
 	m_blockColors[idx] = SOLID_BLOCK_COLOR;
 
+	/*
 	//TODO: all the things
-	//if (id != 0)//there was already a block here
+	if (id != 0)//there was already a block here
 	{
 		//handle on block remove
 	}
 
-	//unsigned int& dataPos = m_data.m_blockDataPositions[idx];
-//	if (dataPos != 0)//There was already a block here with data
+	unsigned int& dataPos = m_data.m_blockDataPositions[idx];
+	if (dataPos != 0)//There was already a block here with data
 	{
 		//clean up old data
 		//get size of old data
 	}
 
-//	if (dataSize != 0 && dataPtr != NULL)
+	if (dataSize != 0 && dataPtr != NULL)
 	{
 		//insert new block data
 	}
+	*/
 
 	id = blockID;
 }
 
-void VoxelChunk::setBlockColor(int x, int y, int z, BlockColor color)
+void VoxelChunk::setBlockColor(const glm::ivec3& blockPos, BlockColor color)
 {
-	assert(x >= 0 && x < CHUNK_SIZE);
-	assert(y >= 0 && y < CHUNK_SIZE);
-	assert(z >= 0 && z < CHUNK_SIZE);
+	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
+	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
+	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
 
 	m_updated = false;
 
-	unsigned int idx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
+	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
 	m_blockColors[idx] = color;
 }
 
-BlockID VoxelChunk::getBlockID(const glm::ivec3& pos) const
+BlockID VoxelChunk::getBlockID(const glm::ivec3& blockPos) const
 {
-	assert(pos.x >= 0 && pos.x < CHUNK_SIZE);
-	assert(pos.y >= 0 && pos.y < CHUNK_SIZE);
-	assert(pos.z >= 0 && pos.z < CHUNK_SIZE);
+	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
+	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
+	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
 
-	unsigned int idx = pos.x * CHUNK_SIZE_SQUARED + pos.y * CHUNK_SIZE + pos.z;
+	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
 	return m_blockIDs[idx];
 }
 
-BlockColor VoxelChunk::getBlockColor(const glm::ivec3& pos) const
+BlockColor VoxelChunk::getBlockColor(const glm::ivec3& blockPos) const
 {
-	assert(pos.x >= 0 && pos.x < CHUNK_SIZE);
-	assert(pos.y >= 0 && pos.y < CHUNK_SIZE);
-	assert(pos.z >= 0 && pos.z < CHUNK_SIZE);
+	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
+	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
+	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
 
-	unsigned int idx = pos.x * CHUNK_SIZE_SQUARED + pos.y * CHUNK_SIZE + pos.z;
+	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
 	return m_blockColors[idx];
 }
 
-BlockIDColor VoxelChunk::getBlockIDColor(const glm::ivec3& pos) const
+BlockIDColor VoxelChunk::getBlockIDColor(const glm::ivec3& blockPos) const
 {
-	assert(pos.x >= 0 && pos.x < CHUNK_SIZE);
-	assert(pos.y >= 0 && pos.y < CHUNK_SIZE);
-	assert(pos.z >= 0 && pos.z < CHUNK_SIZE);
+	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
+	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
+	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
 
-	unsigned int idx = pos.x * CHUNK_SIZE_SQUARED + pos.y * CHUNK_SIZE + pos.z;
+	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
 	return { m_blockIDs[idx], m_blockColors[idx] };
 }
 
