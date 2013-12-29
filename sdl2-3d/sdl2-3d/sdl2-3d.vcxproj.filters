@@ -110,9 +110,6 @@
     <ClInclude Include="Engine\Graphics\Lighting\ShadowCubeMap.h">
       <Filter>Header Files\Engine\Graphics\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\Renderers\ForwardShader.h">
-      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
@@ -120,9 +117,6 @@
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Renderers\SpriteBatch.h">
-      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Renderers\UniformBufferStructs.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Model\IKeyListener.h">
@@ -138,9 +132,6 @@
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\FPSCameraController.h">
-      <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Utils\NumberUtils.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\PerlinGenerator.h">
@@ -263,9 +254,6 @@
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\PerlinGenerator.cpp">
-      <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Utils\NumberUtils.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp">

@@ -24,11 +24,9 @@
     <ClInclude Include="Engine\Graphics\Lighting\ShadowCubeMap.h" />
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h" />
     <ClInclude Include="Engine\Graphics\Pixmap.h" />
-    <ClInclude Include="Engine\Graphics\Renderers\ForwardShader.h" />
     <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SkyBox.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SpriteBatch.h" />
-    <ClInclude Include="Engine\Graphics\Renderers\UniformBufferStructs.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Model\IKeyListener.h" />
     <ClInclude Include="Engine\Model\IMouseListener.h" />
@@ -37,7 +35,6 @@
     <ClInclude Include="Engine\Utils\CheckLuaError.h" />
     <ClInclude Include="Engine\Utils\Comparables.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
-    <ClInclude Include="Engine\Utils\NumberUtils.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
     <ClInclude Include="Engine\Utils\Random.h" />
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
@@ -75,7 +72,6 @@
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp" />
-    <ClCompile Include="Engine\Utils\NumberUtils.cpp" />
     <ClCompile Include="Engine\Utils\PerlinGenerator.cpp" />
     <ClCompile Include="Engine\Utils\ShaderManager.cpp" />
     <ClCompile Include="Engine\Utils\stb_image.c" />

@@ -15,7 +15,8 @@ VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 	, m_updated(false)
 {
 	m_blockColors.resize(CHUNK_SIZE_CUBED, DEFAULT_LIGHT_LEVEL);
-	m_blockIDs.resize(CHUNK_SIZE_CUBED);
+	m_blockIDs.resize(CHUNK_SIZE_CUBED, 0);
+	m_skyVisible.resize(CHUNK_SIZE_CUBED, false);
 }
 
 void VoxelChunk::setBlock(BlockID blockID, int x, int y, int z, void* dataPtr, unsigned int dataSize)

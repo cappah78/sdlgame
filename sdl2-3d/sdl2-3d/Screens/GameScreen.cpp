@@ -14,7 +14,7 @@
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
 static const float CAMERA_FAR = 500.0f;
-static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 0, -10);
+static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
 static const int NUM_CHUNKS_X = 10;
