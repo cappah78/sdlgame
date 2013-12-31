@@ -2,6 +2,7 @@
 #define VOXEL_WORLD_H_
 
 #include "VoxelChunk.h"
+
 #include "TextureManager.h"
 #include "PropertyManager.h"
 
@@ -24,15 +25,21 @@ public:
 	~VoxelWorld();
 
 	void setBlock(BlockID blockID, const glm::ivec3& pos);
-	BlockID getBlockID(const glm::ivec3& pos) const;
-	BlockIDColor getBlockIDColor(const glm::ivec3& pos) const;
 
-	const ChunkManager::ChunkMap& getChunks() const;
-	TextureManager& getTextureManager();
-	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
-	lua_State* const L() const { return m_L; };
+	BlockID getBlockID(const glm::ivec3& pos);
+	BlockIDColor getBlockIDColor(const glm::ivec3& pos);
+	BlockIDColorSolid getBlockIDColorSolid(const glm::ivec3& pos);
+
+	std::shared_ptr<VoxelChunk> getChunk(const glm::ivec3& chunkPos);
 
 	const TextureArray* const getTileSet() const { return m_textureArray; };
+	const TextureManager& getTextureManager() const { return m_textureManager; };
+	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
+
+	const ChunkManager::ChunkMap& getChunks();
+
+	/** Get the lua state */
+	lua_State* const L() const { return m_L; };
 
 	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
 	inline static glm::ivec3 toChunkBlockPos(const glm::ivec3& blockPos);
@@ -47,14 +54,13 @@ private:
 	PropertyManager m_propertyManager;
 
 	LuaChunkGenerator m_generator;
-	mutable ChunkManager m_chunkManager;
+	ChunkManager m_chunkManager;
 
 	inline static int fastFloor(float x)
 	{
 		int i = (int) x;
 		return i - (i > x);
 	};
-
 
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);

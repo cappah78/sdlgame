@@ -102,7 +102,7 @@ void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 	chunk->setBlock(blockID, blockPos);
 }
 
-BlockID VoxelWorld::getBlockID(const glm::ivec3& pos) const
+BlockID VoxelWorld::getBlockID(const glm::ivec3& pos)
 {
 	const glm::ivec3& chunkPos = toChunkPos(pos);
 	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
@@ -111,15 +111,25 @@ BlockID VoxelWorld::getBlockID(const glm::ivec3& pos) const
 	return chunk->getBlockID(blockPos);
 }
 
-BlockIDColor VoxelWorld::getBlockIDColor(const glm::ivec3& pos) const
+BlockIDColor VoxelWorld::getBlockIDColor(const glm::ivec3& pos)
 {
 	const glm::ivec3& chunkPos = toChunkPos(pos);
 	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
 	const glm::ivec3& blockPos = toChunkBlockPos(pos);
+	unsigned int idx = VoxelChunk::getBlockIndex(blockPos);
 
-	return chunk->getBlockIDColor(blockPos);
+	return { chunk->getBlockID(idx), chunk->getBlockColor(idx) };
 }
 
+BlockIDColorSolid VoxelWorld::getBlockIDColorSolid(const glm::ivec3& pos)
+{
+	const glm::ivec3& chunkPos = toChunkPos(pos);
+	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+	const glm::ivec3& blockPos = toChunkBlockPos(pos);
+	unsigned int idx = VoxelChunk::getBlockIndex(blockPos);
+
+	return { chunk->getBlockID(idx), chunk->getBlockColor(idx), chunk->getSolid(idx) };
+}
 
 inline glm::ivec3 VoxelWorld::toChunkPos(const glm::ivec3& blockPos)
 {
@@ -143,10 +153,14 @@ inline glm::ivec3 VoxelWorld::toChunkBlockPos(const glm::ivec3& blockPos)
 	return glm::ivec3(blockX, blockY, blockZ);
 }
 
-
-const ChunkManager::ChunkMap& VoxelWorld::getChunks() const
+const ChunkManager::ChunkMap& VoxelWorld::getChunks()
 {
 	return m_chunkManager.getLoadedChunkMap();
+}
+
+std::shared_ptr<VoxelChunk> VoxelWorld::getChunk(const glm::ivec3& chunkPos)
+{
+	return m_chunkManager.getChunk(chunkPos);
 }
 
 VoxelWorld::~VoxelWorld()

@@ -1,6 +1,7 @@
 #ifndef VOXEL_CHUNK_H_
 #define VOXEL_CHUNK_H_
 
+#include <assert.h>
 #include <glm\glm.hpp>
 
 #include "VoxelBlock.h"
@@ -13,11 +14,12 @@ static const unsigned int CHUNK_SIZE_CUBED = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZ
 #include <vector>
 
 class PropertyManager;
+class WorldRenderer;
 
 class VoxelChunk
 {
 private:
-	/** Container for any amount of random per-block data*/
+	/** Container for abitrary size/amount per-block data */
 	class ChunkDataContainer
 	{
 	public:
@@ -47,7 +49,9 @@ public:
 	VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
 
+	/** If any rendering related things have not yet been updated by the renderer, this is false */
 	bool m_updated;
+	/** Position in chunks, block pos is * CHUNK_SIZE this*/
 	const glm::ivec3 m_pos;
 
 	/** Set the block at the given position inside this chunk (0-chunksize) with optional additional data for this block */
@@ -57,24 +61,47 @@ public:
 
 	/** Get the block at the given position inside this chunk (0-chunksize) */
 	BlockID getBlockID(const glm::ivec3& blockPos) const;
-	/** Return the backing array of id's, index = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z */
-	BlockID* getBlocks() { return &m_blockIDs[0]; };
-
 	/** Get the color at the given position inside this chunk (0-chunksize) */
 	BlockColor getBlockColor(const glm::ivec3& blockPos) const;
-	/** Return the backing array of colors, index = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z */
-	BlockColor* getColors() { return &m_blockColors[0]; };
 
-	BlockIDColor getBlockIDColor(const glm::ivec3& pos) const;
+	/** get the color at the index in the color array, no bounds checking is done */
+	inline BlockColor getBlockColor(unsigned int idx) const
+	{
+		return m_blockColors[idx];
+	};
+	/** get the blockID at the index in the color array, no bounds checking is done */
+	inline BlockID getBlockID(unsigned int idx) const
+	{
+		return m_blockIDs[idx];
+	};
+	/** get the solidity at the index in the color array, no bounds checking is done */
+	inline bool getSolid(unsigned int idx) const
+	{
+		return m_solid[idx];
+	}
+	/** get the sky visibility at the index in the color array, no bounds checking is done */
+	inline bool getSkyVisible(unsigned int idx) const
+	{
+		return m_skyVisible[idx];
+	};
+
+	inline static unsigned int getBlockIndex(const glm::ivec3& blockPos)
+	{
+		assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
+		assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
+		assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
+		unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
+		return idx;
+	}
 
 private:
+	std::vector<BlockColor> m_blockColors;
+	std::vector<BlockID> m_blockIDs;
+	std::vector <bool> m_solid;
+	std::vector<bool> m_skyVisible;
 
 	ChunkDataContainer m_data;
 	PropertyManager& m_propertyManager;
-
-	std::vector<BlockColor> m_blockColors;
-	std::vector<BlockID> m_blockIDs;
-	std::vector<bool> m_skyVisible;
 };
 
 #endif //VOXEL_CHUNK_H_

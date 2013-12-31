@@ -215,9 +215,6 @@
     <ClInclude Include="Engine\Utils\Comparables.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Voxel\BlockRenderData.h">
-      <Filter>Header Files\Voxel</Filter>
-    </ClInclude>
     <ClInclude Include="Voxel\LightManager.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
@@ -316,10 +313,10 @@
     <ClCompile Include="Engine\Graphics\GL\Texture.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\BlockRenderData.cpp">
+    <ClCompile Include="Voxel\LightManager.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
-    <ClCompile Include="Voxel\LightManager.cpp">
+    <ClCompile Include="Voxel\VoxelBlock.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
   </ItemGroup>

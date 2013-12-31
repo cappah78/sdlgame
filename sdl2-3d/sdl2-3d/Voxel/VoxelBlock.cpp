@@ -1,7 +1,29 @@
-#include "BlockRenderData.h"
+#include "VoxelBlock.h"
 
 #include "PropertyManager.h"
 #include "TextureManager.h"
+#include <assert.h>
+
+PerBlockProperties::PerBlockProperties(const std::vector<PerBlockProperty>& p)
+	: sizeBytes(0), properties(p.size())
+{
+	for (const PerBlockProperty& prop : p)
+	{
+		switch (prop.type)
+		{
+		case LUA_INT:
+			sizeBytes += 4;
+			break;
+		case LUA_BOOL:
+			sizeBytes += 1;
+			break;
+		case LUA_FLOAT:
+			sizeBytes += 4;
+			break;
+		}
+		properties.push_back(prop);
+	}
+}
 
 BlockRenderData::BlockRenderData(LuaTableData& data, TextureManager& textureManager)
 {
@@ -30,4 +52,26 @@ BlockRenderData::BlockRenderData(LuaTableData& data, TextureManager& textureMana
 	rightTexture = textureManager.getTextureID(rightTexCStr);
 	frontTexture = textureManager.getTextureID(frontTexCStr);
 	backTexture = textureManager.getTextureID(backTexCStr);
+}
+
+TextureID BlockRenderData::getTextureID(Face face)
+{
+	switch (face)
+	{
+	case Face::TOP:
+		return topTexture;
+	case Face::BOTTOM:
+		return bottomTexture;
+	case Face::LEFT:
+		return leftTexture;
+	case Face::RIGHT:
+		return rightTexture;
+	case Face::FRONT:
+		return frontTexture;
+	case Face::BACK:
+		return backTexture;
+	default:
+		assert(false && "invalid face id");
+		return 0;
+	}
 }

@@ -2,7 +2,6 @@
 #define PROPERTY_MANAGER_H_
 
 #include "VoxelBlock.h"
-#include "BlockRenderData.h"
 #include "TextureManager.h"
 
 #include <assert.h>
@@ -25,7 +24,6 @@ struct LuaTableData
 	TableDataList data;
 };
 
-
 /** Used to keep track of constant data of blocks parsed from lua files */
 class PropertyManager
 {
@@ -46,8 +44,10 @@ public:
 
 private:
 
-	LuaTableData getTableData(lua_State* const L, luabridge::LuaRef ref);
-	void parseBlock(LuaTableData data, BlockID blockID);
+	LuaTableData getTableData(luabridge::LuaRef ref);
+	void parseBlock(LuaTableData blockData, BlockID blockID);
+	void parseType(LuaTableData blockData, BlockID blockID);
+	void parsePerBlockProperties(LuaTableData blockData, BlockID blockID);
 
 	TextureManager& m_textureManager;
 
@@ -56,7 +56,13 @@ private:
 	/** Maps Block name to its id */
 	std::map<const std::string, BlockID> m_blockNameIDMap;
 
-	std::map<BlockID, BlockRenderData> m_blockRenderDataMap;
+	/** Idx == blockID, value == isSolid */
+	std::vector<bool> m_blockSolidity;
+	/** Idx == blockID, value == has per block properties */
+	std::vector<bool> m_hasPerBlockProperties;
+	/** Idx == blockID */
+	std::vector<BlockRenderData> m_blockRenderData;
+	std::vector<PerBlockProperties> m_perBlockProperties;
 };
 
 #endif // PROPERTY_MANAGER_H_

@@ -1,6 +1,5 @@
 #include "VoxelChunk.h"
 
-#include <assert.h>
 #include "PropertyManager.h"
 
 static const float RESIZE_MULTIPLIER = 1.5f;
@@ -17,21 +16,22 @@ VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 	m_blockColors.resize(CHUNK_SIZE_CUBED, DEFAULT_LIGHT_LEVEL);
 	m_blockIDs.resize(CHUNK_SIZE_CUBED, 0);
 	m_skyVisible.resize(CHUNK_SIZE_CUBED, false);
+	m_solid.resize(CHUNK_SIZE_CUBED, false);
 }
 
 void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr, unsigned int dataSize)
 {
-	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
-	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
-	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
+	unsigned int idx = getBlockIndex(blockPos);
 
 	m_updated = false;
 
-	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
 	BlockID& id = m_blockIDs[idx];
+
+	m_propertyManager.getBlockRenderData(blockID);
 
 	//TODO: solid checking
 	m_blockColors[idx] = SOLID_BLOCK_COLOR;
+	m_solid[idx] = true;
 
 	/*
 	//TODO: all the things
@@ -58,44 +58,22 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 
 void VoxelChunk::setBlockColor(const glm::ivec3& blockPos, BlockColor color)
 {
-	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
-	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
-	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
-
 	m_updated = false;
 
-	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
+	unsigned int idx = getBlockIndex(blockPos);
 	m_blockColors[idx] = color;
 }
 
 BlockID VoxelChunk::getBlockID(const glm::ivec3& blockPos) const
 {
-	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
-	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
-	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
-
-	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
+	unsigned int idx = getBlockIndex(blockPos);
 	return m_blockIDs[idx];
 }
 
 BlockColor VoxelChunk::getBlockColor(const glm::ivec3& blockPos) const
 {
-	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
-	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
-	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
-
-	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
+	unsigned int idx = getBlockIndex(blockPos);
 	return m_blockColors[idx];
-}
-
-BlockIDColor VoxelChunk::getBlockIDColor(const glm::ivec3& blockPos) const
-{
-	assert(blockPos.x >= 0 && blockPos.x < CHUNK_SIZE);
-	assert(blockPos.y >= 0 && blockPos.y < CHUNK_SIZE);
-	assert(blockPos.z >= 0 && blockPos.z < CHUNK_SIZE);
-
-	unsigned int idx = blockPos.x * CHUNK_SIZE_SQUARED + blockPos.y * CHUNK_SIZE + blockPos.z;
-	return { m_blockIDs[idx], m_blockColors[idx] };
 }
 
 //--
@@ -151,10 +129,11 @@ void VoxelChunk::ChunkDataContainer::remove(unsigned int position, unsigned int 
 
 void VoxelChunk::ChunkDataContainer::shiftPositionData(unsigned int position, unsigned int amount)
 {
-	for (unsigned int& blockData : m_blockDataPositions)
+	// shift all the elements after position by amount to the left.
+	for (unsigned int& blockDataPos : m_blockDataPositions)
 	{
-		if (blockData > position)
-			blockData -= amount;
+		if (blockDataPos > position)
+			blockDataPos -= amount;
 	}
 }
 

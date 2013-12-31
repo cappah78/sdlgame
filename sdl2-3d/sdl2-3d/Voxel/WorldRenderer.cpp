@@ -165,8 +165,10 @@ inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 	*/
 }
 
-void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
+void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 {
+	const PropertyManager& propertyManager = world.getPropertyManager();
+
 	const ChunkManager::ChunkMap& chunks = world.getChunks();
 	for (auto it : chunks)
 	{
@@ -179,15 +181,14 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 		const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk = getRenderChunk(chunkPos);
 		m_renderer.beginChunk(renderChunk);
 
-		BlockID* blocks = chunk->getBlocks();
 		for (int x = 0; x < CHUNK_SIZE; ++x)
 		{
 			for (int y = 0; y < CHUNK_SIZE; ++y)
 			{
 				for (int z = 0; z < CHUNK_SIZE; ++z)
 				{
-					unsigned int blockIdx = x * CHUNK_SIZE_SQUARED + y * CHUNK_SIZE + z;
-					BlockID id = blocks[blockIdx];
+					unsigned int blockIdx = VoxelChunk::getBlockIndex(glm::ivec3(x, y, z));
+					BlockID id = chunk->getBlockID(blockIdx);
 					if (id == 0)
 						continue;
 
@@ -195,8 +196,8 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 					int worldY = chunkPos.y * CHUNK_SIZE + y;
 					int worldZ = chunkPos.z * CHUNK_SIZE + z;
 
-					//get the 9 surrounding blocks
-					BlockIDColor idColors[3][3][3];
+					//get the 8 surrounding blocks (including pos)
+					BlockIDColorSolid surroundingBlockData[3][3][3];
 					for (int i = 0; i < 3; ++i)
 					{
 						for (int j = 0; j < 3; ++j)
@@ -204,26 +205,25 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 							for (int k = 0; k < 3; ++k)
 							{
 								glm::ivec3 pos(worldX + (i - 1), worldY + (j - 1), worldZ + (k - 1));
-								idColors[i][j][k] = world.getBlockIDColor(pos);
+								surroundingBlockData[i][j][k] = world.getBlockIDColorSolid(pos);
 							}
 						}
 					}
 
-					BlockIDColor above = idColors[1][2][1];
-					BlockIDColor below = idColors[1][0][1];
-					BlockIDColor front = idColors[2][1][1];
-					BlockIDColor back = idColors[0][1][1];
-					BlockIDColor right = idColors[1][1][2];
-					BlockIDColor left = idColors[1][1][0];
+					BlockIDColorSolid above = surroundingBlockData[1][2][1];
+					BlockIDColorSolid below = surroundingBlockData[1][0][1];
+					BlockIDColorSolid front = surroundingBlockData[2][1][1];
+					BlockIDColorSolid back = surroundingBlockData[0][1][1];
+					BlockIDColorSolid right = surroundingBlockData[1][1][2];
+					BlockIDColorSolid left = surroundingBlockData[1][1][0];
 					// store the 6 adjacent blocks so we can check if they're solid blocks.
-					BlockIDColor faceValues[6] = { above, below, left, right, front, back };
+					BlockIDColorSolid faceValues[6] = { above, below, left, right, front, back };
 
 					// for every face of the block
 					for (int face = 0; face < 6; ++face)
 					{
 						// if the face is invisible, continue (if no airblock or transparant block touching face)
-						// alpha 0 is solid block, id 0 is air
-						if (faceValues[face].id != 0 && faceValues[face].color.a == 0)	
+						if (faceValues[face].isSolid)	
 							continue;
 
 						Color8888 perFaceCols[4];
@@ -243,17 +243,16 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 
 								// get the color for the block at the offset
 								// +1 because offset ranges from -1 to 1, and array index goes from 0-2
-								BlockIDColor idCol = idColors[sampleXOffset + 1][sampleYOffset + 1][sampleZOffset + 1];	
+								BlockIDColorSolid blockProperties = surroundingBlockData[sampleXOffset + 1][sampleYOffset + 1][sampleZOffset + 1];
 
-								//blend rgb
-								r += idCol.color.r;
-								g += idCol.color.g;
-								b += idCol.color.b;
-
-								if (idCol.color.a != 0) // alpha 0 is solid block
+								if (!blockProperties.isSolid)
 								{
-									// blend a
-									a += idCol.color.a;
+									//blend rgba
+
+									r += blockProperties.color.r;
+									g += blockProperties.color.g;
+									b += blockProperties.color.b;
+									a += blockProperties.color.a;
 									numTransparent++;
 								}
 								else
@@ -269,8 +268,8 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 
 							//get vertex ao contribution given the touching solid faces.
 							vertexAO[vertex] = getAO(isSolid[0], isSolid[1], isSolid[2]);
-							// average color of the 4 samples for smooth lighting, dont average alpha with solid blocks (those have a == 0)
-							perFaceCols[vertex] = Color8888(r / 4, g / 4, b / 4, (a / numTransparent));
+							// average color of the 4 samples for smooth lighting, dont count solid blocks
+							perFaceCols[vertex] = Color8888(r / numTransparent, g / numTransparent, b / numTransparent, a / numTransparent);
 						}
 
 						// apply AO to alpha component only for every vertex color of the face
@@ -280,12 +279,11 @@ void WorldRenderer::render(const VoxelWorld& world, const Camera& camera)
 						perFaceCols[3].a = vertexAO[3] > perFaceCols[3].a ? 0 : perFaceCols[3].a - vertexAO[3];
 
 						//get the rendering related properties for this block (texture id's).
-						const PropertyManager& propertyManager = world.getPropertyManager();
 						BlockRenderData properties = propertyManager.getBlockRenderData(id);
 
 						// flip quad to avoid asymmetric color blending 
 						bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
-						renderChunk->addFace((VoxelRenderer::Face) face, x, y, z, properties.getTextureID((VoxelRenderer::Face) face),
+						renderChunk->addFace((Face) face, x, y, z, properties.getTextureID((Face) face),
 							perFaceCols[0], perFaceCols[3], perFaceCols[1], perFaceCols[2], flipQuad);
 					}
 				}

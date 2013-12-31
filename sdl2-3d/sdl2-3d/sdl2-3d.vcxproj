@@ -42,7 +42,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
-    <ClInclude Include="Voxel\BlockRenderData.h" />
     <ClInclude Include="Voxel\LightManager.h" />
     <ClInclude Include="Voxel\LuaChunkGenerator.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
@@ -78,12 +77,12 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
-    <ClCompile Include="Voxel\BlockRenderData.cpp" />
     <ClCompile Include="Voxel\ChunkManager.cpp" />
     <ClCompile Include="Voxel\LightManager.cpp" />
     <ClCompile Include="Voxel\LuaChunkGenerator.cpp" />
     <ClCompile Include="Voxel\TextureManager.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
+    <ClCompile Include="Voxel\VoxelBlock.cpp" />
     <ClCompile Include="Voxel\VoxelRenderer.cpp" />
     <ClCompile Include="Voxel\VoxelChunk.cpp" />
     <ClCompile Include="Voxel\VoxelWorld.cpp" />

@@ -9,7 +9,6 @@
 class LightManager
 {
 public:
-	static const int SKY_LIGHT_LEVEL = 255;
 
 	LightManager();
 	~LightManager();

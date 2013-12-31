@@ -7,6 +7,7 @@
 #include <glm\glm.hpp>
 #include <unordered_map>
 #include <assert.h>
+#include <memory>
 
 #include "../Engine/Utils/Comparables.h"
 

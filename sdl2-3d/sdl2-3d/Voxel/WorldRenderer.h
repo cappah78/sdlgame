@@ -23,7 +23,7 @@ public:
 	~WorldRenderer();
 	WorldRenderer(const WorldRenderer& copy) = delete;
 
-	void render(const VoxelWorld& world, const Camera& camera);
+	void render(VoxelWorld& world, const Camera& camera);
 
 private:
 	/** Calculate AO contribution for a vertex given the touching perpendicular faces*/

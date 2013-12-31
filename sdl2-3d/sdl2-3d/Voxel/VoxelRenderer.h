@@ -12,6 +12,7 @@
 #include "../Engine/Graphics/Color8888.h"
 #include "../Engine/Graphics/GL/VertexBuffer.h"
 
+#include "VoxelBlock.h"
 #include "VoxelChunk.h"
 
 class Camera;
@@ -65,10 +66,6 @@ private:
 		unsigned padding : 5;	// unused bits
 	};
 public:
-	enum Face
-	{
-		TOP = 0, BOTTOM = 1, LEFT = 2, RIGHT = 3, FRONT = 4, BACK = 5
-	};
 
 	/** Contains the vao/buffers and holds information to draw them, can add faces to this object */
 	class Chunk
@@ -88,7 +85,6 @@ public:
 		~Chunk();
 
 	private:
-
 		Chunk(float xOffset, float yOffset, float zOffset)
 			: m_colorBuffer(0)
 			, m_pointBuffer(0)

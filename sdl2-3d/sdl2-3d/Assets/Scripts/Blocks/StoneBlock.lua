@@ -8,4 +8,14 @@ Blocks.StoneBlock = {
 		left = "Assets\\Textures\\MinecraftBlocks\\stone.png",
 		right = "Assets\\Textures\\MinecraftBlocks\\stone.png"
 	},
+
+	perBlock = {			--data unique to every block
+		health = "int(5)",	--name = "type(initialvalue)"
+		derp = "bool(false)",
+		someFloat = "float(2.051)"
+	},
+
+	process = function (block)
+		print(block.someFloat)
+	end
 }
