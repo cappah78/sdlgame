@@ -47,7 +47,7 @@ enum BlockPropertyValueType
 
 struct PerBlockProperty
 {
-	PerBlockProperty() : type(LUA_INT) 
+	PerBlockProperty() : type(LUA_INT)
 	{};
 	PerBlockProperty(const std::string& name, BlockPropertyValueType type, int value) 
 		: name(name), type(type), defaultValue(value) 
@@ -60,7 +60,7 @@ struct PerBlockProperty
 
 struct PerBlockProperties
 {
-	PerBlockProperties() {};
+	PerBlockProperties() : sizeBytes(0) {};
 	PerBlockProperties(const std::vector<PerBlockProperty>& p);
 	unsigned int sizeBytes;
 	std::vector<PerBlockProperty> properties;
@@ -69,6 +69,7 @@ struct PerBlockProperties
 struct BlockRenderData	// 8 bytes;
 {
 	BlockRenderData() {};
+	/** Parses the properties from the given table */
 	BlockRenderData(LuaTableData& data, TextureManager& textureManager);
 
 	unsigned topTexture : 10;

@@ -218,6 +218,9 @@
     <ClInclude Include="Voxel\LightManager.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Utils\VoidDataList.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -318,6 +321,9 @@
     </ClCompile>
     <ClCompile Include="Voxel\VoxelBlock.cpp">
       <Filter>Source Files\Voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\VoidDataList.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

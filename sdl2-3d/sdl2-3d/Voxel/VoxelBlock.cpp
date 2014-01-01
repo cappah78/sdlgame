@@ -3,26 +3,26 @@
 #include "PropertyManager.h"
 #include "TextureManager.h"
 #include <assert.h>
+#include <algorithm>
+
+struct PropertiesSorter
+{
+	inline bool operator() (const PerBlockProperty& lhs, const PerBlockProperty& rhs)
+	{
+		return lhs.name < rhs.name;
+	}
+};
 
 PerBlockProperties::PerBlockProperties(const std::vector<PerBlockProperty>& p)
-	: sizeBytes(0), properties(p.size())
+	: sizeBytes(0)
 {
+	properties.reserve(p.size());
 	for (const PerBlockProperty& prop : p)
 	{
-		switch (prop.type)
-		{
-		case LUA_INT:
-			sizeBytes += 4;
-			break;
-		case LUA_BOOL:
-			sizeBytes += 1;
-			break;
-		case LUA_FLOAT:
-			sizeBytes += 4;
-			break;
-		}
+		sizeBytes += 4;	// every property uses 4 bytes for now.
 		properties.push_back(prop);
 	}
+	std::sort(properties.begin(), properties.end(), PropertiesSorter());	//sort alphabetically by key name
 }
 
 BlockRenderData::BlockRenderData(LuaTableData& data, TextureManager& textureManager)

@@ -1,8 +1,8 @@
 #include "VoxelChunk.h"
 
 #include "PropertyManager.h"
-
-static const float RESIZE_MULTIPLIER = 1.5f;
+#include <LuaBridge.h>
+#include <lua.h>
 
 static const Color8888 DEFAULT_LIGHT_LEVEL(0, 0, 0, 255);
 static const Color8888 SOLID_BLOCK_COLOR(0, 0, 0, 0);
@@ -10,9 +10,10 @@ static const Color8888 SOLID_BLOCK_COLOR(0, 0, 0, 0);
 VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 	: m_pos(pos)
 	, m_propertyManager(propertyManager)
-	, m_data(0)
+	, m_perBlockData(0)
 	, m_updated(false)
 {
+	m_blockDataPositions.resize(CHUNK_SIZE_CUBED, -1);
 	m_blockColors.resize(CHUNK_SIZE_CUBED, DEFAULT_LIGHT_LEVEL);
 	m_blockIDs.resize(CHUNK_SIZE_CUBED, 0);
 	m_skyVisible.resize(CHUNK_SIZE_CUBED, false);
@@ -25,35 +26,148 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 
 	m_updated = false;
 
-	BlockID& id = m_blockIDs[idx];
+	BlockID& oldID = m_blockIDs[idx];
+	int& oldDataPos = m_blockDataPositions[idx];
+	m_solid[idx] = m_propertyManager.isSolid(blockID);
 
-	m_propertyManager.getBlockRenderData(blockID);
-
-	//TODO: solid checking
-	m_blockColors[idx] = SOLID_BLOCK_COLOR;
-	m_solid[idx] = true;
-
-	/*
-	//TODO: all the things
-	if (id != 0)//there was already a block here
+	if (oldID != 0) //if there was already a block here
 	{
 		//handle on block remove
+		//TODO: call block remove lua stuff
+		if (oldDataPos != NO_BLOCK_DATA && m_propertyManager.hasPerBlockProperties(oldID)) //There was already a block here with per block data, clean up data
+		{
+			unsigned int oldSize = m_propertyManager.getPerBlockProperties(oldID).sizeBytes;
+			m_perBlockData.remove(oldDataPos, oldSize);
+			shiftPositionIndices(oldDataPos, oldSize);
+		}
 	}
 
-	unsigned int& dataPos = m_data.m_blockDataPositions[idx];
-	if (dataPos != 0)//There was already a block here with data
+	if (m_propertyManager.hasPerBlockProperties(blockID))	// if this block should have perblock values
 	{
-		//clean up old data
-		//get size of old data
-	}
+		PerBlockProperties& properties = m_propertyManager.getPerBlockProperties(blockID);
 
-	if (dataSize != 0 && dataPtr != NULL)
+		if (dataSize != 0 && dataPtr != NULL)	//if given initial values for this block
+		{
+			assert(dataSize == properties.sizeBytes && "Given data size not equal to block properties");
+			int dataPos = m_perBlockData.add(dataPtr, dataSize);
+			oldDataPos = dataPos;
+		}
+		else //insert default values
+		{
+			std::vector<int> dataList;
+			dataList.reserve(properties.sizeBytes / 4);
+			for (PerBlockProperty& p : properties.properties)
+			{				
+				dataList.push_back(p.defaultValue);
+			}
+			unsigned int dataPos = m_perBlockData.add(&dataList[0], sizeof(int) * dataList.size());
+			oldDataPos = dataPos;
+		}
+	}
+	else
 	{
-		//insert new block data
+		assert(dataSize == 0 && dataPtr == 0);	//if no per block data, check that none is given.
+		oldDataPos = NO_BLOCK_DATA;
 	}
-	*/
 
-	id = blockID;
+	oldID = blockID;
+}
+
+void VoxelChunk::doBlockUpdate()
+{
+	glm::ivec3& chunkOffset = m_pos * (int)CHUNK_SIZE;
+
+	for (int x = 0; x < CHUNK_SIZE; ++x)
+	{
+		for (int y = 0; y < CHUNK_SIZE; ++y)
+		{
+			for (int z = 0; z < CHUNK_SIZE; ++z)
+			{
+				int idx = getBlockIndex(glm::ivec3(x, y, z));
+
+				BlockID id = m_blockIDs[idx];
+
+				if (id == 0)	//if block is air, skip
+					continue;
+
+				luabridge::LuaRef block = m_propertyManager.getLuaBlockRef(id);
+				luabridge::LuaRef process = block["process"];
+				if (process.isNil())	//if block has no process function, skip.
+					continue;
+
+				luabridge::LuaRef luaBlockArg = luabridge::newTable(block.state());	// create a lua table for the process argument
+				luaBlockArg["x"] = x + chunkOffset.x;	// add useful things.
+				luaBlockArg["y"] = y + chunkOffset.y;
+				luaBlockArg["z"] = z + chunkOffset.z;
+
+				int blockDataPos = m_blockDataPositions[idx];
+				if (blockDataPos != NO_BLOCK_DATA)	//if block has per block data
+				{
+					PerBlockProperties& properties = m_propertyManager.getPerBlockProperties(id);// get the properties of the data
+
+					void* data = m_perBlockData.get(blockDataPos);	//get the data
+					int* val = static_cast<int*>(data);	// iterate the data, put property value into table under property name
+					for (PerBlockProperty& p : properties.properties)
+					{
+						float f;
+						switch (p.type)
+						{
+						case BlockPropertyValueType::LUA_INT:
+							luaBlockArg[p.name] = *val;
+							break;
+						case BlockPropertyValueType::LUA_FLOAT:
+							f = *(float*) val;	//cast bits to float
+							luaBlockArg[p.name] = f;
+							break;
+						case BlockPropertyValueType::LUA_BOOL:
+							luaBlockArg[p.name] = (*val) == 1;
+							break;
+						}
+						val++;	//increment pointer by 4 bytes;
+					}
+				}
+
+				try
+				{
+					process(luaBlockArg);	//run Blocks.blocktype.process
+				}
+				catch (luabridge::LuaException const& e)
+				{
+					printf("%s \n", e.what());
+				}
+
+				int newDataPos = m_blockDataPositions[idx];
+				if (newDataPos != NO_BLOCK_DATA)	//check to see if the block still exists (might be removed during process)
+				{
+					PerBlockProperties& properties = m_propertyManager.getPerBlockProperties(id);// get the properties of the data
+
+					void* newData = m_perBlockData.get(blockDataPos); //get the data
+					int* val = static_cast<int*>(newData); // iterate the data, updating it with the values from the lua table given as argument to process.
+					for (PerBlockProperty& p : properties.properties)
+					{
+						float f;
+						switch (p.type)
+						{
+						case BlockPropertyValueType::LUA_INT:
+							*val = luaBlockArg[p.name];
+							break;
+						case BlockPropertyValueType::LUA_FLOAT:
+							f = luaBlockArg[p.name];
+							*val = *(int*) &f;	//cast float to int bits
+							break;
+						case BlockPropertyValueType::LUA_BOOL:
+							if (luaBlockArg[p.name])
+								*val = 1;
+							else
+								*val = 0;
+							break;
+						}
+						val++;	//increment pointer by 4 bytes;
+					}
+				}
+			}
+		}
+	}
 }
 
 void VoxelChunk::setBlockColor(const glm::ivec3& blockPos, BlockColor color)
@@ -76,73 +190,13 @@ BlockColor VoxelChunk::getBlockColor(const glm::ivec3& blockPos) const
 	return m_blockColors[idx];
 }
 
-//--
-
-VoxelChunk::ChunkDataContainer::ChunkDataContainer(unsigned int initialSize)
-	: m_size(initialSize)
-	, m_used(0)
-{
-	m_blockDataPositions.resize(CHUNK_SIZE_CUBED);
-
-	m_dataBegin = malloc(initialSize);
-	assert(m_dataBegin && "Failed to allocate");
-}
-
-VoxelChunk::ChunkDataContainer::~ChunkDataContainer(){}
-
-/** copy the data to the list, returning its start index */
-unsigned int VoxelChunk::ChunkDataContainer::add(void* data, unsigned int size)
-{
-	if (m_used + size > m_size)
-	{
-		unsigned int newSize = (unsigned int) ((m_used + size) * RESIZE_MULTIPLIER);
-		resize(newSize);
-	}
-
-	unsigned int position = m_used;
-
-	void* tail = (void*) ((char*) m_dataBegin + m_used);
-	memcpy(tail, data, size);
-	m_used += size;
-
-	return position;
-}
-
-void* VoxelChunk::ChunkDataContainer::get(unsigned int position, unsigned int size)
-{
-	void* at = (void*) ((char*) m_dataBegin + position);
-	return at;
-}
-
-/** invalidates all returned positions*/
-void VoxelChunk::ChunkDataContainer::remove(unsigned int position, unsigned int size)
-{
-	void* removeHead = (void*) ((char*) m_dataBegin + position);
-	void* removeTail = (void*) ((char*) removeHead + size);
-
-	unsigned int moveSize = m_used - (position + size);
-	memmove(removeHead, removeTail, moveSize);
-	m_used -= size;
-
-	shiftPositionData(position, size);
-}
-
-void VoxelChunk::ChunkDataContainer::shiftPositionData(unsigned int position, unsigned int amount)
+void VoxelChunk::shiftPositionIndices(int position, unsigned int amount)
 {
 	// shift all the elements after position by amount to the left.
-	for (unsigned int& blockDataPos : m_blockDataPositions)
+	for (int& blockDataPos : m_blockDataPositions)
 	{
 		if (blockDataPos > position)
 			blockDataPos -= amount;
 	}
 }
 
-void VoxelChunk::ChunkDataContainer::resize(unsigned int newSize)
-{
-	void* newBegin = malloc(newSize);
-	memcpy(newBegin, m_dataBegin, m_used);
-	free(m_dataBegin);
-
-	m_dataBegin = newBegin;
-	m_size = newSize;
-}

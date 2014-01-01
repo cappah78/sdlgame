@@ -24,6 +24,8 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	, m_textureManager(textureManager)
 	, m_propertyManager(textureManager)
 	, m_chunkManager(m_propertyManager, m_generator)
+	, m_timeAccumulator(0)
+	, m_tickDurationSec(0)
 {
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
 
@@ -38,15 +40,19 @@ void VoxelWorld::initializeLuaWorld()
 {
 	luabridge::getGlobalNamespace(m_L)
 		.beginNamespace(LUA_WORLD_NAMESPACE)
-		.addCFunction(LUA_WORLD_REGISTER_FUNCTION, &L_registerBlockType)	//Add World.registerBlockType
-		.addCFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)				//add World.setBlock
+		.addCFunction(LUA_WORLD_REGISTER_FUNCTION, &L_registerBlockType)//Add World.registerBlockType
+		//.addCFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)				
+		.addFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)//add World.setBlock
+		.addFunction(LUA_WORLD_GETBLOCK_FUNCTION, &L_getBlock)
 		.endNamespace();
 
 	checkLuaError(m_L, luaL_dofile(m_L, LUA_INIT_SCRIPT));
 
+	luabridge::LuaRef init = luabridge::getGlobal(m_L, LUA_INIT_NAMESPACE);
+	m_tickDurationSec = luabridge::getGlobal(m_L, LUA_TICK_DURATION_SEC_NAME);
+
 	try 
 	{
-		luabridge::LuaRef init = luabridge::getGlobal(m_L, LUA_INIT_NAMESPACE);
 		init[LUA_INIT_REGISTER_FUNCTION](LUA_BLOCK_SCRIPT_DIR_RELATIVE);	// Run lua Init.registerBlocks()
 	}
 	catch (luabridge::LuaException const& e) 
@@ -76,21 +82,36 @@ int VoxelWorld::L_registerBlockType(lua_State* L)
 	return 0;	// nothing returned
 }
 
-int VoxelWorld::L_setBlock(lua_State* L)
+int VoxelWorld::L_setBlock(BlockID blockID, int x, int y, int z, lua_State* L)
 {
-	int numArgs = lua_gettop(L);
-	assert(numArgs == 4);
-
-	int blockID = lua_tointeger(L, 1);
-
-	int x = lua_tointeger(L, -1);
-	int y = lua_tointeger(L, -2);
-	int z = lua_tointeger(L, -3);
+	assert(lua_gettop(L) == 4 && "World.setBlock requires 4 arguments (BlockID, x, y, z)");	//check if numargs == 4
 
 	VoxelWorld* world = VoxelWorld::stateWorldMap.at(L);
 	world->setBlock(blockID, glm::ivec3(x, y, z));
 
 	return 0;
+}
+
+int VoxelWorld::L_getBlock(int x, int y, int z, lua_State* L)
+{
+	VoxelWorld* world = VoxelWorld::stateWorldMap.at(L);
+	BlockID id = world->getBlockID(glm::ivec3(x, y, z));
+
+	return id;
+}
+
+void VoxelWorld::update(float deltaSec)
+{
+	m_timeAccumulator += deltaSec;
+	while (m_timeAccumulator >= m_tickDurationSec)
+	{
+		m_timeAccumulator -= m_tickDurationSec;
+
+		for (auto it : m_chunkManager.getLoadedChunkMap())
+		{
+			it.second->doBlockUpdate();
+		}
+	}
 }
 
 void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)

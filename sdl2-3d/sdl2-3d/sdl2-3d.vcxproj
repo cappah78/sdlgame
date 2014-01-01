@@ -39,6 +39,7 @@
     <ClInclude Include="Engine\Utils\Random.h" />
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
     <ClInclude Include="Engine\Utils\stb_image.h" />
+    <ClInclude Include="Engine\Utils\VoidDataList.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
@@ -74,6 +75,7 @@
     <ClCompile Include="Engine\Utils\PerlinGenerator.cpp" />
     <ClCompile Include="Engine\Utils\ShaderManager.cpp" />
     <ClCompile Include="Engine\Utils\stb_image.c" />
+    <ClCompile Include="Engine\Utils\VoidDataList.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />

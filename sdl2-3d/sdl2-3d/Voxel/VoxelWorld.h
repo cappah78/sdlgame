@@ -36,6 +36,8 @@ public:
 	const TextureManager& getTextureManager() const { return m_textureManager; };
 	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 
+	void update(float deltaSec);
+
 	const ChunkManager::ChunkMap& getChunks();
 
 	/** Get the lua state */
@@ -44,10 +46,16 @@ public:
 	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
 	inline static glm::ivec3 toChunkBlockPos(const glm::ivec3& blockPos);
 
+	float getTickDurationSec() const { return m_tickDurationSec; };
+
 protected:
 	static std::map<lua_State* const, VoxelWorld* const> stateWorldMap;
 
 private:
+
+	float m_timeAccumulator;
+	float m_tickDurationSec;
+
 	lua_State* m_L;
 	TextureArray* m_textureArray;
 	TextureManager& m_textureManager;
@@ -64,7 +72,8 @@ private:
 
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);
-	static int L_setBlock(lua_State* L);
+	static int L_setBlock(BlockID blockID, int x, int y, int z, lua_State* L);
+	static int L_getBlock(int x, int y, int z, lua_State* L);
 };
 
 #endif //VOXEL_WORLD_H_

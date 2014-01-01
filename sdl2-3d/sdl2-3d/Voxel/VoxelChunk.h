@@ -1,8 +1,9 @@
 #ifndef VOXEL_CHUNK_H_
 #define VOXEL_CHUNK_H_
 
-#include <assert.h>
+#include "../Engine/Utils/VoidDataList.h"
 #include <glm\glm.hpp>
+#include <vector>
 
 #include "VoxelBlock.h"
 
@@ -18,36 +19,12 @@ class WorldRenderer;
 
 class VoxelChunk
 {
-private:
-	/** Container for abitrary size/amount per-block data */
-	class ChunkDataContainer
-	{
-	public:
-		ChunkDataContainer(unsigned int initialSize = 0);
-		~ChunkDataContainer();
-
-		std::vector<unsigned int> m_blockDataPositions;
-
-		/** copy the data to the list, returning its start index */
-		unsigned int add(void* data, unsigned int size);
-		void* get(unsigned int position, unsigned int size);
-		/** invalidates all returned positions*/
-		void remove(unsigned int position, unsigned int size);
-		unsigned int getSize() { return m_size; };
-
-	private:
-		void* m_dataBegin;
-		unsigned int m_size;
-		unsigned int m_used;
-
-		void shiftPositionData(unsigned int position, unsigned int amount);
-		void resize(unsigned int newSize);
-	};
-
 public:
 	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& blockPos);
 	VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
+
+	void doBlockUpdate();
 
 	/** If any rendering related things have not yet been updated by the renderer, this is false */
 	bool m_updated;
@@ -63,7 +40,12 @@ public:
 	BlockID getBlockID(const glm::ivec3& blockPos) const;
 	/** Get the color at the given position inside this chunk (0-chunksize) */
 	BlockColor getBlockColor(const glm::ivec3& blockPos) const;
+	void* getPerBlockData(const glm::ivec3& blockPos) const;
 
+	inline const void* getPerBlockData(unsigned int idx) const
+	{
+		return m_perBlockData.get(m_blockDataPositions[idx]);
+	}
 	/** get the color at the index in the color array, no bounds checking is done */
 	inline BlockColor getBlockColor(unsigned int idx) const
 	{
@@ -94,13 +76,25 @@ public:
 		return idx;
 	}
 
+	/** Get the total amount of per block data this chunk contains in bytes*/
+	inline unsigned int getPerBlockDataListSize()
+	{
+		return m_perBlockData.getSize();
+	};
+
 private:
+	static const int NO_BLOCK_DATA = -1;
+
+	void shiftPositionIndices(int position, unsigned int amount);
+
+	std::vector<int> m_blockDataPositions;
+	VoidDataList m_perBlockData;
+
 	std::vector<BlockColor> m_blockColors;
 	std::vector<BlockID> m_blockIDs;
-	std::vector <bool> m_solid;
+	std::vector<bool> m_solid;
 	std::vector<bool> m_skyVisible;
 
-	ChunkDataContainer m_data;
 	PropertyManager& m_propertyManager;
 };
 

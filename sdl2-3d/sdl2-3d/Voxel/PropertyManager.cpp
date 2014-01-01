@@ -6,14 +6,10 @@
 #include <LuaBridge.h>
 
 #include <unordered_map>
+#include <algorithm>
 
 static const char* LUA_BLOCKS_NAMESPACE = "Blocks";
 static const std::string DEFAULT_BLOCK("defaultblock");
-
-BlockID PropertyManager::getBlockID(const std::string& blockName)
-{
-	return m_blockNameIDMap.at(blockName);
-}
 
 BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string& blockname)
 {
@@ -32,16 +28,17 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 		luabridge::LuaRef block = blocks[blockname];
 		block["id"] = m_lastRegisteredId;
 
-		LuaTableData tableData = getTableData(block);
+		m_luaBlockRefs.resize(m_lastRegisteredId + 1, luabridge::LuaRef(L));
+		m_luaBlockRefs.at(m_lastRegisteredId) = block;
 
+		LuaTableData tableData = getTableData(block);
 		parseBlock(tableData, m_lastRegisteredId);
 
 		return m_lastRegisteredId;
 	}
 }
-#include<iostream>
 
-LuaTableData PropertyManager::getTableData(luabridge::LuaRef ref)
+LuaTableData PropertyManager::getTableData(luabridge::LuaRef ref) const
 {
 	LuaTableData properties(ref);
 
@@ -76,7 +73,7 @@ void PropertyManager::parseType(LuaTableData blockData, BlockID blockID)
 		BlockRenderData renderData(blockData, m_textureManager);
 		m_blockRenderData.resize(blockID + 1);
 		m_blockRenderData.at(blockID) = renderData;
-		m_blockSolidity.resize(blockID + 1);
+		m_blockSolidity.resize(blockID + 1, false);
 		m_blockSolidity.at(blockID) = !renderData.isTransparent;
 		return;
 	}
@@ -95,7 +92,6 @@ void PropertyManager::parsePerBlockProperties(LuaTableData blockData, BlockID bl
 	for (std::pair<luabridge::LuaRef, luabridge::LuaRef> r : perBlockLuaProperties.data)
 	{
 		//TODO: error checking.
-
 		std::string key(r.first);	// name of the lua variable
 		std::string value(r.second);// value of the lua variable
 		unsigned pos = value.find("(");
@@ -131,21 +127,13 @@ void PropertyManager::parsePerBlockProperties(LuaTableData blockData, BlockID bl
 		propertyList.push_back(PerBlockProperty(key, type, defaultVal));
 	}
 
+	m_hasPerBlockProperties.resize(blockID + 1, false);
+
 	if (propertyList.size() > 0)
 	{
-		m_hasPerBlockProperties.resize(blockID + 1);
-		m_hasPerBlockProperties.at(blockID) = true;
 		m_perBlockProperties.resize(blockID + 1);
+		m_hasPerBlockProperties.at(blockID) = true;
 		m_perBlockProperties.at(blockID) = PerBlockProperties(propertyList);
 	}
-}
 
-BlockRenderData PropertyManager::getBlockRenderData(BlockID blockID) const
-{
-	return m_blockRenderData.at(blockID);
-}
-
-BlockDataSize PropertyManager::getBlockDataSize(BlockID blockID)
-{
-	return 0;
 }

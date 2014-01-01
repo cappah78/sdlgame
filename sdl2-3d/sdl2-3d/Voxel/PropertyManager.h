@@ -31,20 +31,24 @@ public:
 	PropertyManager(TextureManager& textureManager)
 		: m_textureManager(textureManager) 
 		, m_lastRegisteredId(0) 
-	{};
+	{
+		m_blockSolidity.push_back(false);	//blockid 0 is not solid
+	};
 	PropertyManager(const PropertyManager& copy) = delete;
 	~PropertyManager() {};
 
-	BlockID getBlockID(const std::string& blockName);
-	BlockDataSize getBlockDataSize(BlockID blockID);
-
 	BlockID registerBlockType(lua_State* const L, const std::string& blockname);
 
-	BlockRenderData getBlockRenderData(BlockID blockID) const;
+	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
+	inline bool hasPerBlockProperties(BlockID blockID) const			{ return m_hasPerBlockProperties.at(blockID); };
+	inline PerBlockProperties getPerBlockProperties(BlockID blockID)	{ assert(m_hasPerBlockProperties.at(blockID)); return m_perBlockProperties.at(blockID); };
+	inline BlockRenderData getBlockRenderData(BlockID blockID) const	{ return m_blockRenderData.at(blockID); };
+	inline luabridge::LuaRef getLuaBlockRef(BlockID blockID) const		{ return m_luaBlockRefs.at(blockID); };
+	inline bool isSolid(BlockID blockID) const							{ return m_blockSolidity.at(blockID); };
 
 private:
 
-	LuaTableData getTableData(luabridge::LuaRef ref);
+	LuaTableData getTableData(luabridge::LuaRef ref) const;
 	void parseBlock(LuaTableData blockData, BlockID blockID);
 	void parseType(LuaTableData blockData, BlockID blockID);
 	void parsePerBlockProperties(LuaTableData blockData, BlockID blockID);
@@ -63,6 +67,9 @@ private:
 	/** Idx == blockID */
 	std::vector<BlockRenderData> m_blockRenderData;
 	std::vector<PerBlockProperties> m_perBlockProperties;
+	/** idx == blockID, value luarefs to access the lua values of this block */
+	std::vector<luabridge::LuaRef> m_luaBlockRefs;
+
 };
 
 #endif // PROPERTY_MANAGER_H_
