@@ -3,7 +3,9 @@ Simple high performance work in progress Minecraft like Voxel Renderer with lua 
 Should be instantly compileable/runnable with VS2013/12 and perhaps older versions.
 
 Random screenshot of last finished feature:
+https://dl.dropboxusercontent.com/u/18555381/Permanent/GravelBlockScripting.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/aowithtextures.png
+
 
 To run the game as a standalone, copy the sdl2-3d/Assets folder to the Release (or Debug) folder.
 
@@ -48,16 +50,19 @@ The texture coordinate buffer is a static buffer shared by all chunks.
 - Vertex based mincraft like lighting.
 - Actual chunk generation (currently using a single call to a lua method to build the world)
 - More Lua bindings between c++/lua (to script things like controls and interactions)
-- System to memory efficiently do block logic in lua scripts.
 - Higher detail Ambient Occlusion like Cube World, sampling from a larger radius.
 - Chunk saving/loading
+- More efficient block update system
+- Scriptable triggers for block updates
 
 <b> Done: </b>
 
+- Processing blocks through scripts with configurable values for every block
 - Basic World/Chunk layout
 - Basic high efficienty voxel renderer
 - Basic Ambient occlusion calculations for voxels
 - Basic Lua bindings to setblock and create new block types from scripts.
 - Learn OpenGL/GLSL/C++
+
 
 
