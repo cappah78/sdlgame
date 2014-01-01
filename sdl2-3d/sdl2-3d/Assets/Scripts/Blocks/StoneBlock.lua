@@ -7,12 +7,5 @@ Blocks.StoneBlock = {
 		back = "Assets\\Textures\\MinecraftBlocks\\stone.png",
 		left = "Assets\\Textures\\MinecraftBlocks\\stone.png",
 		right = "Assets\\Textures\\MinecraftBlocks\\stone.png"
-	},
-
-	perBlock = {			--data unique to every block: name = "type(initialvalue)"
-		health = "int(500)",
-		someFloat = "float(50.0)"
-	},
-
-
+	}
 }

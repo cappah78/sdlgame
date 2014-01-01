@@ -23,7 +23,7 @@ Blocks.GravelBlock = {
 			World.setBlock(Blocks.GravelBlock.id, block.x, 20, block.z)
 		elseif block.fallIntervalTicks <= 0 
 		then
-			if World.getBlock(block.x, block.y - 1, block.z) == 0 -- if block below is air
+			if World.getBlock(block.x, block.y - 1, block.z) == Blocks.AirBlock.id -- if block below is air
 			then	
 				World.setBlock(0, block.x, block.y, block.z)
 				World.setBlock(Blocks.GravelBlock.id, block.x, block.y - 1, block.z)

@@ -127,8 +127,6 @@ void PropertyManager::parsePerBlockProperties(LuaTableData blockData, BlockID bl
 		propertyList.push_back(PerBlockProperty(key, type, defaultVal));
 	}
 
-	m_hasPerBlockProperties.resize(blockID + 1, false);
-
 	if (propertyList.size() > 0)
 	{
 		m_perBlockProperties.resize(blockID + 1);

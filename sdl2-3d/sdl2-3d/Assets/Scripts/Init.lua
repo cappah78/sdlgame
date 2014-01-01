@@ -1,6 +1,10 @@
 require "lfs"	--LuaFileSystem
 
-Blocks = {}
+Blocks = {
+	AirBlock = {
+		id = 0	--should always be 0, hardcoded in c++ for performance.
+	}
+}
 
 TicksPerSec = 20					--The number of times per second process will be called on every block that has it.
 TickDuration = 1000 / TicksPerSec
