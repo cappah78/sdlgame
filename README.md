@@ -46,8 +46,9 @@ Color uses an rgba8888(32 bit integer, Color8888.cpp) buffer, which gets normali
 The texture coordinate buffer is a static buffer shared by all chunks.
 
 <b> WIP: </b>
-- More efficient block update system:
-scriptable triggerable events with a simple evaluation parsed and checked in c++
+- Scriptable triggers for block updates:
+
+Scriptable triggerable events with a simple evaluation parsed and checked in c++
 to reduce amount of lua calls significantly.
 
 <b> TODO: </b>
@@ -57,7 +58,7 @@ to reduce amount of lua calls significantly.
 - More Lua bindings between c++/lua (to script things like controls and interactions)
 - Higher detail Ambient Occlusion like Cube World, sampling from a larger radius.
 - Chunk saving/loading
-- Scriptable triggers for block updates
+- More efficient block update system
 
 <b> Done: </b>
 
