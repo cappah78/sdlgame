@@ -45,6 +45,12 @@ Color uses an rgba8888(32 bit integer, Color8888.cpp) buffer, which gets normali
 
 The texture coordinate buffer is a static buffer shared by all chunks.
 
+<b> WIP: </b>
+- Scriptable triggers for block updates:
+
+Scriptable triggerable events with a simple evaluation parsed and checked in c++
+to reduce amount of lua calls significantly.
+
 <b> TODO: </b>
 
 - Vertex based mincraft like lighting.
@@ -53,7 +59,6 @@ The texture coordinate buffer is a static buffer shared by all chunks.
 - Higher detail Ambient Occlusion like Cube World, sampling from a larger radius.
 - Chunk saving/loading
 - More efficient block update system
-- Scriptable triggers for block updates
 
 <b> Done: </b>
 
