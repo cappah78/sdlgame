@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
+# Visual C++ Express 2013
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdl2-3d", "sdl2-3d\sdl2-3d.vcxproj", "{BFD87650-6020-41DA-8A4C-CB7843B7CD65}"
 EndProject
 Global
