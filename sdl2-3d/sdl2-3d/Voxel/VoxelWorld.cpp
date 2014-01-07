@@ -43,6 +43,7 @@ void VoxelWorld::initializeLuaWorld()
 		.addCFunction(LUA_WORLD_REGISTER_FUNCTION, &L_registerBlockType)//Add World.registerBlockType
 		//.addCFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)				
 		.addFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)//add World.setBlock
+		.addFunction(LUA_WORLD_SETBLOCK_WITH_DATA_FUNCTION, &L_setBlockWithData)//add World.setBlock
 		.addFunction(LUA_WORLD_GETBLOCK_FUNCTION, &L_getBlock)
 		.endNamespace();
 
@@ -50,15 +51,6 @@ void VoxelWorld::initializeLuaWorld()
 
 	luabridge::LuaRef init = luabridge::getGlobal(m_L, LUA_INIT_NAMESPACE);
 	m_tickDurationSec = luabridge::getGlobal(m_L, LUA_TICK_DURATION_SEC_NAME);
-
-	try 
-	{
-		init[LUA_INIT_REGISTER_FUNCTION](LUA_BLOCK_SCRIPT_DIR_RELATIVE);	// Run lua Init.registerBlocks()
-	}
-	catch (luabridge::LuaException const& e) 
-	{
-		std::cerr << e.what() << std::endl;
-	}
 }
 
 int VoxelWorld::L_registerBlockType(lua_State* L)
@@ -67,16 +59,8 @@ int VoxelWorld::L_registerBlockType(lua_State* L)
 	assert(numArgs == 1);
 
 	std::string filename = lua_tostring(L, 1);
-	std::string blockname(filename, 0, filename.size() - 4);
-	std::string scriptDir(LUA_BLOCK_SCRIPT_DIR);
-	scriptDir.append(filename);
+	std::string blockname(filename, 0, filename.size() - 4);	//remove .lua extention
 
-#ifdef _DEBUG
-	std::string luaFileExtention = filename.substr(filename.size() - 4, 4);
-	assert(luaFileExtention == ".lua");
-#endif //!DEBUG
-
-	checkLuaError(L, luaL_dofile(L, scriptDir.c_str()));
 	VoxelWorld::stateWorldMap.at(L)->m_propertyManager.registerBlockType(L, blockname);
 
 	return 0;	// nothing returned
@@ -92,12 +76,23 @@ int VoxelWorld::L_setBlock(BlockID blockID, int x, int y, int z, lua_State* L)
 	return 0;
 }
 
+int VoxelWorld::L_setBlockWithData(BlockID blockID, int x, int y, int z, luabridge::LuaRef perBlockData, lua_State* L)
+{
+	printf("lolol");
+	VoxelWorld* world = VoxelWorld::stateWorldMap.at(L);
+	
+	world->setBlock(blockID, glm::ivec3(x, y, z));
+
+	return 0;
+}
+
+
 int VoxelWorld::L_getBlock(int x, int y, int z, lua_State* L)
 {
 	VoxelWorld* world = VoxelWorld::stateWorldMap.at(L);
-	BlockID id = world->getBlockID(glm::ivec3(x, y, z));
+	const VoxelBlock& block = world->getBlock(glm::ivec3(x, y, z));
 
-	return id;
+	return block.id;
 }
 
 void VoxelWorld::update(float deltaSec)
@@ -123,33 +118,18 @@ void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 	chunk->setBlock(blockID, blockPos);
 }
 
-BlockID VoxelWorld::getBlockID(const glm::ivec3& pos)
+const VoxelBlock& VoxelWorld::getBlock(const glm::ivec3& pos)
 {
 	const glm::ivec3& chunkPos = toChunkPos(pos);
-	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+	const std::shared_ptr<VoxelChunk> chunk = m_chunkManager.getChunk(chunkPos);
 	const glm::ivec3& blockPos = toChunkBlockPos(pos);
 
-	return chunk->getBlockID(blockPos);
+	return chunk->getBlock(blockPos);
 }
 
-BlockIDColor VoxelWorld::getBlockIDColor(const glm::ivec3& pos)
+const BlockProperties& VoxelWorld::getBlockProperties(BlockID blockID)
 {
-	const glm::ivec3& chunkPos = toChunkPos(pos);
-	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
-	const glm::ivec3& blockPos = toChunkBlockPos(pos);
-	unsigned int idx = VoxelChunk::getBlockIndex(blockPos);
-
-	return { chunk->getBlockID(idx), chunk->getBlockColor(idx) };
-}
-
-BlockIDColorSolid VoxelWorld::getBlockIDColorSolid(const glm::ivec3& pos)
-{
-	const glm::ivec3& chunkPos = toChunkPos(pos);
-	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
-	const glm::ivec3& blockPos = toChunkBlockPos(pos);
-	unsigned int idx = VoxelChunk::getBlockIndex(blockPos);
-
-	return { chunk->getBlockID(idx), chunk->getBlockColor(idx), chunk->getSolid(idx) };
+	return m_propertyManager.getBlockProperties(blockID);
 }
 
 inline glm::ivec3 VoxelWorld::toChunkPos(const glm::ivec3& blockPos)

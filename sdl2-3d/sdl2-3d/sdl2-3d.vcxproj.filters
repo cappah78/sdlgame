@@ -417,6 +417,9 @@
     <None Include="Assets\Shaders\multishadowmap.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="Assets\Scripts\Bindings.lua">
+      <Filter>Assets\Scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Models\Skybox\back.bmp">

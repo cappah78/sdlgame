@@ -14,7 +14,6 @@ VoidDataList::~VoidDataList()
 
 }
 
-/** copy the data to the list, returning its start index */
 unsigned int VoidDataList::add(void* data, unsigned int size)
 {
 	unsigned int position = m_data.size();

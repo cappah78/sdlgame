@@ -55,13 +55,14 @@ void Game::startGameLoop()
 				break;
 			}
 		}
+
 		Uint32 newTime = SDL_GetTicks();
 		float deltaSec = (float) (newTime - startTime) / 1000.0f;
 		startTime = newTime;
 		timePassed += deltaSec;
 		renderCount++;
 
-		if (timePassed >= 1.0f)
+		if (timePassed >= 1.0f)	//setting fps in title here
 		{
 			_itoa_s(renderCount, title, 10);
 			char str[20] = "FPS: ";
@@ -106,7 +107,7 @@ int luaPrint(lua_State* L)
 
 	for (int i = 0; i < numArgs; ++i)
 	{
-		lua_pushvalue(L, -1);		//TODO: verify that this is correct, just guessed
+		lua_pushvalue(L, -1);
 		lua_pushvalue(L, i + 1);
 		lua_call(L, 1, 1);
 		const char* res = lua_tostring(L, -1);

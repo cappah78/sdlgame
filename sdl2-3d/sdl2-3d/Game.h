@@ -5,18 +5,12 @@
 #include "Engine/Graphics/Graphics.h"
 
 #include <SDL.h>
-
-#include <cassert>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <typeinfo>
-
 #include <lua.hpp>
 #include <LuaBridge.h>
 
 class IScreen;
 
+/** Manages static classes for easy access to global things (Input/Window etc.). Also contains the game loop. */
 class Game
 {
 public:

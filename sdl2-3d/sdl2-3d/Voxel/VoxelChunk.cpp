@@ -1,6 +1,5 @@
 #include "VoxelChunk.h"
 
-#include "PropertyManager.h"
 #include <LuaBridge.h>
 #include <lua.h>
 
@@ -13,64 +12,56 @@ VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 	, m_perBlockData(0)
 	, m_updated(false)
 {
-	m_blockDataPositions.resize(CHUNK_SIZE_CUBED, -1);
-	m_blockColors.resize(CHUNK_SIZE_CUBED, DEFAULT_LIGHT_LEVEL);
-	m_blockIDs.resize(CHUNK_SIZE_CUBED, 0);
-	m_skyVisible.resize(CHUNK_SIZE_CUBED, false);
-	m_solid.resize(CHUNK_SIZE_CUBED, false);
+	m_blocks.resize(CHUNK_SIZE_CUBED);
 }
 
 void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr, unsigned int dataSize)
 {
 	unsigned int idx = getBlockIndex(blockPos);
-
+	VoxelBlock& block = m_blocks[idx];
 	m_updated = false;
 
-	BlockID& oldID = m_blockIDs[idx];
-	int& oldDataPos = m_blockDataPositions[idx];
-	m_solid[idx] = m_propertyManager.isSolid(blockID);
-
-	if (oldID != 0) //if there was already a block here
+	if (block.id != 0) //if there was already a block here
 	{
 		//handle on block remove
-		//TODO: call block remove lua stuff
-		if (oldDataPos != NO_BLOCK_DATA && m_propertyManager.hasPerBlockProperties(oldID)) //There was already a block here with per block data, clean up data
+		//TODO: call block remove lua stuffa
+		unsigned int oldBlockPropertiesSize = m_propertyManager.getBlockProperties(block.id).propertiesSizeBytes;
+		if (block.blockDataIndex != NO_BLOCK_DATA && oldBlockPropertiesSize != 0) //There was already a block here with per block data, clean up data
 		{
-			unsigned int oldSize = m_propertyManager.getPerBlockProperties(oldID).sizeBytes;
-			m_perBlockData.remove(oldDataPos, oldSize);
-			shiftPositionIndices(oldDataPos, oldSize);
+			m_perBlockData.remove(block.blockDataIndex, oldBlockPropertiesSize);
+			shiftPositionIndices(block.blockDataIndex, oldBlockPropertiesSize);
 		}
 	}
 
-	if (m_propertyManager.hasPerBlockProperties(blockID))	// if this block should have perblock values
-	{
-		PerBlockProperties& properties = m_propertyManager.getPerBlockProperties(blockID);
+	const BlockProperties& properties = m_propertyManager.getBlockProperties(blockID);
 
+	if (properties.propertiesSizeBytes != 0)	// if this block should have perblock values
+	{
 		if (dataSize != 0 && dataPtr != NULL)	//if given initial values for this block
 		{
-			assert(dataSize == properties.sizeBytes && "Given data size not equal to block properties");
-			int dataPos = m_perBlockData.add(dataPtr, dataSize);
-			oldDataPos = dataPos;
+			assert(dataSize == properties.propertiesSizeBytes && "Given data size not equal to block properties");
+			unsigned int dataPos = m_perBlockData.add(dataPtr, dataSize);
+			block.blockDataIndex = dataPos;
 		}
 		else //insert default values
 		{
-			std::vector<int> dataList;
-			dataList.reserve(properties.sizeBytes / 4);
-			for (PerBlockProperty& p : properties.properties)
+			std::vector<int> dataList;	//properties are just a list of integer values for now
+			dataList.reserve(properties.propertiesSizeBytes / 4);
+			for (const PerBlockProperty& p : properties.properties)
 			{				
 				dataList.push_back(p.defaultValue);
 			}
 			unsigned int dataPos = m_perBlockData.add(&dataList[0], sizeof(int) * dataList.size());
-			oldDataPos = dataPos;
+			block.blockDataIndex = dataPos;
 		}
 	}
 	else
 	{
 		assert(dataSize == 0 && dataPtr == 0);	//if no per block data, check that none is given.
-		oldDataPos = NO_BLOCK_DATA;
+		block.blockDataIndex = NO_BLOCK_DATA;
 	}
-
-	oldID = blockID;
+	block.id = blockID;
+	block.solid = blockID != 0; //all non air blocks are solid for now.
 }
 
 void VoxelChunk::doBlockUpdate()
@@ -85,29 +76,26 @@ void VoxelChunk::doBlockUpdate()
 			{
 				int idx = getBlockIndex(glm::ivec3(x, y, z));
 
-				BlockID id = m_blockIDs[idx];
+				VoxelBlock& block = m_blocks[idx];
 
-				if (id == 0)	//if block is air, skip
+				if (block.id == 0)	//if block is air, skip
 					continue;
 
-				luabridge::LuaRef block = m_propertyManager.getLuaBlockRef(id);
-				luabridge::LuaRef process = block["process"];
+				const BlockProperties& properties = m_propertyManager.getBlockProperties(block.id);
+				luabridge::LuaRef process = properties.luaRef["process"];
 				if (process.isNil())	//if block has no process function, skip.
 					continue;
 
-				luabridge::LuaRef luaBlockArg = luabridge::newTable(block.state());	// create a lua table for the process argument
+				luabridge::LuaRef luaBlockArg = luabridge::newTable(properties.luaRef.state());	// create a lua table for the process argument
 				luaBlockArg["x"] = x + chunkOffset.x;	// add useful things.
 				luaBlockArg["y"] = y + chunkOffset.y;
 				luaBlockArg["z"] = z + chunkOffset.z;
 
-				int blockDataPos = m_blockDataPositions[idx];
-				if (blockDataPos != NO_BLOCK_DATA)	//if block has per block data
+				if (properties.propertiesSizeBytes != 0)	//if block has per block data
 				{
-					PerBlockProperties& properties = m_propertyManager.getPerBlockProperties(id);// get the properties of the data
-
-					void* data = m_perBlockData.get(blockDataPos);	//get the data
+					void* data = m_perBlockData.get(block.blockDataIndex);	//get the data
 					int* val = static_cast<int*>(data);	// iterate the data, put property value into table under property name
-					for (PerBlockProperty& p : properties.properties)
+					for (const PerBlockProperty& p : properties.properties)
 					{
 						float f;
 						switch (p.type)
@@ -131,19 +119,16 @@ void VoxelChunk::doBlockUpdate()
 				{
 					process(luaBlockArg);	//run Blocks.blocktype.process
 				}
-				catch (luabridge::LuaException const& e)
+				catch (const luabridge::LuaException& e)
 				{
 					printf("%s \n", e.what());
 				}
 
-				int newDataPos = m_blockDataPositions[idx];
-				if (newDataPos != NO_BLOCK_DATA)	//check to see if the block still exists (might be removed during process)
+				if (block.blockDataIndex != NO_BLOCK_DATA)	//check to see if the block still exists (might be removed during process)
 				{
-					PerBlockProperties& properties = m_propertyManager.getPerBlockProperties(id);// get the properties of the data
-
-					void* newData = m_perBlockData.get(blockDataPos); //get the data
+					void* newData = m_perBlockData.get(block.blockDataIndex); //get the data
 					int* val = static_cast<int*>(newData); // iterate the data, updating it with the values from the lua table given as argument to process.
-					for (PerBlockProperty& p : properties.properties)
+					for (const PerBlockProperty& p : properties.properties)
 					{
 						float f;
 						switch (p.type)
@@ -161,6 +146,9 @@ void VoxelChunk::doBlockUpdate()
 							else
 								*val = 0;
 							break;
+						default:
+							assert(false);
+							break;
 						}
 						val++;	//increment pointer by 4 bytes;
 					}
@@ -170,33 +158,13 @@ void VoxelChunk::doBlockUpdate()
 	}
 }
 
-void VoxelChunk::setBlockColor(const glm::ivec3& blockPos, BlockColor color)
-{
-	m_updated = false;
-
-	unsigned int idx = getBlockIndex(blockPos);
-	m_blockColors[idx] = color;
-}
-
-BlockID VoxelChunk::getBlockID(const glm::ivec3& blockPos) const
-{
-	unsigned int idx = getBlockIndex(blockPos);
-	return m_blockIDs[idx];
-}
-
-BlockColor VoxelChunk::getBlockColor(const glm::ivec3& blockPos) const
-{
-	unsigned int idx = getBlockIndex(blockPos);
-	return m_blockColors[idx];
-}
-
 void VoxelChunk::shiftPositionIndices(int position, unsigned int amount)
 {
 	// shift all the elements after position by amount to the left.
-	for (int& blockDataPos : m_blockDataPositions)
+	for (VoxelBlock& block : m_blocks)
 	{
-		if (blockDataPos > position)
-			blockDataPos -= amount;
+		if (block.blockDataIndex > position)
+			block.blockDataIndex -= amount;
 	}
 }
 

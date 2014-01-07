@@ -29,5 +29,20 @@ Blocks.GravelBlock = {
 				World.setBlock(Blocks.GravelBlock.id, block.x, block.y - 1, block.z)
 			end
 		end
-	end
+	end,
+
+	events = {
+		{
+			trigger = "y < 0",
+			event = function (block)
+				
+			end
+		},
+		{
+			trigger = "tickCount == 100",
+			event = function (block)
+
+			end
+		}
+	}
 }

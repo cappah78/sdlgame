@@ -26,9 +26,8 @@ public:
 
 	void setBlock(BlockID blockID, const glm::ivec3& pos);
 
-	BlockID getBlockID(const glm::ivec3& pos);
-	BlockIDColor getBlockIDColor(const glm::ivec3& pos);
-	BlockIDColorSolid getBlockIDColorSolid(const glm::ivec3& pos);
+	const VoxelBlock& getBlock(const glm::ivec3& pos);
+	const BlockProperties& getBlockProperties(BlockID blockID);
 
 	std::shared_ptr<VoxelChunk> getChunk(const glm::ivec3& chunkPos);
 
@@ -73,6 +72,7 @@ private:
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);
 	static int L_setBlock(BlockID blockID, int x, int y, int z, lua_State* L);
+	static int L_setBlockWithData(BlockID blockID, int x, int y, int z, luabridge::LuaRef perBlockData, lua_State* L);
 	static int L_getBlock(int x, int y, int z, lua_State* L);
 };
 

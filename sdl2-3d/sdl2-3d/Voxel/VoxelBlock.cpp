@@ -13,21 +13,8 @@ struct PropertiesSorter
 	}
 };
 
-PerBlockProperties::PerBlockProperties(const std::vector<PerBlockProperty>& p)
-	: sizeBytes(0)
+BlockRenderData::BlockRenderData(luabridge::LuaRef block, TextureManager& textureManager)
 {
-	properties.reserve(p.size());
-	for (const PerBlockProperty& prop : p)
-	{
-		sizeBytes += 4;	// every property uses 4 bytes for now.
-		properties.push_back(prop);
-	}
-	std::sort(properties.begin(), properties.end(), PropertiesSorter());	//sort alphabetically by key name
-}
-
-BlockRenderData::BlockRenderData(LuaTableData& data, TextureManager& textureManager)
-{
-	luabridge::LuaRef block = data.ref;
 	luabridge::LuaRef texture = block["texture"];
 	const char* topTexCStr = texture["top"];				//read the texture paths
 	const char* bottomTexCStr = texture["bottom"];
@@ -54,7 +41,7 @@ BlockRenderData::BlockRenderData(LuaTableData& data, TextureManager& textureMana
 	backTexture = textureManager.getTextureID(backTexCStr);
 }
 
-TextureID BlockRenderData::getTextureID(Face face)
+TextureID BlockRenderData::getTextureID(Face face) const
 {
 	switch (face)
 	{

@@ -91,6 +91,7 @@
     <ClCompile Include="Voxel\WorldRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Scripts\Bindings.lua" />
     <None Include="Assets\Scripts\Blocks\CoalOreBlock.lua" />
     <None Include="Assets\Scripts\Blocks\CobbleStoneBlock.lua" />
     <None Include="Assets\Scripts\Blocks\DiamondOreBlock.lua" />

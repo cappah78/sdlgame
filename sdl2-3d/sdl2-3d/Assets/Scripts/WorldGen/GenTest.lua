@@ -11,6 +11,7 @@ for i = 0, 10000 do
 		World.setBlock(ids[idx], math.random(0, 50), math.random(0, 10), math.random(0, 50))
 end
 
+
 for i = 0, 500 do
 		World.setBlock(Blocks.GravelBlock.id, math.random(0, 50), math.random(20, 40), math.random(0, 50))
 end

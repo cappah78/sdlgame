@@ -1,4 +1,9 @@
 require "lfs"	--LuaFileSystem
+dofile ".\\Assets\\Scripts\\Bindings.lua"	--setup lua-cpp bindings
+
+TicksPerSec = 20					--The number of times per second process will be called on every block that has it.
+TickDuration = 1000 / TicksPerSec
+TickDurationSec = 1 / TicksPerSec
 
 Blocks = {
 	AirBlock = {
@@ -6,21 +11,14 @@ Blocks = {
 	}
 }
 
-TicksPerSec = 20					--The number of times per second process will be called on every block that has it.
-TickDuration = 1000 / TicksPerSec
-TickDurationSec = 1 / TicksPerSec
-
-Init = {
-	registerBlocks = function(folder) -- iterates every file in the given folder and calls World.registerBlockType(path)
-		for file in lfs.dir(folder) do
-			if file ~= "." and file ~= ".." then	-- removes . and .. directory things
-				World.registerBlockType(file)
-			end
+local registerBlocks = function (folder) -- iterates every file in the given folder and calls World.registerBlockType(path)
+	for file in lfs.dir(folder) do
+		if file ~= "." and file ~= ".." then
+			dofile(folder..file)				--run the block script so vars get initialized
+			World.registerBlockType(file)		--register block c++ side
 		end
 	end
-}
+end
 
-
-
-print("Initializing, TicksPerSec: ".. TicksPerSec .. ", TickDuration: " .. TickDuration .. ", TickDurationSec: " .. TickDurationSec)
+registerBlocks(".\\Assets\\Scripts\\Blocks\\")
 

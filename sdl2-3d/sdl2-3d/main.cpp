@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         sdldie("Unable to initialize SDL");
  
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);	//Req opengl 3.3
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
  
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     maincontext = SDL_GL_CreateContext(mainwindow);
     checkSDLError(__LINE__);
  
-    SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is
+    SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is uncapped
 
 	CHECK_GL_ERROR();
 	initGL();
@@ -157,9 +157,6 @@ int main(int argc, char *argv[])
 
 	Game::startGameLoop(); // blocks untill Game::shutdownGameLoop()
 	CHECK_GL_ERROR();
-
-	if (checkGLError(__FILE__, __LINE__))
-		SDL_Delay(5000);
 
     SDL_GL_DeleteContext(maincontext);
     SDL_DestroyWindow(mainwindow);

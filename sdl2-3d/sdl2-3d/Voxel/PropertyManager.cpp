@@ -28,11 +28,10 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 		luabridge::LuaRef block = blocks[blockname];
 		block["id"] = m_lastRegisteredId;
 
-		m_luaBlockRefs.resize(m_lastRegisteredId + 1, luabridge::LuaRef(L));
-		m_luaBlockRefs.at(m_lastRegisteredId) = block;
+		m_blockProperties.resize(m_lastRegisteredId + 1, BlockProperties(block.state()));
+		m_blockProperties.at(m_lastRegisteredId) = BlockProperties(block);
 
-		LuaTableData tableData = getTableData(block);
-		parseBlock(tableData, m_lastRegisteredId);
+		parseBlock(m_blockProperties[m_lastRegisteredId]);
 
 		return m_lastRegisteredId;
 	}
@@ -56,39 +55,178 @@ LuaTableData PropertyManager::getTableData(luabridge::LuaRef ref) const
 
 	return properties;
 }
-void PropertyManager::parseBlock(LuaTableData blockData, BlockID blockID)
+void PropertyManager::parseBlock(BlockProperties& properties)
 {
-	if (!blockData.ref["perBlock"].isNil())
-		parsePerBlockProperties(blockData, blockID);
+	if (!properties.luaRef["perBlock"].isNil())
+		parsePerBlockProperties(properties);
+	if (!properties.luaRef["events"].isNil())
+		parseEvents(properties);
 
-	parseType(blockData, blockID);
+	parseType(properties);
 }
 
-void PropertyManager::parseType(LuaTableData blockData, BlockID blockID)
+void PropertyManager::parseType(BlockProperties& properties)
 {
-	luabridge::LuaRef type = blockData.ref["type"];
+	luabridge::LuaRef type = properties.luaRef["type"];
 	std::string typeStr = type.tostring();
 
 	if (typeStr.compare(DEFAULT_BLOCK)) {
-		BlockRenderData renderData(blockData, m_textureManager);
-		m_blockRenderData.resize(blockID + 1);
-		m_blockRenderData.at(blockID) = renderData;
-		m_blockSolidity.resize(blockID + 1, false);
-		m_blockSolidity.at(blockID) = !renderData.isTransparent;
+		properties.renderData = BlockRenderData(properties.luaRef, m_textureManager);
 		return;
 	}
 
 	assert(false && "Unrecognized/unimplemented block type");
 }
 
-void PropertyManager::parsePerBlockProperties(LuaTableData blockData, BlockID blockID)
+int toInt(std::string str, BlockPropertyValueType type)
 {
-	luabridge::LuaRef perBlock = blockData.ref["perBlock"];
+	float f;
+	switch (type)
+	{
+	case LUA_INT:
+		return atoi(str.c_str());
+	case LUA_FLOAT:
+		f = (float) atof(str.c_str());
+		return *(int*) &f;
+	case LUA_BOOL:
+		return str == "true";
+	default:
+		return 0;
+	}
+}
+
+void PropertyManager::parseEvents(BlockProperties& properties)
+{
+	luabridge::LuaRef events = properties.luaRef["events"];
+	LuaTableData eventList = getTableData(events);
+
+	for (std::pair<luabridge::LuaRef, luabridge::LuaRef> e : eventList.data)
+	{
+		//TODO: check not nil etc.
+		luabridge::LuaRef triggerRef = e.second["trigger"];
+		std::string triggerStr = triggerRef;
+		triggerStr.erase(std::remove_if(triggerStr.begin(), triggerStr.end(), isspace), triggerStr.end());	//remove all spaces
+
+		int leftEnd;
+		int rightBegin;
+		EventEvaluator eval;
+		int idx = 0;
+		//find evaluator and left/right value string split points
+		for (auto it = triggerStr.begin(); it != triggerStr.end(); ++it, ++idx)	
+		{
+			char c = *it;
+			if (c == '>')
+			{
+				//check >=
+				char next = *(it + 1);
+				if (next == '=')
+				{
+					leftEnd = idx;
+					eval = GREATEREQUALS;
+					rightBegin = idx + 2;
+					break;
+				}
+				else
+				{
+					leftEnd = idx;
+					eval = GREATER;
+					rightBegin = idx + 1;
+					break;
+				}
+			}
+			else if (c == '<')
+			{
+				//check <=
+				char next = *(it + 1);
+				if (next == '=')
+				{
+					leftEnd = idx;
+					eval = LESSEQUALS;
+					rightBegin = idx + 2;
+					break;
+				}
+				else
+				{
+					leftEnd = idx;
+					eval = LESS;
+					rightBegin = idx + 1;
+					break;
+				}
+			}
+			else if (c == '=')
+			{
+				//check ==
+				char next = *(it + 1);
+				if (next == '=')
+				{
+					leftEnd = idx;
+					eval = EQUAL;
+					rightBegin = idx + 2;
+					break;
+				}
+				else
+				{
+					assert(false && "invalid expression, did you type = instead of == ?");
+					break;
+				}
+			}
+		}
+
+		std::string left = triggerStr.substr(0, leftEnd);
+		std::string right = triggerStr.substr(rightBegin, triggerStr.size());
+		BlockPropertyValueType leftType = getValueType(left, properties);
+		BlockPropertyValueType rightType = getValueType(right, properties);
+		int leftValue = toInt(left, leftType);
+		int rightValue = toInt(right, rightType);
+		
+		luabridge::LuaRef eventRef = e.second["event"];
+
+		BlockEventTrigger trigger(leftValue, leftType, rightValue, rightType, eval, eventRef);
+
+		assert(rightType != LUA_TICKCOUNTER && "Only left side of trigger may be a tickCount");	//TODO: fix?
+		if (leftType == LUA_TICKCOUNTER)
+		{
+			assert(eval == EQUAL && "tickCount may only use == expression");
+			assert(rightType == LUA_INT && "tickCount may only be compared with an integer type");
+			properties.events.push_back(trigger);
+			continue;
+		}
+
+		printf("trigger: %i, %i, %i \n", trigger.leftType, trigger.rightType, trigger.eval);
+	}
+}
+
+BlockPropertyValueType PropertyManager::getValueType(std::string str, BlockProperties& properties)
+{
+	for (PerBlockProperty p : properties.properties)
+		if (str == p.name)	//if value is equal to a property name, use the properties' type
+			return p.type;
+
+	if (str == "true" || str == "false")
+		return LUA_BOOL;
+
+	if (str == LUA_TICK_COUNT_NAME)
+		return LUA_TICKCOUNTER;
+
+	// check if contains a decimal point
+	auto it = str.find('.');
+	if (it != std::string::npos)
+	{	//contains
+		return LUA_FLOAT;
+	}
+	else
+	{
+		return LUA_INT;
+	}
+}
+
+void PropertyManager::parsePerBlockProperties(BlockProperties& properties)
+{
+	luabridge::LuaRef perBlock = properties.luaRef["perBlock"];
 
 	LuaTableData& perBlockLuaProperties = getTableData(perBlock);
 
-	std::vector<PerBlockProperty> propertyList;
-	propertyList.reserve(perBlockLuaProperties.data.size());
+	properties.properties.reserve(perBlockLuaProperties.data.size());
 	for (std::pair<luabridge::LuaRef, luabridge::LuaRef> r : perBlockLuaProperties.data)
 	{
 		//TODO: error checking.
@@ -101,7 +239,7 @@ void PropertyManager::parsePerBlockProperties(LuaTableData blockData, BlockID bl
 
 		BlockPropertyValueType type;
 		int defaultVal = NULL;
-
+		// Get the default value
 		// Parse all the different possible types
 		if (valueType == LUA_INT_NAME)
 		{
@@ -124,14 +262,8 @@ void PropertyManager::parsePerBlockProperties(LuaTableData blockData, BlockID bl
 		{
 			assert(false && "Unsupported type");
 		}
-		propertyList.push_back(PerBlockProperty(key, type, defaultVal));
+		printf("key: %s \n", key.c_str());
+		properties.propertiesSizeBytes += 4;	//every property an int for now.
+		properties.properties.push_back(PerBlockProperty(key, type, defaultVal));
 	}
-
-	if (propertyList.size() > 0)
-	{
-		m_perBlockProperties.resize(blockID + 1);
-		m_hasPerBlockProperties.at(blockID) = true;
-		m_perBlockProperties.at(blockID) = PerBlockProperties(propertyList);
-	}
-
 }
