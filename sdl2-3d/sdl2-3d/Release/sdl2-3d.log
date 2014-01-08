@@ -1,7 +1,7 @@
-﻿Build started 07/01/2014 21:08:49.
+﻿Build started 08/01/2014 21:51:49.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\Camera.cpp Engine\Graphics\GL\CubeMap.cpp Engine\Graphics\GL\Material.cpp Engine\Graphics\GL\Mesh.cpp Engine\Graphics\GL\Texture.cpp Engine\Graphics\GL\TextureArray.cpp Engine\Graphics\Graphics.cpp Engine\Graphics\HeightMap.cpp Engine\Graphics\PerspectiveCamera.cpp Engine\Graphics\Pixmap.cpp Engine\Graphics\Renderers\HeightMapRenderer.cpp Engine\Graphics\Renderers\SkyBox.cpp Engine\Graphics\Renderers\SpriteBatch.cpp Engine\Input\Input.cpp Engine\Utils\CheckGLError.cpp Engine\Utils\FPSCameraController.cpp Engine\Utils\PerlinGenerator.cpp Engine\Utils\ShaderManager.cpp Engine\Utils\VoidDataList.cpp Game.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\LightManager.cpp Voxel\LuaChunkGenerator.cpp Voxel\PropertyManager.cpp Voxel\TextureManager.cpp Voxel\VoxelBlock.cpp Voxel\VoxelChunk.cpp Voxel\VoxelRenderer.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\Camera.cpp Engine\Graphics\GL\CubeMap.cpp Engine\Graphics\GL\Material.cpp Engine\Graphics\GL\Mesh.cpp Engine\Graphics\GL\Texture.cpp Engine\Graphics\GL\TextureArray.cpp Engine\Graphics\Graphics.cpp Engine\Graphics\Lighting\ShadowCubeMap.cpp Engine\Graphics\PerspectiveCamera.cpp Engine\Graphics\Renderers\HeightMapRenderer.cpp Engine\Graphics\Renderers\SkyBox.cpp Engine\Graphics\Renderers\SpriteBatch.cpp Engine\Input\Input.cpp Engine\Utils\CheckGLError.cpp Engine\Utils\FPSCameraController.cpp Engine\Utils\PerlinGenerator.cpp Engine\Utils\ShaderManager.cpp Game.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\LightManager.cpp Voxel\PropertyManager.cpp Voxel\TextureManager.cpp Voxel\VoxelBlock.cpp Voxel\VoxelChunk.cpp Voxel\VoxelRenderer.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp main.cpp
          main.cpp
          WorldRenderer.cpp
          VoxelWorld.cpp
@@ -10,24 +10,21 @@
          VoxelBlock.cpp
          TextureManager.cpp
          PropertyManager.cpp
-         LuaChunkGenerator.cpp
          LightManager.cpp
          ChunkManager.cpp
          GameScreen.cpp
          Game.cpp
-         VoidDataList.cpp
          ShaderManager.cpp
          PerlinGenerator.cpp
          FPSCameraController.cpp
          CheckGLError.cpp
          Input.cpp
          SpriteBatch.cpp
-         Compiling...
          SkyBox.cpp
          HeightMapRenderer.cpp
-         Pixmap.cpp
+         Compiling...
          PerspectiveCamera.cpp
-         HeightMap.cpp
+         ShadowCubeMap.cpp
          Graphics.cpp
          TextureArray.cpp
          Texture.cpp
@@ -77,4 +74,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:16.52
+Time Elapsed 00:00:15.74
