@@ -1,6 +1,6 @@
 Simple high performance work in progress Minecraft like Voxel Renderer with lua scripting.
 
-Should be instantly compileable/runnable with VS2013/12 and perhaps older versions.
+Runs immediately on a fresh installation of windows using VS2013 without any other installations. VS2012 might work too (msvcr120(d).dll runtimes required)
 
 Random screenshot of last finished feature:
 https://dl.dropboxusercontent.com/u/18555381/Permanent/GravelBlockScripting.png
