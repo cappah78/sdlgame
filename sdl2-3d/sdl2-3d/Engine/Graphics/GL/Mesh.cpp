@@ -3,10 +3,10 @@
 
 #include <assert.h>
 #include <gl\glew.h>
-#include <assimp.h>
-#include <aiMesh.h>
-#include <aiScene.h>
-#include <aiPostProcess.h>
+#include <assimp/cimport.h>
+#include <assimp/mesh.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 
 #define ZERO_MEM(a) memset(a, 0, sizeof(a))
