@@ -446,14 +446,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\LuaBridge;$(ProjectDir)..\2.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\2.1;$(ProjectDir)..\Libs\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\Lua\2.1;$(ProjectDir)..\Libs\Debug;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\LuaBridge;$(ProjectDir)..\2.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\2.1;$(ProjectDir)..\Libs\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\Lua\2.1;$(ProjectDir)..\Libs\Release;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
@@ -475,8 +475,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\SDL2-2.0.1\lib;$(ProjectDir)..\glew-1.10.0\lib\Debug\Win32;$(ProjectDir)..\libpng;$(ProjectDir)..\assimp\lib;$(ProjectDir)..\LuaBridge\Debug;$(ProjectDir)..\2.1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2d.lib;SDL2maind.lib;assimpd.lib;opengl32.lib;glu32.lib;glew32d.lib;libpng16d.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2d.lib;SDL2maind.lib;assimpd.lib;opengl32.lib;glu32.lib;glew32d.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/NODEFAULTLIB:library</AdditionalOptions>
     </Link>
@@ -501,8 +502,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;libpng16.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\SDL2-2.0.1\lib;$(ProjectDir)..\glew-1.10.0\lib\Release\Win32;$(ProjectDir)..\libpng;$(ProjectDir)..\assimp\lib;$(ProjectDir)..\LuaBridge\Release;%(AdditionalLibraryDirectories);$(ProjectDir)..\2.1</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

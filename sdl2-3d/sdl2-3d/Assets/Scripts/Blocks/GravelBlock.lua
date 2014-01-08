@@ -15,6 +15,7 @@ Blocks.GravelBlock = {
 	},
 
 	process = function (block)
+
 		block.fallIntervalTicks = block.fallIntervalTicks - 1;
 
 		if block.y <= -10 
@@ -29,6 +30,7 @@ Blocks.GravelBlock = {
 				World.setBlock(Blocks.GravelBlock.id, block.x, block.y - 1, block.z)
 			end
 		end
+
 	end,
 
 	events = {
