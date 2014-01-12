@@ -102,6 +102,8 @@ void VoxelWorld::update(float deltaSec)
 	{
 		m_timeAccumulator -= m_tickDurationSec;
 
+		m_propertyManager.updateTickCountEvents();
+
 		for (auto it : m_chunkManager.getLoadedChunkMap())
 		{
 			it.second->doBlockUpdate();

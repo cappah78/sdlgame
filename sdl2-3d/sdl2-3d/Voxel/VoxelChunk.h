@@ -46,9 +46,9 @@ public:
 		return m_propertyManager.getBlockProperties(blockID);
 	}
 
-	inline const void* getPerBlockDataAtIdx(unsigned int blockDataIndex) const
+	inline int* getPerBlockDataList(unsigned int blockDataIndex) const
 	{
-		return m_perBlockData.get(blockDataIndex);
+		return static_cast<int*>(m_perBlockData.get(blockDataIndex));
 	}
 
 	/** get the color at the index in the color array, no bounds checking is done */
@@ -75,6 +75,8 @@ public:
 private:
 	static const int NO_BLOCK_DATA = -1;
 
+	void doBlockEvents(const glm::ivec3& blockPos, const glm::ivec3& chunkOffset);
+	void doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& chunkOffset);
 	void shiftPositionIndices(int position, unsigned int amount);
 
 	VoidDataList m_perBlockData;

@@ -47,7 +47,7 @@ static const char* const LUA_TICK_COUNT_NAME = "tickCount";
 
 enum BlockPropertyValueType
 {
-	LUA_INT, LUA_BOOL, LUA_FLOAT, LUA_TICKCOUNTER
+	LUA_INT, LUA_BOOL, LUA_FLOAT, LUA_TICKCOUNTER, LUA_PROPERTY_REF, LUA_BLOCK_X, LUA_BLOCK_Y, LUA_BLOCK_Z
 };
 
 enum EventEvaluator
@@ -55,42 +55,49 @@ enum EventEvaluator
 	EQUAL, LESS, GREATER, LESSEQUALS, GREATEREQUALS
 };
 
+struct BlockPropertyValue
+{
+	BlockPropertyValue(int value, BlockPropertyValueType type) : value(value), type(type) {};
+	int value;
+	BlockPropertyValueType type;
+
+	bool operator==(const BlockPropertyValue& compare);
+	bool operator>(const BlockPropertyValue& compare);
+	bool operator>=(const BlockPropertyValue& compare);
+	bool operator<(const BlockPropertyValue& compare);
+	bool operator<=(const BlockPropertyValue& compare);
+};
+
 struct PerBlockProperty
 {
-	PerBlockProperty() : type(LUA_INT)
+	PerBlockProperty(luabridge::LuaRef ref) : ref(ref), prop(0, LUA_INT)
 	{};
-	PerBlockProperty(const std::string& name,
+	PerBlockProperty(const std::string& name, luabridge::LuaRef ref,
 		BlockPropertyValueType type, int value)
-		: name(name), type(type), defaultValue(value) 
+		: name(name), ref(ref), prop(value, type)
 	{};
 
 	/** Name of the table key holding the value */
 	std::string name;
-	/** Value as integer bits (contains floatbits/booleans etc) */
-	int defaultValue;
-	/** type of the value, int float etc. */
-	BlockPropertyValueType type;
+	/** Reference to lua table value */
+	luabridge::LuaRef ref;
+	BlockPropertyValue prop;
 };
 
 /** A single event trigger for a block type */
 struct BlockEventTrigger
 {
-	BlockEventTrigger(int leftValue, BlockPropertyValueType leftType,
-	int rightValue, BlockPropertyValueType rightType,
-	EventEvaluator eval, luabridge::LuaRef process)
-		: left(leftValue), right(rightValue)
-		, leftType(leftType), rightType(rightType)
-		, eval(eval), process(process), triggered(false)
+	BlockEventTrigger(BlockPropertyValue left, BlockPropertyValue right, EventEvaluator eval, luabridge::LuaRef process)
+		: left(left)
+		, right(right)
+		, eval(eval)
+		, process(process)
 	{}
-
-	bool triggered;
 		
-	int left;
-	BlockPropertyValueType leftType;
-	int right;
-	BlockPropertyValueType rightType;
-
+	BlockPropertyValue left;
+	BlockPropertyValue right;
 	EventEvaluator eval;
+
 	luabridge::LuaRef process;
 };
 
@@ -129,7 +136,7 @@ struct VoxelBlock
 /** Global constant properties for all the blocks of a single type. */
 struct BlockProperties
 {
-	BlockProperties(luabridge::LuaRef luaRef) : luaRef(luaRef), propertiesSizeBytes(0) {}
+	BlockProperties(luabridge::LuaRef luaRef) : luaRef(luaRef) {}
 
 	/** Reference to the lua version of this block*/
 	luabridge::LuaRef luaRef;
@@ -138,10 +145,8 @@ struct BlockProperties
 	/** If this block is not transparent */
 	unsigned solid : 1;
 
-	/** Total size of the per block properties of each block */
-	unsigned int propertiesSizeBytes;
 	/** List of properties unique for every instance of this type */
-	std::vector<PerBlockProperty> properties;
+	std::vector<PerBlockProperty> perBlockProperties;
 	/** List of events that can be triggered to run lua scripts without polling lua */
 	std::vector<BlockEventTrigger> events;
 };

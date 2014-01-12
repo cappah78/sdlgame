@@ -11,6 +11,21 @@
 static const char* LUA_BLOCKS_NAMESPACE = "Blocks";
 static const std::string DEFAULT_BLOCK("defaultblock");
 
+void PropertyManager::updateTickCountEvents()
+{
+	for (BlockProperties& blockProperties : m_blockProperties)
+	{
+		for (BlockEventTrigger& e : blockProperties.events)
+		{
+			if (e.left.type == BlockPropertyValueType::LUA_TICKCOUNTER) {
+				e.left.value++;
+				if (e.left.value > e.right.value)	// both always integer type
+					e.left.value = 0;
+			}
+		}
+	}
+}
+
 BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string& blockname)
 {
 	auto it = m_blockNameIDMap.find(blockname);
@@ -76,23 +91,6 @@ void PropertyManager::parseType(BlockProperties& properties)
 	}
 
 	assert(false && "Unrecognized/unimplemented block type");
-}
-
-int toInt(std::string str, BlockPropertyValueType type)
-{
-	float f;
-	switch (type)
-	{
-	case LUA_INT:
-		return atoi(str.c_str());
-	case LUA_FLOAT:
-		f = (float) atof(str.c_str());
-		return *(int*) &f;
-	case LUA_BOOL:
-		return str == "true";
-	default:
-		return 0;
-	}
 }
 
 void PropertyManager::parseEvents(BlockProperties& properties)
@@ -174,49 +172,62 @@ void PropertyManager::parseEvents(BlockProperties& properties)
 
 		std::string left = triggerStr.substr(0, leftEnd);
 		std::string right = triggerStr.substr(rightBegin, triggerStr.size());
-		BlockPropertyValueType leftType = getValueType(left, properties);
-		BlockPropertyValueType rightType = getValueType(right, properties);
-		int leftValue = toInt(left, leftType);
-		int rightValue = toInt(right, rightType);
+
+		BlockPropertyValue leftProp = getValue(left, properties.perBlockProperties);
+		BlockPropertyValue rightProp = getValue(right, properties.perBlockProperties);
 		
 		luabridge::LuaRef eventRef = e.second["event"];
+		BlockEventTrigger trigger(leftProp, rightProp, eval, eventRef);
 
-		BlockEventTrigger trigger(leftValue, leftType, rightValue, rightType, eval, eventRef);
-
-		assert(rightType != LUA_TICKCOUNTER && "Only left side of trigger may be a tickCount");	//TODO: fix?
-		if (leftType == LUA_TICKCOUNTER)
+#ifdef _DEBUG
+		assert(rightProp.type != LUA_TICKCOUNTER && "Only left side of trigger may be a tickCount");	//TODO: fix?
+		if (leftProp.type == LUA_TICKCOUNTER)
 		{
 			assert(eval == EQUAL && "tickCount may only use == expression");
-			assert(rightType == LUA_INT && "tickCount may only be compared with an integer type");
-			properties.events.push_back(trigger);
-			continue;
+			assert(rightProp.type == LUA_INT && "tickCount may only be compared with an integer type");
 		}
+#endif //_DEBUG
 
-		printf("trigger: %i, %i, %i \n", trigger.leftType, trigger.rightType, trigger.eval);
+		properties.events.push_back(trigger);
+		printf("trigger: %i, %i, %i \n", trigger.left.type, trigger.right.type, trigger.eval);
 	}
 }
 
-BlockPropertyValueType PropertyManager::getValueType(std::string str, BlockProperties& properties)
+BlockPropertyValue PropertyManager::getValue(std::string str, const std::vector<PerBlockProperty>& perBlockProperties)
 {
-	for (PerBlockProperty p : properties.properties)
-		if (str == p.name)	//if value is equal to a property name, use the properties' type
-			return p.type;
+	for (unsigned int i = 0; i < perBlockProperties.size(); ++i)
+	{
+		const PerBlockProperty& p = perBlockProperties[i];
+		if (str == p.name)
+			return BlockPropertyValue(i, LUA_PROPERTY_REF);
+	}
 
-	if (str == "true" || str == "false")
-		return LUA_BOOL;
+	if (str == "true")
+		return BlockPropertyValue(1, LUA_BOOL);
+	if (str == "false")
+		return BlockPropertyValue(0, LUA_BOOL);
 
 	if (str == LUA_TICK_COUNT_NAME)
-		return LUA_TICKCOUNTER;
+		return BlockPropertyValue(0, LUA_TICKCOUNTER);
+	if (str == "x")
+		return BlockPropertyValue(0, LUA_BLOCK_X);
+	if (str == "y")
+		return BlockPropertyValue(0, LUA_BLOCK_Y);
+	if (str == "z")
+		return BlockPropertyValue(0, LUA_BLOCK_Z);
 
 	// check if contains a decimal point
 	auto it = str.find('.');
 	if (it != std::string::npos)
-	{	//contains
-		return LUA_FLOAT;
+	{
+		float f = (float) atof(str.c_str());
+		int floatBits = *(int*) &f;
+		return BlockPropertyValue(floatBits, LUA_FLOAT);
 	}
 	else
 	{
-		return LUA_INT;
+		int i = atoi(str.c_str());
+		return BlockPropertyValue(i, LUA_INT);
 	}
 }
 
@@ -226,7 +237,7 @@ void PropertyManager::parsePerBlockProperties(BlockProperties& properties)
 
 	LuaTableData& perBlockLuaProperties = getTableData(perBlock);
 
-	properties.properties.reserve(perBlockLuaProperties.data.size());
+	properties.perBlockProperties.reserve(perBlockLuaProperties.data.size());
 	for (std::pair<luabridge::LuaRef, luabridge::LuaRef> r : perBlockLuaProperties.data)
 	{
 		//TODO: error checking.
@@ -263,7 +274,7 @@ void PropertyManager::parsePerBlockProperties(BlockProperties& properties)
 			assert(false && "Unsupported type");
 		}
 		printf("key: %s \n", key.c_str());
-		properties.propertiesSizeBytes += 4;	//every property an int for now.
-		properties.properties.push_back(PerBlockProperty(key, type, defaultVal));
+
+		properties.perBlockProperties.push_back(PerBlockProperty(key, r.second, type, defaultVal));
 	}
 }

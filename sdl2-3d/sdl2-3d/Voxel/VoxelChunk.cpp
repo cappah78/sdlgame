@@ -21,35 +21,35 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 	VoxelBlock& block = m_blocks[idx];
 	m_updated = false;
 
+	const BlockProperties& oldProperties = m_propertyManager.getBlockProperties(block.id);
+	const std::vector<PerBlockProperty>& oldPerBlockProperties = oldProperties.perBlockProperties;
+
 	if (block.id != 0) //if there was already a block here
 	{
-		//handle on block remove
-		//TODO: call block remove lua stuffa
-		unsigned int oldBlockPropertiesSize = m_propertyManager.getBlockProperties(block.id).propertiesSizeBytes;
+		unsigned int oldBlockPropertiesSize = oldPerBlockProperties.size() * sizeof(int);	// each property is an int
 		if (block.blockDataIndex != NO_BLOCK_DATA && oldBlockPropertiesSize != 0) //There was already a block here with per block data, clean up data
 		{
-			m_perBlockData.remove(block.blockDataIndex, oldBlockPropertiesSize);
-			shiftPositionIndices(block.blockDataIndex, oldBlockPropertiesSize);
+			m_perBlockData.remove(block.blockDataIndex, oldBlockPropertiesSize);	//remove per block data of this block.
+			shiftPositionIndices(block.blockDataIndex, oldBlockPropertiesSize);		//required after remove. TODO: clean
 		}
 	}
 
-	const BlockProperties& properties = m_propertyManager.getBlockProperties(blockID);
+	const BlockProperties& newProperties = m_propertyManager.getBlockProperties(blockID);
+	const std::vector<PerBlockProperty>& newPerBlockProperties = newProperties.perBlockProperties;
 
-	if (properties.propertiesSizeBytes != 0)	// if this block should have perblock values
+	if (newPerBlockProperties.size() != 0)	// if this block should have perblock values
 	{
 		if (dataSize != 0 && dataPtr != NULL)	//if given initial values for this block
 		{
-			assert(dataSize == properties.propertiesSizeBytes && "Given data size not equal to block properties");
-			unsigned int dataPos = m_perBlockData.add(dataPtr, dataSize);
-			block.blockDataIndex = dataPos;
+			block.blockDataIndex = m_perBlockData.add(dataPtr, dataSize);
 		}
 		else //insert default values
 		{
 			std::vector<int> dataList;	//properties are just a list of integer values for now
-			dataList.reserve(properties.propertiesSizeBytes / 4);
-			for (const PerBlockProperty& p : properties.properties)
+			dataList.reserve(newPerBlockProperties.size());
+			for (const PerBlockProperty& p : newPerBlockProperties)
 			{				
-				dataList.push_back(p.defaultValue);
+				dataList.push_back(p.prop.value);
 			}
 			unsigned int dataPos = m_perBlockData.add(&dataList[0], sizeof(int) * dataList.size());
 			block.blockDataIndex = dataPos;
@@ -64,6 +64,178 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 	block.solid = blockID != 0; //all non air blocks are solid for now.
 }
 
+void VoxelChunk::doBlockEvents(const glm::ivec3& blockPos, const glm::ivec3& chunkOffset)
+{
+	int idx = getBlockIndex(blockPos);
+	VoxelBlock& block = m_blocks[idx];
+
+	if (block.id == 0)	//if block is air, skip
+		return;
+
+	const BlockProperties& properties = m_propertyManager.getBlockProperties(block.id);
+	for (BlockEventTrigger e : properties.events)
+	{
+		bool triggered = false;
+		switch (e.eval)
+		{
+		case EventEvaluator::EQUAL:
+			triggered = (e.left == e.right);
+			break;
+		case EventEvaluator::GREATER:
+			triggered = (e.left > e.right);
+			break;
+		case EventEvaluator::GREATEREQUALS:
+			triggered = (e.left >= e.right);
+			break;
+		case EventEvaluator::LESS:
+			triggered = (e.left < e.right);
+			break;
+		case EventEvaluator::LESSEQUALS:
+			triggered = (e.left <= e.right);
+			break;
+		}
+
+	}
+}
+
+/** Set the values in the given lua table, to match the data in the given array using the properties */
+void setProperties(int* dataArr, const std::vector<PerBlockProperty>& propertyList, luabridge::LuaRef& luaBlockArg)
+{
+	for (unsigned int i = 0; i < propertyList.size(); ++i)
+	{ // iterate the data, put property value into table under property name
+		const PerBlockProperty& p = propertyList[i];
+		float f;
+		switch (p.prop.type)
+		{
+		case BlockPropertyValueType::LUA_INT:
+			luaBlockArg[p.name] = dataArr[i];
+			break;
+		case BlockPropertyValueType::LUA_FLOAT:
+			f = *(float*) dataArr[i];	//cast bits to float
+			luaBlockArg[p.name] = f;
+			break;
+		case BlockPropertyValueType::LUA_BOOL:
+			luaBlockArg[p.name] = dataArr[i] == 1;
+			break;
+		}
+	}
+}
+
+void updateProperties(int* dataArr, const std::vector<PerBlockProperty>& propertyList, luabridge::LuaRef& luaBlockArg)
+{
+	for (unsigned int i = 0; i < propertyList.size(); ++i)
+	{
+		const PerBlockProperty& p = propertyList[i];
+		float f;
+		switch (p.prop.type)
+		{
+		case BlockPropertyValueType::LUA_INT:
+			dataArr[i] = luaBlockArg[p.name];
+			break;
+		case BlockPropertyValueType::LUA_FLOAT:
+			f = luaBlockArg[p.name];
+			dataArr[i] = *(int*) &f;	//cast float to int bits
+			break;
+		case BlockPropertyValueType::LUA_BOOL:
+			if (luaBlockArg[p.name])
+				dataArr[i] = 1;
+			else
+				dataArr[i] = 0;
+			break;
+		default:
+			assert(false);
+			break;
+		}
+	}
+}
+
+void VoxelChunk::doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& chunkOffset)
+{
+	int idx = getBlockIndex(blockPos);
+	VoxelBlock& block = m_blocks[idx];
+
+	if (block.id == 0)	//if block is air, skip
+		return;
+
+	BlockID startID = block.id;
+
+	const BlockProperties& properties = m_propertyManager.getBlockProperties(block.id);
+	const std::vector<PerBlockProperty>& perBlockProperties = properties.perBlockProperties;
+	luabridge::LuaRef process = properties.luaRef["process"];
+
+	if (properties.events.size() == 0)	// if block has no no events to check, skip.
+		return;
+
+	// if block has per block properties, get the list, else null.
+	int* dataList = perBlockProperties.size() != 0 ? getPerBlockDataList(block.blockDataIndex) : NULL;
+
+	luabridge::LuaRef luaBlockArg = luabridge::newTable(properties.luaRef.state());	// create a lua table for the process argument
+	glm::ivec3 blockWorldPos = blockPos + chunkOffset;
+	luaBlockArg["x"] = blockWorldPos.x;	//add useful values
+	luaBlockArg["y"] = blockWorldPos.y;
+	luaBlockArg["z"] = blockWorldPos.z;
+
+	bool setPerBlockProperties = false;
+
+	for (BlockEventTrigger e : properties.events)	//by value because we dont want to change the default
+	{	// check if any event triggers
+		switch (e.left.type)
+		{
+		case BlockPropertyValueType::LUA_BLOCK_X:
+			e.left.value = blockWorldPos.x;
+			break;
+		case BlockPropertyValueType::LUA_BLOCK_Y:
+			e.left.value = blockWorldPos.y;
+			break;
+		case BlockPropertyValueType::LUA_BLOCK_Z:
+			e.left.value = blockWorldPos.z;
+			break;
+		case BlockPropertyValueType::LUA_PROPERTY_REF:	// if this type, the value will be the index of the property
+			assert(dataList != 0 && "Block does not have per block properties");
+			// get the type from the properties, and the value from the data list
+			e.left.type = properties.perBlockProperties.at(e.left.value).prop.type;
+			e.left.value = dataList[e.left.value];
+			break;
+		}
+
+		bool triggered = false;
+		switch (e.eval)
+		{
+		case EventEvaluator::EQUAL:
+			triggered = (e.left == e.right);
+			break;
+		case EventEvaluator::GREATER:
+			triggered = (e.left > e.right);
+			break;
+		case EventEvaluator::GREATEREQUALS:
+			triggered = (e.left >= e.right);
+			break;
+		case EventEvaluator::LESS:
+			triggered = (e.left < e.right);
+			break;
+		case EventEvaluator::LESSEQUALS:
+			triggered = (e.left <= e.right);
+			break;
+		}
+		if (triggered)
+		{
+			if (!setPerBlockProperties && perBlockProperties.size() != 0)	// fill lua table argument with the properties(if any), only needs to be done once.
+			{
+				setPerBlockProperties = true;
+				setProperties(dataList, perBlockProperties, luaBlockArg);
+			}
+			e.process(luaBlockArg);
+		}
+
+	}
+
+	// if a process happened, and there are per block properties, update the dataList to reflect the changes, only if the block was not removed
+	if (setPerBlockProperties && block.id == startID)	
+	{
+		updateProperties(dataList, perBlockProperties, luaBlockArg);
+	}
+}
+
 void VoxelChunk::doBlockUpdate()
 {
 	glm::ivec3& chunkOffset = m_pos * (int)CHUNK_SIZE;
@@ -74,85 +246,9 @@ void VoxelChunk::doBlockUpdate()
 		{
 			for (int z = 0; z < CHUNK_SIZE; ++z)
 			{
-				int idx = getBlockIndex(glm::ivec3(x, y, z));
+				glm::ivec3 blockPos(x, y, z);
 
-				VoxelBlock& block = m_blocks[idx];
-
-				if (block.id == 0)	//if block is air, skip
-					continue;
-
-				const BlockProperties& properties = m_propertyManager.getBlockProperties(block.id);
-				luabridge::LuaRef process = properties.luaRef["process"];
-				if (process.isNil())	//if block has no process function, skip.
-					continue;
-
-				luabridge::LuaRef luaBlockArg = luabridge::newTable(properties.luaRef.state());	// create a lua table for the process argument
-				luaBlockArg["x"] = x + chunkOffset.x;	// add useful things.
-				luaBlockArg["y"] = y + chunkOffset.y;
-				luaBlockArg["z"] = z + chunkOffset.z;
-
-				if (properties.propertiesSizeBytes != 0)	//if block has per block data
-				{
-					void* data = m_perBlockData.get(block.blockDataIndex);	//get the data
-					int* val = static_cast<int*>(data);	// iterate the data, put property value into table under property name
-					for (const PerBlockProperty& p : properties.properties)
-					{
-						float f;
-						switch (p.type)
-						{
-						case BlockPropertyValueType::LUA_INT:
-							luaBlockArg[p.name] = *val;
-							break;
-						case BlockPropertyValueType::LUA_FLOAT:
-							f = *(float*) val;	//cast bits to float
-							luaBlockArg[p.name] = f;
-							break;
-						case BlockPropertyValueType::LUA_BOOL:
-							luaBlockArg[p.name] = (*val) == 1;
-							break;
-						}
-						val++;	//increment pointer by 4 bytes;
-					}
-				}
-
-				try
-				{
-					process(luaBlockArg);	//run Blocks.blocktype.process
-				}
-				catch (const luabridge::LuaException& e)
-				{
-					printf("%s \n", e.what());
-				}
-
-				if (block.blockDataIndex != NO_BLOCK_DATA)	//check to see if the block still exists (might be removed during process)
-				{
-					void* newData = m_perBlockData.get(block.blockDataIndex); //get the data
-					int* val = static_cast<int*>(newData); // iterate the data, updating it with the values from the lua table given as argument to process.
-					for (const PerBlockProperty& p : properties.properties)
-					{
-						float f;
-						switch (p.type)
-						{
-						case BlockPropertyValueType::LUA_INT:
-							*val = luaBlockArg[p.name];
-							break;
-						case BlockPropertyValueType::LUA_FLOAT:
-							f = luaBlockArg[p.name];
-							*val = *(int*) &f;	//cast float to int bits
-							break;
-						case BlockPropertyValueType::LUA_BOOL:
-							if (luaBlockArg[p.name])
-								*val = 1;
-							else
-								*val = 0;
-							break;
-						default:
-							assert(false);
-							break;
-						}
-						val++;	//increment pointer by 4 bytes;
-					}
-				}
+				doBlockProcess(blockPos, chunkOffset);
 			}
 		}
 	}

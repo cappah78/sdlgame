@@ -38,7 +38,7 @@ public:
 
 	BlockID registerBlockType(lua_State* const L, const std::string& blockname);
 
-	void tick();
+	void updateTickCountEvents();
 
 	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
 	const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }
@@ -49,7 +49,7 @@ private:
 	void parseBlock(BlockProperties& properties);
 	void parseType(BlockProperties& properties);
 	void parseEvents(BlockProperties& properties);
-	BlockPropertyValueType getValueType(std::string str, BlockProperties& properties);
+	BlockPropertyValue getValue(std::string str, const std::vector<PerBlockProperty>& perBlockProperties);
 	void parsePerBlockProperties(BlockProperties& properties);
 
 	TextureManager& m_textureManager;
@@ -64,7 +64,6 @@ private:
 
 	/** Idx == blockID, value.left = tick counter (incrementing), value.right = num ticks required for process(constant) */
 	std::vector<std::vector<BlockEventTrigger>> m_tickCountEvents;
-	std::vector<bool> m_triggeredEvents;
 
 	std::vector<BlockProperties> m_blockProperties;
 

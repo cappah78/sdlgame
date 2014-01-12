@@ -62,3 +62,74 @@ TextureID BlockRenderData::getTextureID(Face face) const
 		return 0;
 	}
 }
+
+bool BlockPropertyValue::operator==(const BlockPropertyValue& compare)
+{
+	if (type == LUA_FLOAT)
+	{
+		float floatVal = *(float*) &value;	//convert float bits to float
+		if (compare.type == LUA_FLOAT)
+		{
+			float cmpFloatVal = *(float*) &compare.value;
+			return floatVal == cmpFloatVal;
+		}
+		return floatVal == (float) value;
+	}
+	return value == compare.value;
+}
+bool BlockPropertyValue::operator>(const BlockPropertyValue& compare)
+{
+	if (type == LUA_FLOAT)
+	{
+		float floatVal = *(float*) &value;	//convert float bits to float
+		if (compare.type == LUA_FLOAT)
+		{
+			float cmpFloatVal = *(float*) &compare.value;
+			return floatVal > cmpFloatVal;
+		}
+		return floatVal > (float) value;
+	}
+	return value > compare.value;
+}
+bool BlockPropertyValue::operator>=(const BlockPropertyValue& compare)
+{
+	if (type == LUA_FLOAT)
+	{
+		float floatVal = *(float*) &value;	//convert float bits to float
+		if (compare.type == LUA_FLOAT)
+		{
+			float cmpFloatVal = *(float*) &compare.value;
+			return floatVal >= cmpFloatVal;
+		}
+		return floatVal >= (float) value;
+	}
+	return value >= compare.value;
+}
+bool BlockPropertyValue::operator<(const BlockPropertyValue& compare)
+{
+	if (type == LUA_FLOAT)
+	{
+		float floatVal = *(float*) &value;	//convert float bits to float
+		if (compare.type == LUA_FLOAT)
+		{
+			float cmpFloatVal = *(float*) &compare.value;
+			return floatVal < cmpFloatVal;
+		}
+		return floatVal < (float) value;
+	}
+	return value < compare.value;
+}
+bool BlockPropertyValue::operator<=(const BlockPropertyValue& compare)
+{
+	if (type == LUA_FLOAT)
+	{
+		float floatVal = *(float*) &value;	//convert float bits to float
+		if (compare.type == LUA_FLOAT)
+		{
+			float cmpFloatVal = *(float*) &compare.value;
+			return floatVal <= cmpFloatVal;
+		}
+		return floatVal <= (float) value;
+	}
+	return value <= compare.value;
+}
