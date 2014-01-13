@@ -61,6 +61,7 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 		block.blockDataIndex = NO_BLOCK_DATA;
 	}
 	block.id = blockID;
+	block.update = true;
 	block.solid = blockID != 0; //all non air blocks are solid for now.
 }
 
@@ -157,7 +158,7 @@ void VoxelChunk::doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& ch
 	if (block.id == 0)	//if block is air, skip
 		return;
 
-	BlockID startID = block.id;
+	int startDataIdx = block.blockDataIndex;
 
 	const BlockProperties& properties = m_propertyManager.getBlockProperties(block.id);
 	const std::vector<PerBlockProperty>& perBlockProperties = properties.perBlockProperties;
@@ -171,6 +172,7 @@ void VoxelChunk::doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& ch
 
 	luabridge::LuaRef luaBlockArg = luabridge::newTable(properties.luaRef.state());	// create a lua table for the process argument
 	glm::ivec3 blockWorldPos = blockPos + chunkOffset;
+
 	luaBlockArg["x"] = blockWorldPos.x;	//add useful values
 	luaBlockArg["y"] = blockWorldPos.y;
 	luaBlockArg["z"] = blockWorldPos.z;
@@ -178,7 +180,9 @@ void VoxelChunk::doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& ch
 	bool setPerBlockProperties = false;
 
 	for (BlockEventTrigger e : properties.events)	//by value because we dont want to change the default
-	{	// check if any event triggers
+	{	
+
+		// update block values before evaluation.
 		switch (e.left.type)
 		{
 		case BlockPropertyValueType::LUA_BLOCK_X:
@@ -198,25 +202,8 @@ void VoxelChunk::doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& ch
 			break;
 		}
 
-		bool triggered = false;
-		switch (e.eval)
-		{
-		case EventEvaluator::EQUAL:
-			triggered = (e.left == e.right);
-			break;
-		case EventEvaluator::GREATER:
-			triggered = (e.left > e.right);
-			break;
-		case EventEvaluator::GREATEREQUALS:
-			triggered = (e.left >= e.right);
-			break;
-		case EventEvaluator::LESS:
-			triggered = (e.left < e.right);
-			break;
-		case EventEvaluator::LESSEQUALS:
-			triggered = (e.left <= e.right);
-			break;
-		}
+		bool triggered = e.isTriggered();
+		
 		if (triggered)
 		{
 			if (!setPerBlockProperties && perBlockProperties.size() != 0)	// fill lua table argument with the properties(if any), only needs to be done once.
@@ -226,11 +213,17 @@ void VoxelChunk::doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& ch
 			}
 			e.process(luaBlockArg);
 		}
+	}
 
+	luabridge::LuaRef onBlockUpdate = properties.luaRef["onBlockUpdate"];
+	if (!onBlockUpdate.isNil() && block.update)	// run onBlockupdate if block.update is true, might move to its own loop.
+	{
+		block.update = false;
+		onBlockUpdate(luaBlockArg);
 	}
 
 	// if a process happened, and there are per block properties, update the dataList to reflect the changes, only if the block was not removed
-	if (setPerBlockProperties && block.id == startID)	
+	if (setPerBlockProperties && block.blockDataIndex == startDataIdx)
 	{
 		updateProperties(dataList, perBlockProperties, luaBlockArg);
 	}

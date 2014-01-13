@@ -79,7 +79,6 @@ public:
   template <class Exception>
   static void Throw (Exception e)
   {
-	printf(e.what());
     throw e;
   }
 

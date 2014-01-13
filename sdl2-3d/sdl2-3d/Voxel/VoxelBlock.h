@@ -61,11 +61,11 @@ struct BlockPropertyValue
 	int value;
 	BlockPropertyValueType type;
 
-	bool operator==(const BlockPropertyValue& compare);
-	bool operator>(const BlockPropertyValue& compare);
-	bool operator>=(const BlockPropertyValue& compare);
-	bool operator<(const BlockPropertyValue& compare);
-	bool operator<=(const BlockPropertyValue& compare);
+	bool operator==(const BlockPropertyValue& compare) const;
+	bool operator>(const BlockPropertyValue& compare) const;
+	bool operator>=(const BlockPropertyValue& compare) const;
+	bool operator<(const BlockPropertyValue& compare) const;
+	bool operator<=(const BlockPropertyValue& compare) const;
 };
 
 struct PerBlockProperty
@@ -99,6 +99,26 @@ struct BlockEventTrigger
 	EventEvaluator eval;
 
 	luabridge::LuaRef process;
+
+	bool isTriggered() const
+	{
+		switch (eval)
+		{
+		case EventEvaluator::EQUAL:
+			return (left == right);
+		case EventEvaluator::GREATER:
+			return (left > right);
+		case EventEvaluator::GREATEREQUALS:
+			return (left >= right);
+		case EventEvaluator::LESS:
+			return (left < right);
+		case EventEvaluator::LESSEQUALS:
+			return (left <= right);
+		default:
+			assert(false);
+			return false;
+		}
+	}
 };
 
 struct BlockRenderData	// 8 bytes;
@@ -123,14 +143,16 @@ struct BlockRenderData	// 8 bytes;
 /** The data stored for every block in a chunk */
 struct VoxelBlock
 {
-	VoxelBlock() : id(0), blockDataIndex(-1), skyVisible(false), solid(false), lightLevel(0) {};
+	VoxelBlock() : id(0), blockDataIndex(-1), skyVisible(false), solid(false), lightLevel(0), update(false) {};
 	//VoxelBlock(const VoxelBlock& copy) = delete;
 	BlockID id;
 	BlockColor color;
 	int blockDataIndex;
-	bool skyVisible;
-	bool solid;
-	char lightLevel;
+	unsigned skyVisible : 1;
+	unsigned solid : 1;
+	/** true if should run onBlockUpdate */
+	unsigned update : 1;
+	unsigned lightLevel : 4;
 };
 
 /** Global constant properties for all the blocks of a single type. */

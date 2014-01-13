@@ -10,6 +10,20 @@ Blocks.GravelBlock = {
 		right = "Assets\\Textures\\MinecraftBlocks\\gravel.png"
 	},
 
+	--[[
+	perBlock = {
+		falling = "bool(false)"
+	},
+	]]--
+
+	--[[
+	onBlockUpdate = function (block)
+		--if block below is air
+		--block.falling = (World.getBlock(block.x, block.y - 1, block.z) == Blocks.AirBlock.id) 
+		--print("updated")
+	end,
+	]]--
+
 	events = {
 		{
 			trigger = "tickCount == 5",	--run every 5 ticks

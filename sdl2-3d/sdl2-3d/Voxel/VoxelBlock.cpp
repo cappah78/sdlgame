@@ -63,7 +63,7 @@ TextureID BlockRenderData::getTextureID(Face face) const
 	}
 }
 
-bool BlockPropertyValue::operator==(const BlockPropertyValue& compare)
+bool BlockPropertyValue::operator==(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
@@ -77,7 +77,7 @@ bool BlockPropertyValue::operator==(const BlockPropertyValue& compare)
 	}
 	return value == compare.value;
 }
-bool BlockPropertyValue::operator>(const BlockPropertyValue& compare)
+bool BlockPropertyValue::operator>(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
@@ -91,7 +91,7 @@ bool BlockPropertyValue::operator>(const BlockPropertyValue& compare)
 	}
 	return value > compare.value;
 }
-bool BlockPropertyValue::operator>=(const BlockPropertyValue& compare)
+bool BlockPropertyValue::operator>=(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
@@ -105,7 +105,7 @@ bool BlockPropertyValue::operator>=(const BlockPropertyValue& compare)
 	}
 	return value >= compare.value;
 }
-bool BlockPropertyValue::operator<(const BlockPropertyValue& compare)
+bool BlockPropertyValue::operator<(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
@@ -119,7 +119,7 @@ bool BlockPropertyValue::operator<(const BlockPropertyValue& compare)
 	}
 	return value < compare.value;
 }
-bool BlockPropertyValue::operator<=(const BlockPropertyValue& compare)
+bool BlockPropertyValue::operator<=(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
