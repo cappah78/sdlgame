@@ -2,6 +2,7 @@
 #define CAMERA_H_
 
 #include <glm\glm.hpp>
+#include "Frustum.h"
 
 /** 
 Based camera class, updates the projection-view matrix for rendering.
@@ -30,7 +31,7 @@ public:
 	/** rotation on the y/z plane from -180 to 180, 0 == up */
 	float getRotationRadYZ();
 
-	// public all the things because convenience > risk
+	// public all the things because convenience
 	glm::mat4 m_combinedMatrix;
 	glm::mat4 m_projectionMatrix;
 	glm::mat4 m_viewMatrix;
@@ -38,6 +39,9 @@ public:
 	glm::vec3 m_position;
 	glm::vec3 m_direction;
 	glm::vec3 m_up;
+
+	glm::mat4 m_frustumProjectionMatrix;
+	Frustum m_frustum;
 
 	float m_viewportWidth;
 	float m_viewportHeight;

@@ -21,16 +21,11 @@ class WorldRenderer;
 class VoxelChunk
 {
 public:
-	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& blockPos);
+	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& chunkPos);
 	VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
 
 	void doBlockUpdate();
-
-	/** If any rendering related things have not yet been updated by the renderer, this is false */
-	bool m_updated;
-	/** Position in chunks, block pos is * CHUNK_SIZE this*/
-	const glm::ivec3 m_pos;
 
 	/** Set the block at the given position inside this chunk (0-chunksize) with optional additional data for this block */
 	void setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr = NULL, unsigned int dataSize = 0);
@@ -71,6 +66,15 @@ public:
 	{
 		return m_perBlockData.getSize();
 	};
+
+	void updateBounds();
+
+	/** If any rendering related things have not yet been updated by the renderer, this is false */
+	bool m_updated;
+	/** Position in chunks, block pos is * CHUNK_SIZE this*/
+	const glm::ivec3 m_pos;
+	/** The 8 corner positions of this chunk*/
+	glm::vec3 m_bounds[8];
 
 private:
 	static const int NO_BLOCK_DATA = -1;

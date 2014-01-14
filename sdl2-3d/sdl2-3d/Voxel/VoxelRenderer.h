@@ -81,15 +81,17 @@ public:
 		void addFace(Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4, bool flipQuad = false);
 		/** Offset to render with*/
 		glm::vec3 m_renderOffset;
+		const glm::vec3* const m_bounds;
 
 		~Chunk();
 
 	private:
-		Chunk(float xOffset, float yOffset, float zOffset
+		Chunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds
 			, std::vector<Color8888>& colorData
 			, std::vector<VoxelVertex>& pointData
 			, std::vector<unsigned short>& indiceData)
-			: m_colorBuffer(colorData.size(), GL_ARRAY_BUFFER, GL_STREAM_DRAW, &colorData[0])
+			: m_bounds(bounds)
+			, m_colorBuffer(colorData.size(), GL_ARRAY_BUFFER, GL_STREAM_DRAW, &colorData[0])
 			, m_pointBuffer(pointData.size(), GL_ARRAY_BUFFER, GL_STREAM_DRAW, &pointData[0])
 			, m_indiceBuffer(indiceData.size(), GL_ELEMENT_ARRAY_BUFFER, GL_STREAM_DRAW, &indiceData[0])
 			, m_renderOffset(xOffset, yOffset, zOffset)
@@ -110,7 +112,7 @@ public:
 	VoxelRenderer(const VoxelRenderer& copyMe) = delete;
 	~VoxelRenderer();
 
-	const std::shared_ptr<VoxelRenderer::Chunk> createChunk(float xOffset = 0, float yOffset = 0, float zOffset = 0);
+	const std::shared_ptr<VoxelRenderer::Chunk> createChunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds);
 
 	/** Ready a chunk to add faces */
 	void beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk);

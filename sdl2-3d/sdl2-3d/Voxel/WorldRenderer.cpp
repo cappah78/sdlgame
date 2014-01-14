@@ -175,12 +175,28 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 		const std::shared_ptr<VoxelChunk>& chunk = it.second;
 		const glm::ivec3& chunkPos = chunk->m_pos;
 
+		//frustum culling
+		bool contains = false;
+		float radius = CHUNK_SIZE / 2.0f;
+
+		for (const glm::vec3& corner : chunk->m_bounds)
+		{
+			if (camera.m_frustum.sphereInFrustum(corner, radius))
+			{
+				contains = true;
+				break;
+			}
+		}
+		if (!contains)
+			continue;
+
 		if (chunk->m_updated)
 			continue;
-		chunk->m_updated = true;
-		const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk = getRenderChunk(chunkPos);
-		m_renderer.beginChunk(renderChunk);
 
+		chunk->m_updated = true;
+
+		const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk = getRenderChunk(chunkPos, chunk->m_bounds);
+		m_renderer.beginChunk(renderChunk);
 		for (int x = 0; x < CHUNK_SIZE; ++x)
 		{
 			for (int y = 0; y < CHUNK_SIZE; ++y)
@@ -298,20 +314,31 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 
 	for (auto it : m_renderChunks)
 	{
+		float radius = CHUNK_SIZE / 2.0f;
+		//frustum culling
+		bool contains = false;
+		for (int i = 0; i < 8; ++i)	//check 8 corners
+		{
+			if (camera.m_frustum.sphereInFrustum(it.second->m_bounds[i], radius)) {
+				contains = true;
+				break;
+			}
+		}
+		if (!contains)
+			continue;
 		m_renderer.renderChunk(it.second, camera);
 	}
 	m_renderer.endRender();
 }
 
-const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos)
+const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos, const glm::vec3* const bounds)
 {
 	auto it = m_renderChunks.find(pos);
 	if (it != m_renderChunks.end())
 		return it->second;
 	else
 	{
-		//printf("createchunk: %i, %i, %i \n", pos.x, pos.y, pos.z);
-		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE);
+		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE, bounds);
 		m_renderChunks.insert(std::make_pair(pos, chunk));
 		return chunk;
 	}

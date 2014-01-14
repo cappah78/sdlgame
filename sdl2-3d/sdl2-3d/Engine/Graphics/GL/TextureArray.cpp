@@ -53,7 +53,7 @@ TextureArray::TextureArray(const std::vector<const std::string*>& imageNames,
 	int i = 0;
 	for (const std::string* imageName : imageNames)
 	{
-		Pixmap p(imageName);
+		Pixmap p(imageName->c_str());
 		assert(p.m_width == textureWidth);
 		assert(p.m_height == textureHeight);
 		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, textureWidth, textureHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE, p.m_data);

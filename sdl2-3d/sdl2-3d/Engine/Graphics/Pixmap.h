@@ -8,7 +8,6 @@ class Pixmap
 {
 public:
 	Pixmap(const char* const fileName);
-	Pixmap(const std::string* const fileName);
 	~Pixmap();
 	/** 
 	Byte data of the image

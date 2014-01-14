@@ -2,8 +2,7 @@
 #define SHADER_H_
 
 #include <glm\glm.hpp>
-#include <string>
-#include <map>
+#include <unordered_map>
 #include <gl\glew.h>
 
 class Shader
@@ -31,13 +30,28 @@ private:
 
 	struct StrCmp
 	{
-		bool operator()(char const *a, char const *b)
+		bool operator() (const char* a, const char* b)
 		{
-			return std::strcmp(a, b) < 0;
+			return std::strcmp(a, b) == 0;
 		}
 	};
 
-	std::map<const char*, GLuint, StrCmp> m_uniformLocMap;
+	struct StrHash //BKDR hash algorithm
+	{	
+		int operator() (const char* str) const
+		{
+			const int seed = 131;
+			int hash = 0;
+			while (*str)
+			{
+				hash = (hash * seed) + (*str);
+				str++;
+			}
+			return hash & (0x7FFFFFFF);
+		}
+	};
+
+	std::unordered_map<const char*, GLuint, StrHash, StrCmp> m_uniformLocMap;
 };
 
 #endif //SHADER_H_

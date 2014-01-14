@@ -9,38 +9,38 @@ Manages rendering related global variables and objects.
 class Graphics
 {
 public:
-	static void swap()
+	static inline void swap()
 	{
 		SDL_GL_SwapWindow(m_window);
 	};
 
-	static unsigned int getScreenWidth()
+	static inline unsigned int getScreenWidth()
 	{
 		return m_screenWidth;
 	};
 
-	static unsigned int getScreenHeight()
+	static inline unsigned int getScreenHeight()
 	{
 		return m_screenHeight;
 	};
 
-	static void resizeScreen(unsigned int screenWidth, unsigned int screenHeight)
+	static inline void resizeScreen(unsigned int screenWidth, unsigned int screenHeight)
 	{
 		m_screenWidth = screenWidth;
 		m_screenHeight = screenHeight;
 	};
 
-	static SDL_Window* const getWindow()
+	static inline SDL_Window* const getWindow()
 	{
 		return m_window;
 	};
 
-	static void setWindowTitle(const char* title)
+	static inline void setWindowTitle(const char* title)
 	{
 		SDL_SetWindowTitle(m_window, title);
 	};
 
-	static void setWindow(SDL_Window* const window)
+	static inline void setWindow(SDL_Window* const window)
 	{
 		m_window = window;
 	}

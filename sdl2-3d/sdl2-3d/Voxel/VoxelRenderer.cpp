@@ -69,6 +69,9 @@ void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chun
 {
 	assert(m_begunRender);
 
+	m_shader.setUniform3f("u_fogColor", glm::vec3(0.4f, 0.7f, 1.0f));	//same as clearcolor
+	m_shader.setUniform1f("u_fogEnd", camera.m_far * 0.9f);
+	m_shader.setUniform1f("u_fogStart", camera.m_far * 0.6f);
 	m_shader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
 	m_shader.setUniform3f("u_camPos", camera.m_position);
 	m_shader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
@@ -85,11 +88,11 @@ void VoxelRenderer::endRender()
 	m_shader.end();
 }
 
-const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset)
+const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds)
 {
 	assert(!m_begunRender && "Cannot create a new chunk in between beginRender() and endRender()");
 
-	std::shared_ptr<VoxelRenderer::Chunk> chunk(new Chunk(xOffset, yOffset, zOffset, m_colorData, m_pointData, m_indiceData));
+	std::shared_ptr<VoxelRenderer::Chunk> chunk(new Chunk(xOffset, yOffset, zOffset, bounds, m_colorData, m_pointData, m_indiceData));
 	glGenVertexArrays(1, &chunk->m_vao);
 	glBindVertexArray(chunk->m_vao);
 

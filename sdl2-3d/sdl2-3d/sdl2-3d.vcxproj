@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h" />
     <ClInclude Include="Engine\Graphics\Color8888.h" />
+    <ClInclude Include="Engine\Graphics\Frustum.h" />
     <ClInclude Include="Engine\Graphics\GL\CubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\GBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\Material.h" />
@@ -58,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Graphics\Camera.cpp" />
+    <ClCompile Include="Engine\Graphics\Frustum.cpp" />
     <ClCompile Include="Engine\Graphics\GL\CubeMap.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Material.cpp" />

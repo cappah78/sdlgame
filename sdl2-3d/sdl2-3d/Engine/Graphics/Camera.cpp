@@ -86,6 +86,9 @@ void Camera::update()
 {
 	m_viewMatrix = glm::lookAt(m_position, m_position + m_direction, m_up);
 	m_combinedMatrix = m_projectionMatrix * m_viewMatrix;
+
+	glm::mat4 frustumCombined = m_frustumProjectionMatrix * m_viewMatrix;
+	m_frustum.calculateFrustum(frustumCombined);
 }
 
 void Camera::lookAt(float x, float y, float z)

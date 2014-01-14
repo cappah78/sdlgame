@@ -13,7 +13,7 @@
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
-static const float CAMERA_FAR = 500.0f;
+static const float CAMERA_FAR = 200.0f;
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
@@ -47,16 +47,16 @@ GameScreen::GameScreen()
 
 void GameScreen::render(float deltaSec)
 {
-	glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
+	glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_cameraController.update(deltaSec);
 	m_camera.update();
 
-	m_world.update(deltaSec);
+	//m_world.update(deltaSec);
 	m_worldRenderer.render(m_world, m_camera);
 
-	m_skyBox.render(m_camera);
+	//m_skyBox.render(m_camera);
 
 	Game::graphics.swap();
 }

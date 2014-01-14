@@ -7,6 +7,12 @@ PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec3 direction, fl
 	, m_fieldOfView(verticalFOV)
 {
 	m_projectionMatrix = glm::perspective(m_fieldOfView, m_viewportWidth / m_viewportHeight, m_near, m_far);
+	m_frustumProjectionMatrix = glm::perspective(m_fieldOfView, m_viewportWidth / m_viewportHeight, m_near, m_far * 0.85f);
+}
+
+PerspectiveCamera::~PerspectiveCamera()
+{
+
 }
 
 void PerspectiveCamera::setFieldOfView(float fovy)
@@ -20,11 +26,6 @@ void PerspectiveCamera::setNearFar(float near, float far)
 	m_near = near;
 	m_far = far;
 	m_projectionMatrix = glm::perspective(m_fieldOfView, m_viewportWidth / m_viewportHeight, near, far);
-}
-
-PerspectiveCamera::~PerspectiveCamera()
-{
-
 }
 
 void PerspectiveCamera::resize(int width, int height)
