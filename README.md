@@ -2,7 +2,8 @@ Simple high performance work in progress Minecraft like Voxel Renderer with lua 
 
 Runs immediately on a fresh installation of windows using VS2013 without any other installations. VS2012 might work too (msvcr120(d).dll runtimes required)
 
-Random screenshot of last finished feature:
+Random screenshot of last finished features:
+https://dl.dropboxusercontent.com/u/18555381/Permanent/fogandfrustumculling.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/GravelBlockScripting.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/aowithtextures.png
 
@@ -66,6 +67,7 @@ to reduce amount of lua calls significantly.
 - Basic World/Chunk layout
 - Basic high efficienty voxel renderer
 - Basic Ambient occlusion calculations for voxels
+- Basic fog / frustum culling
 - Basic Lua bindings to setblock and create new block types from scripts.
 - Learn OpenGL/GLSL/C++
 
