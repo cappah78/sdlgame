@@ -29,5 +29,5 @@ void main()
 	vec4 texCol = texture2DArray(texArr, texCoord);
 	vec4 blockCol = vec4((texCol.rgb + color.rgb) * color.a , texCol.a);
 
-	out_color = mix(blockCol, fogColor,fogFactor) ;
+	out_color = mix(blockCol, fogColor, fogFactor) ;
 }

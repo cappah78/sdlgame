@@ -17,6 +17,7 @@
     <ClInclude Include="Engine\Graphics\GL\GBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\Material.h" />
     <ClInclude Include="Engine\Graphics\GL\Mesh.h" />
+    <ClInclude Include="Engine\Graphics\GL\Shader.h" />
     <ClInclude Include="Engine\Graphics\GL\Texture.h" />
     <ClInclude Include="Engine\Graphics\GL\TextureArray.h" />
     <ClInclude Include="Engine\Graphics\GL\VertexBuffer.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Engine\Graphics\GL\GBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Material.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Mesh.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\Shader.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Texture.cpp" />
     <ClCompile Include="Engine\Graphics\GL\TextureArray.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />

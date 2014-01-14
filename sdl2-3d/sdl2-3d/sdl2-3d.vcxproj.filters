@@ -224,6 +224,9 @@
     <ClInclude Include="Engine\Graphics\GL\GBuffer.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\Shader.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -329,6 +332,9 @@
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\GBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\Shader.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
   </ItemGroup>

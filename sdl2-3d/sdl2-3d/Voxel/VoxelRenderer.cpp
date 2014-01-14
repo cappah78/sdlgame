@@ -55,20 +55,13 @@ VoxelRenderer::VoxelRenderer()
 	, m_begunCache(false)
 	, m_blendEnabled(false)
 	, m_texcoordBuffer(MAX_FACES_PER_CACHE * 4)
+	, m_shader(VERT_SHADER_PATH, NULL, FRAG_SHADER_PATH)
 {
 	m_pointData.resize(MAX_FACES_PER_CACHE * 4);
 	m_colorData.resize(MAX_FACES_PER_CACHE * 4);
 	m_indiceData.resize(MAX_FACES_PER_CACHE * 6);
-
-	m_shaderId = ShaderManager::createShaderProgram(VERT_SHADER_PATH, NULL, FRAG_SHADER_PATH);
 	
 	glBindVertexArray(0);
-	glUseProgram(m_shaderId);
-
-	m_camPosLoc = glGetUniformLocation(m_shaderId, "u_camPos");
-	m_chunkOffsetLoc = glGetUniformLocation(m_shaderId, "u_chunkOffset");
-	m_mvpUniformLoc = glGetUniformLocation(m_shaderId, MVP_UNIFORM_NAME);
-	m_normalUniformLoc = glGetUniformLocation(m_shaderId, MVP_UNIFORM_NAME);
 
 	for (int i = 0; i < MAX_FACES_PER_CACHE; ++i)
 	{
@@ -85,16 +78,16 @@ void VoxelRenderer::beginRender(const TextureArray* tileSet)
 	assert(!m_begunRender && "Call endRender() before beginRender()");
 	m_begunRender = true;
 	tileSet->bind();
-	glUseProgram(m_shaderId);
+	m_shader.begin();
 }
 
 void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk, const Camera& camera)
 {
 	assert(m_begunRender);
-	
-	glUniform3f(m_chunkOffsetLoc, chunk->m_xOffset, chunk->m_yOffset, chunk->m_zOffset);
-	glUniform3f(m_camPosLoc, camera.m_position.x, camera.m_position.y, camera.m_position.z);
-	setMVPUniform(camera.m_combinedMatrix);
+
+	m_shader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
+	m_shader.setUniform3f("u_camPos", camera.m_position);
+	m_shader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
 
 	glBindVertexArray(chunk->m_vao);
 	chunk->m_indiceBuffer.bind();
@@ -105,19 +98,17 @@ void VoxelRenderer::endRender()
 {
 	assert(m_begunRender && "Call beginRender() before endRender()");
 	m_begunRender = false;
-	glUseProgram(0);
+	m_shader.end();
 }
 
 const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset)
 {
-
 	assert(!m_begunRender && "Cannot create a new chunk in between beginRender() and endRender()");
 
-	std::shared_ptr<VoxelRenderer::Chunk> chunk(new Chunk(xOffset, yOffset, zOffset));
+	std::shared_ptr<VoxelRenderer::Chunk> chunk(new Chunk(xOffset, yOffset, zOffset, m_colorData, m_pointData, m_indiceData));
 	glGenVertexArrays(1, &chunk->m_vao);
 	glBindVertexArray(chunk->m_vao);
 
-	//chunk->m_indiceBuffer.bind();
 	chunk->m_pointBuffer.setAttribPointer(POSITION_LOC, GL_UNSIGNED_INT, 1, GL_FALSE, GL_TRUE);
 	chunk->m_colorBuffer.setAttribPointer(COLOR_LOC, GL_UNSIGNED_BYTE, 4, GL_TRUE);
 	m_texcoordBuffer.setAttribPointer(TEXCOORD_LOC, GL_FLOAT, 2);
@@ -127,7 +118,7 @@ const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOf
 
 VoxelRenderer::~VoxelRenderer()
 {
-	glDeleteShader(m_shaderId);
+
 }
 
 void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
@@ -141,10 +132,6 @@ void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk
 	chunk->m_indiceBuffer.reset();
 	chunk->m_pointBuffer.reset();
 	chunk->m_colorBuffer.reset();
-
-	chunk->m_indiceBuffer.setBackingArray(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
-	chunk->m_pointBuffer.setBackingArray(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
-	chunk->m_colorBuffer.setBackingArray(&m_colorData[0], m_colorData.size() * sizeof(m_colorData[0]));
 
 	chunk->m_begun = true;
 }
@@ -202,22 +189,7 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
 	chunk->m_pointBuffer.update();
 	chunk->m_colorBuffer.update();
 
-	chunk->m_indiceBuffer.clearBackingArray();
-	chunk->m_pointBuffer.clearBackingArray();
-	chunk->m_colorBuffer.clearBackingArray();
-
 	chunk->m_begun = false;
-}
-
-void VoxelRenderer::setMVPUniform(glm::mat4 mvpMatrix)
-{
-	assert(m_begunRender);
-	glUniformMatrix4fv(m_mvpUniformLoc, 1, GL_FALSE, &mvpMatrix[0][0]);
-}
-void VoxelRenderer::setNormalUniform(glm::vec3 normal)
-{
-	assert(m_begunRender);
-	glUniform3fv(m_normalUniformLoc, 1, &normal[0]);
 }
 
 VoxelRenderer::Chunk::~Chunk()

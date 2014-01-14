@@ -9,7 +9,7 @@ template <typename T>
 class VertexBuffer
 {
 public:
-	VertexBuffer(unsigned int sizeInElements, GLenum bufferType = GL_ARRAY_BUFFER, GLenum drawUsage = GL_STREAM_DRAW)
+	VertexBuffer(unsigned int sizeInElements, GLenum bufferType = GL_ARRAY_BUFFER, GLenum drawUsage = GL_STREAM_DRAW, T* data = NULL)
 		: m_counter(0)
 		, m_lastUpdatePos(0)
 		, m_ownsData(sizeInElements > 0)
@@ -18,7 +18,8 @@ public:
 		, m_bufferType(bufferType)
 		, m_drawUsage(drawUsage)
 	{
-		m_data = m_ownsData ? new T[sizeInElements] : NULL;
+		m_data = data == NULL ? new T[sizeInElements] : data;
+		m_ownsData = (m_data == NULL);
 
 		glGenBuffers(1, &m_id);
 		glBindBuffer(bufferType, m_id);
@@ -89,26 +90,6 @@ public:
 		m_lastUpdatePos = 0;
 	};
 
-	/** Set the array that is used to add data, thus allowing sharing with multiple vertex buffers */
-	inline void setBackingArray(T* data, int sizeBytes)
-	{
-		if (m_ownsData && m_data != NULL)
-			delete[] m_data;
-		m_data = data;
-		m_ownsData = false;
-		m_sizeInElements = sizeBytes / sizeof(T);
-
-		glBindBuffer(m_bufferType, m_id);
-		glBufferData(m_bufferType, sizeBytes, NULL, m_drawUsage);
-	};
-
-	inline void clearBackingArray()
-	{
-		if (m_ownsData && m_data != NULL)
-			delete[] m_data;
-		m_data = NULL;
-	};
-
 	inline GLuint getID() { return m_id; };
 	inline T* getBackingArray() { return m_data; };
 	inline unsigned int getSizeInElements() { return m_counter; };
@@ -124,5 +105,27 @@ private:
 	GLenum m_drawUsage;
 	bool m_ownsData;
 };
+
+/** Set the array that is used to add data, thus allowing sharing with multiple vertex buffers */
+/*
+inline void setBackingArray(T* data, int sizeBytes)
+{
+	if (m_ownsData && m_data != NULL)
+		delete[] m_data;
+	m_data = data;
+	m_ownsData = false;
+	m_sizeInElements = sizeBytes / sizeof(T);
+
+	glBindBuffer(m_bufferType, m_id);
+	glBufferData(m_bufferType, sizeBytes, NULL, m_drawUsage);
+};
+
+inline void clearBackingArray()
+{
+	if (m_ownsData && m_data != NULL)
+		delete[] m_data;
+	m_data = NULL;
+}; 
+*/
 
 #endif //VERTEX_BUFFER_H_

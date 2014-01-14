@@ -7,10 +7,10 @@
 #include <assert.h>
 #include <memory>
 
-
 #include "../Engine/Graphics/GL/TextureArray.h"
 #include "../Engine/Graphics/Color8888.h"
 #include "../Engine/Graphics/GL/VertexBuffer.h"
+#include "../Engine/Graphics/GL/Shader.h"
 
 #include "VoxelBlock.h"
 #include "VoxelChunk.h"
@@ -80,18 +80,19 @@ public:
 		*/
 		void addFace(Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4, bool flipQuad = false);
 		/** Offset to render with*/
-		float m_xOffset, m_yOffset, m_zOffset;
+		glm::vec3 m_renderOffset;
 
 		~Chunk();
 
 	private:
-		Chunk(float xOffset, float yOffset, float zOffset)
-			: m_colorBuffer(0)
-			, m_pointBuffer(0)
-			, m_indiceBuffer(0, GL_ELEMENT_ARRAY_BUFFER)
-			, m_xOffset(xOffset)
-			, m_yOffset(yOffset)
-			, m_zOffset(zOffset)
+		Chunk(float xOffset, float yOffset, float zOffset
+			, std::vector<Color8888>& colorData
+			, std::vector<VoxelVertex>& pointData
+			, std::vector<unsigned short>& indiceData)
+			: m_colorBuffer(colorData.size(), GL_ARRAY_BUFFER, GL_STREAM_DRAW, &colorData[0])
+			, m_pointBuffer(pointData.size(), GL_ARRAY_BUFFER, GL_STREAM_DRAW, &pointData[0])
+			, m_indiceBuffer(indiceData.size(), GL_ELEMENT_ARRAY_BUFFER, GL_STREAM_DRAW, &indiceData[0])
+			, m_renderOffset(xOffset, yOffset, zOffset)
 			, m_numFaces(0)
 			, m_begun(false)
 		{};
@@ -124,23 +125,14 @@ public:
 	void endRender();
 
 private:
-	void setMVPUniform(glm::mat4 mvpMatrix);
-	void setNormalUniform(glm::vec3 normal);
 
 	bool m_begunCache;
 	bool m_begunRender;
-
 	bool m_blendEnabled;
 
-	GLuint m_shaderId;
-
-	GLuint m_camPosLoc;
-	GLuint m_mvpUniformLoc;
-	GLuint m_normalUniformLoc;
-	GLuint m_chunkOffsetLoc;
+	Shader m_shader;
 
 	VertexBuffer<glm::vec2> m_texcoordBuffer;
-	//VertexBuffer<unsigned short> m_indiceBuffer;
 
 	std::vector<Color8888> m_colorData;
 	std::vector<VoxelVertex> m_pointData;
