@@ -1,58 +1,37 @@
 #include "VoxelRenderer.h"
 
 #include "..\Engine\Graphics\Camera.h"
-#include "..\Engine\Utils\ShaderManager.h"
 #include <glm/gtx/transform.hpp>
-
-const char* MVP_UNIFORM_NAME = "u_mvp";
-const char* NORMAL_UNIFORM_NAME = "u_normal";
 
 const char* VERT_SHADER_PATH = "Assets/Shaders/voxelshader.vert";
 const char* FRAG_SHADER_PATH = "Assets/Shaders/voxelshader.frag";
 
-// face, corner, vertices
+// [face][corner][vertices]
 static const int g_faceVertexOffsetsInt[6][4][3] = {
 	{ //top
-		{ 1, 1, 0 },
-		{ 0, 1, 0 },
-		{ 1, 1, 1 },
-		{ 0, 1, 1 }
-	},
+		{ 1, 1, 0 }, { 0, 1, 0 },
+		{ 1, 1, 1 }, { 0, 1, 1 }},
 	{ //bottom
-		{ 1, 0, 1 },
-		{ 0, 0, 1 },
-		{ 1, 0, 0 },
-		{ 0, 0, 0 }
-	},
+		{ 1, 0, 1 }, { 0, 0, 1 },
+		{ 1, 0, 0 }, { 0, 0, 0 }},
 	{ //left
-		{ 0, 1, 0 },
-		{ 1, 1, 0 },
-		{ 0, 0, 0 },
-		{ 1, 0, 0 }
-	},
+		{ 0, 1, 0 }, { 1, 1, 0 },
+		{ 0, 0, 0 }, { 1, 0, 0 }},
 	{ //right
-		{ 1, 1, 1 },
-		{ 0, 1, 1 },
-		{ 1, 0, 1 },
-		{ 0, 0, 1 }
-	},
+		{ 1, 1, 1 }, { 0, 1, 1 },
+		{ 1, 0, 1 }, { 0, 0, 1 }},
 	{ //front
-		{ 1, 1, 0 },
-		{ 1, 1, 1 },
-		{ 1, 0, 0 },
-		{ 1, 0, 1 }
-	},
+		{ 1, 1, 0 }, { 1, 1, 1 },
+		{ 1, 0, 0 }, { 1, 0, 1 }},
 	{ //back
-		{ 0, 1, 1 },
-		{ 0, 1, 0 },
-		{ 0, 0, 1 },
-		{ 0, 0, 0 }
+		{ 0, 1, 1 }, { 0, 1, 0 },
+		{ 0, 0, 1 }, { 0, 0, 0 }
 	}
 };
 
 VoxelRenderer::VoxelRenderer()
 	: m_begunRender(false)
-	, m_begunCache(false)
+	, m_begunChunk(false)
 	, m_blendEnabled(false)
 	, m_texcoordBuffer(MAX_FACES_PER_CACHE * 4)
 	, m_shader(VERT_SHADER_PATH, NULL, FRAG_SHADER_PATH)
@@ -71,6 +50,11 @@ VoxelRenderer::VoxelRenderer()
 		m_texcoordBuffer.add(glm::vec2(0.0f, 1.0f));
 	}
 	m_texcoordBuffer.update();
+}
+
+VoxelRenderer::~VoxelRenderer()
+{
+
 }
 
 void VoxelRenderer::beginRender(const TextureArray* tileSet)
@@ -116,16 +100,11 @@ const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOf
 	return chunk;
 }
 
-VoxelRenderer::~VoxelRenderer()
-{
-
-}
-
 void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
 {
 	assert(!chunk->m_begun && "This chunk has already begun");
-	assert(!m_begunCache && "A chunk has already begun");
-	m_begunCache = true;
+	assert(!m_begunChunk && "A chunk has already begun");
+	m_begunChunk = true;
 
 	chunk->m_numFaces = 0;
 
@@ -141,7 +120,6 @@ void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID
 	assert(m_begun && "Chunk has not yet begun");
 
 	m_numFaces++;
-
 	unsigned int indiceIdx = m_indiceBuffer.getSizeInElements();
 	unsigned short j = (indiceIdx / 6) * 4;
 
@@ -182,8 +160,8 @@ void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID
 
 void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
 {
-	assert(m_begunCache && chunk->m_begun && "Cache has not yet begun");
-	m_begunCache = false;
+	assert(m_begunChunk && chunk->m_begun && "Chunk has not yet begun");
+	m_begunChunk = false;
 
 	chunk->m_indiceBuffer.update();
 	chunk->m_pointBuffer.update();

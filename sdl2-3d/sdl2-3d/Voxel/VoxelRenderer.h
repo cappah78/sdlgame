@@ -126,7 +126,7 @@ public:
 
 private:
 
-	bool m_begunCache;
+	bool m_begunChunk;
 	bool m_begunRender;
 	bool m_blendEnabled;
 
