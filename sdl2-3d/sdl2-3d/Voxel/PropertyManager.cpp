@@ -186,7 +186,7 @@ void PropertyManager::parseEvents(BlockProperties& properties)
 #endif //_DEBUG
 
 		properties.events.push_back(trigger);
-		printf("trigger: %i, %i, %i \n", trigger.left.type, trigger.right.type, trigger.eval);
+		//printf("trigger: %i, %i, %i \n", trigger.left.type, trigger.right.type, trigger.eval);
 	}
 }
 
