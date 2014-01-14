@@ -11,7 +11,9 @@ const unsigned int TEXTURE_ID_MASK = 0x01FF8000u;
 const unsigned int UNUSED_BITS_MASK = 0xFE000000u;
 
 uniform mat4 u_mvp;
+uniform vec3 u_camPos;
 uniform vec3 u_normal;
+uniform vec3 u_chunkOffset;
 
 layout(location = 0) in uint in_point;
 layout(location = 1) in vec2 in_texCoord;
@@ -19,6 +21,7 @@ layout(location = 2) in vec4 in_color;
 
 out vec3 texCoord;
 out vec4 color;
+out float eyeDist;
 
 void main(void)
 {
@@ -33,8 +36,15 @@ void main(void)
 	//extract textureId using black magic
 	float textureId = float((in_point & TEXTURE_ID_MASK) >> POSITION_BITS_3);
 
+	vec3 position = vec3(x, y, z) + u_chunkOffset;
+
 	// offset the vertices by the position
-	gl_Position = u_mvp * vec4(x, y, z, 1.0);
+	gl_Position = u_mvp * vec4(position, 1.0);
+
+	eyeDist = sqrt(
+		(position.x - u_camPos.x) * (position.x - u_camPos.x) +
+        (position.y - u_camPos.y) * (position.y - u_camPos.y) +
+        (position.z - u_camPos.z) * (position.z - u_camPos.z)); 
 
 	// supply 3d texcoord to fragment shader
 	texCoord = vec3(in_texCoord, textureId);

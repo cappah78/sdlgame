@@ -65,6 +65,8 @@ VoxelRenderer::VoxelRenderer()
 	glBindVertexArray(0);
 	glUseProgram(m_shaderId);
 
+	m_camPosLoc = glGetUniformLocation(m_shaderId, "u_camPos");
+	m_chunkOffsetLoc = glGetUniformLocation(m_shaderId, "u_chunkOffset");
 	m_mvpUniformLoc = glGetUniformLocation(m_shaderId, MVP_UNIFORM_NAME);
 	m_normalUniformLoc = glGetUniformLocation(m_shaderId, MVP_UNIFORM_NAME);
 
@@ -89,14 +91,10 @@ void VoxelRenderer::beginRender(const TextureArray* tileSet)
 void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk, const Camera& camera)
 {
 	assert(m_begunRender);
-	glm::mat4 modelMatrix = glm::mat4(1);
-	modelMatrix[3][0] = chunk->m_xOffset;
-	modelMatrix[3][1] = chunk->m_yOffset;
-	modelMatrix[3][2] = chunk->m_zOffset;
-
-	glm::mat4& mvpMatrix = camera.m_combinedMatrix * modelMatrix;
 	
-	setMVPUniform(mvpMatrix);
+	glUniform3f(m_chunkOffsetLoc, chunk->m_xOffset, chunk->m_yOffset, chunk->m_zOffset);
+	glUniform3f(m_camPosLoc, camera.m_position.x, camera.m_position.y, camera.m_position.z);
+	setMVPUniform(camera.m_combinedMatrix);
 
 	glBindVertexArray(chunk->m_vao);
 	chunk->m_indiceBuffer.bind();

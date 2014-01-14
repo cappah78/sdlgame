@@ -134,9 +134,10 @@ private:
 
 	GLuint m_shaderId;
 
+	GLuint m_camPosLoc;
 	GLuint m_mvpUniformLoc;
 	GLuint m_normalUniformLoc;
-	GLuint m_offsetUniformLoc;
+	GLuint m_chunkOffsetLoc;
 
 	VertexBuffer<glm::vec2> m_texcoordBuffer;
 	//VertexBuffer<unsigned short> m_indiceBuffer;

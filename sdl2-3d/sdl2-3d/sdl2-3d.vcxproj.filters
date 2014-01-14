@@ -221,6 +221,9 @@
     <ClInclude Include="Engine\Utils\VoidDataList.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -324,6 +327,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Utils\VoidDataList.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

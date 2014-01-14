@@ -39,11 +39,18 @@ struct BlockIDColorSolid
 	bool isSolid;
 };
 
-//TODO: perhaps move to .luaNb
+//TODO: perhaps move to a .lua config
+static const char* const LUA_BLOCKS_NAMESPACE = "Blocks";
 static const char* const LUA_INT_NAME = "int";
 static const char* const LUA_BOOL_NAME = "bool";
 static const char* const LUA_FLOAT_NAME = "float";
 static const char* const LUA_TICK_COUNT_NAME = "tickCount";
+static const char* const LUA_BLOCK_X_NAME = "x";
+static const char* const LUA_BLOCK_Y_NAME = "y";
+static const char* const LUA_BLOCK_Z_NAME = "z";
+
+static const std::string DEFAULT_BLOCK = "defaultblock";
+
 
 enum BlockPropertyValueType
 {

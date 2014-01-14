@@ -18,7 +18,7 @@ static const char* SKYBOX_FACE_NAMES[] = {
 	"Assets/Models/Skybox/back.bmp" 
 };
 
-static const float CORNER_RADIUS_MULTIPLIER = 0.58f; // 2.0f - sqrt(1 * 1 + 1 * 1)
+static const float CORNER_RADIUS_MULTIPLIER = 0.57f; // 2.0f - sqrt(1 * 1 + 1 * 1)
 
 static const char* SKYBOX_MODEL_PATH = "Assets/Models/Skybox/skybox.obj";
 static const char* SKYBOX_VERTEX_SHADER_PATH = "Assets/Shaders/skybox.vert";

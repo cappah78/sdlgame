@@ -8,9 +8,6 @@
 #include <unordered_map>
 #include <algorithm>
 
-static const char* LUA_BLOCKS_NAMESPACE = "Blocks";
-static const std::string DEFAULT_BLOCK("defaultblock");
-
 void PropertyManager::updateTickCountEvents()
 {
 	for (BlockProperties& blockProperties : m_blockProperties)
@@ -83,9 +80,9 @@ void PropertyManager::parseBlock(BlockProperties& properties)
 void PropertyManager::parseType(BlockProperties& properties)
 {
 	luabridge::LuaRef type = properties.luaRef["type"];
-	std::string typeStr = type.tostring();
+	std::string typeStr = type;
 
-	if (typeStr.compare(DEFAULT_BLOCK)) {
+	if (typeStr == DEFAULT_BLOCK) {
 		properties.renderData = BlockRenderData(properties.luaRef, m_textureManager);
 		return;
 	}
@@ -209,11 +206,11 @@ BlockPropertyValue PropertyManager::getValue(std::string str, const std::vector<
 
 	if (str == LUA_TICK_COUNT_NAME)
 		return BlockPropertyValue(0, LUA_TICKCOUNTER);
-	if (str == "x")
+	if (str == LUA_BLOCK_X_NAME)
 		return BlockPropertyValue(0, LUA_BLOCK_X);
-	if (str == "y")
+	if (str == LUA_BLOCK_Y_NAME)
 		return BlockPropertyValue(0, LUA_BLOCK_Y);
-	if (str == "z")
+	if (str == LUA_BLOCK_Z_NAME)
 		return BlockPropertyValue(0, LUA_BLOCK_Z);
 
 	// check if contains a decimal point
