@@ -3,6 +3,7 @@ Simple high performance work in progress Minecraft like Voxel Renderer with lua 
 Runs immediately on a fresh installation of windows using VS2013 without any other installations. VS2012 might work too (msvcr120(d).dll runtimes required)
 
 Random screenshot of last finished features:
+https://dl.dropboxusercontent.com/u/18555381/Permanent/libnoise.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/fogandfrustumculling.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/GravelBlockScripting.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/aowithtextures.png
@@ -55,7 +56,7 @@ to reduce amount of lua calls significantly.
 <b> TODO: </b>
 
 - Vertex based mincraft like lighting.
-- Actual chunk generation (currently using a single call to a lua method to build the world)
+- Dynamic world generation
 - More Lua bindings between c++/lua (to script things like controls and interactions)
 - Higher detail Ambient Occlusion like Cube World, sampling from a larger radius.
 - Chunk saving/loading
@@ -63,7 +64,7 @@ to reduce amount of lua calls significantly.
 
 <b> Done: </b>
 
-- Processing blocks through scripts with configurable values for every block
+- Processing blocks through scripts with configurable values for every block (disabled for now, needs more optimizations)
 - Basic World/Chunk layout
 - Basic high efficienty voxel renderer
 - Basic Ambient occlusion calculations for voxels
