@@ -5,6 +5,7 @@
 #include "../Engine/Graphics/GL/TextureArray.h"
 #include "../Engine/Graphics/Color8888.h"
 #include "PropertyManager.h"
+#include "../Game.h"
 
 WorldRenderer::WorldRenderer()
 {
@@ -165,9 +166,14 @@ inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 	*/
 }
 
+static const unsigned int MAX_MS_CHUNK_GEN_PER_FRAME = 2;
 void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 {
+	static const float sphereCullRad = CHUNK_SIZE / 2.0f;
+
 	const PropertyManager& propertyManager = world.getPropertyManager();
+
+	unsigned int startTicks = Game::getSDLTicks();
 
 	const ChunkManager::ChunkMap& chunks = world.getChunks();
 	for (auto it : chunks)
@@ -175,13 +181,14 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 		const std::shared_ptr<VoxelChunk>& chunk = it.second;
 		const glm::ivec3& chunkPos = chunk->m_pos;
 
+		if (startTicks - Game::getSDLTicks() > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
+			break;
+
 		//frustum culling
 		bool contains = false;
-		float radius = CHUNK_SIZE / 2.0f;
-
 		for (const glm::vec3& corner : chunk->m_bounds)
 		{
-			if (camera.m_frustum.sphereInFrustum(corner, radius))
+			if (camera.m_frustum.sphereInFrustum(corner, sphereCullRad))
 			{
 				contains = true;
 				break;
@@ -314,12 +321,12 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 
 	for (auto it : m_renderChunks)
 	{
-		float radius = CHUNK_SIZE / 2.0f;
 		//frustum culling
 		bool contains = false;
 		for (int i = 0; i < 8; ++i)	//check 8 corners
 		{
-			if (camera.m_frustum.sphereInFrustum(it.second->m_bounds[i], radius)) {
+			if (camera.m_frustum.sphereInFrustum(it.second->m_bounds[i], sphereCullRad)) 
+			{
 				contains = true;
 				break;
 			}

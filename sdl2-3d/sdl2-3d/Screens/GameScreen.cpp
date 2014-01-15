@@ -13,13 +13,11 @@
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
-static const float CAMERA_FAR = 200.0f;
+
+static const float CAMERA_FAR = 350.0f;	//is also fog/chunk load distance
+
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
-
-static const int NUM_CHUNKS_X = 10;
-static const int NUM_CHUNKS_Y = 10;
-static const int NUM_CHUNKS_Z = 10;
 
 GameScreen::GameScreen()
 	: m_camera(CAMERA_SPAWN_POS,
@@ -30,7 +28,6 @@ GameScreen::GameScreen()
 		CAMERA_NEAR, 
 		CAMERA_FAR)
 	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
-	//, m_skyBox(CAMERA_FAR)
 	, m_textureManager(16, 16)
 	, m_world(m_textureManager)
 {
@@ -55,7 +52,6 @@ void GameScreen::render(float deltaSec)
 
 	//m_world.update(deltaSec);
 	m_worldRenderer.render(m_world, m_camera);
-
 	//m_skyBox.render(m_camera);
 
 	Game::graphics.swap();

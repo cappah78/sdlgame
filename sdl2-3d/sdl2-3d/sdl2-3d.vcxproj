@@ -37,6 +37,7 @@
     <ClInclude Include="Engine\Utils\CheckLuaError.h" />
     <ClInclude Include="Engine\Utils\Comparables.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
+    <ClInclude Include="Engine\Utils\noiseutils.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
     <ClInclude Include="Engine\Utils\Random.h" />
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
@@ -76,6 +77,7 @@
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp" />
+    <ClCompile Include="Engine\Utils\noiseutils.cpp" />
     <ClCompile Include="Engine\Utils\PerlinGenerator.cpp" />
     <ClCompile Include="Engine\Utils\ShaderManager.cpp" />
     <ClCompile Include="Engine\Utils\stb_image.c" />
@@ -450,13 +452,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(ProjectDir)..\Includes\Libnoise-1.0.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\Lua\2.1;$(ProjectDir)..\Libs\Debug;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(ProjectDir)..\Includes\Libnoise-1.0.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\Lua\2.1;$(ProjectDir)..\Libs\Release;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
     <SourcePath>$(SourcePath)</SourcePath>
@@ -506,9 +508,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;lua5.1.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

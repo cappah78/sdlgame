@@ -10,6 +10,9 @@
 #include <lua.hpp>
 #include <LuaBridge.h>
 
+#include <noise\noise.h>
+#include "../Engine/Utils/noiseutils.h"
+
 std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 
 //TODO: remove constant
@@ -33,7 +36,35 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	initializeLuaWorld();
 	m_textureArray = m_textureManager.generateTextureArray();
 
-	m_generator.generateMap();
+	////////////////Map generation//////////////	//wip
+	module::Perlin module;
+	utils::NoiseMap heightMap;
+	utils::NoiseMapBuilderPlane heightMapBuilder;
+	heightMapBuilder.SetSourceModule(module);
+	heightMapBuilder.SetDestNoiseMap(heightMap);
+	heightMapBuilder.SetDestSize(512, 512);
+	heightMapBuilder.SetBounds(6.0, 10.0, 1.0, 5.0);
+	heightMapBuilder.Build();
+
+	int numRegisteredBlocks = m_propertyManager.getNumRegisteredBlocks();
+
+	for (int x = 0; x < heightMap.GetWidth(); ++x)
+	{
+		for (int z = 0; z < heightMap.GetHeight(); ++z)
+		{
+			float height = heightMap.GetValue(x, z) * 20.0f;
+			int intHeight = (int) glm::round(height);
+
+			for (int y = 0; y < 5; ++y)
+			{
+				int random = (rand() % (numRegisteredBlocks - 1)) + 1;
+				setBlock(random, glm::ivec3(x, intHeight - y, z));
+			}
+		}
+	}
+	//////////////////////////////////////////////////////////////////
+	//TODO: through lua scripts
+	//m_generator.generateMap();
 }
 
 void VoxelWorld::initializeLuaWorld()

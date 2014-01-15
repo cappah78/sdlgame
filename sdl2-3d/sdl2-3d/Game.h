@@ -28,6 +28,7 @@ public:
 	static void startGameLoop();
 	static void shutdownGameLoop();
 
+	inline static unsigned int getSDLTicks() { return SDL_GetTicks(); };
 	static void render(float deltaSec);
 	static void resize(int width, int height);
 	static void setScreen(IScreen* screen);

@@ -221,6 +221,9 @@
     <ClInclude Include="Engine\Graphics\Frustum.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Utils\noiseutils.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -330,6 +333,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Frustum.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils\noiseutils.cpp">
+      <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

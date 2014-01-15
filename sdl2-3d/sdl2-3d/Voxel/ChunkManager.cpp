@@ -28,6 +28,7 @@ std::shared_ptr<VoxelChunk> ChunkManager::loadChunk(const glm::ivec3& pos)
 	std::shared_ptr<VoxelChunk> chunk = std::shared_ptr<VoxelChunk>(new VoxelChunk(m_propertyManager, pos));
 
 	m_loadedChunks.insert(std::make_pair(pos, chunk));
+
 	//TODO: chunk generation
 	//generateChunk(chunk);
 
