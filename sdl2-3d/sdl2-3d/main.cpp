@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <io.h>
 #include <SDL.h>
+#include <SDL_video.h>
 
 /* If using gl3.h */
 /* Ensure we are using opengl's core profile only */

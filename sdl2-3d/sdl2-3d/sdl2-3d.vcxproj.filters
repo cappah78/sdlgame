@@ -39,14 +39,8 @@
     <Filter Include="Header Files\Engine\Model">
       <UniqueIdentifier>{11e24b22-3565-417b-975b-a3275dc528c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Engine\Graphics\Lighting">
-      <UniqueIdentifier>{5825d134-7146-4c4c-b6fe-9f5fe3c7777f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Graphics">
       <UniqueIdentifier>{0afe63ac-2d02-43eb-a905-5559be976a17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Engine\Graphics\Lighting">
-      <UniqueIdentifier>{df1e2546-7022-4cfe-9d38-6aae0e913d19}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{61951764-42a0-4d7e-b5c0-5ab7af34a28d}</UniqueIdentifier>
@@ -106,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Pixmap.h">
       <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Lighting\ShadowCubeMap.h">
-      <Filter>Header Files\Engine\Graphics\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
@@ -255,9 +246,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp">
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\Lighting\ShadowCubeMap.cpp">
-      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\ShaderManager.cpp">
       <Filter>Source Files\Engine\Utils</Filter>

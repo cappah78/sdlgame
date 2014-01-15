@@ -28,7 +28,7 @@ public:
 	virtual bool keyDown(SDL_Keysym key) override;
 	virtual bool keyUp(SDL_Keysym key) override;
 private:
-	SkyBox m_skyBox;
+	//SkyBox m_skyBox;
 	FPSCameraController m_cameraController;
 	PerspectiveCamera m_camera;
 

@@ -30,7 +30,7 @@ GameScreen::GameScreen()
 		CAMERA_NEAR, 
 		CAMERA_FAR)
 	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
-	, m_skyBox(CAMERA_FAR)
+	//, m_skyBox(CAMERA_FAR)
 	, m_textureManager(16, 16)
 	, m_world(m_textureManager)
 {

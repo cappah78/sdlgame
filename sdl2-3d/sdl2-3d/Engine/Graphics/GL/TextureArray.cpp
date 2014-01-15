@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <string>
 
+#include "../../Utils/CheckGLError.h"
+
 TextureArray::TextureArray(const std::vector<const char*>& imageNames, 
 	unsigned int textureWidth, unsigned int textureHeight,
 	bool generateMipMaps,
@@ -41,8 +43,11 @@ TextureArray::TextureArray(const std::vector<const std::string*>& imageNames,
 	GLint minFilter, GLint magFilter,
 	GLint textureWrapS, GLint textureWrapT)
 {
+	CHECK_GL_ERROR();
 	glGenTextures(1, &m_textureID);
+	CHECK_GL_ERROR();
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureID);
+	CHECK_GL_ERROR();
 
 	//glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, textureWidth, textureHeight, imageNames.size());
 	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, textureWidth, textureHeight, imageNames.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);

@@ -24,7 +24,6 @@
     <ClInclude Include="Engine\Graphics\GL\VertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\HeightMap.h" />
-    <ClInclude Include="Engine\Graphics\Lighting\ShadowCubeMap.h" />
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h" />
     <ClInclude Include="Engine\Graphics\Pixmap.h" />
     <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h" />
@@ -69,7 +68,6 @@
     <ClCompile Include="Engine\Graphics\GL\TextureArray.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />
     <ClCompile Include="Engine\Graphics\HeightMap.cpp" />
-    <ClCompile Include="Engine\Graphics\Lighting\ShadowCubeMap.cpp" />
     <ClCompile Include="Engine\Graphics\PerspectiveCamera.cpp" />
     <ClCompile Include="Engine\Graphics\Pixmap.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp" />

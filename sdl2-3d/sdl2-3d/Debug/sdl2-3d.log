@@ -1,31 +1,20 @@
-﻿Build started 13/01/2014 12:37:31.
+﻿Build started 15/01/2014 16:09:47.
      1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Ot /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\LightManager.cpp Voxel\PropertyManager.cpp Voxel\VoxelBlock.cpp Voxel\VoxelChunk.cpp Voxel\VoxelRenderer.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp main.cpp
-         PropertyManager.cpp
-         Generating Code...
-         Compiling...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Ot /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
-         WorldRenderer.cpp
-         VoxelWorld.cpp
-         VoxelRenderer.cpp
-         VoxelChunk.cpp
-         VoxelBlock.cpp
-         LightManager.cpp
-         ChunkManager.cpp
-         GameScreen.cpp
-         Game.cpp
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.exe" /INCREMENTAL /NOLOGO SDL2d.lib SDL2maind.lib assimpd.lib opengl32.lib glu32.lib glew32d.lib lua5.1.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.lib" /MACHINE:X86 /NODEFAULTLIB:library Debug\Camera.obj
+         Debug\Frustum.obj
          Debug\CubeMap.obj
+         Debug\GBuffer.obj
          Debug\Material.obj
          Debug\Mesh.obj
+         Debug\Shader.obj
          Debug\Texture.obj
          Debug\TextureArray.obj
          Debug\Graphics.obj
          Debug\HeightMap.obj
-         Debug\ShadowCubeMap.obj
          Debug\PerspectiveCamera.obj
          Debug\Pixmap.obj
          Debug\HeightMapRenderer.obj
@@ -56,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:08.75
+Time Elapsed 00:00:01.96

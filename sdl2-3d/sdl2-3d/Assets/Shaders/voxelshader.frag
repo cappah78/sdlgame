@@ -1,7 +1,5 @@
 #version 330 core
 
-#extension GL_EXT_texture_array : enable
-
 uniform float u_fogStart;
 uniform float u_fogEnd;
 uniform vec3 u_fogColor;
@@ -24,7 +22,7 @@ void main()
 {
     float fogFactor = computeLinearFogFactor();
 
-	vec4 texCol = texture2DArray(texArr, texCoord);
+	vec4 texCol = texture(texArr, texCoord);
 	vec4 blockCol = vec4((texCol.rgb + color.rgb) * color.a , texCol.a);
 
 	out_color = mix(blockCol, vec4(u_fogColor, 1.0), fogFactor) ;
