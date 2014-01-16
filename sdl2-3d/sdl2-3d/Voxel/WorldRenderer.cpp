@@ -178,11 +178,11 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	const ChunkManager::ChunkMap& chunks = world.getChunks();
 	for (auto it : chunks)
 	{
+
+
 		const std::shared_ptr<VoxelChunk>& chunk = it.second;
 		const glm::ivec3& chunkPos = chunk->m_pos;
-
-		if (startTicks - Game::getSDLTicks() > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
-			break;
+		glm::vec3 chunkWorldPos = glm::vec3(chunkPos.x * (float) CHUNK_SIZE, chunkPos.y * (float) CHUNK_SIZE, chunkPos.z * (float) CHUNK_SIZE);
 
 		//frustum culling
 		bool contains = false;
@@ -195,7 +195,19 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 			}
 		}
 		if (!contains)
+		{
 			continue;
+		}
+
+		if (glm::distance(camera.m_position, chunkWorldPos) > camera.m_far)
+		{
+			removeRenderChunk(chunkPos);
+			chunk->m_updated = false;
+			continue;
+		}
+
+		if (startTicks - Game::getSDLTicks() > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
+			continue;	//continue, not break because we still want to remove chunks that are out of range even when past max time
 
 		if (chunk->m_updated)
 			continue;
@@ -337,7 +349,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	}
 	m_renderer.endRender();
 }
-
+static unsigned int count = 0;
 const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos, const glm::vec3* const bounds)
 {
 	auto it = m_renderChunks.find(pos);
@@ -347,6 +359,20 @@ const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const 
 	{
 		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE, bounds);
 		m_renderChunks.insert(std::make_pair(pos, chunk));
+		count++;
+		printf("numchunks: %i \n", count);
+
 		return chunk;
+	}
+}
+
+void WorldRenderer::removeRenderChunk(const glm::ivec3& pos)
+{
+	auto it = m_renderChunks.find(pos);
+	if (it != m_renderChunks.end())
+	{
+		m_renderChunks.erase(it);
+		count--;
+		printf("numchunks: %i \n", count);
 	}
 }

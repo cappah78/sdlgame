@@ -2,29 +2,27 @@
 #define GBUFFER_H_
 
 #include <gl\glew.h>
+#include <vector>
 
 class GBuffer
 {
 public:
-	enum GBufferTextureType {
-		TEXCOORD, NUM_TEXTURES
-	};
 
-	GBuffer();
+	GBuffer(unsigned int numTextures);
 	~GBuffer();
 
 	bool init(unsigned int width, unsigned int height);
 	void bindForWriting();
 	void bindForReading();
 
-	void setReadBuffer(GBufferTextureType textureType);
+	void setReadBuffer(unsigned int textureIdx);
 
 private:
-	
-	GLuint m_fbo;
-	GLuint m_textures[NUM_TEXTURES];
-	GLuint m_depthTexture;
+	unsigned int m_numTextures;
 
+	GLuint m_fbo;
+	std::vector<GLuint> m_textures;
+	GLuint m_depthTexture;
 };
 
 #endif //GBUFFER_H_

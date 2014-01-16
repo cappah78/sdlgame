@@ -11,6 +11,7 @@
 #include "../Engine/Graphics/Color8888.h"
 #include "../Engine/Graphics/GL/VertexBuffer.h"
 #include "../Engine/Graphics/GL/Shader.h"
+#include "../Engine/Graphics/GL/DeferredShader.h"
 
 #include "VoxelBlock.h"
 #include "VoxelChunk.h"
@@ -42,7 +43,7 @@ private:
 	static const unsigned int TEXCOORD_LOC = 1;
 	static const unsigned int COLOR_LOC = 2;
 
-	static const unsigned int MAX_FACES_PER_CACHE = 2048 * 6; // == CHUNK_SIZE_CUBED / 2;
+	static const unsigned int MAX_FACES_PER_CACHE = 2048 * 2; // == CHUNK_SIZE_CUBED / 2;
 
 	static_assert(CHUNK_SIZE == 16, "This class hardcodes an amount of bits to use for x/y/z, dependant on CHUNK_SIZE");//change assert once fixd
 	static const unsigned int SIZE_BITS = 5; //2^sizebits == chunksize or sqrt(chunkSize) + 1
@@ -133,6 +134,7 @@ private:
 	bool m_blendEnabled;
 
 	Shader m_shader;
+	//DeferredShader m_shader;
 
 	VertexBuffer<glm::vec2> m_texcoordBuffer;
 

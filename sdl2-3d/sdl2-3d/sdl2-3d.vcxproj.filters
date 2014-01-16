@@ -224,6 +224,9 @@
     <ClInclude Include="Engine\Utils\noiseutils.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\DeferredShader.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -337,6 +340,9 @@
     <ClCompile Include="Engine\Utils\noiseutils.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\DeferredShader.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta">
@@ -431,6 +437,9 @@
     </None>
     <None Include="Assets\Scripts\Bindings.lua">
       <Filter>Assets\Scripts</Filter>
+    </None>
+    <None Include="Assets\Shaders\deferredgeompass.frag">
+      <Filter>Assets\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

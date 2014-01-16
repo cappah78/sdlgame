@@ -15,6 +15,7 @@
     <ClInclude Include="Engine\Graphics\Color8888.h" />
     <ClInclude Include="Engine\Graphics\Frustum.h" />
     <ClInclude Include="Engine\Graphics\GL\CubeMap.h" />
+    <ClInclude Include="Engine\Graphics\GL\DeferredShader.h" />
     <ClInclude Include="Engine\Graphics\GL\GBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\Material.h" />
     <ClInclude Include="Engine\Graphics\GL\Mesh.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Engine\Graphics\Camera.cpp" />
     <ClCompile Include="Engine\Graphics\Frustum.cpp" />
     <ClCompile Include="Engine\Graphics\GL\CubeMap.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\DeferredShader.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Material.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Mesh.cpp" />
@@ -108,6 +110,7 @@
     <None Include="Assets\Scripts\Blocks\StoneBlock.lua" />
     <None Include="Assets\Scripts\Init.lua" />
     <None Include="Assets\Scripts\WorldGen\GenTest.lua" />
+    <None Include="Assets\Shaders\deferredgeompass.frag" />
     <None Include="Assets\Shaders\forwardshader.frag" />
     <None Include="Assets\Shaders\forwardshader.vert" />
     <None Include="Assets\Shaders\fullscreenquad.geom" />

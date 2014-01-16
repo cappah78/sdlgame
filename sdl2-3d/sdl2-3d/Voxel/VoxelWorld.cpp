@@ -42,7 +42,7 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	utils::NoiseMapBuilderPlane heightMapBuilder;
 	heightMapBuilder.SetSourceModule(module);
 	heightMapBuilder.SetDestNoiseMap(heightMap);
-	heightMapBuilder.SetDestSize(512, 512);
+	heightMapBuilder.SetDestSize(1024, 1024);
 	heightMapBuilder.SetBounds(6.0, 10.0, 1.0, 5.0);
 	heightMapBuilder.Build();
 
@@ -52,7 +52,7 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	{
 		for (int z = 0; z < heightMap.GetHeight(); ++z)
 		{
-			float height = heightMap.GetValue(x, z) * 20.0f;
+			float height = heightMap.GetValue(x, z) * 35.0f;
 			int intHeight = (int) glm::round(height);
 
 			for (int y = 0; y < 5; ++y)
@@ -107,6 +107,7 @@ int VoxelWorld::L_setBlock(BlockID blockID, int x, int y, int z, lua_State* L)
 	return 0;
 }
 
+//TODO:..
 int VoxelWorld::L_setBlockWithData(BlockID blockID, int x, int y, int z, luabridge::LuaRef perBlockData, lua_State* L)
 {
 	printf("lolol");

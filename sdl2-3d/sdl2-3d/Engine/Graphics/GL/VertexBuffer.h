@@ -22,8 +22,6 @@ public:
 		m_ownsData = (m_data == NULL);
 
 		glGenBuffers(1, &m_id);
-		glBindBuffer(bufferType, m_id);
-		glBufferData(bufferType, m_sizeInElements * sizeof(T), NULL, drawUsage);
 	};
 
 	~VertexBuffer()
@@ -79,9 +77,10 @@ public:
 	/** Upload the added data to the gpu, binds the buffer */
 	inline void update()
 	{
-		glBindBuffer(m_bufferType, m_id);
-		glBufferSubData(m_bufferType, m_lastUpdatePos, m_counter * sizeof(T), m_data);
-		m_lastUpdatePos = m_counter;
+		uploadData(m_counter);
+		//glBindBuffer(m_bufferType, m_id);
+		//glBufferSubData(m_bufferType, m_lastUpdatePos, m_counter * sizeof(T), m_data);
+		//m_lastUpdatePos = m_counter;
 	};
 
 	inline void reset()
@@ -95,6 +94,12 @@ public:
 	inline unsigned int getSizeInElements() { return m_counter; };
 
 private:
+
+	void uploadData(unsigned int sizeInElements)
+	{
+		glBindBuffer(m_bufferType, m_id);
+		glBufferData(m_bufferType, m_sizeInElements * sizeof(T), m_data, m_drawUsage);
+	};
 
 	unsigned int m_lastUpdatePos;
 	unsigned int m_counter;
