@@ -7,9 +7,12 @@
 #include "PropertyManager.h"
 #include "../Game.h"
 
+#include <algorithm>
+
+static unsigned int numLoadedChunks = 0;
+
 WorldRenderer::WorldRenderer()
 {
-	
 }
 
 WorldRenderer::~WorldRenderer()
@@ -166,6 +169,19 @@ inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 	*/
 }
 
+struct DistanceSort
+{
+	DistanceSort(glm::vec3 pos) : camPos(pos) {};
+	glm::vec3 camPos;
+
+	bool operator()(const std::shared_ptr<VoxelRenderer::Chunk>& lhs, const std::shared_ptr<VoxelRenderer::Chunk>& rhs) {
+		glm::vec3 delta1 = camPos - lhs->m_renderOffset;
+		glm::vec3 delta2 = camPos - rhs->m_renderOffset;
+
+		return glm::length(delta1) < glm::length(delta2);
+	}
+};
+
 static const unsigned int MAX_MS_CHUNK_GEN_PER_FRAME = 2;
 void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 {
@@ -178,8 +194,6 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	const ChunkManager::ChunkMap& chunks = world.getChunks();
 	for (auto it : chunks)
 	{
-
-
 		const std::shared_ptr<VoxelChunk>& chunk = it.second;
 		const glm::ivec3& chunkPos = chunk->m_pos;
 		glm::vec3 chunkWorldPos = glm::vec3(chunkPos.x * (float) CHUNK_SIZE, chunkPos.y * (float) CHUNK_SIZE, chunkPos.z * (float) CHUNK_SIZE);
@@ -195,9 +209,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 			}
 		}
 		if (!contains)
-		{
 			continue;
-		}
 
 		if (glm::distance(camera.m_position, chunkWorldPos) > camera.m_far)
 		{
@@ -208,128 +220,21 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 
 		if (startTicks - Game::getSDLTicks() > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
 			continue;	//continue, not break because we still want to remove chunks that are out of range even when past max time
-
 		if (chunk->m_updated)
 			continue;
-
 		chunk->m_updated = true;
 
 		const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk = getRenderChunk(chunkPos, chunk->m_bounds);
-		m_renderer.beginChunk(renderChunk);
-		for (int x = 0; x < CHUNK_SIZE; ++x)
-		{
-			for (int y = 0; y < CHUNK_SIZE; ++y)
-			{
-				for (int z = 0; z < CHUNK_SIZE; ++z)
-				{
-					unsigned int blockIdx = VoxelChunk::getBlockIndex(glm::ivec3(x, y, z));
-					const VoxelBlock& block = chunk->getBlock(blockIdx);
-					if (block.id == 0)
-						continue;
-
-					const BlockProperties& properties = world.getBlockProperties(block.id);
-
-					int worldX = chunkPos.x * CHUNK_SIZE + x;
-					int worldY = chunkPos.y * CHUNK_SIZE + y;
-					int worldZ = chunkPos.z * CHUNK_SIZE + z;
-
-					//get the 8 surrounding blocks (including pos)
-					const VoxelBlock* surroundingBlockData[3][3][3];
-					for (int i = 0; i < 3; ++i)
-					{
-						for (int j = 0; j < 3; ++j)
-						{
-							for (int k = 0; k < 3; ++k)
-							{
-								glm::ivec3 pos(worldX + (i - 1), worldY + (j - 1), worldZ + (k - 1));
-
-								surroundingBlockData[i][j][k] = &world.getBlock(pos);
-							}
-						}
-					}
-					const VoxelBlock* above = surroundingBlockData[1][2][1];
-					const VoxelBlock* below = surroundingBlockData[1][0][1];
-					const VoxelBlock* front = surroundingBlockData[2][1][1];
-					const VoxelBlock* back = surroundingBlockData[0][1][1];
-					const VoxelBlock* right = surroundingBlockData[1][1][2];
-					const VoxelBlock* left = surroundingBlockData[1][1][0];
-					// store the 6 adjacent blocks so we can check if they're solid blocks.
-					const VoxelBlock* faceValues[6] = { above, below, left, right, front, back };
-
-					// for every face of the block
-					for (int face = 0; face < 6; ++face)
-					{
-						// if the face is invisible, continue (if no airblock or transparant block touching face)
-						if (faceValues[face]->solid)
-						{
-							continue;
-						}
-
-						Color8888 perFaceCols[4];
-						unsigned char vertexAO[4];
-
-						for (int vertex = 0; vertex < 4; ++vertex)	//for every vertex
-						{
-							bool isSolid[3] = { false, false, false };
-							int r = 0, g = 0, b = 0, a = 0, numTransparent = 0;
-
-							for (int sample = 0; sample < 3; ++sample)	//3 times per vertex, order should be side, side, corner
-							{
-								// Get the offset to sample with.
-								char sampleXOffset = AO_CHECKS_OFFSET[face][vertex][sample][0];
-								char sampleYOffset = AO_CHECKS_OFFSET[face][vertex][sample][1];
-								char sampleZOffset = AO_CHECKS_OFFSET[face][vertex][sample][2];
-
-								// get the color for the block at the offset
-								// +1 because offset ranges from -1 to 1, and array index goes from 0-2
-								const VoxelBlock* blockProperties = surroundingBlockData[sampleXOffset + 1][sampleYOffset + 1][sampleZOffset + 1];
-
-								if (!blockProperties->solid)
-								{
-									//blend rgba
-
-									r += blockProperties->color.r;
-									g += blockProperties->color.g;
-									b += blockProperties->color.b;
-									a += blockProperties->color.a;
-									numTransparent++;
-								}
-								else
-									isSolid[sample] = true;
-							}
-
-							//blend rgb
-							r += faceValues[face]->color.r;
-							g += faceValues[face]->color.g;
-							b += faceValues[face]->color.b;
-							a += faceValues[face]->color.a;
-							numTransparent++;
-
-							//get vertex ao contribution given the touching solid faces.
-							vertexAO[vertex] = getAO(isSolid[0], isSolid[1], isSolid[2]);
-							// average color of the 4 samples for smooth lighting, dont count solid blocks
-							perFaceCols[vertex] = Color8888(r / numTransparent, g / numTransparent, b / numTransparent, a / numTransparent);
-						}
-
-						// apply AO to alpha component only for every vertex color of the face
-						perFaceCols[0].a = vertexAO[0] > perFaceCols[0].a ? 0 : perFaceCols[0].a - vertexAO[0];
-						perFaceCols[1].a = vertexAO[1] > perFaceCols[1].a ? 0 : perFaceCols[1].a - vertexAO[1];
-						perFaceCols[2].a = vertexAO[2] > perFaceCols[2].a ? 0 : perFaceCols[2].a - vertexAO[2];
-						perFaceCols[3].a = vertexAO[3] > perFaceCols[3].a ? 0 : perFaceCols[3].a - vertexAO[3];
-
-						//get the rendering related properties for this block (texture id's).
-						// flip quad to avoid asymmetric color blending 
-						bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
-						renderChunk->addFace((Face) face, x, y, z, properties.renderData.getTextureID((Face) face),
-							perFaceCols[0], perFaceCols[3], perFaceCols[1], perFaceCols[2], flipQuad);
-					}
-				}
-			}
-		}
-		m_renderer.endChunk(renderChunk);
+		buildChunk(chunkPos, renderChunk, chunk, world);
 	}
 
 	m_renderer.beginRender(world.getTileSet());
+
+	m_visibleChunkList.clear();
+	m_visibleChunkList.reserve(numLoadedChunks);
+
+	unsigned int numFaces = 0;
+	unsigned int numChunks = 0;
 
 	for (auto it : m_renderChunks)
 	{
@@ -345,11 +250,21 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 		}
 		if (!contains)
 			continue;
-		m_renderer.renderChunk(it.second, camera);
+
+		numFaces += it.second->getNumFaces();
+		numChunks++;
+		m_visibleChunkList.push_back(it.second);
 	}
+
+	std::sort(m_visibleChunkList.begin(), m_visibleChunkList.end(), DistanceSort(camera.m_position));
+	for (std::shared_ptr<VoxelRenderer::Chunk> c : m_visibleChunkList)
+	{
+		m_renderer.renderChunk(c, camera);
+	}
+
+	//printf("Triangles: %i, chunks: %i Total loaded chunks: %i ,  \n", numFaces * 2, numChunks, numLoadedChunks);
 	m_renderer.endRender();
 }
-static unsigned int count = 0;
 const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos, const glm::vec3* const bounds)
 {
 	auto it = m_renderChunks.find(pos);
@@ -359,9 +274,7 @@ const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const 
 	{
 		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE, bounds);
 		m_renderChunks.insert(std::make_pair(pos, chunk));
-		count++;
-		printf("numchunks: %i \n", count);
-
+		numLoadedChunks++;
 		return chunk;
 	}
 }
@@ -372,7 +285,122 @@ void WorldRenderer::removeRenderChunk(const glm::ivec3& pos)
 	if (it != m_renderChunks.end())
 	{
 		m_renderChunks.erase(it);
-		count--;
-		printf("numchunks: %i \n", count);
+		numLoadedChunks--;
 	}
+}
+
+//inline only used in one place
+inline void WorldRenderer::buildChunk(const glm::ivec3& chunkPos, const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk, const std::shared_ptr<VoxelChunk>& chunk, VoxelWorld& world)
+{
+	m_renderer.beginChunk(renderChunk);
+	for (int x = 0; x < CHUNK_SIZE; ++x)
+	{
+		for (int y = 0; y < CHUNK_SIZE; ++y)
+		{
+			for (int z = 0; z < CHUNK_SIZE; ++z)
+			{
+				unsigned int blockIdx = VoxelChunk::getBlockIndex(glm::ivec3(x, y, z));
+				const VoxelBlock& block = chunk->getBlock(blockIdx);
+				if (block.id == 0)
+					continue;
+
+				const BlockProperties& properties = world.getBlockProperties(block.id);
+
+				int worldX = chunkPos.x * CHUNK_SIZE + x;
+				int worldY = chunkPos.y * CHUNK_SIZE + y;
+				int worldZ = chunkPos.z * CHUNK_SIZE + z;
+
+				//get the 8 surrounding blocks (including pos)
+				const VoxelBlock* surroundingBlockData[3][3][3];
+				for (int i = 0; i < 3; ++i)
+				{
+					for (int j = 0; j < 3; ++j)
+					{
+						for (int k = 0; k < 3; ++k)
+						{
+							glm::ivec3 pos(worldX + (i - 1), worldY + (j - 1), worldZ + (k - 1));
+							surroundingBlockData[i][j][k] = &world.getBlock(pos);
+						}
+					}
+				}
+				const VoxelBlock* above = surroundingBlockData[1][2][1];
+				const VoxelBlock* below = surroundingBlockData[1][0][1];
+				const VoxelBlock* front = surroundingBlockData[2][1][1];
+				const VoxelBlock* back = surroundingBlockData[0][1][1];
+				const VoxelBlock* right = surroundingBlockData[1][1][2];
+				const VoxelBlock* left = surroundingBlockData[1][1][0];
+				// store the 6 adjacent blocks so we can check if they're solid blocks.
+				const VoxelBlock* faceValues[6] = { above, below, left, right, front, back };
+
+				// for every face of the block
+				for (int face = 0; face < 6; ++face)
+				{
+					// if the face is invisible, continue (if no airblock or transparant block touching face)
+					if (faceValues[face]->solid)
+					{
+						continue;
+					}
+
+					Color8888 perFaceCols[4];
+					unsigned char vertexAO[4];
+
+					for (int vertex = 0; vertex < 4; ++vertex)	//for every vertex
+					{
+						bool isSolid[3] = { false, false, false };
+						int r = 0, g = 0, b = 0, a = 0, numTransparent = 0;
+
+						for (int sample = 0; sample < 3; ++sample)	//3 times per vertex, order should be side, side, corner
+						{
+							// Get the offset to sample with.
+							char sampleXOffset = AO_CHECKS_OFFSET[face][vertex][sample][0];
+							char sampleYOffset = AO_CHECKS_OFFSET[face][vertex][sample][1];
+							char sampleZOffset = AO_CHECKS_OFFSET[face][vertex][sample][2];
+
+							// get the color for the block at the offset
+							// +1 because offset ranges from -1 to 1, and array index goes from 0-2
+							const VoxelBlock* blockProperties = surroundingBlockData[sampleXOffset + 1][sampleYOffset + 1][sampleZOffset + 1];
+
+							if (!blockProperties->solid)
+							{
+								//blend rgba
+
+								r += blockProperties->color.r;
+								g += blockProperties->color.g;
+								b += blockProperties->color.b;
+								a += blockProperties->color.a;
+								numTransparent++;
+							}
+							else
+								isSolid[sample] = true;
+						}
+
+						//blend rgb
+						r += faceValues[face]->color.r;
+						g += faceValues[face]->color.g;
+						b += faceValues[face]->color.b;
+						a += faceValues[face]->color.a;
+						numTransparent++;
+
+						//get vertex ao contribution given the touching solid faces.
+						vertexAO[vertex] = getAO(isSolid[0], isSolid[1], isSolid[2]);
+						// average color of the 4 samples for smooth lighting, dont count solid blocks
+						perFaceCols[vertex] = Color8888(r / numTransparent, g / numTransparent, b / numTransparent, a / numTransparent);
+					}
+
+					// apply AO to alpha component only for every vertex color of the face
+					perFaceCols[0].a = vertexAO[0] > perFaceCols[0].a ? 0 : perFaceCols[0].a - vertexAO[0];
+					perFaceCols[1].a = vertexAO[1] > perFaceCols[1].a ? 0 : perFaceCols[1].a - vertexAO[1];
+					perFaceCols[2].a = vertexAO[2] > perFaceCols[2].a ? 0 : perFaceCols[2].a - vertexAO[2];
+					perFaceCols[3].a = vertexAO[3] > perFaceCols[3].a ? 0 : perFaceCols[3].a - vertexAO[3];
+
+					//get the rendering related properties for this block (texture id's).
+					// flip quad to avoid asymmetric color blending 
+					bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
+					renderChunk->addFace((Face) face, x, y, z, properties.renderData.getTextureID((Face) face),
+						perFaceCols[0], perFaceCols[3], perFaceCols[1], perFaceCols[2], flipQuad);
+				}
+			}
+		}
+	}
+	m_renderer.endChunk(renderChunk);
 }

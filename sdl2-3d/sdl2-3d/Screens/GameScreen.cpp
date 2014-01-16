@@ -14,7 +14,7 @@
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
 
-static const float CAMERA_FAR = 350.0f;	//is also fog/chunk load distance
+static const float CAMERA_FAR = 450.0f;	//is also fog/chunk load distance
 
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);

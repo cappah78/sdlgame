@@ -12,11 +12,19 @@ struct IVec3Cmp
 	}
 };
 
+struct IVec3Equality
+{
+	bool operator()(const glm::ivec3& lhs, const glm::ivec3& rhs) const
+	{
+		return lhs == rhs;
+	}
+};
+
 struct IVec3Hash
 {
 	size_t operator()(const glm::ivec3 & vec) const
 	{
-		return vec.x * 1024 + vec.y * 512 + vec.z;
+		return (vec.x * 12582917 + vec.z) * 6291469 + vec.y;
 	}
 };
 

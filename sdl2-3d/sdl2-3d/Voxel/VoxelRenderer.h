@@ -86,6 +86,8 @@ public:
 
 		~Chunk();
 
+		inline unsigned int getNumFaces() const { return m_numFaces; };
+
 	private:
 		Chunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds
 			, std::vector<Color8888>& colorData
@@ -128,7 +130,6 @@ public:
 	void endRender();
 
 private:
-
 	bool m_begunChunk;
 	bool m_begunRender;
 	bool m_blendEnabled;

@@ -39,6 +39,13 @@
     <ClInclude Include="Engine\Utils\Comparables.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
     <ClInclude Include="Engine\Utils\noiseutils.h" />
+    <ClInclude Include="Engine\Utils\Octree\array.h" />
+    <ClInclude Include="Engine\Utils\Octree\array2d.h" />
+    <ClInclude Include="Engine\Utils\Octree\numtraits.h" />
+    <ClInclude Include="Engine\Utils\Octree\octree.h" />
+    <ClInclude Include="Engine\Utils\Octree\point3d.h" />
+    <ClInclude Include="Engine\Utils\Octree\shareddata.h" />
+    <ClInclude Include="Engine\Utils\Octree\tinyvector.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
     <ClInclude Include="Engine\Utils\Random.h" />
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
