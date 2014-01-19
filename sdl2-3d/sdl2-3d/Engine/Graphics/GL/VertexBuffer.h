@@ -18,6 +18,8 @@ public:
 		, m_id(0)
 		, m_bufferType(bufferType)
 		, m_drawUsage(drawUsage)
+		, m_isEnabled(false)
+		, m_attributeIdx(-1)
 	{
 		m_data = data == NULL ? new T[sizeInElements] : data;
 		m_ownsData = (m_data == NULL);
@@ -41,19 +43,28 @@ public:
 	{
 		CHECK_GL_ERROR();
 
-		glBindBuffer(m_bufferType, m_id);
-		CHECK_GL_ERROR();
+		m_attributeIdx = attributeIdx;
+		m_isEnabled = true;
 
+		glBindBuffer(m_bufferType, m_id);
 		if (isIntegerType)
 			glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, 
 			(const GLvoid*) offsetBytes);
 		else
 			glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, 
 			stride, (const GLvoid*) offsetBytes);
-		CHECK_GL_ERROR();
 		glEnableVertexAttribArray(attributeIdx);
 		CHECK_GL_ERROR();
 	};
+
+	inline void setEnabled(bool enabled = true)
+	{
+		assert(m_attributeIdx != -1 && "No vertexattribpointer set");
+		if (enabled)
+			glEnableVertexAttribArray(m_attributeIdx);
+		else
+			glDisableVertexAttribArray(m_attributeIdx);
+	}
 
 	inline void bindBufferBase(GLuint blockIndex , GLenum target = GL_UNIFORM_BUFFER)
 	{
@@ -85,9 +96,7 @@ public:
 	inline void update()
 	{
 		uploadData(m_counter);
-		//glBindBuffer(m_bufferType, m_id);
-		//glBufferSubData(m_bufferType, m_lastUpdatePos, m_counter * sizeof(T), m_data);
-		//m_lastUpdatePos = m_counter;
+		/*glBindBuffer(m_bufferType, m_id);glBufferSubData(m_bufferType, m_lastUpdatePos, m_counter * sizeof(T), m_data);m_lastUpdatePos = m_counter;*/
 	};
 
 	inline void reset()
@@ -113,9 +122,11 @@ private:
 	unsigned int m_sizeInElements;
 	T* m_data;
 	GLuint m_id;
+	int m_attributeIdx;
 	GLenum m_bufferType;
 	GLenum m_drawUsage;
 	bool m_ownsData;
+	bool m_isEnabled;
 };
 
 /** Set the array that is used to add data, thus allowing sharing with multiple vertex buffers */

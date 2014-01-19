@@ -1,14 +1,48 @@
-﻿Build started 19/01/2014 16:31:53.
-     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
+﻿Build started 19/01/2014 18:46:30.
+     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp Screens\GameScreen.cpp Voxel\LightManager.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp main.cpp
-         VoxelWorld.cpp
-         Skipping... (no relevant changes detected)
-         main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\Camera.cpp Engine\Graphics\Frustum.cpp Engine\Graphics\GL\CubeMap.cpp Engine\Graphics\GL\DeferredShader.cpp Engine\Graphics\GL\GBuffer.cpp Engine\Graphics\GL\Material.cpp Engine\Graphics\GL\Mesh.cpp Engine\Graphics\GL\Shader.cpp Engine\Graphics\GL\ShadowMapShader.cpp Engine\Graphics\GL\Texture.cpp Engine\Graphics\GL\TextureArray.cpp Engine\Graphics\Graphics.cpp Engine\Graphics\HeightMap.cpp Engine\Graphics\PerspectiveCamera.cpp Engine\Graphics\Pixmap.cpp Engine\Graphics\Renderers\HeightMapRenderer.cpp Engine\Graphics\Renderers\QuadRenderer.cpp Engine\Graphics\Renderers\SkyBox.cpp Engine\Graphics\Renderers\SpriteBatch.cpp Engine\Input\Input.cpp Engine\Utils\CheckGLError.cpp Engine\Utils\FPSCameraController.cpp Engine\Utils\noiseutils.cpp Engine\Utils\PerlinGenerator.cpp Engine\Utils\ShaderManager.cpp Engine\Utils\VoidDataList.cpp Game.cpp main.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\LightManager.cpp Voxel\TextureManager.cpp Voxel\PropertyManager.cpp Voxel\VoxelBlock.cpp Voxel\VoxelRenderer.cpp Voxel\VoxelChunk.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp
          WorldRenderer.cpp
+         VoxelWorld.cpp
+         VoxelChunk.cpp
+         VoxelRenderer.cpp
+         VoxelBlock.cpp
+         PropertyManager.cpp
+         TextureManager.cpp
          LightManager.cpp
+         ChunkManager.cpp
          GameScreen.cpp
+         main.cpp
          Game.cpp
+         VoidDataList.cpp
+         ShaderManager.cpp
+         PerlinGenerator.cpp
+         noiseutils.cpp
+         FPSCameraController.cpp
+         CheckGLError.cpp
+         Input.cpp
+         SpriteBatch.cpp
+         Compiling...
+         SkyBox.cpp
+         QuadRenderer.cpp
+         HeightMapRenderer.cpp
+         Pixmap.cpp
+         PerspectiveCamera.cpp
+         HeightMap.cpp
+         Graphics.cpp
+         TextureArray.cpp
+         Texture.cpp
+         ShadowMapShader.cpp
+         Shader.cpp
+         Mesh.cpp
+         Material.cpp
+         GBuffer.cpp
+         DeferredShader.cpp
+         CubeMap.cpp
+         Frustum.cpp
+         Camera.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt Engine\Utils\stb_image.c
+         stb_image.c
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib lua5.1.lib libnoise.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH:NO Release\Camera.obj
          Release\Frustum.obj
@@ -52,8 +86,8 @@
          Generating code
          Finished generating code
          sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
-     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.38
+Time Elapsed 00:00:21.02

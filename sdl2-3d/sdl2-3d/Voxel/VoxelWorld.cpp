@@ -108,7 +108,7 @@ BlockID* VoxelWorld::getBlockLayer(int height)
 
 void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 {
-	const double blocksPerUnit = 44236800.0 / 90000.0;
+	const double blocksPerUnit = 492.0;
 	const int numBlockIDS = m_propertyManager.getNumRegisteredBlocks();
 
 
