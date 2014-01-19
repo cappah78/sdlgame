@@ -453,6 +453,21 @@
     <None Include="Assets\Shaders\quad.frag">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="Assets\Scripts\Blocks\GrassBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\SnowBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\SandBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\GrassSnowBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Scripts\Blocks\WaterBlock.lua">
+      <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Models\Skybox\back.bmp">

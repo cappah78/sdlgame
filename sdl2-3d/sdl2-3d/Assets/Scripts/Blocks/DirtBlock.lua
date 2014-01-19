@@ -1,4 +1,4 @@
---[[Blocks.DirtBlock = {
+Blocks.DirtBlock = {
 	type = "defaultblock",
 	texture = {
 		top = "Assets\\Textures\\MinecraftBlocks\\dirt.png",
@@ -8,4 +8,4 @@
 		left = "Assets\\Textures\\MinecraftBlocks\\dirt.png",
 		right = "Assets\\Textures\\MinecraftBlocks\\dirt.png"
 	},
-}]]--
+}

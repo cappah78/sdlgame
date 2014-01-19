@@ -79,6 +79,7 @@ private:
 		return i - (i > x);
 	};
 
+	BlockID* getBlockLayer(int height);
 	void generateChunk(const glm::ivec3& chunkPos);
 
 	void initializeLuaWorld();

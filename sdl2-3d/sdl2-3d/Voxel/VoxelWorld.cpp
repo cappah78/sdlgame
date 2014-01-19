@@ -56,12 +56,61 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	//////////////////////////////////////////////
 }
 
+static const int SURFACE_DEPTH = 5;
+
+BlockID* VoxelWorld::getBlockLayer(int height)
+{
+	BlockID* ids = new BlockID[SURFACE_DEPTH];
+
+	if (height >= 30)
+	{
+		ids[0] = m_propertyManager.getBlockID("SnowBlock");
+		ids[1] = m_propertyManager.getBlockID("GrassSnowBlock");
+		ids[2] = m_propertyManager.getBlockID("DirtBlock");
+		ids[3] = m_propertyManager.getBlockID("StoneBlock");
+		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+	}
+	else if (height >= 20 && height < 30)
+	{
+		ids[0] = m_propertyManager.getBlockID("GrassSnowBlock");
+		ids[1] = m_propertyManager.getBlockID("DirtBlock");
+		ids[2] = m_propertyManager.getBlockID("StoneBlock");
+		ids[3] = m_propertyManager.getBlockID("StoneBlock");
+		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+	}
+	else if(height >= -12 && height < 20)
+	{
+		ids[0] = m_propertyManager.getBlockID("GrassBlock");
+		ids[1] = m_propertyManager.getBlockID("DirtBlock");
+		ids[2] = m_propertyManager.getBlockID("StoneBlock");
+		ids[3] = m_propertyManager.getBlockID("StoneBlock");
+		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+	}
+	else if(height <= -12 && height > -18)
+	{
+		ids[0] = m_propertyManager.getBlockID("SandBlock");
+		ids[1] = m_propertyManager.getBlockID("SandBlock");
+		ids[2] = m_propertyManager.getBlockID("DirtBlock");
+		ids[3] = m_propertyManager.getBlockID("StoneBlock");
+		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+	}
+	else if(height <= -18)
+	{
+		ids[0] = m_propertyManager.getBlockID("WaterBlock");
+		ids[1] = m_propertyManager.getBlockID("WaterBlock");
+		ids[2] = m_propertyManager.getBlockID("WaterBlock");
+		ids[3] = m_propertyManager.getBlockID("StoneBlock");
+		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+	}
+
+	return ids;
+}
+
 void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 {
 	const double blocksPerUnit = 44236800.0 / 90000.0;
 	const int numBlockIDS = m_propertyManager.getNumRegisteredBlocks();
 
-	const int depth = 5;
 
 	glm::ivec3 from = chunkPos * (int) CHUNK_SIZE;
 	glm::ivec3 to = from + (int) CHUNK_SIZE;
@@ -71,16 +120,21 @@ void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 		{
 
 			int height = (int) m_worldGenerator.GetValue(x / blocksPerUnit, z / blocksPerUnit);
-			int blockID = (height % numBlockIDS + 1) + 1;
 
-			if (blockID < 0)
-				blockID *= -1;
-			blockID = glm::clamp(blockID, 1, numBlockIDS);
+			int blockSampleHeight;
+			if (height < -15)
+				blockSampleHeight = height;
+			else
+				blockSampleHeight = height + (int) (glm::sin(x / 0.723) * 2.0f) + (int) (glm::cos(z / 0.723) * 2.0f);
 
-			for (int y = height - depth; y < height; ++y)
+			BlockID* ids = getBlockLayer(blockSampleHeight);
+
+			int idx = SURFACE_DEPTH;
+			for (int y = height - SURFACE_DEPTH; y < height; ++y)
 			{
-				setBlock(blockID, glm::ivec3(x, y, z));
+				setBlock(ids[--idx], glm::ivec3(x, y, z));
 			}
+			delete[] ids;
 		}
 	}
 }

@@ -107,9 +107,14 @@
     <None Include="Assets\Scripts\Blocks\DiamondOreBlock.lua" />
     <None Include="Assets\Scripts\Blocks\DirtBlock.lua" />
     <None Include="Assets\Scripts\Blocks\GoldOreBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\GrassBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\GrassSnowBlock.lua" />
     <None Include="Assets\Scripts\Blocks\GravelBlock.lua" />
     <None Include="Assets\Scripts\Blocks\IronOreBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\SandBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\SnowBlock.lua" />
     <None Include="Assets\Scripts\Blocks\StoneBlock.lua" />
+    <None Include="Assets\Scripts\Blocks\WaterBlock.lua" />
     <None Include="Assets\Scripts\Init.lua" />
     <None Include="Assets\Scripts\WorldGen\GenTest.lua" />
     <None Include="Assets\Shaders\deferredgeompass.frag" />
