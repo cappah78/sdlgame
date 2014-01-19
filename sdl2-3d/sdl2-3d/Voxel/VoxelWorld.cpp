@@ -27,7 +27,7 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	, m_propertyManager(textureManager)
 	, m_chunkManager(m_propertyManager)
 	, m_timeAccumulator(0)
-	, m_tickDurationSec(0)
+	, m_tickDurationSec(1/20.0f)
 	, m_gbuffer(0)
 {
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
@@ -63,8 +63,8 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 {
 	unsigned int start = Game::getSDLTicks();
 
-	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) + 1.0f;
-	float unloadDistance = glm::sqrt(loadDistance * loadDistance + loadDistance * loadDistance) + 2.0f;
+	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) - 1.0f;
+	float unloadDistance = glm::sqrt(loadDistance * loadDistance + loadDistance * loadDistance) + 1.0f;
 	float unloadDistanceSqr = unloadDistance * unloadDistance;
 	glm::ivec3 cameraChunkPos = toChunkPos(glm::ivec3(camera.m_position));
 
@@ -73,9 +73,8 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 	std::vector<glm::ivec3> toUnload;
 	for (const std::pair<const glm::ivec3, std::unique_ptr<VoxelChunk>>& posChunk : chunkMap)
 	{
-		//float distance = glm::distance(glm::vec3(cameraChunkPos), glm::vec3(posChunk.first));
-		float dst = glm::length(glm::vec3(cameraChunkPos - posChunk.first));
-		float sqrDst = dst * dst;
+		glm::vec3 dst = glm::vec3(cameraChunkPos - posChunk.first);
+		float sqrDst = glm::dot(dst, dst);
 		if (sqrDst > unloadDistanceSqr)
 		{
 			toUnload.push_back(posChunk.first);

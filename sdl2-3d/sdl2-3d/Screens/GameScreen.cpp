@@ -50,7 +50,6 @@ void GameScreen::render(float deltaSec)
 	m_cameraController.update(deltaSec);
 	m_camera.update();
 
-
 	m_world.update(deltaSec, m_camera);
 	m_worldRenderer.render(m_world, m_camera);
 	//m_skyBox.render(m_camera);
