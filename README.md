@@ -5,6 +5,7 @@ Runs immediately on a fresh installation of windows using VS2013 without any oth
 Requires an opengl 3.3+ GPU with ~1GB of vram (render distance still hardcoded)
 
 Random screenshot of last finished features:
+https://dl.dropboxusercontent.com/u/18555381/Permanent/blocktypes.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/viewdistance.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/libnoise.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/fogandfrustumculling.png
