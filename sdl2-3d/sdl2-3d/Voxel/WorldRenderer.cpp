@@ -6,7 +6,7 @@
 #include "../Engine/Graphics/Color8888.h"
 #include "PropertyManager.h"
 #include "../Game.h"
-
+#include "../Engine/Utils/CheckGLError.h"
 #include <algorithm>
 
 
@@ -158,11 +158,13 @@ WorldRenderer::WorldRenderer()
 	m_voxelShader.begin();
 	m_voxelShader.setUniform3f("u_fogColor", glm::vec3(0.4f, 0.7f, 1.0f));        //same as clearcolor
 	m_voxelShader.end();
+
+	CHECK_GL_ERROR();
 }
 
 WorldRenderer::~WorldRenderer()
 {
-
+	m_visibleChunkList.clear();
 }
 
 inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
@@ -230,7 +232,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	m_visibleChunkList.clear();
 	m_visibleChunkList.reserve(m_numLoadedChunks);
 
-	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>>& it : m_renderChunks)
+	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>> it : m_renderChunks)
 	{
 		if (camera.frustumContainsSpheres(it.second->m_bounds, 8, sphereCullRad)) //8 corners
 			m_visibleChunkList.push_back(it.second);
@@ -251,8 +253,6 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 		m_renderer.renderChunk(chunk);
 	}
 	m_voxelShader.end();
-
-
 }
 
 const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos, const glm::vec3* const bounds)

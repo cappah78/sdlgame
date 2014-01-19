@@ -34,11 +34,13 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 	VoxelBlock& block = m_blocks[idx];
 	m_updated = false;
 
-	const BlockProperties& oldProperties = m_propertyManager.getBlockProperties(block.id);
-	const std::vector<PerBlockProperty>& oldPerBlockProperties = oldProperties.perBlockProperties;
+
 
 	if (block.id != 0) //if there was already a block here
 	{
+		const BlockProperties& oldProperties = m_propertyManager.getBlockProperties(block.id);
+		const std::vector<PerBlockProperty>& oldPerBlockProperties = oldProperties.perBlockProperties;
+
 		unsigned int oldBlockPropertiesSize = oldPerBlockProperties.size() * sizeof(int);	// each property is an int
 		if (block.blockDataIndex != NO_BLOCK_DATA && oldBlockPropertiesSize != 0) //There was already a block here with per block data, clean up data
 		{
@@ -47,32 +49,36 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 		}
 	}
 
-	const BlockProperties& newProperties = m_propertyManager.getBlockProperties(blockID);
-	const std::vector<PerBlockProperty>& newPerBlockProperties = newProperties.perBlockProperties;
+	if (blockID != 0)
+	{
+		const BlockProperties& newProperties = m_propertyManager.getBlockProperties(blockID);
+		const std::vector<PerBlockProperty>& newPerBlockProperties = newProperties.perBlockProperties;
 
-	if (newPerBlockProperties.size() != 0)	// if this block should have perblock values
-	{
-		if (dataSize != 0 && dataPtr != NULL)	//if given initial values for this block
+		if (newPerBlockProperties.size() != 0)	// if this block should have perblock values
 		{
-			block.blockDataIndex = m_perBlockData.add(dataPtr, dataSize);
-		}
-		else //insert default values
-		{
-			std::vector<int> dataList;	//properties are just a list of integer values for now
-			dataList.reserve(newPerBlockProperties.size());
-			for (const PerBlockProperty& p : newPerBlockProperties)
-			{				
-				dataList.push_back(p.prop.value);
+			if (dataSize != 0 && dataPtr != NULL)	//if given initial values for this block
+			{
+				block.blockDataIndex = m_perBlockData.add(dataPtr, dataSize);
 			}
-			unsigned int dataPos = m_perBlockData.add(&dataList[0], sizeof(int) * dataList.size());
-			block.blockDataIndex = dataPos;
+			else //insert default values
+			{
+				std::vector<int> dataList;	//properties are just a list of integer values for now
+				dataList.reserve(newPerBlockProperties.size());
+				for (const PerBlockProperty& p : newPerBlockProperties)
+				{
+					dataList.push_back(p.prop.value);
+				}
+				unsigned int dataPos = m_perBlockData.add(&dataList[0], sizeof(int) * dataList.size());
+				block.blockDataIndex = dataPos;
+			}
+		}
+		else
+		{
+			assert(dataSize == 0 && dataPtr == 0);	//if no per block data, check that none is given.
+			block.blockDataIndex = NO_BLOCK_DATA;
 		}
 	}
-	else
-	{
-		assert(dataSize == 0 && dataPtr == 0);	//if no per block data, check that none is given.
-		block.blockDataIndex = NO_BLOCK_DATA;
-	}
+
 	block.id = blockID;
 	block.update = true;
 	block.solid = blockID != 0; //all non air blocks are solid for now.

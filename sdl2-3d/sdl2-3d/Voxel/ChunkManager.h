@@ -27,6 +27,8 @@ public:
 	void unloadChunk(const glm::ivec3& chunkPos);
 	const ChunkMap& getLoadedChunkMap() const { return m_loadedChunks; };
 
+	bool isChunkLoaded(int chunkX, int chunkZ);
+
 private:
 	std::unique_ptr<VoxelChunk>& loadChunk(const glm::ivec3& pos);
 

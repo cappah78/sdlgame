@@ -56,7 +56,6 @@ protected:
 	static std::map<lua_State* const, VoxelWorld* const> stateWorldMap;
 
 private:
-	std::vector<std::shared_ptr<module::Module>> m_modules;
 	model::Plane m_worldGenerator;
 
 	float m_timeAccumulator;

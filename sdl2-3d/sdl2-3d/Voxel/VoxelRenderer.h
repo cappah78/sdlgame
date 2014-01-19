@@ -81,9 +81,7 @@ public:
 		void addFace(Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4, bool flipQuad = false);
 		/** Offset to render with*/
 		glm::vec3 m_renderOffset;
-		const glm::vec3* const m_bounds;
-
-		~Chunk();
+		glm::vec3 m_bounds[8];
 
 		inline unsigned int getNumFaces() const { return m_numFaces; };
 
@@ -91,16 +89,12 @@ public:
 		Chunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds
 			, std::vector<Color8888>& colorData
 			, std::vector<VoxelVertex>& pointData
-			, std::vector<unsigned short>& indiceData)
-			: m_bounds(bounds)
-			, m_colorBuffer(colorData.size(), GL_ARRAY_BUFFER, GL_STREAM_DRAW, &colorData[0])
-			, m_pointBuffer(pointData.size(), GL_ARRAY_BUFFER, GL_STREAM_DRAW, &pointData[0])
-			, m_indiceBuffer(indiceData.size(), GL_ELEMENT_ARRAY_BUFFER, GL_STREAM_DRAW, &indiceData[0])
-			, m_renderOffset(xOffset, yOffset, zOffset)
-			, m_numFaces(0)
-			, m_begun(false)
-		{};
+			, std::vector<unsigned short>& indiceData
+			, VoxelRenderer& renderer);
 
+		~Chunk();
+
+		VoxelRenderer& m_renderer;
 		bool m_begun;
 		GLuint m_vao;
 		unsigned int m_numFaces;
@@ -124,6 +118,8 @@ public:
 	void renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk);
 
 private:
+	static void returnChunk(Chunk* chunk);
+
 	bool m_begunChunk;
 	bool m_begunRender;
 	bool m_blendEnabled;
@@ -135,6 +131,8 @@ private:
 	std::vector<Color8888> m_colorData;
 	std::vector<VoxelVertex> m_pointData;
 	std::vector<unsigned short> m_indiceData;
+
+	std::vector<Chunk*> m_chunkPool;
 };
 
 #endif //VOXEL_RENDERER_H_

@@ -1,6 +1,7 @@
 #include "Shader.h"
 
 #include "../../Utils/ShaderManager.h"
+#include "../../Utils/CheckGLError.h"
 
 bool Shader::s_begun = false;
 
@@ -12,6 +13,7 @@ Shader::Shader()
 Shader::Shader(const char* const vertexShaderPath, const char* const geomShaderPath, const char* const fragShaderPath)
 {
 	setupProgram(vertexShaderPath, geomShaderPath, fragShaderPath);
+	CHECK_GL_ERROR();
 }
 
 Shader::~Shader()

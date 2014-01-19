@@ -37,34 +37,28 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 
 
 	////////////////Map generation//////////////	//WIP!
-	std::shared_ptr<module::Billow> base(new module::Billow);
-	m_modules.push_back(base);
+	// TODO: remove statics //
+	////////////////////////////////////////////
+	static module::Perlin perlin;
+	perlin.SetOctaveCount(4);
+	perlin.SetFrequency(2.5);
 
-	base->SetOctaveCount(10);
-	base->SetFrequency(0.8);
-	base->SetPersistence(0.25);
-	base->SetLacunarity(2.2);
+	static module::Turbulence turbulence;
+	turbulence.SetFrequency(4.0);
+	turbulence.SetPower(0.2);
+	turbulence.SetSourceModule(0, perlin);
 
-	std::shared_ptr<module::Turbulence> turbulence(new module::Turbulence);
-	m_modules.push_back(turbulence);
+	static module::ScaleBias scale;
+	scale.SetSourceModule(0, turbulence);
+	scale.SetScale(40.0);
 
-	turbulence->SetSourceModule(0, *base);
-	turbulence->SetFrequency(2.0);
-	turbulence->SetPower(0.125);
-
-	std::shared_ptr<module::ScaleBias> scale(new module::ScaleBias);
-	m_modules.push_back(scale);
-
-	scale->SetSourceModule(0, *turbulence);
-	scale->SetScale(50.0f);
-
-	m_worldGenerator.SetModule(*scale);
+	m_worldGenerator.SetModule(scale);
 	//////////////////////////////////////////////
 }
 
 void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 {
-	const double blocksPerUnit = 128.0;
+	const double blocksPerUnit = 44236800.0 / 90000.0;
 	const int numBlockIDS = m_propertyManager.getNumRegisteredBlocks();
 
 	const int depth = 5;
@@ -79,8 +73,9 @@ void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 			int height = (int) m_worldGenerator.GetValue(x / blocksPerUnit, z / blocksPerUnit);
 			int blockID = (height % numBlockIDS + 1) + 1;
 
-			blockID = glm::clamp(blockID, 1, numBlockIDS + 1);
-			height = glm::max(height, -10);
+			if (blockID < 0)
+				blockID *= -1;
+			blockID = glm::clamp(blockID, 1, numBlockIDS);
 
 			for (int y = height - depth; y < height; ++y)
 			{

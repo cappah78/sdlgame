@@ -41,7 +41,7 @@ public:
 	void updateTickCountEvents();
 
 	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
-	const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }
+	inline const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }
 	inline BlockID getNumRegisteredBlocks() const { return m_lastRegisteredId; };
 private:
 

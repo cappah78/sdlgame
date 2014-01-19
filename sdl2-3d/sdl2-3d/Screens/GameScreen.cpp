@@ -60,7 +60,7 @@ void GameScreen::render(float deltaSec)
 
 GameScreen::~GameScreen() 
 {
-	m_chunkRenderData.clear();
+
 }
 
 void GameScreen::resize(int width, int height) 

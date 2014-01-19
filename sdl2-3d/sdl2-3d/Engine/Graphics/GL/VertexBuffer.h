@@ -2,6 +2,7 @@
 #define VERTEX_BUFFER_H_
 
 #include <gl\glew.h>
+#include "../../Utils/CheckGLError.h"
 
 //template implementation in here instead of having to include a .cpp
 
@@ -38,14 +39,20 @@ public:
 		GLboolean normalized = false, GLboolean isIntegerType = false, GLuint stride = 0, 
 		GLuint offsetBytes = 0)
 	{
+		CHECK_GL_ERROR();
+
 		glBindBuffer(m_bufferType, m_id);
+		CHECK_GL_ERROR();
+
 		if (isIntegerType)
 			glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, 
 			(const GLvoid*) offsetBytes);
 		else
 			glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, 
 			stride, (const GLvoid*) offsetBytes);
+		CHECK_GL_ERROR();
 		glEnableVertexAttribArray(attributeIdx);
+		CHECK_GL_ERROR();
 	};
 
 	inline void bindBufferBase(GLuint blockIndex , GLenum target = GL_UNIFORM_BUFFER)
