@@ -1,43 +1,31 @@
 #include "ChunkManager.h"
 
-std::shared_ptr<VoxelChunk> const ChunkManager::getChunk(const glm::ivec3& pos)
+std::unique_ptr<VoxelChunk>& ChunkManager::getChunk(const glm::ivec3& pos)
 {
-	if (pos == m_lastReturnedChunkPos)
-		return m_lastReturnedChunk;
-
 	auto it = m_loadedChunks.find(pos);
 	if (it != m_loadedChunks.end())
 	{
-		std::shared_ptr<VoxelChunk> chunk = it->second;
-		m_lastReturnedChunk = chunk;
-		m_lastReturnedChunkPos = pos;
-		return chunk;
+		return it->second;
 	}
 	else
 	{
-		std::shared_ptr<VoxelChunk> chunk = loadChunk(pos);
-		m_lastReturnedChunk = chunk;
-		m_lastReturnedChunkPos = pos;
-		return chunk;
+		return loadChunk(pos);
 	}
 }
 
-std::shared_ptr<VoxelChunk> ChunkManager::loadChunk(const glm::ivec3& pos)
+std::unique_ptr<VoxelChunk>& ChunkManager::loadChunk(const glm::ivec3& pos)
 {
-	//printf("loadchunk: %i, %i, %i \n", pos.x, pos.y, pos.z);
-	std::shared_ptr<VoxelChunk> chunk = std::shared_ptr<VoxelChunk>(new VoxelChunk(m_propertyManager, pos));
-
-	m_loadedChunks.insert(std::make_pair(pos, chunk));
+	m_loadedChunks[pos] = std::unique_ptr<VoxelChunk>(new VoxelChunk(m_propertyManager, pos));
 
 	//TODO: chunk generation
 	//generateChunk(chunk);
 
-	return chunk;
+	return m_loadedChunks[pos];
 }
 
-void ChunkManager::unloadChunk(std::shared_ptr<VoxelChunk> chunk)
+void ChunkManager::unloadChunk(const glm::ivec3& chunkPos)
 {
-	auto it = m_loadedChunks.find(chunk->m_pos);
+	auto it = m_loadedChunks.find(chunkPos);
 	if (it != m_loadedChunks.end())
 		m_loadedChunks.erase(it);
 }

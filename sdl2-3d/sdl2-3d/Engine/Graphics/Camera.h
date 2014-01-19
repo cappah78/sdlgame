@@ -24,6 +24,11 @@ public:
 	virtual void update();
 	virtual void setNearFar(float near, float far);
 
+	/** True if any of the vertices are contained in the frustum */
+	bool frustumContains(const glm::vec3* const vertices, unsigned int numVertices) const;
+	/** True if any of the spheres are contained in the frustum */
+	bool frustumContainsSpheres(const glm::vec3* const vertices, unsigned int numVertices, float sphereRadius) const;
+
 	/** rotation on the x/y plane from -180 to 180, 0 == up */
 	float getRotationRadXY();
 	/** rotation on the x/z plane from -180 to 180, 0 == up */

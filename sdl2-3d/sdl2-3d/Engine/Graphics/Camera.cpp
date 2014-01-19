@@ -26,6 +26,22 @@ Camera::~Camera()
 
 }
 
+bool Camera::frustumContains(const glm::vec3* const vertices, unsigned int numVertices) const
+{
+	for (unsigned int i = 0; i < numVertices; ++i)	//check 8 corners
+		if (m_frustum.pointInFrustum(vertices[i]))
+			return true;
+	return false;
+}
+
+bool Camera::frustumContainsSpheres(const glm::vec3* const vertices, unsigned int numVertices, float sphereRadius) const
+{
+	for (unsigned int i = 0; i < numVertices; ++i)	//check 8 corners
+		if (m_frustum.sphereInFrustum(vertices[i], sphereRadius))
+			return true;
+	return false;
+}
+
 void Camera::translate(float x, float y, float z)
 {
 	m_position.x += x;

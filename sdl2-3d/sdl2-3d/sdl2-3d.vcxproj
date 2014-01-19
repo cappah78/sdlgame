@@ -20,6 +20,7 @@
     <ClInclude Include="Engine\Graphics\GL\Material.h" />
     <ClInclude Include="Engine\Graphics\GL\Mesh.h" />
     <ClInclude Include="Engine\Graphics\GL\Shader.h" />
+    <ClInclude Include="Engine\Graphics\GL\ShadowMapShader.h" />
     <ClInclude Include="Engine\Graphics\GL\Texture.h" />
     <ClInclude Include="Engine\Graphics\GL\TextureArray.h" />
     <ClInclude Include="Engine\Graphics\GL\VertexBuffer.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h" />
     <ClInclude Include="Engine\Graphics\Pixmap.h" />
     <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h" />
+    <ClInclude Include="Engine\Graphics\Renderers\QuadRenderer.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SkyBox.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SpriteBatch.h" />
     <ClInclude Include="Engine\Input\Input.h" />
@@ -39,13 +41,6 @@
     <ClInclude Include="Engine\Utils\Comparables.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
     <ClInclude Include="Engine\Utils\noiseutils.h" />
-    <ClInclude Include="Engine\Utils\Octree\array.h" />
-    <ClInclude Include="Engine\Utils\Octree\array2d.h" />
-    <ClInclude Include="Engine\Utils\Octree\numtraits.h" />
-    <ClInclude Include="Engine\Utils\Octree\octree.h" />
-    <ClInclude Include="Engine\Utils\Octree\point3d.h" />
-    <ClInclude Include="Engine\Utils\Octree\shareddata.h" />
-    <ClInclude Include="Engine\Utils\Octree\tinyvector.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
     <ClInclude Include="Engine\Utils\Random.h" />
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
@@ -55,7 +50,6 @@
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
     <ClInclude Include="Voxel\LightManager.h" />
-    <ClInclude Include="Voxel\LuaChunkGenerator.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
     <ClInclude Include="Voxel\TextureManager.h" />
     <ClInclude Include="Voxel\PropertyManager.h" />
@@ -74,6 +68,7 @@
     <ClCompile Include="Engine\Graphics\GL\Material.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Shader.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\ShadowMapShader.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Texture.cpp" />
     <ClCompile Include="Engine\Graphics\GL\TextureArray.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />
@@ -81,6 +76,7 @@
     <ClCompile Include="Engine\Graphics\PerspectiveCamera.cpp" />
     <ClCompile Include="Engine\Graphics\Pixmap.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp" />
+    <ClCompile Include="Engine\Graphics\Renderers\QuadRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SkyBox.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SpriteBatch.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
@@ -96,7 +92,6 @@
     <ClCompile Include="Screens\GameScreen.cpp" />
     <ClCompile Include="Voxel\ChunkManager.cpp" />
     <ClCompile Include="Voxel\LightManager.cpp" />
-    <ClCompile Include="Voxel\LuaChunkGenerator.cpp" />
     <ClCompile Include="Voxel\TextureManager.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
     <ClCompile Include="Voxel\VoxelBlock.cpp" />
@@ -125,6 +120,8 @@
     <None Include="Assets\Shaders\gbuffer.vert" />
     <None Include="Assets\Shaders\multishadowmap.geom" />
     <None Include="Assets\Shaders\multishadowmap.vert" />
+    <None Include="Assets\Shaders\quad.frag" />
+    <None Include="Assets\Shaders\quad.vert" />
     <None Include="Assets\Shaders\skybox.frag" />
     <None Include="Assets\Shaders\skybox.vert" />
     <None Include="Assets\Shaders\spritebatch.frag" />
@@ -493,7 +490,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2d.lib;SDL2maind.lib;assimpd.lib;opengl32.lib;glu32.lib;glew32d.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2d.lib;SDL2maind.lib;assimpd.lib;opengl32.lib;glu32.lib;glew32d.lib;lua5.1.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/NODEFAULTLIB:library</AdditionalOptions>
     </Link>

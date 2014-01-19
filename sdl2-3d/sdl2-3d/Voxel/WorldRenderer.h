@@ -3,6 +3,9 @@
 
 #include "VoxelRenderer.h"
 #include "../Engine/Utils/Comparables.h"
+#include "../Engine/Graphics/GL/ShadowMapShader.h"
+
+#include "../Engine/Graphics/Renderers/QuadRenderer.h"
 
 #include <unordered_map>
 
@@ -30,16 +33,19 @@ private:
 	/** Get a render chunk object containing the render related data for a chunk given a chunk position */
 	void removeRenderChunk(const glm::ivec3& pos);
 
-	inline void buildChunk(
-		const glm::ivec3& chunkPos, 
-		const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk, 
-		const std::shared_ptr<VoxelChunk>& chunk, 
-		VoxelWorld& world);
+	void buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world);
 
 	const std::shared_ptr<VoxelRenderer::Chunk> getRenderChunk(const glm::ivec3& pos, const glm::vec3* const bounds);
 	RenderChunkMap m_renderChunks;
+
+	Shader m_voxelShader;
 	VoxelRenderer m_renderer;
 
+	ShadowMapShader m_shadowShader;
+	QuadRenderer m_quadRenderer;
+	Shader m_quadShader;
+
+	unsigned int m_numLoadedChunks;
 
 	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_visibleChunkList;
 };

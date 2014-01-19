@@ -3,10 +3,10 @@
 
 #include "PropertyManager.h"
 #include "../Engine/Utils/VoidDataList.h"
+#include "VoxelBlock.h"
+
 #include <glm\glm.hpp>
 #include <vector>
-
-#include "VoxelBlock.h"
 
 /** Chunk size in one dimension */
 static const unsigned int CHUNK_SIZE = 16;
@@ -22,7 +22,7 @@ class VoxelChunk
 {
 public:
 	VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& chunkPos);
-	VoxelChunk(const VoxelChunk& copyMe) = delete;
+	//VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
 
 	void doBlockUpdate();

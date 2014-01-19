@@ -42,13 +42,12 @@ private:
 	static const unsigned int POSITION_LOC = 0;
 	static const unsigned int TEXCOORD_LOC = 1;
 	static const unsigned int COLOR_LOC = 2;
-
-	static const unsigned int MAX_FACES_PER_CACHE = 2048 * 2; // == CHUNK_SIZE_CUBED / 2;
-
-	static_assert(CHUNK_SIZE == 16, "This class hardcodes an amount of bits to use for x/y/z, dependant on CHUNK_SIZE");//change assert once fixd
+	static const unsigned int MAX_FACES_PER_CHUNK = (CHUNK_SIZE / 2)*(CHUNK_SIZE / 2)*(CHUNK_SIZE / 2) * 6;
 	static const unsigned int SIZE_BITS = 5; //2^sizebits == chunksize or sqrt(chunkSize) + 1
 	static const unsigned int TEXTURE_ID_BITS = 12;
+
 	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Vertex Data must be <= 32 bits");
+	static_assert(CHUNK_SIZE == 16, "This class hardcodes an amount of bits to use for x/y/z, dependant on CHUNK_SIZE");//change assert once fixd
 
 	/** block x/y/z/textureid packed into one integer */
 	struct VoxelVertex
@@ -75,7 +74,7 @@ public:
 	public:
 		/** 
 		Add a cube face at the given position, must be in between VoxelRenderer::beginChunk and VoxelRenderer::endChunk
-		- int x/y/z : position within this cache, must be within 0 to CHUNK_SIZE
+		- int x/y/z : position within this chunk, must be within 0 to CHUNK_SIZE
 		- int textureIdx : texture index witin the TextureArray used for VoxelRenderer::beginRender
 		- Color8888 1-4 : color tint for the corners of this face
 		*/
@@ -118,26 +117,20 @@ public:
 	const std::shared_ptr<VoxelRenderer::Chunk> createChunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds);
 
 	/** Ready a chunk to add faces */
-	void beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk);
+	void beginChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk);
 	/** Finish adding faces to a chunk and upload the vertex data */
-	void endChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk);
+	void endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk);
 
-	/** Prepare the renderer for rendering using the given tileset */
-	void beginRender(const TextureArray* tileSet);
-	/** Draw the given chunk with its offset, must be in between VoxelRenderer::beginRender and VoxelRenderer::endRender */
-	void renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk, const Camera& camera);
-	/** Finish rendering */
-	void endRender();
+	void renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk);
 
 private:
 	bool m_begunChunk;
 	bool m_begunRender;
 	bool m_blendEnabled;
 
-	Shader m_shader;
-	//DeferredShader m_shader;
-
 	VertexBuffer<glm::vec2> m_texcoordBuffer;
+
+	/** Arrays shared to */
 
 	std::vector<Color8888> m_colorData;
 	std::vector<VoxelVertex> m_pointData;

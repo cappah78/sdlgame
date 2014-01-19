@@ -6,12 +6,11 @@
 #include "../Engine/Utils/CheckLuaError.h"
 #include "../Engine/Graphics/Color8888.h"
 #include "../Engine/Graphics/GL/TextureArray.h"
+#include "../Engine/Graphics/Camera.h"
 
 #include <lua.hpp>
 #include <LuaBridge.h>
 
-#include <noise\noise.h>
-#include "../Engine/Utils/noiseutils.h"
 
 std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 
@@ -19,52 +18,76 @@ std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 static const unsigned int BLOCK_TEX_RES = 16;
 static const float BLOCK_TO_CHUNK = 1 / (float) CHUNK_SIZE;
 
-static const int SEED = 23;
-
 VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	: m_L(luaL_newstate())
-	, m_generator(m_L, SEED)
 	, m_textureManager(textureManager)
 	, m_propertyManager(textureManager)
-	, m_chunkManager(m_propertyManager, m_generator)
+	, m_chunkManager(m_propertyManager)
 	, m_timeAccumulator(0)
 	, m_tickDurationSec(0)
+	, m_gbuffer(0)
 {
+	m_loadedBits.resize(LOADED_BITS_RADIUS * LOADED_BITS_RADIUS, false);
+
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
 
 	Game::initLua(m_L);
 	initializeLuaWorld();
 	m_textureArray = m_textureManager.generateTextureArray();
 
-	////////////////Map generation//////////////	//wip
-	module::Perlin module;
-	utils::NoiseMap heightMap;
-	utils::NoiseMapBuilderPlane heightMapBuilder;
-	heightMapBuilder.SetSourceModule(module);
-	heightMapBuilder.SetDestNoiseMap(heightMap);
-	heightMapBuilder.SetDestSize(1024, 1024);
-	heightMapBuilder.SetBounds(6.0, 10.0, 1.0, 5.0);
-	heightMapBuilder.Build();
 
-	int numRegisteredBlocks = m_propertyManager.getNumRegisteredBlocks();
+	////////////////Map generation//////////////	//WIP!
+	std::shared_ptr<module::Billow> base(new module::Billow);
+	m_modules.push_back(base);
 
-	for (int x = 0; x < heightMap.GetWidth(); ++x)
+	base->SetOctaveCount(10);
+	base->SetFrequency(0.8);
+	base->SetPersistence(0.25);
+	base->SetLacunarity(2.2);
+
+	std::shared_ptr<module::Turbulence> turbulence(new module::Turbulence);
+	m_modules.push_back(turbulence);
+
+	turbulence->SetSourceModule(0, *base);
+	turbulence->SetFrequency(2.0);
+	turbulence->SetPower(0.125);
+
+	std::shared_ptr<module::ScaleBias> scale(new module::ScaleBias);
+	m_modules.push_back(scale);
+
+	scale->SetSourceModule(0, *turbulence);
+	scale->SetScale(50.0f);
+
+	m_worldGenerator.SetModule(*scale);
+	//////////////////////////////////////////////
+}
+
+void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
+{
+	const double blocksPerUnit = 128.0;
+	const int numBlockIDS = m_propertyManager.getNumRegisteredBlocks();
+
+	const int depth = 5;
+
+	glm::ivec3 from = chunkPos * (int) CHUNK_SIZE;
+	glm::ivec3 to = from + (int) CHUNK_SIZE;
+	for (int x = from.x; x < to.x; ++x)
 	{
-		for (int z = 0; z < heightMap.GetHeight(); ++z)
+		for (int z = from.z; z < to.z; ++z)
 		{
-			float height = heightMap.GetValue(x, z) * 35.0f;
-			int intHeight = (int) glm::round(height);
 
-			for (int y = 0; y < 5; ++y)
+			int height = (int) m_worldGenerator.GetValue(x / blocksPerUnit, z / blocksPerUnit);
+			int blockID = (height % numBlockIDS + 1) + 1;
+
+			blockID = glm::clamp(blockID, 1, numBlockIDS + 1);
+			height = glm::max(height, -10);
+
+			for (int y = height - depth; y < height; ++y)
 			{
-				int random = (rand() % (numRegisteredBlocks - 1)) + 1;
-				setBlock(random, glm::ivec3(x, intHeight - y, z));
+				setBlock(blockID, glm::ivec3(x, y, z));
 			}
 		}
 	}
-	//////////////////////////////////////////////////////////////////
-	//TODO: through lua scripts
-	//m_generator.generateMap();
 }
 
 void VoxelWorld::initializeLuaWorld()
@@ -127,18 +150,53 @@ int VoxelWorld::L_getBlock(int x, int y, int z, lua_State* L)
 	return block.id;
 }
 
-void VoxelWorld::update(float deltaSec)
+static const unsigned int MAX_GENERATE_TIME_MS = 2;
+
+void VoxelWorld::update(float deltaSec, const Camera& camera)
 {
-	m_timeAccumulator += deltaSec;
-	while (m_timeAccumulator >= m_tickDurationSec)
+	unsigned int start = Game::getSDLTicks();
+
+	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) + 1.0f;
+	float unloadDistance = glm::sqrt(loadDistance * loadDistance + loadDistance * loadDistance) + 2.0f;
+
+	glm::ivec3 cameraChunkPos = toChunkPos(glm::ivec3(camera.m_position));
+	
+	std::vector<glm::ivec3> toUnload;
+	for (const std::pair<const glm::ivec3, std::unique_ptr<VoxelChunk>>& posChunk : m_chunkManager.getLoadedChunkMap())
 	{
-		m_timeAccumulator -= m_tickDurationSec;
-
-		m_propertyManager.updateTickCountEvents();
-
-		for (auto it : m_chunkManager.getLoadedChunkMap())
+		float distance = glm::distance(glm::vec3(cameraChunkPos), glm::vec3(posChunk.first));
+		if (distance > unloadDistance)
 		{
-			it.second->doBlockUpdate();
+			toUnload.push_back(posChunk.first);
+		}
+	}
+	
+	for (const glm::ivec3& vec : toUnload)
+	{
+		unsigned int bitIdx = (vec.x + LOADED_BITS_RADIUS / 2) * LOADED_BITS_RADIUS + (vec.z + LOADED_BITS_RADIUS / 2);
+		m_loadedBits[bitIdx] = false;
+		m_chunkManager.unloadChunk(vec);
+
+		if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
+			return;
+	}
+	
+	glm::ivec3 minRange = cameraChunkPos - (int) loadDistance;
+	glm::ivec3 maxRange = cameraChunkPos + (int) loadDistance;
+	for (int x = minRange.x; x < maxRange.x; ++x)
+	{
+		for (int z = minRange.z; z < maxRange.z; ++z)
+		{
+			unsigned int bitIdx = (x + LOADED_BITS_RADIUS / 2) * LOADED_BITS_RADIUS + (z + LOADED_BITS_RADIUS / 2);
+
+			if (!m_loadedBits[bitIdx])
+			{
+				m_loadedBits[bitIdx] = true;
+				generateChunk(glm::ivec3(x, 0, z));
+			}
+
+			if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
+				return;
 		}
 	}
 }
@@ -146,7 +204,7 @@ void VoxelWorld::update(float deltaSec)
 void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 {
 	const glm::ivec3& chunkPos = toChunkPos(pos);
-	const std::shared_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+	const std::unique_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
 	const glm::ivec3& blockPos = toChunkBlockPos(pos);
 
 	chunk->setBlock(blockID, blockPos);
@@ -155,7 +213,7 @@ void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 const VoxelBlock& VoxelWorld::getBlock(const glm::ivec3& pos)
 {
 	const glm::ivec3& chunkPos = toChunkPos(pos);
-	const std::shared_ptr<VoxelChunk> chunk = m_chunkManager.getChunk(chunkPos);
+	const std::unique_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
 	const glm::ivec3& blockPos = toChunkBlockPos(pos);
 
 	return chunk->getBlock(blockPos);
@@ -193,14 +251,14 @@ const ChunkManager::ChunkMap& VoxelWorld::getChunks()
 	return m_chunkManager.getLoadedChunkMap();
 }
 
-std::shared_ptr<VoxelChunk> VoxelWorld::getChunk(const glm::ivec3& chunkPos)
+std::unique_ptr<VoxelChunk>& VoxelWorld::getChunk(const glm::ivec3& chunkPos)
 {
 	return m_chunkManager.getChunk(chunkPos);
 }
 
 VoxelWorld::~VoxelWorld()
 {
-
+	//TODO: fix breakpoint trigger O.o? somethin not getting deleted properly
 }
 
 

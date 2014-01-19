@@ -32,12 +32,15 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 	}
 	else
 	{
+		luabridge::LuaRef blocks = luabridge::getGlobal(L, LUA_BLOCKS_NAMESPACE);
+		luabridge::LuaRef block = blocks[blockname];
+		if (block.isNil())
+			return 0;
 		//TODO: some sort of persistent block id manager thing.
 		++m_lastRegisteredId;
 		m_blockNameIDMap.insert(std::make_pair(blockname, m_lastRegisteredId));
 
-		luabridge::LuaRef blocks = luabridge::getGlobal(L, LUA_BLOCKS_NAMESPACE);
-		luabridge::LuaRef block = blocks[blockname];
+	
 		block["id"] = m_lastRegisteredId;
 
 		m_blockProperties.resize(m_lastRegisteredId + 1, BlockProperties(block.state()));

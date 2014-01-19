@@ -6,13 +6,18 @@
 #include "TextureManager.h"
 #include "PropertyManager.h"
 
-#include "LuaChunkGenerator.h"
 #include "ChunkManager.h"
+
+#include "../Engine/Graphics/GL/GBuffer.h"
 
 #include <vector>
 #include <glm\glm.hpp>
 
+#include <noise\noise.h>
+#include "../Engine/Utils/noiseutils.h"
+
 struct lua_State;
+class Camera;
 class TextureArray;
 
 static const unsigned int CHUNK_LOAD_RANGE = 16;
@@ -29,13 +34,13 @@ public:
 	const VoxelBlock& getBlock(const glm::ivec3& pos);
 	const BlockProperties& getBlockProperties(BlockID blockID);
 
-	std::shared_ptr<VoxelChunk> getChunk(const glm::ivec3& chunkPos);
+	std::unique_ptr<VoxelChunk>& getChunk(const glm::ivec3& chunkPos);
 
 	const TextureArray* const getTileSet() const { return m_textureArray; };
 	const TextureManager& getTextureManager() const { return m_textureManager; };
 	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 
-	void update(float deltaSec);
+	void update(float deltaSec, const Camera& camera);
 
 	const ChunkManager::ChunkMap& getChunks();
 
@@ -51,23 +56,31 @@ protected:
 	static std::map<lua_State* const, VoxelWorld* const> stateWorldMap;
 
 private:
+	std::vector<std::shared_ptr<module::Module>> m_modules;
+	model::Plane m_worldGenerator;
 
 	float m_timeAccumulator;
 	float m_tickDurationSec;
+
+	static const unsigned int LOADED_BITS_RADIUS = 1024;
+	std::vector<bool> m_loadedBits;
 
 	lua_State* m_L;
 	TextureArray* m_textureArray;
 	TextureManager& m_textureManager;
 	PropertyManager m_propertyManager;
 
-	LuaChunkGenerator m_generator;
 	ChunkManager m_chunkManager;
+
+	GBuffer m_gbuffer;
 
 	inline static int fastFloor(float x)
 	{
 		int i = (int) x;
 		return i - (i > x);
 	};
+
+	void generateChunk(const glm::ivec3& chunkPos);
 
 	void initializeLuaWorld();
 	static int L_registerBlockType(lua_State* L);

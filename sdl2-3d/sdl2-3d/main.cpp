@@ -32,7 +32,6 @@ void sdldie(const char *msg) {
 }
  
 void checkSDLError(int line = -1) {
-#ifndef NDEBUG
 	const char *error = SDL_GetError();
 	if (*error != '\0') {
 		printf("SDL Error: %s\n", error);
@@ -40,7 +39,6 @@ void checkSDLError(int line = -1) {
 			printf(" + line: %i\n", line);
 		SDL_ClearError();
 	}
-#endif
 }
 
 void initGL()
@@ -49,21 +47,12 @@ void initGL()
 	GLenum err = glewInit(); 
 
 	if (GLEW_OK != err)
-	{
-		/* Problem: glewInit failed, something is seriously wrong. */
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-	}
-	else 
-	{
-		//clear invalid enum bullshit error
+	else 	//clear invalid enum bullshit error
 		for (GLenum glErr = glGetError(); glErr != GL_NO_ERROR; glErr = glGetError());
-	}
-
-	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 }
 
 
-//#ifdef _DEBUG
 // maximum mumber of lines the output console should have
 static const WORD MAX_CONSOLE_LINES = 500;
 
@@ -106,14 +95,11 @@ void redirectIOToConsole()
 	// point to console as well
 	std::ios::sync_with_stdio();
 }
-//#endif //_DEBUG
  
 /* Our program's entry point */
 int main(int argc, char *argv[])
 {
-	//#ifdef _DEBUG
 	redirectIOToConsole();
-	//#endif //_DEBUG
 
     SDL_Window *mainwindow;
     SDL_GLContext maincontext;
@@ -160,6 +146,7 @@ int main(int argc, char *argv[])
 	CHECK_GL_ERROR();
 
     SDL_GL_DeleteContext(maincontext);
+	//TODO: fix breakpoint trigger O.o?
     SDL_DestroyWindow(mainwindow);
     SDL_Quit();
 

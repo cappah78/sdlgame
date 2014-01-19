@@ -1,12 +1,10 @@
 #include "GBuffer.h"
 
-#include "../../../Game.h"
-
-GBuffer::GBuffer(unsigned int numTextures)
+GBuffer::GBuffer(unsigned int numTextures, unsigned int width, unsigned int height)
 	: m_numTextures(numTextures)
 	, m_textures(numTextures, 0)
 {
-	init(Game::graphics.getScreenWidth(), Game::graphics.getScreenHeight());
+	init(width, height);
 }
 GBuffer::~GBuffer()
 {
@@ -20,8 +18,10 @@ bool GBuffer::init(unsigned int width, unsigned int height)
 	glGenFramebuffers(1, &m_fbo);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 
-	glGenTextures(m_numTextures, &m_textures[0]);
 	glGenTextures(1, &m_depthTexture);
+
+	if (m_numTextures > 0)
+		glGenTextures(m_numTextures, &m_textures[0]);
 
 	for (unsigned int i = 0; i < m_numTextures; ++i)
 	{
@@ -32,6 +32,10 @@ bool GBuffer::init(unsigned int width, unsigned int height)
 
 	glBindTexture(GL_TEXTURE_2D, m_depthTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthTexture, 0);
 
@@ -41,13 +45,19 @@ bool GBuffer::init(unsigned int width, unsigned int height)
 		drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
 	}
 
-	glDrawBuffers(m_numTextures, &drawBuffers[0]);
+	if (m_numTextures > 0)
+		glDrawBuffers(m_numTextures, &drawBuffers[0]);
+	else
+		glDrawBuffer(GL_NONE);
 
+#ifdef _DEBUG
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		printf("FB error, status: 0x%x\n", status);
 		return false;
 	}
+#endif //_DEBUG
+
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	return true;
 }

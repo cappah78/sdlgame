@@ -9,16 +9,6 @@
 
 #include <algorithm>
 
-static unsigned int numLoadedChunks = 0;
-
-WorldRenderer::WorldRenderer()
-{
-}
-
-WorldRenderer::~WorldRenderer()
-{
-
-}
 
 //face, vertex, offsetvec	//TODO: refactor so offsets are calculated programmatically instead of from this array.
 static const char AO_CHECKS_OFFSET[6][4][3][3] =
@@ -74,9 +64,9 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 			{ -1, 1, -1 }
 		},
 		{ //v2
-			{ -1, 0, -1 },	
+			{ -1, 0, -1 },
 			{ 0, -1, -1 },
-			{ -1, -1, -1 }	
+			{ -1, -1, -1 }
 		},
 		{ //v3
 			{ 0, -1, -1 },
@@ -93,7 +83,7 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 		{ //v1
 			{ 0, 1, 1 },
 			{ 1, 0, 1 },
-			{ 1, 1, 1 }	
+			{ 1, 1, 1 }
 		},
 		{ //v2
 			{ 1, 0, 1 },
@@ -158,6 +148,23 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 	}
 };
 
+
+WorldRenderer::WorldRenderer()
+	: m_shadowShader("Assets/Shaders/voxelshader.vert", NULL, NULL)
+	, m_quadShader("Assets/Shaders/quad.vert", NULL, "Assets/Shaders/quad.frag")
+	, m_voxelShader("Assets/Shaders/voxelshader.vert", NULL, "Assets/Shaders/voxelshader.frag")
+	, m_numLoadedChunks(0)
+{
+	m_voxelShader.begin();
+	m_voxelShader.setUniform3f("u_fogColor", glm::vec3(0.4f, 0.7f, 1.0f));        //same as clearcolor
+	m_voxelShader.end();
+}
+
+WorldRenderer::~WorldRenderer()
+{
+
+}
+
 inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 {
 	return side && side2 ? 2 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH;
@@ -171,7 +178,7 @@ inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 
 struct DistanceSort
 {
-	DistanceSort(glm::vec3 pos) : camPos(pos) {};
+	DistanceSort(const glm::vec3& pos) : camPos(pos) {};
 	glm::vec3 camPos;
 
 	bool operator()(const std::shared_ptr<VoxelRenderer::Chunk>& lhs, const std::shared_ptr<VoxelRenderer::Chunk>& rhs) {
@@ -183,88 +190,71 @@ struct DistanceSort
 };
 
 static const unsigned int MAX_MS_CHUNK_GEN_PER_FRAME = 2;
+
 void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 {
 	static const float sphereCullRad = CHUNK_SIZE / 2.0f;
+	const float cullRangeSquared = camera.m_far * camera.m_far;
 
 	const PropertyManager& propertyManager = world.getPropertyManager();
 
 	unsigned int startTicks = Game::getSDLTicks();
 
 	const ChunkManager::ChunkMap& chunks = world.getChunks();
-	for (auto it : chunks)
+	for (auto& it : chunks)
 	{
-		const std::shared_ptr<VoxelChunk>& chunk = it.second;
+		const std::unique_ptr<VoxelChunk>& chunk = it.second;
 		const glm::ivec3& chunkPos = chunk->m_pos;
 		glm::vec3 chunkWorldPos = glm::vec3(chunkPos.x * (float) CHUNK_SIZE, chunkPos.y * (float) CHUNK_SIZE, chunkPos.z * (float) CHUNK_SIZE);
 
-		//frustum culling
-		bool contains = false;
-		for (const glm::vec3& corner : chunk->m_bounds)
-		{
-			if (camera.m_frustum.sphereInFrustum(corner, sphereCullRad))
-			{
-				contains = true;
-				break;
-			}
-		}
-		if (!contains)
-			continue;
-
-		if (glm::distance(camera.m_position, chunkWorldPos) > camera.m_far)
+		glm::vec3 dist = camera.m_position - chunkWorldPos;
+		if (glm::dot(dist, dist) > cullRangeSquared)	// removing chunk data from gpu if out of camera.far range
 		{
 			removeRenderChunk(chunkPos);
 			chunk->m_updated = false;
 			continue;
 		}
 
-		if (startTicks - Game::getSDLTicks() > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
+		if (!camera.frustumContainsSpheres(it.second->m_bounds, 8, sphereCullRad)) //8 corners
+			continue;
+
+		if (Game::getSDLTicks() - startTicks > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
 			continue;	//continue, not break because we still want to remove chunks that are out of range even when past max time
 		if (chunk->m_updated)
 			continue;
 		chunk->m_updated = true;
 
-		const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk = getRenderChunk(chunkPos, chunk->m_bounds);
-		buildChunk(chunkPos, renderChunk, chunk, world);
+		buildChunk(chunk, world);
 	}
 
-	m_renderer.beginRender(world.getTileSet());
-
 	m_visibleChunkList.clear();
-	m_visibleChunkList.reserve(numLoadedChunks);
+	m_visibleChunkList.reserve(m_numLoadedChunks);
 
-	unsigned int numFaces = 0;
-	unsigned int numChunks = 0;
-
-	for (auto it : m_renderChunks)
+	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>>& it : m_renderChunks)
 	{
-		//frustum culling
-		bool contains = false;
-		for (int i = 0; i < 8; ++i)	//check 8 corners
-		{
-			if (camera.m_frustum.sphereInFrustum(it.second->m_bounds[i], sphereCullRad)) 
-			{
-				contains = true;
-				break;
-			}
-		}
-		if (!contains)
-			continue;
-
-		numFaces += it.second->getNumFaces();
-		numChunks++;
-		m_visibleChunkList.push_back(it.second);
+		if (camera.frustumContainsSpheres(it.second->m_bounds, 8, sphereCullRad)) //8 corners
+			m_visibleChunkList.push_back(it.second);
 	}
 
 	std::sort(m_visibleChunkList.begin(), m_visibleChunkList.end(), DistanceSort(camera.m_position));
-	for (std::shared_ptr<VoxelRenderer::Chunk> c : m_visibleChunkList)
-	{
-		m_renderer.renderChunk(c, camera);
-	}
 
-	//printf("Triangles: %i, chunks: %i Total loaded chunks: %i ,  \n", numFaces * 2, numChunks, numLoadedChunks);
-	m_renderer.endRender();
+	world.getTileSet()->bind();
+	m_voxelShader.begin();
+	m_voxelShader.setUniform1f("u_fogEnd", camera.m_far * 0.9f);
+	m_voxelShader.setUniform1f("u_fogStart", camera.m_far * 0.6f);
+	m_voxelShader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
+	m_voxelShader.setUniform3f("u_camPos", camera.m_position);
+
+	for (std::shared_ptr<VoxelRenderer::Chunk> chunk : m_visibleChunkList)
+	{
+		m_voxelShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
+		m_renderer.renderChunk(chunk);
+	}
+	m_voxelShader.end();
+
+
 }
+
 const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos, const glm::vec3* const bounds)
 {
 	auto it = m_renderChunks.find(pos);
@@ -273,8 +263,10 @@ const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const 
 	else
 	{
 		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE, bounds);
+		//printf("Creating: %i %i %i \n", pos.x, pos.y, pos.z);
+
 		m_renderChunks.insert(std::make_pair(pos, chunk));
-		numLoadedChunks++;
+		m_numLoadedChunks++;
 		return chunk;
 	}
 }
@@ -284,14 +276,18 @@ void WorldRenderer::removeRenderChunk(const glm::ivec3& pos)
 	auto it = m_renderChunks.find(pos);
 	if (it != m_renderChunks.end())
 	{
+		//printf("Removing: %i %i %i \n", pos.x, pos.y, pos.z);
+
 		m_renderChunks.erase(it);
-		numLoadedChunks--;
+		m_numLoadedChunks--;
 	}
 }
 
-//inline only used in one place
-inline void WorldRenderer::buildChunk(const glm::ivec3& chunkPos, const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk, const std::shared_ptr<VoxelChunk>& chunk, VoxelWorld& world)
+void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world)
 {
+	const glm::ivec3& chunkPos = chunk->m_pos;
+	auto& renderChunk = getRenderChunk(chunkPos, chunk->m_bounds);
+
 	m_renderer.beginChunk(renderChunk);
 	for (int x = 0; x < CHUNK_SIZE; ++x)
 	{

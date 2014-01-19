@@ -4,20 +4,24 @@
 #include <gl\glew.h>
 #include <vector>
 
+#include "../../../Game.h"
+
+
 class GBuffer
 {
 public:
 
-	GBuffer(unsigned int numTextures);
+	GBuffer(unsigned int numTextures, unsigned int width = Game::graphics.getScreenWidth(), unsigned int height = Game::graphics.getScreenHeight());
 	~GBuffer();
 
-	bool init(unsigned int width, unsigned int height);
 	void bindForWriting();
 	void bindForReading();
 
 	void setReadBuffer(unsigned int textureIdx);
 
 private:
+	bool init(unsigned int width, unsigned int height);
+
 	unsigned int m_numTextures;
 
 	GLuint m_fbo;

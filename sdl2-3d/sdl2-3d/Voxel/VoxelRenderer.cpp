@@ -33,16 +33,15 @@ VoxelRenderer::VoxelRenderer()
 	: m_begunRender(false)
 	, m_begunChunk(false)
 	, m_blendEnabled(false)
-	, m_texcoordBuffer(MAX_FACES_PER_CACHE * 4)
-	, m_shader(VERT_SHADER_PATH, NULL, FRAG_SHADER_PATH)
+	, m_texcoordBuffer(MAX_FACES_PER_CHUNK * 4)
 {
-	m_pointData.resize(MAX_FACES_PER_CACHE * 4);
-	m_colorData.resize(MAX_FACES_PER_CACHE * 4);
-	m_indiceData.resize(MAX_FACES_PER_CACHE * 6);
+	m_pointData.resize(MAX_FACES_PER_CHUNK * 4);
+	m_colorData.resize(MAX_FACES_PER_CHUNK * 4);
+	m_indiceData.resize(MAX_FACES_PER_CHUNK * 6);
 	
 	glBindVertexArray(0);
 
-	for (int i = 0; i < MAX_FACES_PER_CACHE; ++i)
+	for (int i = 0; i < MAX_FACES_PER_CHUNK; ++i)
 	{
 		m_texcoordBuffer.add(glm::vec2(1.0f, 0.0f));
 		m_texcoordBuffer.add(glm::vec2(0.0f, 0.0f));
@@ -57,41 +56,17 @@ VoxelRenderer::~VoxelRenderer()
 
 }
 
-void VoxelRenderer::beginRender(const TextureArray* tileSet)
+void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 {
-	assert(!m_begunRender && "Call endRender() before beginRender()");
-	m_begunRender = true;
-	tileSet->bind();
-	m_shader.begin();
-}
-
-void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk, const Camera& camera)
-{
-	assert(m_begunRender);
-
-	m_shader.setUniform3f("u_fogColor", glm::vec3(0.4f, 0.7f, 1.0f));	//same as clearcolor
-	m_shader.setUniform1f("u_fogEnd", camera.m_far * 0.9f);
-	m_shader.setUniform1f("u_fogStart", camera.m_far * 0.6f);
-	m_shader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
-	m_shader.setUniform3f("u_camPos", camera.m_position);
-	m_shader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
+	if (chunk->m_numFaces == 0)
+		return;
 
 	glBindVertexArray(chunk->m_vao);
-	chunk->m_indiceBuffer.bind();
 	glDrawElements(GL_TRIANGLES, chunk->m_numFaces * 6, GL_UNSIGNED_SHORT, 0);
-}
-
-void VoxelRenderer::endRender()
-{
-	assert(m_begunRender && "Call beginRender() before endRender()");
-	m_begunRender = false;
-	m_shader.end();
 }
 
 const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds)
 {
-	assert(!m_begunRender && "Cannot create a new chunk in between beginRender() and endRender()");
-
 	std::shared_ptr<VoxelRenderer::Chunk> chunk(new Chunk(xOffset, yOffset, zOffset, bounds, m_colorData, m_pointData, m_indiceData));
 	glGenVertexArrays(1, &chunk->m_vao);
 	glBindVertexArray(chunk->m_vao);
@@ -103,7 +78,7 @@ const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOf
 	return chunk;
 }
 
-void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
+void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 {
 	assert(!chunk->m_begun && "This chunk has already begun");
 	assert(!m_begunChunk && "A chunk has already begun");
@@ -161,7 +136,7 @@ void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID
 	m_colorBuffer.add(color4);
 }
 
-void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk> chunk)
+void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 {
 	assert(m_begunChunk && chunk->m_begun && "Chunk has not yet begun");
 	m_begunChunk = false;
