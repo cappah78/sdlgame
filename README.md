@@ -56,12 +56,12 @@ to reduce amount of lua calls significantly.
 
 <b> TODO: </b>
 
-- Vertex based mincraft like lighting.
-- Dynamic world generation
 - More Lua bindings between c++/lua (to script things like controls and interactions)
 - Higher detail Ambient Occlusion like Cube World, sampling from a larger radius.
 - Chunk saving/loading
 - More efficient block update system
+- Fancier chunk generation
+- Fancy lighting using shadow mapping and baking the result into the vertex color attribute for free and smooth lighting/shadows
 
 <b> Done: </b>
 
@@ -72,6 +72,4 @@ to reduce amount of lua calls significantly.
 - Basic fog / frustum culling
 - Basic Lua bindings to setblock and create new block types from scripts.
 - Learn OpenGL/GLSL/C++
-
-
-
+- Dynamic world generation
