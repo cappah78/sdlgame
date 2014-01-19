@@ -7,7 +7,7 @@
 
 static const float CAMERA_SPEED = 120.0f;
 static const float MOUSE_LOOK_SENSITIVITY = 0.2f;
-static const float DIAGONAL_SPEED = sqrt(pow(CAMERA_SPEED, 2) / 2.0);
+static const float DIAGONAL_SPEED = (float) glm::sqrt((CAMERA_SPEED * CAMERA_SPEED) / 2.0);
 
 static const glm::vec3 UP(0, 1, 0);
 
