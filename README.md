@@ -26,8 +26,6 @@ The game loop primarily takes place in GameScreen.cpp, which initializes and ren
 
 VoxelWorld manages block types and properties of every type, contains all the Lua high level lua bindings like World.setBlock(id, x, y, z), and holds a ChunkManager which loads/unloads chunks and allows easy retrieval of specific chunks.
 
-ChunkManager has a LuaChunkGenerator which will be in charge of generating any new chunks created for the first time using a Lua script to be easily modifiable.
-
 <b> Performance and Rendering </b>
 
 Chunks are 16x16x16 blocks to have a good balance between render calls, time to rebuild a chunk's vertices, and culling.
@@ -48,12 +46,6 @@ Color uses an rgba8888(32 bit integer, Color8888.cpp) buffer, which gets normali
 
 The texture coordinate buffer is a static buffer shared by all chunks.
 
-<b> WIP: </b>
-- Scriptable triggers for block updates:
-
-Scriptable triggerable events with a simple evaluation parsed and checked in c++
-to reduce amount of lua calls significantly.
-
 <b> TODO: </b>
 
 - More Lua bindings between c++/lua (to script things like controls and interactions)
@@ -65,6 +57,7 @@ to reduce amount of lua calls significantly.
 
 <b> Done: </b>
 
+- Dynamic world generation
 - Processing blocks through scripts with configurable values for every block (disabled for now, needs more optimizations)
 - Basic World/Chunk layout
 - Basic high efficienty voxel renderer
@@ -72,4 +65,3 @@ to reduce amount of lua calls significantly.
 - Basic fog / frustum culling
 - Basic Lua bindings to setblock and create new block types from scripts.
 - Learn OpenGL/GLSL/C++
-- Dynamic world generation
