@@ -61,8 +61,8 @@ private:
 	float m_timeAccumulator;
 	float m_tickDurationSec;
 
-	static const unsigned int LOADED_BITS_RADIUS = 1024;
-	std::vector<bool> m_loadedBits;
+	//static const unsigned int LOADED_BITS_RADIUS = 1024;
+	//std::vector<bool> m_loadedBits;
 
 	lua_State* m_L;
 	TextureArray* m_textureArray;

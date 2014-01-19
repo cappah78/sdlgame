@@ -18,6 +18,9 @@ std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 static const unsigned int BLOCK_TEX_RES = 16;
 static const float BLOCK_TO_CHUNK = 1 / (float) CHUNK_SIZE;
 
+const double blocksPerUnit = 492.0;
+
+
 VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	: m_L(luaL_newstate())
 	, m_textureManager(textureManager)
@@ -27,8 +30,6 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	, m_tickDurationSec(0)
 	, m_gbuffer(0)
 {
-	m_loadedBits.resize(LOADED_BITS_RADIUS * LOADED_BITS_RADIUS, false);
-
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
 
 	Game::initLua(m_L);
@@ -54,6 +55,59 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 
 	m_worldGenerator.SetModule(scale);
 	//////////////////////////////////////////////
+}
+
+static const unsigned int MAX_GENERATE_TIME_MS = 2;
+
+void VoxelWorld::update(float deltaSec, const Camera& camera)
+{
+	unsigned int start = Game::getSDLTicks();
+
+	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) + 1.0f;
+	float unloadDistance = glm::sqrt(loadDistance * loadDistance + loadDistance * loadDistance) + 2.0f;
+	float unloadDistanceSqr = unloadDistance * unloadDistance;
+	glm::ivec3 cameraChunkPos = toChunkPos(glm::ivec3(camera.m_position));
+
+	const ChunkManager::ChunkMap& chunkMap = m_chunkManager.getLoadedChunkMap();
+
+	std::vector<glm::ivec3> toUnload;
+	for (const std::pair<const glm::ivec3, std::unique_ptr<VoxelChunk>>& posChunk : chunkMap)
+	{
+		//float distance = glm::distance(glm::vec3(cameraChunkPos), glm::vec3(posChunk.first));
+		float dst = glm::length(glm::vec3(cameraChunkPos - posChunk.first));
+		float sqrDst = dst * dst;
+		if (sqrDst > unloadDistanceSqr)
+		{
+			toUnload.push_back(posChunk.first);
+		}
+		if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
+			break;
+	}
+
+	for (const glm::ivec3& vec : toUnload)
+	{
+		m_chunkManager.unloadChunk(vec);
+
+		if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
+			return;
+	}
+
+	glm::ivec3 minRange = cameraChunkPos - (int) loadDistance;
+	glm::ivec3 maxRange = cameraChunkPos + (int) loadDistance;
+	for (int x = minRange.x; x < maxRange.x; ++x)
+	{
+		for (int z = minRange.z; z < maxRange.z; ++z)
+		{
+			if (!m_chunkManager.isChunkGenerated(x, z))	//if not, no chunk has been generated yet.
+			{
+				m_chunkManager.setChunkGenerated(x, z);
+				generateChunk(glm::ivec3(x, 0, z));
+			}
+
+			if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
+				return;
+		}
+	}
 }
 
 static const int SURFACE_DEPTH = 5;
@@ -108,9 +162,7 @@ BlockID* VoxelWorld::getBlockLayer(int height)
 
 void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 {
-	const double blocksPerUnit = 492.0;
 	const int numBlockIDS = m_propertyManager.getNumRegisteredBlocks();
-
 
 	glm::ivec3 from = chunkPos * (int) CHUNK_SIZE;
 	glm::ivec3 to = from + (int) CHUNK_SIZE;
@@ -118,20 +170,20 @@ void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 	{
 		for (int z = from.z; z < to.z; ++z)
 		{
-
 			int height = (int) m_worldGenerator.GetValue(x / blocksPerUnit, z / blocksPerUnit);
 
 			int blockSampleHeight;
 			if (height < -15)
 				blockSampleHeight = height;
 			else
-				blockSampleHeight = height + (int) (glm::sin(x / 0.723) * 2.0f) + (int) (glm::cos(z / 0.723) * 2.0f);
+				blockSampleHeight = height + (int) (glm::sin(x / 0.0123) * 2.0f) + (int) (glm::cos(z / 0.0123) * 2.0f);
 
 			BlockID* ids = getBlockLayer(blockSampleHeight);
 
 			int idx = SURFACE_DEPTH;
 			for (int y = height - SURFACE_DEPTH; y < height; ++y)
 			{
+				//TODO: optimize
 				setBlock(ids[--idx], glm::ivec3(x, y, z));
 			}
 			delete[] ids;
@@ -199,62 +251,25 @@ int VoxelWorld::L_getBlock(int x, int y, int z, lua_State* L)
 	return block.id;
 }
 
-static const unsigned int MAX_GENERATE_TIME_MS = 2;
-
-void VoxelWorld::update(float deltaSec, const Camera& camera)
-{
-	unsigned int start = Game::getSDLTicks();
-
-	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) + 1.0f;
-	float unloadDistance = glm::sqrt(loadDistance * loadDistance + loadDistance * loadDistance) + 2.0f;
-
-	glm::ivec3 cameraChunkPos = toChunkPos(glm::ivec3(camera.m_position));
-	
-	std::vector<glm::ivec3> toUnload;
-	for (const std::pair<const glm::ivec3, std::unique_ptr<VoxelChunk>>& posChunk : m_chunkManager.getLoadedChunkMap())
-	{
-		float distance = glm::distance(glm::vec3(cameraChunkPos), glm::vec3(posChunk.first));
-		if (distance > unloadDistance)
-		{
-			toUnload.push_back(posChunk.first);
-		}
-	}
-	
-	for (const glm::ivec3& vec : toUnload)
-	{
-		unsigned int bitIdx = (vec.x + LOADED_BITS_RADIUS / 2) * LOADED_BITS_RADIUS + (vec.z + LOADED_BITS_RADIUS / 2);
-		m_loadedBits[bitIdx] = false;
-		m_chunkManager.unloadChunk(vec);
-
-		if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
-			return;
-	}
-	
-	glm::ivec3 minRange = cameraChunkPos - (int) loadDistance;
-	glm::ivec3 maxRange = cameraChunkPos + (int) loadDistance;
-	for (int x = minRange.x; x < maxRange.x; ++x)
-	{
-		for (int z = minRange.z; z < maxRange.z; ++z)
-		{
-			unsigned int bitIdx = (x + LOADED_BITS_RADIUS / 2) * LOADED_BITS_RADIUS + (z + LOADED_BITS_RADIUS / 2);
-
-			if (!m_loadedBits[bitIdx])
-			{
-				m_loadedBits[bitIdx] = true;
-				generateChunk(glm::ivec3(x, 0, z));
-			}
-
-			if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
-				return;
-		}
-	}
-}
-
 void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 {
 	const glm::ivec3& chunkPos = toChunkPos(pos);
 	const std::unique_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
 	const glm::ivec3& blockPos = toChunkBlockPos(pos);
+
+	//if block is on edge, update touching other chunks
+	if (blockPos.x == 0)
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(-1, 0, 0))->m_updated = false;
+	if (blockPos.x == CHUNK_SIZE - 1)
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(1, 0, 0))->m_updated = false;
+	if (blockPos.y == 0)
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, -1, 0))->m_updated = false;
+	if (blockPos.y == CHUNK_SIZE - 1)
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 1, 0))->m_updated = false;
+	if (blockPos.z == 0)
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 0, -1))->m_updated = false;
+	if (blockPos.z == CHUNK_SIZE - 1)
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 0, 1))->m_updated = false;
 
 	chunk->setBlock(blockID, blockPos);
 }

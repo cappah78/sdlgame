@@ -5,6 +5,7 @@
 
 #include <glm\glm.hpp>
 #include <unordered_map>
+#include <unordered_set>
 #include <assert.h>
 #include <memory>
 
@@ -27,11 +28,34 @@ public:
 	void unloadChunk(const glm::ivec3& chunkPos);
 	const ChunkMap& getLoadedChunkMap() const { return m_loadedChunks; };
 
-	bool isChunkLoaded(int chunkX, int chunkZ);
-
+	bool isChunkGenerated(int chunkX, int chunkZ) const;
+	void setChunkGenerated(int chunkX, int chunkZ, bool isGenerated = true);
 private:
 	std::unique_ptr<VoxelChunk>& loadChunk(const glm::ivec3& pos);
 
+	struct ChunkPos
+	{
+		ChunkPos(int x, int y) : x(x), y(y) {};
+		int x, y;
+	};
+
+	struct ChunkPosEq
+	{
+		bool operator()(const ChunkPos& lhs, const ChunkPos& rhs)
+		{
+			return lhs.x == rhs.x && lhs.y == rhs.y;
+		}
+	};
+
+	struct ChunkPosHash
+	{
+		size_t operator()(const ChunkPos& pos)
+		{
+			return pos.x * pos.y + (pos.x ^ pos.y);
+		}
+	};
+
+	std::unordered_set<ChunkPos, ChunkPosHash, ChunkPosEq> m_generatedChunkSet;
 	ChunkMap m_loadedChunks;
 	PropertyManager& m_propertyManager;
 };

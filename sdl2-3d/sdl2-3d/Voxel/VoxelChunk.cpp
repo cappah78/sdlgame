@@ -34,8 +34,6 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 	VoxelBlock& block = m_blocks[idx];
 	m_updated = false;
 
-
-
 	if (block.id != 0) //if there was already a block here
 	{
 		const BlockProperties& oldProperties = m_propertyManager.getBlockProperties(block.id);
