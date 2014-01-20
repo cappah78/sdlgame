@@ -50,8 +50,6 @@ public:
 	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
 	inline static glm::ivec3 toChunkBlockPos(const glm::ivec3& blockPos);
 
-	float getTickDurationSec() const { return m_tickDurationSec; };
-
 protected:
 	static std::map<lua_State* const, VoxelWorld* const> stateWorldMap;
 
@@ -60,9 +58,6 @@ private:
 
 	float m_timeAccumulator;
 	float m_tickDurationSec;
-
-	//static const unsigned int LOADED_BITS_RADIUS = 1024;
-	//std::vector<bool> m_loadedBits;
 
 	lua_State* m_L;
 	TextureArray* m_textureArray;

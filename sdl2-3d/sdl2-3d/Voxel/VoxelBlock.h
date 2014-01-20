@@ -24,21 +24,6 @@ enum Face
 	TOP = 0, BOTTOM = 1, LEFT = 2, RIGHT = 3, FRONT = 4, BACK = 5
 };
 
-struct BlockIDColor
-{
-	BlockIDColor() {};
-	BlockIDColor(BlockID id, BlockColor color) : id(id), color(color) {};
-	BlockID id;
-	BlockColor color;
-};
-
-struct BlockIDColorSolid
-{
-	BlockID id;
-	BlockColor color;
-	bool isSolid;
-};
-
 //TODO: perhaps move to a .lua config
 static const char* const LUA_BLOCKS_NAMESPACE = "Blocks";
 static const char* const LUA_INT_NAME = "int";
@@ -148,7 +133,7 @@ struct BlockRenderData	// 8 bytes;
 };
 
 /** The data stored for every block in a chunk */
-struct VoxelBlock
+__declspec(align(16)) struct VoxelBlock
 {
 	VoxelBlock() : id(0), blockDataIndex(-1), skyVisible(false), solid(false), lightLevel(0), update(false) {};
 	//VoxelBlock(const VoxelBlock& copy) = delete;

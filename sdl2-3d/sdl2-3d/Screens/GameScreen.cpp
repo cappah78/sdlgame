@@ -37,9 +37,11 @@ GameScreen::GameScreen()
 
 	glEnable(GL_DEPTH_TEST);
 
+#ifdef _DEBUG
 	GLint maxTexLayers;
 	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTexLayers);
 	std::cout << "Max texture layers: " << maxTexLayers << std::endl;
+#endif //_DEBUG
 }
 
 void GameScreen::render(float deltaSec)

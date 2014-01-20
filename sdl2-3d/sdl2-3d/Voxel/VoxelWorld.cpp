@@ -27,7 +27,7 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	, m_propertyManager(textureManager)
 	, m_chunkManager(m_propertyManager)
 	, m_timeAccumulator(0)
-	, m_tickDurationSec(1/20.0f)
+	, m_tickDurationSec(1 / 5.0f)
 	, m_gbuffer(0)
 {
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
@@ -64,9 +64,33 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 	unsigned int start = Game::getSDLTicks();
 
 	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) - 1.0f;
+	glm::ivec3 cameraChunkPos = toChunkPos(glm::ivec3(camera.m_position));
+
+	glm::ivec3 minRange = cameraChunkPos - (int) loadDistance;
+	glm::ivec3 maxRange = cameraChunkPos + (int) loadDistance;
+	for (int x = minRange.x; x < maxRange.x; ++x)
+	{
+		for (int z = minRange.z; z < maxRange.z; ++z)
+		{
+			if (!m_chunkManager.isChunkGenerated(x, z))	//if not, no chunk has been generated yet.
+			{
+				m_chunkManager.setChunkGenerated(x, z);
+				generateChunk(glm::ivec3(x, 0, z));
+			}
+
+			if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
+				return;
+		}
+	}
+
+	m_timeAccumulator += deltaSec;
+	if (m_timeAccumulator >= m_tickDurationSec)
+		m_timeAccumulator -= m_tickDurationSec;
+	else
+		return;
+
 	float unloadDistance = glm::sqrt(loadDistance * loadDistance + loadDistance * loadDistance) + 1.0f;
 	float unloadDistanceSqr = unloadDistance * unloadDistance;
-	glm::ivec3 cameraChunkPos = toChunkPos(glm::ivec3(camera.m_position));
 
 	const ChunkManager::ChunkMap& chunkMap = m_chunkManager.getLoadedChunkMap();
 
@@ -89,23 +113,6 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 
 		if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
 			return;
-	}
-
-	glm::ivec3 minRange = cameraChunkPos - (int) loadDistance;
-	glm::ivec3 maxRange = cameraChunkPos + (int) loadDistance;
-	for (int x = minRange.x; x < maxRange.x; ++x)
-	{
-		for (int z = minRange.z; z < maxRange.z; ++z)
-		{
-			if (!m_chunkManager.isChunkGenerated(x, z))	//if not, no chunk has been generated yet.
-			{
-				m_chunkManager.setChunkGenerated(x, z);
-				generateChunk(glm::ivec3(x, 0, z));
-			}
-
-			if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
-				return;
-		}
 	}
 }
 
@@ -195,7 +202,6 @@ void VoxelWorld::initializeLuaWorld()
 	luabridge::getGlobalNamespace(m_L)
 		.beginNamespace(LUA_WORLD_NAMESPACE)
 		.addCFunction(LUA_WORLD_REGISTER_FUNCTION, &L_registerBlockType)//Add World.registerBlockType
-		//.addCFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)				
 		.addFunction(LUA_WORLD_SETBLOCK_FUNCTION, &L_setBlock)//add World.setBlock
 		.addFunction(LUA_WORLD_SETBLOCK_WITH_DATA_FUNCTION, &L_setBlockWithData)//add World.setBlock
 		.addFunction(LUA_WORLD_GETBLOCK_FUNCTION, &L_getBlock)
@@ -233,7 +239,8 @@ int VoxelWorld::L_setBlock(BlockID blockID, int x, int y, int z, lua_State* L)
 //TODO:..
 int VoxelWorld::L_setBlockWithData(BlockID blockID, int x, int y, int z, luabridge::LuaRef perBlockData, lua_State* L)
 {
-	printf("lolol");
+	assert(false);
+
 	VoxelWorld* world = VoxelWorld::stateWorldMap.at(L);
 	
 	world->setBlock(blockID, glm::ivec3(x, y, z));
@@ -321,7 +328,7 @@ std::unique_ptr<VoxelChunk>& VoxelWorld::getChunk(const glm::ivec3& chunkPos)
 
 VoxelWorld::~VoxelWorld()
 {
-	//TODO: fix breakpoint trigger O.o? somethin not getting deleted properly
+
 }
 
 

@@ -232,7 +232,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	m_visibleChunkList.clear();
 	m_visibleChunkList.reserve(m_numLoadedChunks);
 
-	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>> it : m_renderChunks)
+	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>>& it : m_renderChunks)
 	{
 		if (camera.frustumContainsSpheres(it.second->m_bounds, 8, sphereCullRad)) //8 corners
 			m_visibleChunkList.push_back(it.second);
@@ -247,7 +247,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	m_voxelShader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
 	m_voxelShader.setUniform3f("u_camPos", camera.m_position);
 
-	for (std::shared_ptr<VoxelRenderer::Chunk> chunk : m_visibleChunkList)
+	for (const std::shared_ptr<VoxelRenderer::Chunk>& chunk : m_visibleChunkList)
 	{
 		m_voxelShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
 		m_renderer.renderChunk(chunk);
@@ -277,7 +277,6 @@ void WorldRenderer::removeRenderChunk(const glm::ivec3& pos)
 	if (it != m_renderChunks.end())
 	{
 		//printf("Removing: %i %i %i \n", pos.x, pos.y, pos.z);
-
 		m_renderChunks.erase(it);
 		m_numLoadedChunks--;
 	}
@@ -325,7 +324,7 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 				const VoxelBlock* back = surroundingBlockData[0][1][1];
 				const VoxelBlock* right = surroundingBlockData[1][1][2];
 				const VoxelBlock* left = surroundingBlockData[1][1][0];
-				// store the 6 adjacent blocks so we can check if they're solid blocks.
+				// store the 6 adjacent blocks so we can check if they're solid.
 				const VoxelBlock* faceValues[6] = { above, below, left, right, front, back };
 
 				// for every face of the block
@@ -333,9 +332,7 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 				{
 					// if the face is invisible, continue (if no airblock or transparant block touching face)
 					if (faceValues[face]->solid)
-					{
 						continue;
-					}
 
 					Color8888 perFaceCols[4];
 					unsigned char vertexAO[4];
@@ -359,7 +356,6 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 							if (!blockProperties->solid)
 							{
 								//blend rgba
-
 								r += blockProperties->color.r;
 								g += blockProperties->color.g;
 								b += blockProperties->color.b;
