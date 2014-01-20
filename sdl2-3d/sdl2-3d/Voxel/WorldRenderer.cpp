@@ -187,7 +187,10 @@ struct DistanceSort
 		glm::vec3 delta1 = camPos - lhs->m_renderOffset;
 		glm::vec3 delta2 = camPos - rhs->m_renderOffset;
 
-		return glm::length(delta1) < glm::length(delta2);
+		//return glm::dot(delta1, delta1) < glm::dot(delta2, delta2);
+
+		//faster but less accurate
+		return (delta1.x + delta1.y + delta1.z) < (delta2.x + delta2.y + delta2.z);
 	}
 };
 
@@ -206,7 +209,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	for (auto& it : chunks)
 	{
 		const std::unique_ptr<VoxelChunk>& chunk = it.second;
-		const glm::ivec3& chunkPos = chunk->m_pos;
+		const glm::ivec3& chunkPos = it.first;
 		glm::vec3 chunkWorldPos = glm::vec3(chunkPos.x * (float) CHUNK_SIZE, chunkPos.y * (float) CHUNK_SIZE, chunkPos.z * (float) CHUNK_SIZE);
 
 		glm::vec3 dist = camera.m_position - chunkWorldPos;
@@ -217,7 +220,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 			continue;
 		}
 
-		if (!camera.frustumContainsSpheres(it.second->m_bounds, 8, sphereCullRad)) //8 corners
+		if (!camera.frustumContainsSpheres(chunk->m_bounds, 8, sphereCullRad)) //8 corners
 			continue;
 
 		if (Game::getSDLTicks() - startTicks > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
