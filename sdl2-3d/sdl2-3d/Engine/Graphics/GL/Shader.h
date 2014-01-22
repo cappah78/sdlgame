@@ -19,6 +19,7 @@ public:
 
 	//TODO: moar uniforms
 
+	void setUniform1i(const char* const uniformName, int val);
 	void setUniform1f(const char* const uniformName, float val);
 	void setUniform2f(const char* const uniformName, const glm::vec2& vec);
 	void setUniform3f(const char* const uniformName, const glm::vec3& vec);
@@ -51,7 +52,7 @@ private:
 		}
 	};
 
-	std::unordered_map<const char*, GLuint, StrHash, StrCmp> m_uniformLocMap;
+	std::unordered_map<const char*, GLint, StrHash, StrCmp> m_uniformLocMap;
 };
 
 #endif //SHADER_H_

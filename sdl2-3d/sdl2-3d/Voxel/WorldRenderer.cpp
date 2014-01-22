@@ -9,7 +9,6 @@
 #include "../Engine/Utils/CheckGLError.h"
 #include <algorithm>
 
-
 //face, vertex, offsetvec	//TODO: refactor so offsets are calculated programmatically instead of from this array.
 static const char AO_CHECKS_OFFSET[6][4][3][3] =
 {
@@ -150,9 +149,7 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 
 
 WorldRenderer::WorldRenderer()
-	: m_shadowShader("Assets/Shaders/voxelshader.vert", NULL, NULL)
-	, m_quadShader("Assets/Shaders/quad.vert", NULL, "Assets/Shaders/quad.frag")
-	, m_voxelShader("Assets/Shaders/voxelshader.vert", NULL, "Assets/Shaders/voxelshader.frag")
+	: m_voxelShader("Assets/Shaders/voxelshader.vert", NULL, "Assets/Shaders/voxelshader.frag")
 	, m_numLoadedChunks(0)
 {
 	m_voxelShader.begin();
@@ -240,16 +237,16 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 		if (camera.frustumContainsSpheres(it.second->m_bounds, 8, sphereCullRad)) //8 corners
 			m_visibleChunkList.push_back(it.second);
 	}
-
 	std::sort(m_visibleChunkList.begin(), m_visibleChunkList.end(), DistanceSort(camera.m_position));
-
 	world.getTileSet()->bind();
-	m_voxelShader.begin();
-	m_voxelShader.setUniform1f("u_fogEnd", camera.m_far * 0.9f);
-	m_voxelShader.setUniform1f("u_fogStart", camera.m_far * 0.6f);
-	m_voxelShader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
-	m_voxelShader.setUniform3f("u_camPos", camera.m_position);
 
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	m_voxelShader.begin();
+	m_voxelShader.setUniform1f("u_fogEnd", camera.m_far );
+	m_voxelShader.setUniform1f("u_fogStart", camera.m_far);
+	m_voxelShader.setUniform3f("u_camPos", camera.m_position);
+	m_voxelShader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
 	for (const std::shared_ptr<VoxelRenderer::Chunk>& chunk : m_visibleChunkList)
 	{
 		m_voxelShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);

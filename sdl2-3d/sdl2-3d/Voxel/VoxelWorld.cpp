@@ -79,9 +79,10 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 			}
 
 			if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
-				return;
+				goto exitGenerateLoop;
 		}
 	}
+	exitGenerateLoop:
 
 	m_timeAccumulator += deltaSec;
 	if (m_timeAccumulator >= m_tickDurationSec)
@@ -93,7 +94,6 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 	float unloadDistanceSqr = unloadDistance * unloadDistance;
 
 	const ChunkManager::ChunkMap& chunkMap = m_chunkManager.getLoadedChunkMap();
-
 	std::vector<glm::ivec3> toUnload;
 	for (const std::pair<const glm::ivec3, std::unique_ptr<VoxelChunk>>& posChunk : chunkMap)
 	{
@@ -103,16 +103,11 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 		{
 			toUnload.push_back(posChunk.first);
 		}
-		if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
-			break;
 	}
 
 	for (const glm::ivec3& vec : toUnload)
 	{
 		m_chunkManager.unloadChunk(vec);
-
-		if (Game::getSDLTicks() - start > MAX_GENERATE_TIME_MS)
-			return;
 	}
 }
 
@@ -169,28 +164,51 @@ BlockID* VoxelWorld::getBlockLayer(int height)
 void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 {
 	const int numBlockIDS = m_propertyManager.getNumRegisteredBlocks();
+	BlockID stone = m_propertyManager.getBlockID("StoneBlock");
 
 	glm::ivec3 from = chunkPos * (int) CHUNK_SIZE;
 	glm::ivec3 to = from + (int) CHUNK_SIZE;
-	for (int x = from.x; x < to.x; ++x)
+
+	const int sampleSize = (int) CHUNK_SIZE + 2; //we also need the borders
+	int blockHeights[sampleSize * sampleSize];
+	int chunkSize = (int) CHUNK_SIZE;
+
+	for (int x = 0; x < sampleSize; ++x)
 	{
-		for (int z = from.z; z < to.z; ++z)
+		for (int z = 0; z < sampleSize; ++z)
 		{
-			int height = (int) m_worldGenerator.GetValue(x / blocksPerUnit, z / blocksPerUnit);
+			int height = (int) m_worldGenerator.GetValue((x + (from.x - 1))/ blocksPerUnit, (z + (from.z - 1)) / blocksPerUnit);
+			blockHeights[x * sampleSize + z] = height;
+		}
+	}
+
+	for (int x = 0; x < chunkSize; ++x)
+	{
+		for (int z = 0; z < chunkSize; ++z)
+		{
+			int height = blockHeights[(x + 1) * sampleSize + (z + 1)];
+
+			int depth = blockHeights[(x + 2) * sampleSize + (z + 1)];
+			depth = glm::min(depth, blockHeights[(x) * sampleSize + (z + 1)]);
+			depth = glm::min(depth, blockHeights[(x + 1) * sampleSize + (z + 2)]);
+			depth = glm::min(depth, blockHeights[(x + 1) * sampleSize + (z)]);
+			depth = glm::max(height - depth, 1);
 
 			int blockSampleHeight;
-			if (height < -15)
+			if (height < -15)	// no variation for sea level
 				blockSampleHeight = height;
 			else
 				blockSampleHeight = height + (int) (glm::sin(x / 0.0123) * 2.0f) + (int) (glm::cos(z / 0.0123) * 2.0f);
 
 			BlockID* ids = getBlockLayer(blockSampleHeight);
 
-			int idx = SURFACE_DEPTH;
-			for (int y = height - SURFACE_DEPTH; y < height; ++y)
+			int idx = depth;
+			for (int y = height - idx; y < height; ++y)
 			{
-				//TODO: optimize
-				setBlock(ids[--idx], glm::ivec3(x, y, z));
+				if (idx < 5)
+					setBlock(ids[--idx], glm::ivec3(x + from.x, y, z + from.z));
+				else
+					setBlock(stone, glm::ivec3(x + from.x, y, z + from.z));
 			}
 			delete[] ids;
 		}

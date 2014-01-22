@@ -20,6 +20,8 @@ public:
 
 private:
 	float m_fieldOfView;
+
+	void updateProjection();
 };
 
 #endif //PERSPECTIVE_CAMERA_H_

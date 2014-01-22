@@ -39,13 +39,28 @@ void Shader::end()
 	//glUseProgram(0);	//optional
 }
 
+void Shader::setUniform1i(const char* const uniformName, int val)
+{
+	assert(s_begun);
+	auto it = m_uniformLocMap.find(uniformName);
+	if (it == m_uniformLocMap.end())
+	{
+		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+		assert(loc != -1);
+		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
+		glUniform1i(loc, val);
+	}
+	else
+		glUniform1i(it->second, val);
+}
 void Shader::setUniform1f(const char* const uniformName, float val)
 {
 	assert(s_begun);
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
-		GLuint loc = glGetUniformLocation(m_shaderID, uniformName);
+		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+		assert(loc != -1);
 		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniform1f(loc, val);
 	}
@@ -58,7 +73,8 @@ void Shader::setUniform2f(const char* const uniformName, const glm::vec2& vec)
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
-		GLuint loc = glGetUniformLocation(m_shaderID, uniformName);		
+		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+		assert(loc != -1);
 		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniform2f(loc, vec.x, vec.y);
 	}
@@ -71,7 +87,8 @@ void Shader::setUniform3f(const char* const uniformName, const glm::vec3& vec)
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
-		GLuint loc = glGetUniformLocation(m_shaderID, uniformName);
+		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+		assert(loc != -1);
 		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniform3f(loc, vec.x, vec.y, vec.z);
 	}
@@ -84,7 +101,8 @@ void Shader::setUniformMatrix4f(const char* const uniformName, const glm::mat4& 
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
-		GLuint loc = glGetUniformLocation(m_shaderID, uniformName);
+		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+		assert(loc != -1);
 		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
 	}

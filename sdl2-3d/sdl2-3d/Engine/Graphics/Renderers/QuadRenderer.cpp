@@ -1,31 +1,34 @@
 #include "QuadRenderer.h"
 
 QuadRenderer::QuadRenderer()
+	: m_positionBuffer(12)
+	, m_texcoordBuffer(8)
+	, m_indiceBuffer(6, GL_ELEMENT_ARRAY_BUFFER)
 {
 	glGenVertexArrays(1, &m_vao);
-	glGenBuffers(1, &m_positionBuffer);
-	glGenBuffers(1, &m_indiceBuffer);
-
-
 	glBindVertexArray(m_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, m_positionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(QUAD_VERTICES), QUAD_VERTICES, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indiceBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(QUAD_INDICES), QUAD_INDICES, GL_STATIC_DRAW);
+	m_positionBuffer.add(&QUAD_VERTICES[0], 12);
+	m_positionBuffer.setAttribPointer(0, GL_FLOAT, 3);
+	m_positionBuffer.update();
+
+	m_texcoordBuffer.add(&QUAD_TEXCOORDS[0], 8);
+	m_texcoordBuffer.setAttribPointer(1, GL_FLOAT, 2);
+	m_texcoordBuffer.update();
+
+	m_indiceBuffer.add(&QUAD_INDICES[0], 6);
+	m_indiceBuffer.update();
 }
 
 QuadRenderer::~QuadRenderer()
 {
 	glDeleteVertexArrays(1, &m_vao);
-	glDeleteBuffers(1, &m_positionBuffer);
-	glDeleteBuffers(1, &m_indiceBuffer);
 }
 
 void QuadRenderer::drawQuad()
 {
 	glBindVertexArray(m_vao);
+	m_positionBuffer.bind();
+	m_indiceBuffer.bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0);
 }

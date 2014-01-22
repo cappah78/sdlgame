@@ -16,8 +16,11 @@ public:
 
 	void bindForWriting();
 	void bindForReading();
+	void bindDepthTexture(unsigned int textureUnit);
 
 	void setReadBuffer(unsigned int textureIdx);
+
+	GLuint getDepthTexId() const { return m_depthTexture; };
 
 private:
 	bool init(unsigned int width, unsigned int height);

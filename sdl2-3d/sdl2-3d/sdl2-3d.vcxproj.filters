@@ -444,9 +444,6 @@
     <None Include="Assets\Scripts\Bindings.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
-    <None Include="Assets\Shaders\deferredgeompass.frag">
-      <Filter>Assets\Shaders</Filter>
-    </None>
     <None Include="Assets\Shaders\quad.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
@@ -467,6 +464,12 @@
     </None>
     <None Include="Assets\Scripts\Blocks\WaterBlock.lua">
       <Filter>Assets\Scripts\Blocks</Filter>
+    </None>
+    <None Include="Assets\Shaders\depth.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\voxelshaderdepth.vert">
+      <Filter>Assets\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

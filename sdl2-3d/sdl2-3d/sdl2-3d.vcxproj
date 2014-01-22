@@ -117,7 +117,7 @@
     <None Include="Assets\Scripts\Blocks\WaterBlock.lua" />
     <None Include="Assets\Scripts\Init.lua" />
     <None Include="Assets\Scripts\WorldGen\GenTest.lua" />
-    <None Include="Assets\Shaders\deferredgeompass.frag" />
+    <None Include="Assets\Shaders\depth.frag" />
     <None Include="Assets\Shaders\forwardshader.frag" />
     <None Include="Assets\Shaders\forwardshader.vert" />
     <None Include="Assets\Shaders\fullscreenquad.geom" />
@@ -133,6 +133,7 @@
     <None Include="Assets\Shaders\spritebatch.vert" />
     <None Include="Assets\Shaders\voxelshader.frag" />
     <None Include="Assets\Shaders\voxelshader.vert" />
+    <None Include="Assets\Shaders\voxelshaderdepth.vert" />
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta" />
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_1.png.mcmeta" />
     <None Include="Assets\Textures\MinecraftBlocks\lava_flow.png.mcmeta" />

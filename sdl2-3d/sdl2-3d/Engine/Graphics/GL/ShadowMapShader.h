@@ -12,9 +12,11 @@ public:
 	ShadowMapShader(const ShadowMapShader& copy) = delete;
 
 	void begin() override;
-private:
 
 	GBuffer m_gbuffer;
+private:
+
+
 };
 
 #endif //SHADOW_MAP_SHADER_H_

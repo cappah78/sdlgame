@@ -66,11 +66,12 @@ private:
 		unsigned padding : 5;	// unused bits
 	};
 public:
-
+	friend class WorldRenderer;
 	/** Contains the vao/buffers and holds information to draw them, can add faces to this object */
 	class Chunk
 	{
 		friend class VoxelRenderer;
+		friend class WorldRenderer;
 	public:
 		/** 
 		Add a cube face at the given position, must be in between VoxelRenderer::beginChunk and VoxelRenderer::endChunk

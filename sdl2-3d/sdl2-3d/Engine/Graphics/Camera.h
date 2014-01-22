@@ -45,7 +45,6 @@ public:
 	glm::vec3 m_direction;
 	glm::vec3 m_up;
 
-	glm::mat4 m_frustumProjectionMatrix;
 	Frustum m_frustum;
 
 	float m_viewportWidth;

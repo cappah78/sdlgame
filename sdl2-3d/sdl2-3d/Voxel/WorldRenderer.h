@@ -3,10 +3,9 @@
 
 #include "VoxelRenderer.h"
 #include "../Engine/Utils/Comparables.h"
-#include "../Engine/Graphics/GL/ShadowMapShader.h"
 
 #include "../Engine/Graphics/Renderers/QuadRenderer.h"
-
+#include "../Engine/Graphics/GL/Texture.h"
 #include <unordered_map>
 
 class VoxelWorld;
@@ -40,10 +39,6 @@ private:
 
 	Shader m_voxelShader;
 	VoxelRenderer m_renderer;
-
-	ShadowMapShader m_shadowShader;
-	QuadRenderer m_quadRenderer;
-	Shader m_quadShader;
 
 	unsigned int m_numLoadedChunks;
 

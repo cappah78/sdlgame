@@ -2,17 +2,25 @@
 #define QUAD_RENDERER_H_
 
 #include <GL\glew.h>
+#include "../GL/VertexBuffer.h"
 
-static const float QUAD_VERTICES[] = { 
-	1, -1, 0,	// bottom right rocner
-	1, 1, 0,	//top right corner
-	-1, 1, 0,	//top left corner
-	-1, -1, 0	//bottom left corner
+static float QUAD_VERTICES[] = { 
+	-1, 1, 0,
+	-1, -1, 0,
+	1, -1, 0,
+	1, 1, 0
 };
 
-static const unsigned char QUAD_INDICES[] = { 
-	0, 1, 2, // first triangle (bottom left - top left - top right)
-	0, 2, 3 // second triangle (bottom left - top right - bottom right)
+static float QUAD_TEXCOORDS [] = {
+	0.0, 1.0,
+	0.0, 0.0,
+	1.0, 0.0,
+	1.0, 1.0
+};
+
+static unsigned char QUAD_INDICES[] = { 
+	0, 1, 2,
+	0, 2, 3
 }; 
 
 class QuadRenderer
@@ -25,8 +33,10 @@ public:
 	void drawQuad();
 private:
 	GLuint m_vao;
-	GLuint m_positionBuffer;
-	GLuint m_indiceBuffer;
+
+	VertexBuffer<float> m_positionBuffer;
+	VertexBuffer<float> m_texcoordBuffer;
+	VertexBuffer<unsigned char> m_indiceBuffer;
 };
 
 #endif //QUAD_RENDERER_H_

@@ -3,6 +3,11 @@
 
 #include <gl\glew.h>
 #include "../../Utils/CheckGLError.h"
+#include <assert.h>
+#include <memory>
+
+#define NULL 0
+
 
 //template implementation in here instead of having to include a .cpp
 
@@ -60,6 +65,8 @@ public:
 	inline void setEnabled(bool enabled = true)
 	{
 		assert(m_attributeIdx != -1 && "No vertexattribpointer set");
+		glBindBuffer(m_bufferType, m_id);
+
 		if (enabled)
 			glEnableVertexAttribArray(m_attributeIdx);
 		else
@@ -76,14 +83,12 @@ public:
 		glBindBuffer(m_bufferType, m_id);
 	};
 
-	/** Copy size amount of bytes from data to the buffer */
-	inline void add(void* data, unsigned int sizeBytes)
+	inline void add(T* data, unsigned int numElements)
 	{
-		unsigned int numObjects = sizeBytes / sizeof(T);
-		assert(m_sizeInElements > m_counter + numObjects);
-		memcpy(&m_data[m_counter], data, sizeBytes);
-		m_counter += numObjects;
-	};
+		assert(m_sizeInElements >= m_counter + numElements);
+		memcpy((void*)&m_data[m_counter], data, numElements * sizeof(T));
+		m_counter += numElements;
+	}
 
 	/** Add data to the buffer, copied by value since it assumed that vertex buffer elements are generally very small */
 	inline void add(T data)
@@ -95,8 +100,8 @@ public:
 	/** Upload the added data to the gpu, binds the buffer */
 	inline void update()
 	{
-		uploadData(m_counter);
-		/*glBindBuffer(m_bufferType, m_id);glBufferSubData(m_bufferType, m_lastUpdatePos, m_counter * sizeof(T), m_data);m_lastUpdatePos = m_counter;*/
+		glBindBuffer(m_bufferType, m_id);
+		glBufferData(m_bufferType, m_sizeInElements * sizeof(T), m_data, m_drawUsage);
 	};
 
 	inline void reset()
@@ -110,12 +115,6 @@ public:
 	inline unsigned int getSizeInElements() { return m_counter; };
 
 private:
-
-	void uploadData(unsigned int sizeInElements)
-	{
-		glBindBuffer(m_bufferType, m_id);
-		glBufferData(m_bufferType, m_sizeInElements * sizeof(T), m_data, m_drawUsage);
-	};
 
 	unsigned int m_lastUpdatePos;
 	unsigned int m_counter;
