@@ -243,8 +243,8 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	////////////////////////////////////////////////////////////////////////////////////////////
 
 	m_voxelShader.begin();
-	m_voxelShader.setUniform1f("u_fogEnd", camera.m_far );
-	m_voxelShader.setUniform1f("u_fogStart", camera.m_far);
+	m_voxelShader.setUniform1f("u_fogEnd", camera.m_far);
+	m_voxelShader.setUniform1f("u_fogStart", camera.m_far * 0.7f);
 	m_voxelShader.setUniform3f("u_camPos", camera.m_position);
 	m_voxelShader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
 	for (const std::shared_ptr<VoxelRenderer::Chunk>& chunk : m_visibleChunkList)
