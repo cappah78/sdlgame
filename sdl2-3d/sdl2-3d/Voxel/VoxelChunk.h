@@ -73,8 +73,6 @@ public:
 	bool m_updated;
 	/** Position in chunks, block pos is * CHUNK_SIZE this*/
 	const glm::ivec3 m_pos;
-	/** The 8 corner positions of this chunk*/
-	glm::vec3 m_bounds[8];
 
 private:
 	static const int NO_BLOCK_DATA = -1;

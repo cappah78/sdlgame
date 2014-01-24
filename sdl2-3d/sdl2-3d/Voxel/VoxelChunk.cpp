@@ -12,20 +12,7 @@ VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 	, m_perBlockData(0)
 	, m_updated(false)
 {
-	updateBounds();
 	m_blocks.resize(CHUNK_SIZE_CUBED);
-}
-
-void VoxelChunk::updateBounds()
-{
-	m_bounds[0] = glm::vec3(m_pos.x * (float) CHUNK_SIZE, m_pos.y * (float) CHUNK_SIZE, m_pos.z * (float) CHUNK_SIZE);
-	m_bounds[1] = glm::vec3(m_bounds[0] + glm::vec3(CHUNK_SIZE, 0, 0));
-	m_bounds[2] = glm::vec3(m_bounds[0] + glm::vec3(CHUNK_SIZE, CHUNK_SIZE, 0));
-	m_bounds[3] = glm::vec3(m_bounds[0] + glm::vec3(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE));
-	m_bounds[4] = glm::vec3(m_bounds[0] + glm::vec3(0, CHUNK_SIZE, 0));
-	m_bounds[5] = glm::vec3(m_bounds[0] + glm::vec3(0, CHUNK_SIZE, CHUNK_SIZE));
-	m_bounds[6] = glm::vec3(m_bounds[0] + glm::vec3(0, 0, CHUNK_SIZE));
-	m_bounds[7] = glm::vec3(m_bounds[0] + glm::vec3(CHUNK_SIZE, 0, CHUNK_SIZE));
 }
 
 void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr, unsigned int dataSize)
