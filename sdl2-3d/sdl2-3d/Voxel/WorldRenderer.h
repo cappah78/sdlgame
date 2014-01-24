@@ -25,6 +25,7 @@ public:
 	WorldRenderer(const WorldRenderer& copy) = delete;
 
 	void render(VoxelWorld& world, const Camera& camera);
+	void doLights(const Camera& camera);
 
 private:
 	/** Calculate AO contribution for a vertex given the touching perpendicular faces*/
@@ -34,13 +35,25 @@ private:
 
 	void buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world);
 
-	const std::shared_ptr<VoxelRenderer::Chunk> getRenderChunk(const glm::ivec3& pos, const glm::vec3* const bounds);
+	const std::shared_ptr<VoxelRenderer::Chunk> getRenderChunk(const glm::ivec3& pos);
 	RenderChunkMap m_renderChunks;
 
 	Shader m_voxelShader;
 	VoxelRenderer m_renderer;
 
+	Shader m_shadowShader;
+	GBuffer m_gbuffer;
+
+	Shader m_quadShader;
+	QuadRenderer m_quadRenderer;
+
+	Shader m_lightShader;
+
 	unsigned int m_numLoadedChunks;
+	struct VSOut {
+		float lightDst;
+	};
+	std::vector<float> m_getPixelBuffer;
 
 	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_visibleChunkList;
 };

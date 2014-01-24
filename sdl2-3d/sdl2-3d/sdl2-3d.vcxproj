@@ -16,6 +16,7 @@
     <ClInclude Include="Engine\Graphics\Frustum.h" />
     <ClInclude Include="Engine\Graphics\GL\CubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\DeferredShader.h" />
+    <ClInclude Include="Engine\Graphics\GL\DepthCubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\GBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\Material.h" />
     <ClInclude Include="Engine\Graphics\GL\Mesh.h" />
@@ -123,6 +124,8 @@
     <None Include="Assets\Shaders\fullscreenquad.geom" />
     <None Include="Assets\Shaders\gbuffer.frag" />
     <None Include="Assets\Shaders\gbuffer.vert" />
+    <None Include="Assets\Shaders\lightcalc.frag" />
+    <None Include="Assets\Shaders\lightcalc.vert" />
     <None Include="Assets\Shaders\multishadowmap.geom" />
     <None Include="Assets\Shaders\multishadowmap.vert" />
     <None Include="Assets\Shaders\quad.frag" />

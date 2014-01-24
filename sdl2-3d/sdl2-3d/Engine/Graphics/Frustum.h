@@ -13,9 +13,10 @@ public:
 	void calculateFrustum(const glm::mat4& mvp);
 	bool pointInFrustum(const glm::vec3& point) const;
 	bool sphereInFrustum(const glm::vec3& point, float radius) const;
+	static bool aabbInFrustum(const glm::vec3& point, const glm::vec3& extents, const glm::mat4& frustumMatrix);
 
 private:
-	glm::vec4 planes[6];
+	glm::vec4 m_planes[6];
 };
 
 #endif //FRUSTUM_H_

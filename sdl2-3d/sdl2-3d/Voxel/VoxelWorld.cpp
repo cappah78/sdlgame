@@ -104,18 +104,20 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 			toUnload.push_back(posChunk.first);
 		}
 	}
+	unsigned int startUnload = Game::getSDLTicks();
 
 	for (const glm::ivec3& vec : toUnload)
 	{
 		m_chunkManager.unloadChunk(vec);
+
+		if (Game::getSDLTicks() - startUnload > MAX_GENERATE_TIME_MS)
+			return;
 	}
 }
 
-static const int SURFACE_DEPTH = 5;
-
-BlockID* VoxelWorld::getBlockLayer(int height)
+BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
 {
-	BlockID* ids = new BlockID[SURFACE_DEPTH];
+	BlockID* ids = new BlockID[5];
 
 	if (height >= 30)
 	{

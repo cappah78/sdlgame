@@ -27,6 +27,7 @@ public:
 
 private:
 	static bool s_begun;	// global state to avoid mixing multiple shaders.
+	bool m_begun;
 	GLuint m_shaderID;
 
 	struct StrCmp

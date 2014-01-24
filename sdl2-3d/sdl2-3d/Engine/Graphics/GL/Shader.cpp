@@ -11,6 +11,7 @@ Shader::Shader()
 }
 
 Shader::Shader(const char* const vertexShaderPath, const char* const geomShaderPath, const char* const fragShaderPath)
+	: m_begun(false)
 {
 	setupProgram(vertexShaderPath, geomShaderPath, fragShaderPath);
 	CHECK_GL_ERROR();
@@ -29,19 +30,23 @@ void Shader::setupProgram(const char* const vertexShaderPath, const char* const 
 void Shader::begin()
 {
 	assert(!s_begun);
+	assert(!m_begun);
 	s_begun = true;
+	m_begun = true;
 	glUseProgram(m_shaderID);
 }
 void Shader::end()
 {
 	assert(s_begun);
+	assert(m_begun);
 	s_begun = false;
+	m_begun = false;
 	//glUseProgram(0);	//optional
 }
 
 void Shader::setUniform1i(const char* const uniformName, int val)
 {
-	assert(s_begun);
+	assert(m_begun);
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
@@ -55,7 +60,7 @@ void Shader::setUniform1i(const char* const uniformName, int val)
 }
 void Shader::setUniform1f(const char* const uniformName, float val)
 {
-	assert(s_begun);
+	assert(m_begun);
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
@@ -69,7 +74,7 @@ void Shader::setUniform1f(const char* const uniformName, float val)
 }
 void Shader::setUniform2f(const char* const uniformName, const glm::vec2& vec)
 {
-	assert(s_begun);
+	assert(m_begun);
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
@@ -83,7 +88,7 @@ void Shader::setUniform2f(const char* const uniformName, const glm::vec2& vec)
 }
 void Shader::setUniform3f(const char* const uniformName, const glm::vec3& vec)
 {
-	assert(s_begun);
+	assert(m_begun);
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{
@@ -97,7 +102,7 @@ void Shader::setUniform3f(const char* const uniformName, const glm::vec3& vec)
 }
 void Shader::setUniformMatrix4f(const char* const uniformName, const glm::mat4& mat)
 {
-	assert(s_begun);
+	assert(m_begun);
 	auto it = m_uniformLocMap.find(uniformName);
 	if (it == m_uniformLocMap.end())
 	{

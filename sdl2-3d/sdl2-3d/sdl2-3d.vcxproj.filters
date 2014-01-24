@@ -230,6 +230,9 @@
     <ClInclude Include="Engine\Graphics\Renderers\QuadRenderer.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\DepthCubeMap.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -469,6 +472,12 @@
       <Filter>Assets\Shaders</Filter>
     </None>
     <None Include="Assets\Shaders\voxelshaderdepth.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\lightcalc.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\lightcalc.frag">
       <Filter>Assets\Shaders</Filter>
     </None>
   </ItemGroup>

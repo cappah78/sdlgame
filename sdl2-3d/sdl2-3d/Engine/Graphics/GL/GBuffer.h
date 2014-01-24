@@ -14,6 +14,7 @@ public:
 	GBuffer(unsigned int numTextures, unsigned int width = Game::graphics.getScreenWidth(), unsigned int height = Game::graphics.getScreenHeight());
 	~GBuffer();
 
+	void unbind();
 	void bindForWriting();
 	void bindForReading();
 	void bindDepthTexture(unsigned int textureUnit);

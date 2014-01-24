@@ -74,6 +74,7 @@ bool GameScreen::keyDown(SDL_Keysym key)
 {
 	if (key.sym == SDLK_r)
 	{
+		m_worldRenderer.doLights(m_camera);
 
 	}
 

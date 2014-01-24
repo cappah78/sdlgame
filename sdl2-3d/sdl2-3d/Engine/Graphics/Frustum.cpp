@@ -32,93 +32,128 @@ void Frustum::calculateFrustum(const glm::mat4& mvp)
 	m32 = trans[3][2];
 	m33 = trans[3][3];
 
-	planes[0].x = m30 - m00;
-	planes[0].y = m31 - m01;
-	planes[0].z = m32 - m02;
-	planes[0].w = m33 - m03;
+	m_planes[0].x = m30 - m00;
+	m_planes[0].y = m31 - m01;
+	m_planes[0].z = m32 - m02;
+	m_planes[0].w = m33 - m03;
 
-	t = glm::fastInverseSqrt(planes[0].x * planes[0].x + planes[0].y * planes[0].y + planes[0].z * planes[0].z);
+	t = glm::fastInverseSqrt(m_planes[0].x * m_planes[0].x + m_planes[0].y * m_planes[0].y + m_planes[0].z * m_planes[0].z);
 
-	planes[0].x *= t;
-	planes[0].y *= t;
-	planes[0].z *= t;
-	planes[0].w *= t;
+	m_planes[0].x *= t;
+	m_planes[0].y *= t;
+	m_planes[0].z *= t;
+	m_planes[0].w *= t;
 
-	planes[1].x = m30 + m00;
-	planes[1].y = m31 + m01;
-	planes[1].z = m32 + m02;
-	planes[1].w = m33 + m03;
+	m_planes[1].x = m30 + m00;
+	m_planes[1].y = m31 + m01;
+	m_planes[1].z = m32 + m02;
+	m_planes[1].w = m33 + m03;
 
-	t = glm::fastInverseSqrt(planes[1].x * planes[1].x + planes[1].y * planes[1].y + planes[1].z * planes[1].z);
+	t = glm::fastInverseSqrt(m_planes[1].x * m_planes[1].x + m_planes[1].y * m_planes[1].y + m_planes[1].z * m_planes[1].z);
 
-	planes[1].x *= t;
-	planes[1].y *= t;
-	planes[1].z *= t;
-	planes[1].w *= t;
+	m_planes[1].x *= t;
+	m_planes[1].y *= t;
+	m_planes[1].z *= t;
+	m_planes[1].w *= t;
 
-	planes[2].x = m30 - m10;
-	planes[2].y = m31 - m11;
-	planes[2].z = m32 - m12;
-	planes[2].w = m33 - m13;
+	m_planes[2].x = m30 - m10;
+	m_planes[2].y = m31 - m11;
+	m_planes[2].z = m32 - m12;
+	m_planes[2].w = m33 - m13;
 
-	t = glm::fastInverseSqrt(planes[2].x * planes[2].x + planes[2].y * planes[2].y + planes[2].z * planes[2].z);
+	t = glm::fastInverseSqrt(m_planes[2].x * m_planes[2].x + m_planes[2].y * m_planes[2].y + m_planes[2].z * m_planes[2].z);
 
-	planes[2].x *= t;
-	planes[2].y *= t;
-	planes[2].z *= t;
-	planes[2].w *= t;
+	m_planes[2].x *= t;
+	m_planes[2].y *= t;
+	m_planes[2].z *= t;
+	m_planes[2].w *= t;
 
-	planes[3].x = m30 + m10;
-	planes[3].y = m31 + m11;
-	planes[3].z = m32 + m12;
-	planes[3].w = m33 + m13;
+	m_planes[3].x = m30 + m10;
+	m_planes[3].y = m31 + m11;
+	m_planes[3].z = m32 + m12;
+	m_planes[3].w = m33 + m13;
 
-	t = glm::fastInverseSqrt(planes[3].x * planes[3].x + planes[3].y * planes[3].y + planes[3].z * planes[3].z);
+	t = glm::fastInverseSqrt(m_planes[3].x * m_planes[3].x + m_planes[3].y * m_planes[3].y + m_planes[3].z * m_planes[3].z);
 
-	planes[3].x *= t;
-	planes[3].y *= t;
-	planes[3].z *= t;
-	planes[3].w *= t;
+	m_planes[3].x *= t;
+	m_planes[3].y *= t;
+	m_planes[3].z *= t;
+	m_planes[3].w *= t;
 
-	planes[4].x = m30 - m20;
-	planes[4].y = m31 - m21;
-	planes[4].z = m32 - m22;
-	planes[4].w = m33 - m23;
+	m_planes[4].x = m30 - m20;
+	m_planes[4].y = m31 - m21;
+	m_planes[4].z = m32 - m22;
+	m_planes[4].w = m33 - m23;
 
-	t = glm::fastInverseSqrt(planes[4].x * planes[4].x + planes[4].y * planes[4].y + planes[4].z * planes[4].z);
+	t = glm::fastInverseSqrt(m_planes[4].x * m_planes[4].x + m_planes[4].y * m_planes[4].y + m_planes[4].z * m_planes[4].z);
 
-	planes[4].x *= t;
-	planes[4].y *= t;
-	planes[4].z *= t;
-	planes[4].w *= t;
+	m_planes[4].x *= t;
+	m_planes[4].y *= t;
+	m_planes[4].z *= t;
+	m_planes[4].w *= t;
 
-	planes[5].x = m30 + m20;
-	planes[5].y = m31 + m21;
-	planes[5].z = m32 + m22;
-	planes[5].w = m33 + m23;
+	m_planes[5].x = m30 + m20;
+	m_planes[5].y = m31 + m21;
+	m_planes[5].z = m32 + m22;
+	m_planes[5].w = m33 + m23;
 
-	t = glm::fastInverseSqrt(planes[5].x * planes[5].x + planes[5].y * planes[5].y + planes[5].z * planes[5].z);
+	t = glm::fastInverseSqrt(m_planes[5].x * m_planes[5].x + m_planes[5].y * m_planes[5].y + m_planes[5].z * m_planes[5].z);
 
-	planes[5].x *= t;
-	planes[5].y *= t;
-	planes[5].z *= t;
-	planes[5].w *= t;
+	m_planes[5].x *= t;
+	m_planes[5].y *= t;
+	m_planes[5].z *= t;
+	m_planes[5].w *= t;
 }
 
 bool Frustum::pointInFrustum(const glm::vec3& point) const
 {
 	for (int p = 0; p < 6; p++)
-		if (planes[p].x * point.x + planes[p].y * point.y + planes[p].z * point.z + planes[p].w <= 0)
+		if (m_planes[p].x * point.x + m_planes[p].y * point.y + m_planes[p].z * point.z + m_planes[p].w <= 0)
 			return false;
 
 	return true;
 }
 
-
 bool Frustum::sphereInFrustum(const glm::vec3& point, float radius) const
 {
 	for (int p = 0; p < 6; p++)
-	if (planes[p].x * point.x + planes[p].y * point.y + planes[p].z * point.z + planes[p].w + radius <= 0)
+		if (m_planes[p].x * point.x + m_planes[p].y * point.y + m_planes[p].z * point.z + m_planes[p].w + radius <= 0)
+			return false;
+
+	return true;
+}
+
+static inline bool extentSignedTest(const glm::vec4& p, const glm::vec3& center, const glm::vec3& extent)
+{
+	return (glm::dot(glm::vec3(p), center) + glm::dot(glm::abs(glm::vec3(p)), extent) < -p.w);
+}
+
+bool Frustum::aabbInFrustum(const glm::vec3& center, const glm::vec3& extent, const glm::mat4& frustumMatrix)
+{
+	const glm::vec4& rowX = frustumMatrix[0];
+	const glm::vec4& rowY = frustumMatrix[1];
+	const glm::vec4& rowZ = frustumMatrix[2];
+	const glm::vec4& rowW = frustumMatrix[3];
+
+	// Left and right planes              
+	if (extentSignedTest(rowW + rowX, center, extent))
+		return false;
+
+	if (extentSignedTest(rowW - rowX, center, extent))
+		return false;
+
+	// Bottom and top planes
+	if (extentSignedTest(rowW + rowY, center, extent))
+		return false;
+
+	if (extentSignedTest(rowW - rowY, center, extent))
+		return false;
+
+	// Near and far planes
+	if (extentSignedTest(rowW + rowZ, center, extent))
+		return false;
+
+	if (extentSignedTest(rowW - rowZ, center, extent))
 		return false;
 
 	return true;

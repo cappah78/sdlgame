@@ -6,6 +6,7 @@
 #include "../Model/IKeyListener.h"
 
 #include <SDL.h>
+
 #include <algorithm>
 
 std::vector<IKeyListener*> Input::m_keyListeners;
@@ -91,4 +92,10 @@ void Input::keyUp(SDL_Keysym& key)
 	for (IKeyListener* keyListener : m_keyListeners)
 		if (keyListener->keyUp(key))
 			break;
+}
+
+bool Input::isKeyPressed(const SDL_Scancode& key)
+{
+	const unsigned char* keys = SDL_GetKeyboardState(NULL);
+	return keys[key] == 1;
 }

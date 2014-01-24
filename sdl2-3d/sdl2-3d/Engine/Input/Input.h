@@ -7,6 +7,7 @@ class IMouseListener;
 class Game;
 
 struct SDL_Keysym;
+#include <SDL_keycode.h>
 
 /** 
 Manages input related data, listeners can register to this and 
@@ -28,6 +29,8 @@ public:
 
 	static void keyDown(SDL_Keysym& key);
 	static void keyUp(SDL_Keysym& key);
+
+	static bool isKeyPressed(const SDL_Scancode& key);
 
 private:
 	Input() {};

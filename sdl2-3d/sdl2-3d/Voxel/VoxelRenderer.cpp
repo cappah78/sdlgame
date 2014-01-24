@@ -36,6 +36,7 @@ VoxelRenderer::VoxelRenderer()
 	, m_begunChunk(false)
 	, m_blendEnabled(false)
 	, m_texcoordBuffer(MAX_FACES_PER_CHUNK * 4)
+	, m_vertexIdBuffer(MAX_FACES_PER_CHUNK * 4)
 {
 	CHECK_GL_ERROR();
 	m_pointData.resize(MAX_FACES_PER_CHUNK * 4);
@@ -44,14 +45,20 @@ VoxelRenderer::VoxelRenderer()
 	CHECK_GL_ERROR();
 	glBindVertexArray(0);
 
+	unsigned short vertexId = 0;
 	for (int i = 0; i < MAX_FACES_PER_CHUNK; ++i)
 	{
 		m_texcoordBuffer.add(glm::vec2(1.0f, 0.0f));
 		m_texcoordBuffer.add(glm::vec2(0.0f, 0.0f));
 		m_texcoordBuffer.add(glm::vec2(1.0f, 1.0f));
 		m_texcoordBuffer.add(glm::vec2(0.0f, 1.0f));
+		m_vertexIdBuffer.add(vertexId++);
+		m_vertexIdBuffer.add(vertexId++);
+		m_vertexIdBuffer.add(vertexId++);
+		m_vertexIdBuffer.add(vertexId++);
 	}
 	m_texcoordBuffer.update();
+	m_vertexIdBuffer.update();
 
 	CHECK_GL_ERROR();
 }
@@ -65,16 +72,16 @@ VoxelRenderer::~VoxelRenderer()
 	CHECK_GL_ERROR();
 }
 
-void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
+void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk, GLenum mode)
 {
 	if (chunk->m_numFaces == 0)
 		return;
 
 	glBindVertexArray(chunk->m_vao);
-	glDrawElements(GL_TRIANGLES, chunk->m_numFaces * 6, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(mode, chunk->m_numFaces * 6, GL_UNSIGNED_SHORT, 0);
 }
 
-const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds)
+const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset)
 {
 	if (m_chunkPool.size() > 0)
 	{
@@ -82,15 +89,19 @@ const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOf
 		chunk->m_renderOffset.x = xOffset;
 		chunk->m_renderOffset.y = yOffset;
 		chunk->m_renderOffset.z = zOffset;
-		memcpy(&chunk->m_bounds[0], bounds, sizeof(glm::vec3) * 8);
+		memset(&m_colorData[0], 0, sizeof(Color8888) * m_colorData.size());
+		chunk->m_colorBuffer.update();
 
 		m_chunkPool.pop_back();
 		return chunk;
 	}
 
-	Chunk* newChunk = new Chunk(xOffset, yOffset, zOffset, bounds, m_colorData, m_pointData, m_indiceData, *this);
+	Chunk* newChunk = new Chunk(xOffset, yOffset, zOffset, m_colorData, m_pointData, m_indiceData, *this);
 	std::shared_ptr<VoxelRenderer::Chunk> chunk(newChunk, &returnChunk);
-	m_texcoordBuffer.bind();	//shared between chunks, add to currently bound chunk vao.
+	m_texcoordBuffer.bind();
+	memset(&m_colorData[0], 0, sizeof(Color8888) * m_colorData.size());
+	newChunk->m_colorBuffer.update();
+
 	CHECK_GL_ERROR();
 
 	return chunk;
@@ -100,7 +111,6 @@ void VoxelRenderer::returnChunk(Chunk* chunk)
 {
 	chunk->m_renderer.m_chunkPool.push_back(chunk);
 }
-
 
 void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 {
@@ -174,7 +184,7 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 	CHECK_GL_ERROR();
 }
 
-VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds
+VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset
 	, std::vector<Color8888>& colorData
 	, std::vector<VoxelVertex>& pointData
 	, std::vector<unsigned short>& indiceData
@@ -187,14 +197,13 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, const g
 	, m_begun(false)
 	, m_renderer(renderer)
 {
-	memcpy(&m_bounds[0], bounds, sizeof(glm::vec3) * 8);
-
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
 	m_pointBuffer.setAttribPointer(POSITION_LOC, GL_UNSIGNED_INT, 1, GL_FALSE, GL_TRUE);
 	m_colorBuffer.setAttribPointer(COLOR_LOC, GL_UNSIGNED_BYTE, 4, GL_TRUE);
 	m_renderer.m_texcoordBuffer.setAttribPointer(TEXCOORD_LOC, GL_FLOAT, 2);
+	m_renderer.m_vertexIdBuffer.setAttribPointer(3, GL_UNSIGNED_SHORT, 1, GL_FALSE, GL_TRUE);
 
 	CHECK_GL_ERROR();
 }

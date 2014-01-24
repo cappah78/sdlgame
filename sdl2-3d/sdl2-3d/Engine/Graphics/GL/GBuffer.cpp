@@ -15,6 +15,7 @@ GBuffer::~GBuffer()
 
 bool GBuffer::init(unsigned int width, unsigned int height)
 {
+	/*
 	// Create the FBO
 	glGenFramebuffers(1, &m_fbo);
 
@@ -33,8 +34,8 @@ bool GBuffer::init(unsigned int width, unsigned int height)
 	// Disable writes to the color buffer
 	glDrawBuffer(GL_NONE);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	*/
 
-	/*
 	glGenFramebuffers(1, &m_fbo);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 
@@ -52,7 +53,7 @@ bool GBuffer::init(unsigned int width, unsigned int height)
 	}
 
 	glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -79,11 +80,16 @@ bool GBuffer::init(unsigned int width, unsigned int height)
 #endif //_DEBUG
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	*/
 
 
 	return true;
 }
+
+void GBuffer::unbind()
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+}
+
 void GBuffer::bindForWriting()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
@@ -108,5 +114,6 @@ void GBuffer::bindDepthTexture(unsigned int textureUnit)
 
 void GBuffer::setReadBuffer(unsigned int textureIdx)
 {
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 	glReadBuffer(GL_COLOR_ATTACHMENT0 + textureIdx);
 }

@@ -97,6 +97,11 @@ public:
 		m_data[m_counter++] = data;
 	};
 
+	inline void set(T data, unsigned int index)
+	{
+		m_data[index] = data;
+	};
+
 	/** Upload the added data to the gpu, binds the buffer */
 	inline void update()
 	{

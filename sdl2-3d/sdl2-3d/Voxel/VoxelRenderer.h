@@ -82,12 +82,11 @@ public:
 		void addFace(Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4, bool flipQuad = false);
 		/** Offset to render with*/
 		glm::vec3 m_renderOffset;
-		glm::vec3 m_bounds[8];
 
 		inline unsigned int getNumFaces() const { return m_numFaces; };
 
 	private:
-		Chunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds
+		Chunk(float xOffset, float yOffset, float zOffset
 			, std::vector<Color8888>& colorData
 			, std::vector<VoxelVertex>& pointData
 			, std::vector<unsigned short>& indiceData
@@ -109,14 +108,14 @@ public:
 	VoxelRenderer(const VoxelRenderer& copyMe) = delete;
 	~VoxelRenderer();
 
-	const std::shared_ptr<VoxelRenderer::Chunk> createChunk(float xOffset, float yOffset, float zOffset, const glm::vec3* const bounds);
+	const std::shared_ptr<VoxelRenderer::Chunk> createChunk(float xOffset, float yOffset, float zOffset);
 
 	/** Ready a chunk to add faces */
 	void beginChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk);
 	/** Finish adding faces to a chunk and upload the vertex data */
 	void endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk);
 
-	void renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk);
+	void renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk, GLenum mode = GL_TRIANGLES);
 
 private:
 	static void returnChunk(Chunk* chunk);
@@ -126,6 +125,7 @@ private:
 	bool m_blendEnabled;
 
 	VertexBuffer<glm::vec2> m_texcoordBuffer;
+	VertexBuffer<unsigned short> m_vertexIdBuffer;
 
 	/** Arrays shared to */
 
