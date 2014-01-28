@@ -9,6 +9,7 @@
 #include <set>
 #include <vector>
 #include <memory>
+#include <glm\glm.hpp>
 
 #include <lua.hpp>
 #include <LuaBridge.h>
@@ -41,9 +42,9 @@ public:
 	BlockID registerBlockType(lua_State* const L, const std::string& blockname);
 
 	void updateTickCountEvents();
-
 	unsigned short getBlockTextureID(const std::string& textureName);
 	std::shared_ptr<TextureArray> generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight);
+	void doBlockUpdate(const VoxelBlock& block, const glm::ivec3& blockPos);
 
 	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
 	inline const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }
@@ -51,6 +52,8 @@ public:
 private:
 
 	LuaTableData getTableData(luabridge::LuaRef ref) const;
+
+	void parseMethods(BlockProperties& properties);
 	void parseBlock(BlockProperties& properties);
 	void parseEvents(BlockProperties& properties);
 	BlockPropertyValue getValue(std::string str, const std::vector<PerBlockProperty>& perBlockProperties);

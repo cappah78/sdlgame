@@ -113,11 +113,23 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 	}
 }
 
+void VoxelWorld::doBlockUpdates()
+{
+	for (const glm::ivec3& blockWorldPos : m_updatedBlockPositions)
+	{
+		const glm::ivec3& chunkPos = toChunkPos(blockWorldPos);
+		const std::unique_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+		const glm::ivec3& blockChunkPos = toChunkBlockPos(blockWorldPos);
+
+		chunk->doBlockUpdate(blockChunkPos, blockWorldPos);
+	}
+}
+
 BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
 {
 	BlockID* ids = new BlockID[5];
 
-	if (height >= 30)
+	if (height >= 30)	// hill tops
 	{
 		ids[0] = m_propertyManager.getBlockID("SnowBlock");
 		ids[1] = m_propertyManager.getBlockID("GrassSnowBlock");
@@ -125,7 +137,7 @@ BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
 		ids[3] = m_propertyManager.getBlockID("StoneBlock");
 		ids[4] = m_propertyManager.getBlockID("StoneBlock");
 	}
-	else if (height >= 20 && height < 30)
+	else if (height >= 20 && height < 30) //hill mid
 	{
 		ids[0] = m_propertyManager.getBlockID("GrassSnowBlock");
 		ids[1] = m_propertyManager.getBlockID("DirtBlock");
@@ -133,7 +145,7 @@ BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
 		ids[3] = m_propertyManager.getBlockID("StoneBlock");
 		ids[4] = m_propertyManager.getBlockID("StoneBlock");
 	}
-	else if(height >= -12 && height < 20)
+	else if(height >= -12 && height < 20) //plains / lower hills
 	{
 		ids[0] = m_propertyManager.getBlockID("GrassBlock");
 		ids[1] = m_propertyManager.getBlockID("DirtBlock");
@@ -141,7 +153,7 @@ BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
 		ids[3] = m_propertyManager.getBlockID("StoneBlock");
 		ids[4] = m_propertyManager.getBlockID("StoneBlock");
 	}
-	else if(height <= -12 && height > -18)
+	else if(height <= -12 && height > -18) //beach
 	{
 		ids[0] = m_propertyManager.getBlockID("SandBlock");
 		ids[1] = m_propertyManager.getBlockID("SandBlock");
@@ -149,13 +161,13 @@ BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
 		ids[3] = m_propertyManager.getBlockID("StoneBlock");
 		ids[4] = m_propertyManager.getBlockID("StoneBlock");
 	}
-	else if(height <= -18)
+	else if(height <= -18) //water
 	{
 		ids[0] = m_propertyManager.getBlockID("WaterBlock");
 		ids[1] = m_propertyManager.getBlockID("WaterBlock");
 		ids[2] = m_propertyManager.getBlockID("WaterBlock");
-		ids[3] = m_propertyManager.getBlockID("StoneBlock");
-		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+		ids[3] = m_propertyManager.getBlockID("WaterBlock");
+		ids[4] = m_propertyManager.getBlockID("WaterBlock");
 	}
 
 	return ids;
@@ -283,17 +295,17 @@ void VoxelWorld::setBlock(BlockID blockID, const glm::ivec3& pos)
 
 	//if block is on edge, update touching other chunks
 	if (blockPos.x == 0)
-		m_chunkManager.getChunk(chunkPos + glm::ivec3(-1, 0, 0))->m_updated = false;
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(-1, 0, 0))->m_shouldUpdate = true;
 	if (blockPos.x == CHUNK_SIZE - 1)
-		m_chunkManager.getChunk(chunkPos + glm::ivec3(1, 0, 0))->m_updated = false;
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(1, 0, 0))->m_shouldUpdate = true;
 	if (blockPos.y == 0)
-		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, -1, 0))->m_updated = false;
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, -1, 0))->m_shouldUpdate = true;
 	if (blockPos.y == CHUNK_SIZE - 1)
-		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 1, 0))->m_updated = false;
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 1, 0))->m_shouldUpdate = true;
 	if (blockPos.z == 0)
-		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 0, -1))->m_updated = false;
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 0, -1))->m_shouldUpdate = true;
 	if (blockPos.z == CHUNK_SIZE - 1)
-		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 0, 1))->m_updated = false;
+		m_chunkManager.getChunk(chunkPos + glm::ivec3(0, 0, 1))->m_shouldUpdate = true;
 
 	chunk->setBlock(blockID, blockPos);
 }

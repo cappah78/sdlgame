@@ -20,6 +20,22 @@ static const char* const LUA_BLOCK_Y_NAME = "y";
 static const char* const LUA_BLOCK_Z_NAME = "z";
 static const std::string DEFAULT_BLOCK = "defaultblock";
 
+void PropertyManager::doBlockUpdate(const VoxelBlock& block, const glm::ivec3& blockPos)
+{
+	const BlockProperties& properties = getBlockProperties(block.id);
+	if (properties.hasBlockUpdateMethod)
+	{
+		luabridge::newTable(properties.luaRef.state());
+		for (const PerBlockProperty& prop : properties.perBlockProperties)
+		{
+
+		}
+
+
+
+	}
+}
+
 void PropertyManager::updateTickCountEvents()
 {
 	for (BlockProperties& blockProperties : m_blockProperties)
@@ -27,9 +43,9 @@ void PropertyManager::updateTickCountEvents()
 		for (BlockEventTrigger& e : blockProperties.events)
 		{
 			if (e.left.type == BlockPropertyValueType::LUA_TICKCOUNTER) {
-				e.left.value++;
-				if (e.left.value > e.right.value)	// both always integer type
-					e.left.value = 0;
+				e.left.valueBits++;
+				if (e.left.valueBits > e.right.valueBits)	// both always integer type
+					e.left.valueBits = 0;
 			}
 		}
 	}
@@ -60,24 +76,22 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 {
 	auto it = m_blockNameIDMap.find(blockname);
 	if (it != m_blockNameIDMap.end())
-	{	//already contained
 		return it->second;
-	}
 	else
 	{
 		luabridge::LuaRef blocks = luabridge::getGlobal(L, LUA_BLOCKS_NAMESPACE);
 		luabridge::LuaRef block = blocks[blockname];
 		if (block.isNil())
 			return 0;
+
 		//TODO: some sort of persistent block id manager thing.
 		++m_lastRegisteredId;
-		m_blockNameIDMap.insert(std::make_pair(blockname, m_lastRegisteredId));
-
-	
 		block["id"] = m_lastRegisteredId;
 
+		m_blockNameIDMap.insert(std::make_pair(blockname, m_lastRegisteredId));
 		m_blockProperties.resize(m_lastRegisteredId + 1, BlockProperties(block.state()));
-		m_blockProperties.at(m_lastRegisteredId) = BlockProperties(block, *this);
+		m_blockProperties[m_lastRegisteredId] = BlockProperties(block, *this);
+
 
 		parseBlock(m_blockProperties[m_lastRegisteredId]);
 
@@ -105,6 +119,8 @@ LuaTableData PropertyManager::getTableData(luabridge::LuaRef ref) const
 }
 void PropertyManager::parseBlock(BlockProperties& properties)
 {
+	parseMethods(properties);
+
 	if (!properties.luaRef["perBlock"].isNil())
 		parsePerBlockProperties(properties);
 	if (!properties.luaRef["events"].isNil())
@@ -246,6 +262,15 @@ BlockPropertyValue PropertyManager::getValue(std::string str, const std::vector<
 	{
 		int i = atoi(str.c_str());
 		return BlockPropertyValue(i, LUA_INT);
+	}
+}
+
+void PropertyManager::parseMethods(BlockProperties& properties)
+{
+	if (!properties.luaRef["blockUpdate"].isNil())
+	{
+		properties.hasBlockUpdateMethod = true;
+		properties.blockUpdateMethod = properties.luaRef["blockUpdate"];
 	}
 }
 

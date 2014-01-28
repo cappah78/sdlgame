@@ -8,4 +8,8 @@ Blocks.SandBlock = {
 		left = "Assets\\Textures\\MinecraftBlocks\\sand.png",
 		right = "Assets\\Textures\\MinecraftBlocks\\sand.png"
 	},
+
+	perBlock = {
+		thingy = "int(5)"
+	}
 }

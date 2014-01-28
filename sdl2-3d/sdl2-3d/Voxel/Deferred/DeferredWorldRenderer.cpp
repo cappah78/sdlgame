@@ -67,7 +67,7 @@ void DeferredWorldRenderer::findVisibleChunks(VoxelWorld& world, const Camera& c
 		if (glm::dot(dist, dist) > cullRangeSquared)	// removing chunk data from gpu if out of camera.far range
 		{
 			removeRenderChunk(chunkPos);
-			chunk->m_updated = false;
+			chunk->m_shouldUpdate = true;
 			continue;
 		}
 
@@ -76,9 +76,9 @@ void DeferredWorldRenderer::findVisibleChunks(VoxelWorld& world, const Camera& c
 
 		if (Game::getSDLTicks() - startTicks > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
 			continue;	//continue, not break because we still want to remove chunks that are out of range even when past max time
-		if (chunk->m_updated)
+		if (!chunk->m_shouldUpdate)
 			continue;
-		chunk->m_updated = true;
+		chunk->m_shouldUpdate = false;
 
 		buildChunk(chunk, world);
 	}

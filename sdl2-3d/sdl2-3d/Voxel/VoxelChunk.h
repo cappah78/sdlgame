@@ -25,11 +25,10 @@ public:
 	//VoxelChunk(const VoxelChunk& copyMe) = delete;
 	~VoxelChunk() {};
 
-	void doBlockUpdate();
+	void doBlockUpdate(const glm::ivec3& blockChunkPos, const glm::ivec3& blockWorldPos);
 
 	/** Set the block at the given position inside this chunk (0-chunksize) with optional additional data for this block */
 	void setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr = NULL, unsigned int dataSize = 0);
-	/** Set the color at the given position inside this chunk (0-chunksize) */
 
 	/** Get the block at the given position inside this chunk (0-chunksize) */
 	const VoxelBlock& getBlock(const glm::ivec3& blockPos) const
@@ -70,16 +69,23 @@ public:
 	void updateBounds();
 
 	/** If any rendering related things have not yet been updated by the renderer, this is false */
-	bool m_updated;
+	bool m_shouldUpdate;
 	/** Position in chunks, block pos is * CHUNK_SIZE this*/
 	const glm::ivec3 m_pos;
 
 private:
 	static const int NO_BLOCK_DATA = -1;
 
-	void doBlockEvents(const glm::ivec3& blockPos, const glm::ivec3& chunkOffset);
-	void doBlockProcess(const glm::ivec3& blockPos, const glm::ivec3& chunkOffset);
-	void shiftPositionIndices(int position, unsigned int amount);
+	/** Insert all the properties of the given block into the table */
+	void insertBlockData(const VoxelBlock& block, luabridge::LuaRef& table);
+	/** Read and update all properties of the given block using the table's data */
+	void updateBlockData(const VoxelBlock& block, luabridge::LuaRef& table);
+
+	void removeBlockData(VoxelBlock& block);
+	void setDefaultBlockData(VoxelBlock& block);
+
+	void updateBlockEventTriggers(VoxelBlock& block, const glm::ivec3& blockWorldPos);
+	void doBlockProcess(VoxelBlock& block, const glm::ivec3& blockWorldPos);
 
 	VoidDataList m_perBlockData;
 	std::vector<VoxelBlock> m_blocks;
