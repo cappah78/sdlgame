@@ -19,7 +19,7 @@ struct DistanceSort
 DeferredWorldRenderer::DeferredWorldRenderer()
 	: m_gbuffer(1)
 	//, m_sphere("Assets/Models/sphere.obj")
-	, m_geometryShader("Assets/Shaders/gbuffer.vert", NULL, "Assets/Shaders/gbuffer.frag")
+	, m_geometryShader("Assets/Shaders/geometry.vert", NULL, "Assets/Shaders/geometry.frag")
 	, m_pointLightShader("Assets/Shaders/deferredpointlight.vert", NULL, "Assets/Shaders/deferredpointlight.frag")
 	, m_quadShader("Assets/Shaders/quad.vert", NULL, "Assets/Shaders/quad.frag")
 	, m_numLoadedChunks(0)

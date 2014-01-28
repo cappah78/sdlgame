@@ -86,9 +86,13 @@ const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOf
 	return chunk;
 }
 
+static const unsigned int MAX_CHUNKS_IN_POOL = 100;
 void VoxelRenderer::returnChunk(Chunk* chunk)
 {
-	chunk->m_renderer.m_chunkPool.push_back(chunk);
+	if (chunk->m_renderer.m_chunkPool.size() < MAX_CHUNKS_IN_POOL)
+		chunk->m_renderer.m_chunkPool.push_back(chunk);
+	else
+		delete chunk;
 }
 
 void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)

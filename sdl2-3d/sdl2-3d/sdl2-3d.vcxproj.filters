@@ -444,12 +444,6 @@
     <None Include="Assets\Scripts\Blocks\DiamondOreBlock.lua">
       <Filter>Assets\Scripts\Blocks</Filter>
     </None>
-    <None Include="Assets\Shaders\gbuffer.frag">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Assets\Shaders\gbuffer.vert">
-      <Filter>Assets\Shaders</Filter>
-    </None>
     <None Include="Assets\Shaders\multishadowmap.geom">
       <Filter>Assets\Shaders</Filter>
     </None>
@@ -496,6 +490,12 @@
       <Filter>Assets\Shaders</Filter>
     </None>
     <None Include="Assets\Shaders\deferredpointlight.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\geometry.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="Assets\Shaders\geometry.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
   </ItemGroup>

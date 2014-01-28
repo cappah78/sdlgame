@@ -126,8 +126,8 @@
     <None Include="Assets\Shaders\forwardshader.frag" />
     <None Include="Assets\Shaders\forwardshader.vert" />
     <None Include="Assets\Shaders\fullscreenquad.geom" />
-    <None Include="Assets\Shaders\gbuffer.frag" />
-    <None Include="Assets\Shaders\gbuffer.vert" />
+    <None Include="Assets\Shaders\geometry.frag" />
+    <None Include="Assets\Shaders\geometry.vert" />
     <None Include="Assets\Shaders\lightcalc.frag" />
     <None Include="Assets\Shaders\lightcalc.vert" />
     <None Include="Assets\Shaders\multishadowmap.geom" />

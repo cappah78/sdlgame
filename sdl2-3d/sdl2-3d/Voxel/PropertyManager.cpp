@@ -306,7 +306,7 @@ void PropertyManager::parsePerBlockProperties(BlockProperties& properties)
 		{
 			assert(false && "Unsupported type");
 		}
-		printf("key: %s \n", key.c_str());
+		//printf("key: %s \n", key.c_str());
 
 		properties.perBlockProperties.push_back(PerBlockProperty(key, r.second, type, defaultVal));
 	}

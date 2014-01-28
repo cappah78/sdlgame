@@ -101,7 +101,7 @@ struct BlockEventTrigger
 };
 
 /** The data stored for every block in a chunk */
-__declspec(align(16)) struct VoxelBlock
+struct VoxelBlock
 {
 	VoxelBlock() : id(0), blockDataIndex(-1), skyVisible(false), solid(false), lightLevel(0) {};
 	//VoxelBlock(const VoxelBlock& copy) = delete;

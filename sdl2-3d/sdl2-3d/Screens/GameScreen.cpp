@@ -14,7 +14,7 @@
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
 
-static const float CAMERA_FAR = 400.0f;	//is also fog/chunk load distance
+static const float CAMERA_FAR = 280.0f;	//is also fog/chunk load distance
 
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
@@ -83,14 +83,27 @@ bool GameScreen::keyDown(SDL_Keysym key)
 
 	if (key.sym == SDLK_t)
 	{
-		//m_worldRenderer.doLights(m_camera);
 		m_deferredWorldRenderer.doLight(m_camera);
 	}
 
 	if (key.sym == SDLK_f)
 	{
-		//m_worldRenderer.doLights(m_camera);
 		m_world.doBlockUpdate(glm::ivec3(glm::round(m_camera.m_position)));
+	}
+
+	if (key.sym == SDLK_PERIOD)
+	{
+		m_camera.setNearFar(m_camera.m_near, m_camera.m_far + 10.0f);
+	}
+
+	if (key.sym == SDLK_COMMA)
+	{
+		m_camera.setNearFar(m_camera.m_near, m_camera.m_far - 10.0f);
+	}
+
+	if (key.sym == SDLK_F1)
+	{
+		printf("Controls: \nWASD, Shift, Space to fly \nR to toggle different speeds \nPeriod to increase render distance \nComma to decrease render distance \nF to trigger a block update at location \nT to place a light at location(wip)\n");
 	}
 
 

@@ -29,8 +29,8 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	, m_tickDurationSec(1 / 5.0f)
 	, m_gbuffer(0)
 {
+	printf("Press F1 to print controls. \n");
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
-
 	Game::initLua(m_L);
 	initializeLuaWorld();
 	m_textureArray = m_propertyManager.generateBlockTextureArray(16, 16);
