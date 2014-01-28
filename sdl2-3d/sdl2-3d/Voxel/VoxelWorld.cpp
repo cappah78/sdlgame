@@ -59,6 +59,8 @@ static const unsigned int MAX_GENERATE_TIME_MS = 2;
 
 void VoxelWorld::update(float deltaSec, const Camera& camera)
 {
+	doBlockUpdates();
+
 	unsigned int start = Game::getSDLTicks();
 
 	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) - 1.0f;
@@ -123,6 +125,7 @@ void VoxelWorld::doBlockUpdates()
 
 		chunk->doBlockUpdate(blockChunkPos, blockWorldPos);
 	}
+	m_updatedBlockPositions.clear();
 }
 
 BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
@@ -317,6 +320,11 @@ const VoxelBlock& VoxelWorld::getBlock(const glm::ivec3& pos)
 	const glm::ivec3& blockPos = toChunkBlockPos(pos);
 
 	return chunk->getBlock(blockPos);
+}
+
+void VoxelWorld::doBlockUpdate(const glm::ivec3& blockWorldPos)
+{
+	m_updatedBlockPositions.push_back(blockWorldPos);
 }
 
 const BlockProperties& VoxelWorld::getBlockProperties(BlockID blockID)

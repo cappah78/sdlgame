@@ -11,5 +11,10 @@ Blocks.SandBlock = {
 
 	perBlock = {
 		thingy = "int(5)"
-	}
+	},
+
+	blockUpdate = function (block)
+		print("sandblock update: " .. block.x .. ":" .. block.y .. ":".. block.z .. " thingy: " .. block.thingy)
+		block.thingy = block.thingy - 1
+	end,
 }

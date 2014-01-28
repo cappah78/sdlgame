@@ -5,8 +5,6 @@
 #include <assert.h>
 #include <algorithm>
 
-
-
 struct PropertiesSorter
 {
 	inline bool operator() (const PerBlockProperty& lhs, const PerBlockProperty& rhs)
@@ -18,6 +16,7 @@ struct PropertiesSorter
 BlockProperties::BlockProperties(luabridge::LuaRef block, PropertyManager& propertyManager)
 	: luaRef(block)
 	, blockUpdateMethod(luaRef.state())
+	, hasBlockUpdateMethod(false)
 {
 	luabridge::LuaRef texture = block["texture"];
 	const char* topTexCStr = texture["top"];				//read the texture paths

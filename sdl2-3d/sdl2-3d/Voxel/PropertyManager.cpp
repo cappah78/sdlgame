@@ -20,20 +20,10 @@ static const char* const LUA_BLOCK_Y_NAME = "y";
 static const char* const LUA_BLOCK_Z_NAME = "z";
 static const std::string DEFAULT_BLOCK = "defaultblock";
 
-void PropertyManager::doBlockUpdate(const VoxelBlock& block, const glm::ivec3& blockPos)
+PropertyManager::PropertyManager()
 {
-	const BlockProperties& properties = getBlockProperties(block.id);
-	if (properties.hasBlockUpdateMethod)
-	{
-		luabridge::newTable(properties.luaRef.state());
-		for (const PerBlockProperty& prop : properties.perBlockProperties)
-		{
-
-		}
-
-
-
-	}
+	// first item is air block, just insert empty properties
+	m_blockProperties.push_back(BlockProperties(luaL_newstate()));
 }
 
 void PropertyManager::updateTickCountEvents()
@@ -85,17 +75,16 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 			return 0;
 
 		//TODO: some sort of persistent block id manager thing.
-		++m_lastRegisteredId;
-		block["id"] = m_lastRegisteredId;
 
-		m_blockNameIDMap.insert(std::make_pair(blockname, m_lastRegisteredId));
-		m_blockProperties.resize(m_lastRegisteredId + 1, BlockProperties(block.state()));
-		m_blockProperties[m_lastRegisteredId] = BlockProperties(block, *this);
+		m_blockProperties.push_back(BlockProperties(block, *this));
+		BlockID id = m_blockProperties.size() - 1;
 
+		m_blockNameIDMap.insert(std::make_pair(blockname, id));
 
-		parseBlock(m_blockProperties[m_lastRegisteredId]);
+		block["id"] = id;
+		parseBlock(m_blockProperties[m_blockProperties.size() - 1]);
 
-		return m_lastRegisteredId;
+		return m_blockProperties.size();
 	}
 }
 
@@ -207,8 +196,8 @@ void PropertyManager::parseEvents(BlockProperties& properties)
 		std::string left = triggerStr.substr(0, leftEnd);
 		std::string right = triggerStr.substr(rightBegin, triggerStr.size());
 
-		BlockPropertyValue leftProp = getValue(left, properties.perBlockProperties);
-		BlockPropertyValue rightProp = getValue(right, properties.perBlockProperties);
+		BlockPropertyValue leftProp = parseBlockPropertyValue(left, properties);
+		BlockPropertyValue rightProp = parseBlockPropertyValue(right, properties);
 		
 		luabridge::LuaRef eventRef = e.second["event"];
 		BlockEventTrigger trigger(leftProp, rightProp, eval, eventRef);
@@ -227,8 +216,9 @@ void PropertyManager::parseEvents(BlockProperties& properties)
 	}
 }
 
-BlockPropertyValue PropertyManager::getValue(std::string str, const std::vector<PerBlockProperty>& perBlockProperties)
+BlockPropertyValue PropertyManager::parseBlockPropertyValue(std::string str, BlockProperties& properties)
 {
+	const std::vector<PerBlockProperty>& perBlockProperties = properties.perBlockProperties;
 	for (unsigned int i = 0; i < perBlockProperties.size(); ++i)
 	{
 		const PerBlockProperty& p = perBlockProperties[i];

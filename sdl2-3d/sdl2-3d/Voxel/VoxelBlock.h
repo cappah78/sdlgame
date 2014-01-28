@@ -116,7 +116,7 @@ __declspec(align(16)) struct VoxelBlock
 /** Global constant properties for all the blocks of a single type. */
 struct BlockProperties
 {
-	BlockProperties(luabridge::LuaRef luaRef) : luaRef(luaRef), blockUpdateMethod(luaRef.state()) {}
+	BlockProperties(lua_State* state) : luaRef(state), blockUpdateMethod(state), hasBlockUpdateMethod(false) {}
 	BlockProperties(luabridge::LuaRef luaRef, PropertyManager& propertyManager);
 	TextureID getTextureID(Face face) const;
 

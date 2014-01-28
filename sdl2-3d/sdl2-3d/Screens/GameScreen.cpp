@@ -75,9 +75,21 @@ bool GameScreen::keyDown(SDL_Keysym key)
 {
 	if (key.sym == SDLK_r)
 	{
+	
+	}
+
+	if (key.sym == SDLK_t)
+	{
 		//m_worldRenderer.doLights(m_camera);
 		m_deferredWorldRenderer.doLight(m_camera);
 	}
+
+	if (key.sym == SDLK_f)
+	{
+		//m_worldRenderer.doLights(m_camera);
+		m_world.doBlockUpdate(glm::ivec3(m_camera.m_position));
+	}
+
 
 	return false;
 }

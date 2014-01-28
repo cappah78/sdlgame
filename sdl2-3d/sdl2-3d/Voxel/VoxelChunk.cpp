@@ -17,10 +17,9 @@ VoxelChunk::VoxelChunk(PropertyManager& propertyManager, const glm::ivec3& pos)
 
 void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dataPtr, unsigned int dataSize)
 {
-	unsigned int idx = getBlockIndex(blockPos);
-	m_shouldUpdate = false;
+	m_shouldUpdate = true;
 
-	VoxelBlock& oldBlock = m_blocks[idx];
+	VoxelBlock& oldBlock = m_blocks[getBlockIndex(blockPos)];
 	removeBlockData(oldBlock);
 
 	if (blockID == 0)	//if air block return;
@@ -29,6 +28,7 @@ void VoxelChunk::setBlock(BlockID blockID, const glm::ivec3& blockPos, void* dat
 	VoxelBlock& newBlock = oldBlock;	//just for verbosity
 	newBlock.id = blockID;
 	newBlock.solid = blockID != 0; //all non air blocks are solid for now.
+	setDefaultBlockData(newBlock);
 }
 
 void VoxelChunk::setDefaultBlockData(VoxelBlock& block)
@@ -102,6 +102,24 @@ void VoxelChunk::updateBlockEventTriggers(VoxelBlock& block, const glm::ivec3& b
 			triggered = (e.left <= e.right);
 			break;
 		}
+		if (triggered)
+		{
+			// create a lua table for the blockUpdate method argument
+			luabridge::LuaRef luaBlockArg = luabridge::newTable(properties.luaRef.state());
+
+			luaBlockArg["x"] = blockWorldPos.x;	//add useful values
+			luaBlockArg["y"] = blockWorldPos.y;
+			luaBlockArg["z"] = blockWorldPos.z;
+
+			BlockID oldID = block.id;
+			bool hasProperties = properties.perBlockProperties.size() > 0;
+			if (hasProperties)
+				insertBlockData(block, luaBlockArg);
+			e.process(luaBlockArg);
+			// update data with changes made in script, only if the block was not removed
+			if (hasProperties && block.id == oldID)
+				updateBlockData(block, luaBlockArg);
+		}
 	}
 }
 
@@ -161,8 +179,12 @@ void VoxelChunk::updateBlockData(const VoxelBlock& block, luabridge::LuaRef& tab
 
 void VoxelChunk::doBlockUpdate(const glm::ivec3& blockChunkPos, const glm::ivec3& blockWorldPos)
 {
+
 	const VoxelBlock& block = getBlock(getBlockIndex(blockChunkPos));
 	const BlockProperties& properties = m_propertyManager.getBlockProperties(block.id);
+
+	printf("update: %i : %i : %i : %i \n", blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, block.id);
+
 
 	if (!properties.hasBlockUpdateMethod)
 		return;

@@ -8,4 +8,8 @@ Blocks.GrassBlock = {
 		left = "Assets\\Textures\\MinecraftBlocks\\grassside.png",
 		right = "Assets\\Textures\\MinecraftBlocks\\grassside.png"
 	},
+
+	blockUpdate = function (block)
+		print("grassblock update: " .. block.x .. ":" .. block.y .. ":".. block.z)
+	end,
 }

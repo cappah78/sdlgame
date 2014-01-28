@@ -8,4 +8,8 @@ Blocks.WaterBlock = {
 		left = "Assets\\Textures\\MinecraftBlocks\\water.png",
 		right = "Assets\\Textures\\MinecraftBlocks\\water.png"
 	},
+
+	blockUpdate = function (block)
+		print("waterblock update: " .. block.x .. ":" .. block.y .. ":".. block.z)
+	end,
 }

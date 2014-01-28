@@ -41,6 +41,7 @@ public:
 	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 
 	void update(float deltaSec, const Camera& camera);
+	void doBlockUpdate(const glm::ivec3& blockWorldPos);
 
 	const ChunkManager::ChunkMap& getChunks();
 

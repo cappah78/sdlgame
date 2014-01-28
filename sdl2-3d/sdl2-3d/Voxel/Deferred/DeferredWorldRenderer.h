@@ -32,6 +32,8 @@ private:
 	void doDirectionalLightPass(const VoxelWorld& world, const Camera& camera);
 
 	void buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world);
+	void buildChunkWithAO(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world);
+
 	void removeRenderChunk(const glm::ivec3& pos);
 	const std::shared_ptr<VoxelRenderer::Chunk> getRenderChunk(const glm::ivec3& pos);
 
