@@ -1,10 +1,12 @@
 Simple high performance work in progress Minecraft like Voxel Renderer with lua scripting.
 
-Runs immediately on a fresh installation of windows using VS2013 without any other installations. VS2012 might work too (msvcr120(d).dll runtimes required)
+Runs immediately on a fresh installation of windows using VS2013 without any other installations.
+Requires a shader model 4.0 GPU (gl3.3) and Visual C++ Redistributable 2012.
 
-Requires an opengl 3.3+ GPU with ~1GB of vram (render distance still hardcoded)
+Press F1 to print controls in console
 
 Random screenshot of last finished features:
+https://dl.dropboxusercontent.com/u/18555381/Permanent/moarrenderdistances.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/blocktypes.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/viewdistance.png
 https://dl.dropboxusercontent.com/u/18555381/Permanent/libnoise.png
