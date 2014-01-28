@@ -21,7 +21,6 @@ layout(location = 2) in vec4 in_color;
 
 out vec3 texCoord;
 out vec4 color;
-out float eyeDist;
 
 void main(void)
 {
@@ -40,11 +39,6 @@ void main(void)
 
 	// offset the vertices by the position
 	gl_Position = u_mvp * vec4(position, 1.0);
-
-	eyeDist = sqrt(
-		(position.x - u_camPos.x) * (position.x - u_camPos.x) +
-        (position.y - u_camPos.y) * (position.y - u_camPos.y) +
-        (position.z - u_camPos.z) * (position.z - u_camPos.z)); 
 
 	// supply 3d texcoord to fragment shader
 	texCoord = vec3(in_texCoord, textureId);

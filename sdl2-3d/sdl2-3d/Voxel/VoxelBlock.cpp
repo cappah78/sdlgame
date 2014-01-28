@@ -5,6 +5,8 @@
 #include <assert.h>
 #include <algorithm>
 
+
+
 struct PropertiesSorter
 {
 	inline bool operator() (const PerBlockProperty& lhs, const PerBlockProperty& rhs)
@@ -13,7 +15,8 @@ struct PropertiesSorter
 	}
 };
 
-BlockRenderData::BlockRenderData(luabridge::LuaRef block, TextureManager& textureManager)
+BlockProperties::BlockProperties(luabridge::LuaRef block, PropertyManager& propertyManager)
+: luaRef(block)
 {
 	luabridge::LuaRef texture = block["texture"];
 	const char* topTexCStr = texture["top"];				//read the texture paths
@@ -23,8 +26,7 @@ BlockRenderData::BlockRenderData(luabridge::LuaRef block, TextureManager& textur
 	const char* frontTexCStr = texture["front"];
 	const char* backTexCStr = texture["back"];
 
-	isTransparent = block["transparent"].isNil() ? block["transparent"] : false;
-	isAnimated = block["animated"].isNil() ? block["animated"] : false;
+	solid = block["transparent"].isNil() ? block["transparent"] : true;
 
 	assert(topTexCStr != NULL && "Top face texture not declared");
 	assert(bottomTexCStr != NULL && "Bottom face texture not declared");
@@ -33,15 +35,15 @@ BlockRenderData::BlockRenderData(luabridge::LuaRef block, TextureManager& textur
 	assert(frontTexCStr != NULL && "Front face texture not declared");
 	assert(backTexCStr != NULL && "Back face texture not declared");
 
-	topTexture = textureManager.getTextureID(topTexCStr);
-	bottomTexture = textureManager.getTextureID(bottomTexCStr);
-	leftTexture = textureManager.getTextureID(leftTexCStr);
-	rightTexture = textureManager.getTextureID(rightTexCStr);
-	frontTexture = textureManager.getTextureID(frontTexCStr);
-	backTexture = textureManager.getTextureID(backTexCStr);
+	topTexture = propertyManager.getBlockTextureID(topTexCStr);
+	bottomTexture = propertyManager.getBlockTextureID(bottomTexCStr);
+	leftTexture = propertyManager.getBlockTextureID(leftTexCStr);
+	rightTexture = propertyManager.getBlockTextureID(rightTexCStr);
+	frontTexture = propertyManager.getBlockTextureID(frontTexCStr);
+	backTexture = propertyManager.getBlockTextureID(backTexCStr);
 }
 
-TextureID BlockRenderData::getTextureID(Face face) const
+unsigned short BlockProperties::getTextureID(Face face) const
 {
 	switch (face)
 	{

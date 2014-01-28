@@ -12,6 +12,7 @@
 #include "..\Voxel\VoxelRenderer.h"
 #include "../Voxel/VoxelWorld.h"
 #include "../Voxel/WorldRenderer.h"
+#include "../Voxel/Deferred/DeferredWorldRenderer.h"
 
 
 class VoxelCache;
@@ -35,7 +36,7 @@ private:
 	TextureManager m_textureManager;
 	VoxelWorld m_world;
 	WorldRenderer m_worldRenderer;
-
+	DeferredWorldRenderer m_deferredWorldRenderer;
 	VoxelRenderer m_voxelRenderer;
 	TextureArray* m_tileSet;
 };

@@ -36,7 +36,7 @@ public:
 
 	std::unique_ptr<VoxelChunk>& getChunk(const glm::ivec3& chunkPos);
 
-	const TextureArray* const getTileSet() const { return m_textureArray; };
+	const std::shared_ptr<TextureArray> getTileSet() const { return m_textureArray; };
 	const TextureManager& getTextureManager() const { return m_textureManager; };
 	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 
@@ -60,7 +60,7 @@ private:
 	float m_tickDurationSec;
 
 	lua_State* m_L;
-	TextureArray* m_textureArray;
+	std::shared_ptr<TextureArray> m_textureArray;
 	TextureManager& m_textureManager;
 	PropertyManager m_propertyManager;
 

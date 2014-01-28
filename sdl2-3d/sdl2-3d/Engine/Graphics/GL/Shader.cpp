@@ -5,6 +5,8 @@
 
 bool Shader::s_begun = false;
 
+//#define SHADER_STRICT_UNIFORM_LOC
+
 Shader::Shader() 
 {
 
@@ -51,7 +53,9 @@ void Shader::setUniform1i(const char* const uniformName, int val)
 	if (it == m_uniformLocMap.end())
 	{
 		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+#ifdef SHADER_STRICT_UNIFORM_LOC
 		assert(loc != -1);
+#endif //SHADER_STRICT_UNIFORM_LOC
 		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniform1i(loc, val);
 	}
@@ -65,7 +69,9 @@ void Shader::setUniform1f(const char* const uniformName, float val)
 	if (it == m_uniformLocMap.end())
 	{
 		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+#ifdef SHADER_STRICT_UNIFORM_LOC
 		assert(loc != -1);
+#endif //SHADER_STRICT_UNIFORM_LOC
 		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniform1f(loc, val);
 	}
@@ -79,8 +85,9 @@ void Shader::setUniform2f(const char* const uniformName, const glm::vec2& vec)
 	if (it == m_uniformLocMap.end())
 	{
 		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+#ifdef SHADER_STRICT_UNIFORM_LOC
 		assert(loc != -1);
-		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
+#endif //SHADER_STRICT_UNIFORM_LOC		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniform2f(loc, vec.x, vec.y);
 	}
 	else
@@ -93,8 +100,9 @@ void Shader::setUniform3f(const char* const uniformName, const glm::vec3& vec)
 	if (it == m_uniformLocMap.end())
 	{
 		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+#ifdef SHADER_STRICT_UNIFORM_LOC
 		assert(loc != -1);
-		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
+#endif //SHADER_STRICT_UNIFORM_LOC		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniform3f(loc, vec.x, vec.y, vec.z);
 	}
 	else
@@ -107,8 +115,9 @@ void Shader::setUniformMatrix4f(const char* const uniformName, const glm::mat4& 
 	if (it == m_uniformLocMap.end())
 	{
 		GLint loc = glGetUniformLocation(m_shaderID, uniformName);
+#ifdef SHADER_STRICT_UNIFORM_LOC
 		assert(loc != -1);
-		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
+#endif //SHADER_STRICT_UNIFORM_LOC		m_uniformLocMap.insert(std::make_pair(uniformName, loc));
 		glUniformMatrix4fv(loc, 1, GL_FALSE, &mat[0][0]);
 	}
 	else

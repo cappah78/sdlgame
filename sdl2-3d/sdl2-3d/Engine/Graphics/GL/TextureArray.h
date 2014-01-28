@@ -17,7 +17,7 @@ public:
 		GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_NEAREST,
 		GLint textureWrapS = GL_CLAMP_TO_EDGE, GLint textureWrapT = GL_CLAMP_TO_EDGE);
 
-	TextureArray(const std::vector<const std::string*>& imageNames, unsigned int textureWidth, unsigned int textureHeight,
+	TextureArray(const std::vector<std::string>& imageNames, unsigned int textureWidth, unsigned int textureHeight,
 		bool generateMipMaps = true,
 		GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_NEAREST,
 		GLint textureWrapS = GL_CLAMP_TO_EDGE, GLint textureWrapT = GL_CLAMP_TO_EDGE);

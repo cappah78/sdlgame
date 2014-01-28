@@ -14,7 +14,7 @@
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
 
-static const float CAMERA_FAR = 450.0f;	//is also fog/chunk load distance
+static const float CAMERA_FAR = 400.0f;	//is also fog/chunk load distance
 
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
@@ -28,7 +28,7 @@ GameScreen::GameScreen()
 		CAMERA_NEAR, 
 		CAMERA_FAR)
 	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
-	, m_textureManager(16, 16)
+	, m_textureManager()
 	, m_world(m_textureManager)
 {
 	Game::input.registerKeyListener(&m_cameraController);
@@ -53,7 +53,8 @@ void GameScreen::render(float deltaSec)
 	m_camera.update();
 
 	m_world.update(deltaSec, m_camera);
-	m_worldRenderer.render(m_world, m_camera);
+	//m_worldRenderer.render(m_world, m_camera);
+	m_deferredWorldRenderer.render(m_world, m_camera);
 	//m_skyBox.render(m_camera);
 
 	Game::graphics.swap();
@@ -74,8 +75,8 @@ bool GameScreen::keyDown(SDL_Keysym key)
 {
 	if (key.sym == SDLK_r)
 	{
-		m_worldRenderer.doLights(m_camera);
-
+		//m_worldRenderer.doLights(m_camera);
+		m_deferredWorldRenderer.doLight(m_camera);
 	}
 
 	return false;

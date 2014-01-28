@@ -1,14 +1,16 @@
 #ifndef MESH_H_
-#define	MESH_H_
+#define MESH_H_
 
 #include <vector>
 #include <glm\glm.hpp>
+#include <memory>
+#include "VertexBuffer.h"
 
 struct aiMesh;
 struct aiScene;
 class Texture;
 
-/** 
+/**
 -WIP-
 Renderable mesh
 */
@@ -25,39 +27,24 @@ public:
 	static const unsigned int WORLD_MAT_LOCATION_R3 = 5;
 	static const unsigned int WORLD_MAT_LOCATION_R4 = 6;
 
-    Mesh();
+	Mesh();
 	Mesh(const std::string& fileName);
-    ~Mesh();
+	~Mesh();
 
-    bool loadMesh(const std::string& Filename);
-    void render();
-    void render(unsigned int numInstances, const glm::mat4* wvpMats, const glm::mat4* worldMats);
+	void loadMesh(const std::string& Filename);
+	//void render();
+	//void render(unsigned int numInstances, const glm::mat4* wvpMats, const glm::mat4* worldMats);
 
 private:
-	struct Vertex
-	{
-		glm::vec3 m_pos;
-		glm::vec2 m_tex;
-		glm::vec3 m_normal;
-
-		Vertex() {}
-
-		Vertex(const glm::vec3& pos, const glm::vec2& tex, const glm::vec3& normal)
-		{
-			m_pos = pos;
-			m_tex = tex;
-			m_normal = normal;
-		}
-	};
 
 	struct MeshEntry {
 		static const unsigned int INVALID_MATERIAL = 0xFFFFFFFF;
 
 		MeshEntry()
-		: numIndices(0)
-		, baseVertex(0)
-		, baseIndex(0)
-		, materialIndex(INVALID_MATERIAL)
+			: numIndices(0)
+			, baseVertex(0)
+			, baseIndex(0)
+			, materialIndex(INVALID_MATERIAL)
 		{};
 
 		unsigned int numIndices;
@@ -66,29 +53,20 @@ private:
 		unsigned int materialIndex;
 	};
 
+	void initVertexBuffers(const aiScene* scene);
+	bool initMaterials(const aiScene* scene, const std::string& filename);
 
-    bool initFromScene(const aiScene* scene, const std::string& filename);
-	/** Create a mesh from the given vertex data*/
-    void initMesh(const aiMesh* aiMesh,
-                  std::vector<glm::vec3>& positions,
-                  std::vector<glm::vec3>& normals,
-                  std::vector<glm::vec2>& texCoords,
-                  std::vector<unsigned int>& indices);
+	std::unique_ptr<VertexBuffer> m_indiceBuffer;
+	std::unique_ptr<VertexBuffer> m_positionBuffer;
+	std::unique_ptr<VertexBuffer> m_normalBuffer;
+	std::unique_ptr<VertexBuffer> m_tangentBuffer;
+	std::unique_ptr<VertexBuffer> m_bitangentBuffer;
+	std::vector<std::unique_ptr<VertexBuffer>> m_texcoordBuffers;
+	std::vector<std::unique_ptr<VertexBuffer>> m_colorBuffers;
 
-    bool initMaterials(const aiScene* scene, const std::string& filename);
-    void clear();
-
-
-	enum Buffers { INDICES, POSITION, NORMAL, TEXCOORD, WORLD_MAT, NUM_BUFFERS };
-
-    GLuint m_vao;
-	GLuint m_buffers[NUM_BUFFERS];
-
-    std::vector<MeshEntry> m_entries;
+	std::vector<MeshEntry> m_entries;
 	//TODO: refactor into Material
-    std::vector<Texture*> m_textures;
+	std::vector<Texture*> m_textures;
 };
 
-
-#endif	/* MESH_H_ */
-
+#endif MESH_H_

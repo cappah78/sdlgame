@@ -16,8 +16,8 @@ public:
 
 	void unbind();
 	void bindForWriting();
-	void bindForReading();
-	void bindDepthTexture(unsigned int textureUnit);
+	void bindForReading(unsigned int fromTextureUnit = 0);
+	void bindDepthTexture(unsigned int textureUnit = 0);
 
 	void setReadBuffer(unsigned int textureIdx);
 

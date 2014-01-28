@@ -24,7 +24,6 @@ const double blocksPerUnit = 492.0;
 VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	: m_L(luaL_newstate())
 	, m_textureManager(textureManager)
-	, m_propertyManager(textureManager)
 	, m_chunkManager(m_propertyManager)
 	, m_timeAccumulator(0)
 	, m_tickDurationSec(1 / 5.0f)
@@ -34,8 +33,7 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 
 	Game::initLua(m_L);
 	initializeLuaWorld();
-	m_textureArray = m_textureManager.generateTextureArray();
-
+	m_textureArray = m_propertyManager.generateBlockTextureArray(16, 16);
 
 	////////////////Map generation//////////////	//WIP!
 	// TODO: remove statics //

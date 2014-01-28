@@ -50,7 +50,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
-    <ClInclude Include="Voxel\LightManager.h" />
+    <ClInclude Include="Voxel\Deferred\DeferredWorldRenderer.h" />
+    <ClInclude Include="Voxel\Deferred\PointLight.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
     <ClInclude Include="Voxel\TextureManager.h" />
     <ClInclude Include="Voxel\PropertyManager.h" />
@@ -92,7 +93,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
     <ClCompile Include="Voxel\ChunkManager.cpp" />
-    <ClCompile Include="Voxel\LightManager.cpp" />
+    <ClCompile Include="Voxel\Deferred\DeferredWorldRenderer.cpp" />
+    <ClCompile Include="Voxel\Deferred\PointLight.cpp" />
     <ClCompile Include="Voxel\TextureManager.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
     <ClCompile Include="Voxel\VoxelBlock.cpp" />
@@ -118,6 +120,8 @@
     <None Include="Assets\Scripts\Blocks\WaterBlock.lua" />
     <None Include="Assets\Scripts\Init.lua" />
     <None Include="Assets\Scripts\WorldGen\GenTest.lua" />
+    <None Include="Assets\Shaders\deferredpointlight.frag" />
+    <None Include="Assets\Shaders\deferredpointlight.vert" />
     <None Include="Assets\Shaders\depth.frag" />
     <None Include="Assets\Shaders\forwardshader.frag" />
     <None Include="Assets\Shaders\forwardshader.vert" />

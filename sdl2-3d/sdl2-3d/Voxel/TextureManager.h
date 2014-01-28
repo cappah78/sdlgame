@@ -5,30 +5,33 @@ typedef unsigned short TextureID;
 
 #include <string>
 #include <map>
+#include <vector>
 #include <assert.h>
 
 class TextureArray;
+class Texture;
 
 class TextureManager
 {
 public:
-	TextureManager(unsigned int textureWidth, unsigned int textureHeight)
+
+	static const unsigned short INVALID_TEXTURE_ID = 65535;
+
+	TextureManager()
 		: m_lastTextureID(0)
-		, m_textureWidth(textureWidth)
-		, m_textureHeight(textureHeight)
 	{};
 	TextureManager(const TextureManager& copy) = delete;
-	~TextureManager() {};
+	~TextureManager();
+
+	TextureID registerTexture(const std::string& texturename);
+	const Texture* const getTexture(TextureID textureID) const;
 
 	TextureID getTextureID(const std::string& texturename);
-	/** Generate the texture array matching with the id's, returned object must be deleted by user */
-	TextureArray* generateTextureArray();
 private:
-	unsigned int m_textureWidth;
-	unsigned int m_textureHeight;
 
 	TextureID m_lastTextureID;
 	std::map<const std::string, TextureID> m_textureNameIDMap;
+	std::vector<Texture*> m_textures;
 };
 
 #endif //TEXTURE_MANAGER_H_

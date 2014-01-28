@@ -1,23 +1,15 @@
 #include "QuadRenderer.h"
 
 QuadRenderer::QuadRenderer()
-	: m_positionBuffer(12)
-	, m_texcoordBuffer(8)
-	, m_indiceBuffer(6, GL_ELEMENT_ARRAY_BUFFER)
+	: m_indiceBuffer(GL_ELEMENT_ARRAY_BUFFER)
 {
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
-	m_positionBuffer.add(&QUAD_VERTICES[0], 12);
+	m_positionBuffer.upload(&QUAD_VERTICES[0], 12 * sizeof(float));
 	m_positionBuffer.setAttribPointer(0, GL_FLOAT, 3);
-	m_positionBuffer.update();
 
-	m_texcoordBuffer.add(&QUAD_TEXCOORDS[0], 8);
-	m_texcoordBuffer.setAttribPointer(1, GL_FLOAT, 2);
-	m_texcoordBuffer.update();
-
-	m_indiceBuffer.add(&QUAD_INDICES[0], 6);
-	m_indiceBuffer.update();
+	m_indiceBuffer.upload(&QUAD_INDICES[0], 6 * sizeof(unsigned char));
 }
 
 QuadRenderer::~QuadRenderer()

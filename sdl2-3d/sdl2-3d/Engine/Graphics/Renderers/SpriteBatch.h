@@ -2,6 +2,7 @@
 #define SPRITEBATCH_H_
 
 #include <glm\glm.hpp>
+#include <vector>
 #include "../GL/VertexBuffer.h"
 
 typedef int GLint;
@@ -55,8 +56,10 @@ private:
 	GLuint m_shader;
 	GLuint m_vao;
 
-	VertexBuffer<float> m_verticeBuffer;
-	VertexBuffer<unsigned short> m_indiceBuffer;
+	VertexBuffer m_verticeBuffer;
+	VertexBuffer m_indiceBuffer;
+
+	std::vector<float> m_verticeData;
 
 	GLint m_mvpLoc; // model view projection matrix uniform
 

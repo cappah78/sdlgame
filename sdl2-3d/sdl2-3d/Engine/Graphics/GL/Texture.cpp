@@ -12,6 +12,7 @@ Texture::Texture(const Pixmap& pixmap, bool generateMipMaps,
 	: m_width(pixmap.m_width)
 	, m_height(pixmap.m_height)
 	, m_numComponents(pixmap.m_numComponents)
+	, m_textureID(0)
 {
 	setupGLTexture(pixmap, generateMipMaps, minFilter, magFilter, textureWrapS, textureWrapT);
 }
@@ -19,6 +20,7 @@ Texture::Texture(const Pixmap& pixmap, bool generateMipMaps,
 Texture::Texture(const char* const fileName, bool generateMipMaps,
 	GLint minFilter, GLint magFilter,
 	GLint textureWrapS, GLint textureWrapT)
+	: m_textureID(0)
 {
 	Pixmap p(fileName);
 	m_width = p.m_width;
@@ -52,6 +54,9 @@ void Texture::bind(GLenum textureUnit) const
 void Texture::setupGLTexture(const Pixmap& pixmap, bool generateMipMaps, GLint minFilter, GLint magFilter,
 	GLint textureWrapS, GLint textureWrapT)
 {
+	if (!pixmap.m_data)
+		return;
+
 	glGenTextures(1, &m_textureID);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
  

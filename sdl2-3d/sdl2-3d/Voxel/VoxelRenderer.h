@@ -18,30 +18,14 @@
 
 class Camera;
 
-/** 
-Efficiently renders textured/colored cubes minecraft style.
-Uses VoxelRenderer::Chunk objects to store, render and add faces.
-
-General usage:
-VoxelRenderer::Chunk* chunk = voxelRenderer.createChunk(xOffset, yOffset, zOffset);
-voxelRenderer.beginChunk(chunk);
-// for every visible face that fits within this cache (size is VoxelChunk::CHUNK_SIZE)
-chunk->addFace(Face::TOP, x, y, z, textureIdx, color, color, color, color);
-
-voxelRenderer.beginRender(textureArray);
-voxelRenderer.renderChunk(chunk, camera);
-voxelRenderer.endRender();
-
-Implementation details:
-A single index and texcoord buffer is shared by all caches. Only a single vertex and a single color
-array will be used to construct the data on the gpu, its shared by all caches.
-*/
 class VoxelRenderer
 {
 private:
 	static const unsigned int POSITION_LOC = 0;
 	static const unsigned int TEXCOORD_LOC = 1;
 	static const unsigned int COLOR_LOC = 2;
+	static const unsigned int VERTEX_ID_LOC = 3
+		;
 	static const unsigned int MAX_FACES_PER_CHUNK = (CHUNK_SIZE / 2)*(CHUNK_SIZE / 2)*(CHUNK_SIZE / 2) * 6;
 	static const unsigned int SIZE_BITS = 5; //2^sizebits == chunksize or sqrt(chunkSize) + 1
 	static const unsigned int TEXTURE_ID_BITS = 12;
@@ -86,12 +70,7 @@ public:
 		inline unsigned int getNumFaces() const { return m_numFaces; };
 
 	private:
-		Chunk(float xOffset, float yOffset, float zOffset
-			, std::vector<Color8888>& colorData
-			, std::vector<VoxelVertex>& pointData
-			, std::vector<unsigned short>& indiceData
-			, VoxelRenderer& renderer);
-
+		Chunk(float xOffset, float yOffset, float zOffset, VoxelRenderer& renderer);
 		~Chunk();
 
 		VoxelRenderer& m_renderer;
@@ -99,9 +78,9 @@ public:
 		GLuint m_vao;
 		unsigned int m_numFaces;
 
-		VertexBuffer<VoxelVertex> m_pointBuffer;
-		VertexBuffer<Color8888> m_colorBuffer;
-		VertexBuffer<unsigned short> m_indiceBuffer;
+		VertexBuffer m_pointBuffer;
+		VertexBuffer m_colorBuffer;
+		VertexBuffer m_indiceBuffer;
 	};
 
 	VoxelRenderer();
@@ -121,13 +100,10 @@ private:
 	static void returnChunk(Chunk* chunk);
 
 	bool m_begunChunk;
-	bool m_begunRender;
 	bool m_blendEnabled;
 
-	VertexBuffer<glm::vec2> m_texcoordBuffer;
-	VertexBuffer<unsigned short> m_vertexIdBuffer;
-
-	/** Arrays shared to */
+	std::vector<glm::vec2> m_texcoordData;
+	VertexBuffer m_texcoordBuffer;
 
 	std::vector<Color8888> m_colorData;
 	std::vector<VoxelVertex> m_pointData;

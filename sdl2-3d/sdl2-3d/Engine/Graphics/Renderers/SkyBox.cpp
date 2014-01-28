@@ -52,7 +52,7 @@ void SkyBox::render(const Camera& camera)
 	glUniformMatrix4fv(m_mvpLoc, 1, GL_FALSE, &mvp[0][0]);
 
 	m_cubeMap.bind(GL_TEXTURE0);
-	m_mesh.render();
+	//m_mesh.render();//TODO: fixme
 
 	glUseProgram(0);
 }

@@ -7,6 +7,18 @@
 
 #include <unordered_map>
 #include <algorithm>
+#include "../Engine/Graphics/GL/TextureArray.h"
+
+//TODO: perhaps move to a .lua config
+static const char* const LUA_BLOCKS_NAMESPACE = "Blocks";
+static const char* const LUA_INT_NAME = "int";
+static const char* const LUA_BOOL_NAME = "bool";
+static const char* const LUA_FLOAT_NAME = "float";
+static const char* const LUA_TICK_COUNT_NAME = "tickCount";
+static const char* const LUA_BLOCK_X_NAME = "x";
+static const char* const LUA_BLOCK_Y_NAME = "y";
+static const char* const LUA_BLOCK_Z_NAME = "z";
+static const std::string DEFAULT_BLOCK = "defaultblock";
 
 void PropertyManager::updateTickCountEvents()
 {
@@ -21,6 +33,27 @@ void PropertyManager::updateTickCountEvents()
 			}
 		}
 	}
+}
+
+unsigned short PropertyManager::getBlockTextureID(const std::string& textureName)
+{
+	auto it = m_blockTextureIDNames.find(textureName);
+	if (it != m_blockTextureIDNames.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		unsigned short id = (unsigned short) m_blockTextureNames.size();
+		m_blockTextureIDNames.insert(std::make_pair(textureName, id));
+		m_blockTextureNames.push_back(textureName);
+		return id;
+	}
+}
+
+std::shared_ptr<TextureArray> PropertyManager::generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight)
+{
+	return std::shared_ptr<TextureArray>(new TextureArray(m_blockTextureNames, blockTexWidth, blockTexHeight));
 }
 
 BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string& blockname)
@@ -44,7 +77,7 @@ BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string
 		block["id"] = m_lastRegisteredId;
 
 		m_blockProperties.resize(m_lastRegisteredId + 1, BlockProperties(block.state()));
-		m_blockProperties.at(m_lastRegisteredId) = BlockProperties(block);
+		m_blockProperties.at(m_lastRegisteredId) = BlockProperties(block, *this);
 
 		parseBlock(m_blockProperties[m_lastRegisteredId]);
 
@@ -76,21 +109,6 @@ void PropertyManager::parseBlock(BlockProperties& properties)
 		parsePerBlockProperties(properties);
 	if (!properties.luaRef["events"].isNil())
 		parseEvents(properties);
-
-	parseType(properties);
-}
-
-void PropertyManager::parseType(BlockProperties& properties)
-{
-	luabridge::LuaRef type = properties.luaRef["type"];
-	std::string typeStr = type;
-
-	if (typeStr == DEFAULT_BLOCK) {
-		properties.renderData = BlockRenderData(properties.luaRef, m_textureManager);
-		return;
-	}
-
-	assert(false && "Unrecognized/unimplemented block type");
 }
 
 void PropertyManager::parseEvents(BlockProperties& properties)

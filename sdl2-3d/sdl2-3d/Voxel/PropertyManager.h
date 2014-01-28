@@ -6,7 +6,9 @@
 
 #include <assert.h>
 #include <map>
+#include <set>
 #include <vector>
+#include <memory>
 
 #include <lua.hpp>
 #include <LuaBridge.h>
@@ -28,9 +30,9 @@ struct LuaTableData
 class PropertyManager
 {
 public:
-	PropertyManager(TextureManager& textureManager)
-		: m_textureManager(textureManager) 
-		, m_lastRegisteredId(0) 
+	PropertyManager()
+		: m_lastRegisteredId(0) 
+
 	{
 	};
 	PropertyManager(const PropertyManager& copy) = delete;
@@ -40,6 +42,9 @@ public:
 
 	void updateTickCountEvents();
 
+	unsigned short getBlockTextureID(const std::string& textureName);
+	std::shared_ptr<TextureArray> generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight);
+
 	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
 	inline const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }
 	inline BlockID getNumRegisteredBlocks() const { return m_lastRegisteredId; };
@@ -47,12 +52,9 @@ private:
 
 	LuaTableData getTableData(luabridge::LuaRef ref) const;
 	void parseBlock(BlockProperties& properties);
-	void parseType(BlockProperties& properties);
 	void parseEvents(BlockProperties& properties);
 	BlockPropertyValue getValue(std::string str, const std::vector<PerBlockProperty>& perBlockProperties);
 	void parsePerBlockProperties(BlockProperties& properties);
-
-	TextureManager& m_textureManager;
 
 	/** ID counter used to give every registered block an unique id */
 	BlockID m_lastRegisteredId;
@@ -67,6 +69,8 @@ private:
 
 	std::vector<BlockProperties> m_blockProperties;
 
+	std::map<std::string, unsigned short> m_blockTextureIDNames;
+	std::vector<std::string> m_blockTextureNames;
 };
 
 #endif // PROPERTY_MANAGER_H_

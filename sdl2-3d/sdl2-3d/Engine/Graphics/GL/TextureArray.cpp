@@ -37,7 +37,7 @@ TextureArray::TextureArray(const std::vector<const char*>& imageNames,
 	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }
 
-TextureArray::TextureArray(const std::vector<const std::string*>& imageNames, 
+TextureArray::TextureArray(const std::vector<std::string>& imageNames, 
 	unsigned int textureWidth, unsigned int textureHeight,
 	bool generateMipMaps,
 	GLint minFilter, GLint magFilter,
@@ -45,9 +45,7 @@ TextureArray::TextureArray(const std::vector<const std::string*>& imageNames,
 {
 	CHECK_GL_ERROR();
 	glGenTextures(1, &m_textureID);
-	CHECK_GL_ERROR();
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureID);
-	CHECK_GL_ERROR();
 
 	//glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, textureWidth, textureHeight, imageNames.size());
 	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, textureWidth, textureHeight, imageNames.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -56,9 +54,9 @@ TextureArray::TextureArray(const std::vector<const std::string*>& imageNames,
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, textureWrapS);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, textureWrapT);
 	int i = 0;
-	for (const std::string* imageName : imageNames)
+	for (const std::string& imageName : imageNames)
 	{
-		Pixmap p(imageName->c_str());
+		Pixmap p(imageName.c_str());
 		assert(p.m_width == textureWidth);
 		assert(p.m_height == textureHeight);
 		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, textureWidth, textureHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE, p.m_data);

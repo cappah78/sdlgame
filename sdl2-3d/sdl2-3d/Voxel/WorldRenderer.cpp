@@ -156,8 +156,6 @@ WorldRenderer::WorldRenderer()
 	, m_numLoadedChunks(0)
 	, m_gbuffer(1)
 	, m_getPixelBuffer(Game::graphics.getScreenWidth() * Game::graphics.getScreenHeight())
-	, m_shadowShader("Assets/Shaders/voxelshaderdepth.vert", NULL, "Assets/Shaders/depth.frag")
-	, m_quadShader("Assets/Shaders/quad.vert", NULL, "Assets/Shaders/quad.frag")
 	, m_lightShader("Assets/Shaders/lightcalc.vert", NULL, "Assets/Shaders/lightcalc.frag")
 {
 	m_voxelShader.begin();
@@ -261,116 +259,6 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 		m_renderer.renderChunk(chunk);
 	}
 	m_voxelShader.end();
-}
-
-
-void WorldRenderer::doLights(const Camera& camera)
-{
-	static const unsigned int NUM_PX_CHUNK_W = 256;
-	static const unsigned int NUM_PX_CHUNK_H = 50;
-
-	/*
-	m_gbuffer.bindForWriting();
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	m_shadowShader.begin();
-	m_shadowShader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
-	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>>& it : m_renderChunks)
-	{
-		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = it.second;
-		m_shadowShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
-		m_renderer.renderChunk(chunk);
-	}
-	m_shadowShader.end();
-	m_gbuffer.unbind();
-	*/
-
-	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> chunks;
-
-	float lightDistance = 15;
-	float lightDistanceSqr = (lightDistance + CHUNK_SIZE) * (lightDistance + CHUNK_SIZE);
-	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>> it : m_renderChunks)
-	{
-		glm::vec3 chunkBlockPos(it.first * (int) CHUNK_SIZE);
-		glm::vec3 dst = chunkBlockPos - camera.m_position;
-		float dstSqr = glm::dot(dst, dst);
-		if (dstSqr < lightDistanceSqr)
-			chunks.push_back(it.second);
-	}
-
-	if (chunks.size() == 0)
-		return;
-
-	const unsigned int screenWidth = Game::graphics.getScreenWidth();
-	const unsigned int screenHeight = Game::graphics.getScreenHeight();
-
-	//amount of chunks drawn to a single buffer at a time (w*h)
-	const unsigned int numWidth = (int) screenWidth / NUM_PX_CHUNK_W;
-	const unsigned int numHeight = (int) screenHeight / NUM_PX_CHUNK_H;
-
-	m_lightShader.begin();
-	m_lightShader.setUniform2f("u_screenSize", glm::vec2(screenWidth, screenHeight));
-	m_lightShader.setUniform3f("u_camPos", camera.m_position);
-	m_lightShader.setUniform1f("u_lightDistance", lightDistance);
-
-	m_gbuffer.bindForWriting();
-	m_gbuffer.setReadBuffer(0);
-	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	glClearColor(0, 0, 0, 1.0);
-	glDisable(GL_DEPTH_TEST);
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	while (chunks.size() > 0)
-	{
-		std::vector<std::shared_ptr<VoxelRenderer::Chunk>> currentChunks;
-
-		for (unsigned int i = 0; i < (numWidth + numHeight) && chunks.size() > 0; ++i)
-		{
-			currentChunks.push_back(chunks.at(chunks.size() - 1));
-			chunks.pop_back();
-		}
-
-		glClear(GL_COLOR_BUFFER_BIT);
-		for (unsigned int i = 0, size = currentChunks.size(); i < size; ++i)
-		{
-			unsigned int xOffset = i % numWidth;
-			unsigned int yOffset = i / numWidth;
-
-			const std::shared_ptr<VoxelRenderer::Chunk> chunk = currentChunks.at(i);
-			m_lightShader.setUniform2f("u_renderOffset", glm::vec2(NUM_PX_CHUNK_W * xOffset, NUM_PX_CHUNK_H * yOffset));
-			m_lightShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
-			m_renderer.renderChunk(chunk, GL_POINTS);
-		}
-
-		const unsigned int fbWidth = NUM_PX_CHUNK_W * numWidth;
-		const unsigned int fbHeight = NUM_PX_CHUNK_H * numHeight;
-		glReadPixels(0, 0, fbWidth, fbHeight, GL_RED, GL_FLOAT, &m_getPixelBuffer[0]);
-		for (unsigned int i = 0, size = currentChunks.size(); i < size; ++i)
-		{
-			const std::shared_ptr <VoxelRenderer::Chunk>& chunk = currentChunks[i];
-			unsigned int numVertices = chunk->m_pointBuffer.getSizeInElements();
-
-			unsigned int xOffsetChunk = (int) (i) % numWidth;
-			unsigned int yOffsetChunk = (int) (i) / numWidth;
-
-			chunk->m_colorBuffer.reset();
-			for (unsigned int j = 0; j < numVertices; ++j)
-			{
-				unsigned int xOffsetPx = j % NUM_PX_CHUNK_W;
-				unsigned int yOffsetPx = j / NUM_PX_CHUNK_W;
-				unsigned int row = yOffsetPx + yOffsetChunk * NUM_PX_CHUNK_H;
-				unsigned int totalOffset = fbWidth * row + (xOffsetPx + xOffsetChunk * NUM_PX_CHUNK_W);
-
-				float dst = m_getPixelBuffer[totalOffset];
-				chunk->m_colorBuffer.add(Color8888(0, 0, 0, (unsigned char) (dst * 255.0f)));
-			}
-			chunk->m_colorBuffer.update();
-		}
-	}
-	m_gbuffer.unbind();
-	m_lightShader.end();
-
-	glEnable(GL_DEPTH_TEST);
 }
 
 const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos)
@@ -506,7 +394,7 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 					//get the rendering related properties for this block (texture id's).
 					// flip quad to avoid asymmetric color blending 
 					bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
-					renderChunk->addFace((Face) face, x, y, z, properties.renderData.getTextureID((Face) face),
+					renderChunk->addFace((Face) face, x, y, z, properties.getTextureID((Face) face),
 						perFaceCols[0], perFaceCols[3], perFaceCols[1], perFaceCols[2], flipQuad);
 				}
 			}
@@ -514,3 +402,97 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 	}
 	m_renderer.endChunk(renderChunk);
 }
+
+
+
+/*
+void WorldRenderer::bakeLight(const glm::vec3& lightPos, float lightRadius)
+{
+static const unsigned int NUM_PX_CHUNK_W = 256;
+static const unsigned int NUM_PX_CHUNK_H = 50;
+
+std::vector<std::shared_ptr<VoxelRenderer::Chunk>> chunks;
+
+float lightDistanceSqr = (lightRadius + CHUNK_SIZE) * (lightRadius + CHUNK_SIZE);
+for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>> it : m_renderChunks)
+{
+glm::vec3 chunkBlockPos(it.first * (int) CHUNK_SIZE);
+glm::vec3 dst = chunkBlockPos - lightPos;
+float dstSqr = glm::dot(dst, dst);
+if (dstSqr < lightDistanceSqr)
+chunks.push_back(it.second);
+}
+
+if (chunks.size() == 0)
+return;
+
+const unsigned int screenWidth = Game::graphics.getScreenWidth();
+const unsigned int screenHeight = Game::graphics.getScreenHeight();
+
+//amount of chunks drawn to a single buffer at a time (w*h)
+const unsigned int numWidth = (int) screenWidth / NUM_PX_CHUNK_W;
+const unsigned int numHeight = (int) screenHeight / NUM_PX_CHUNK_H;
+
+m_lightShader.begin();
+m_lightShader.setUniform2f("u_screenSize", glm::vec2(screenWidth, screenHeight));
+m_lightShader.setUniform3f("u_camPos", lightPos);
+m_lightShader.setUniform1f("u_lightDistance", lightRadius);
+
+m_gbuffer.bindForWriting();
+m_gbuffer.setReadBuffer(0);
+glReadBuffer(GL_COLOR_ATTACHMENT0);
+glClearColor(0, 0, 0, 1.0);
+glDisable(GL_DEPTH_TEST);
+glClear(GL_DEPTH_BUFFER_BIT);
+
+while (chunks.size() > 0)
+{
+std::vector<std::shared_ptr<VoxelRenderer::Chunk>> currentChunks;
+
+for (unsigned int i = 0; i < (numWidth + numHeight) && chunks.size() > 0; ++i)
+{
+currentChunks.push_back(chunks.at(chunks.size() - 1));
+chunks.pop_back();
+}
+
+glClear(GL_COLOR_BUFFER_BIT);
+for (unsigned int i = 0, size = currentChunks.size(); i < size; ++i)
+{
+unsigned int xOffset = i % numWidth;
+unsigned int yOffset = i / numWidth;
+
+const std::shared_ptr<VoxelRenderer::Chunk> chunk = currentChunks.at(i);
+m_lightShader.setUniform2f("u_renderOffset", glm::vec2(NUM_PX_CHUNK_W * xOffset, NUM_PX_CHUNK_H * yOffset));
+m_lightShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
+m_renderer.renderChunk(chunk, GL_POINTS);
+}
+
+const unsigned int fbWidth = NUM_PX_CHUNK_W * numWidth;
+const unsigned int fbHeight = NUM_PX_CHUNK_H * numHeight;
+glReadPixels(0, 0, fbWidth, fbHeight, GL_RED, GL_FLOAT, &m_getPixelBuffer[0]);
+for (unsigned int i = 0, size = currentChunks.size(); i < size; ++i)
+{
+const std::shared_ptr <VoxelRenderer::Chunk>& chunk = currentChunks[i];
+unsigned int numVertices = chunk->m_pointBuffer.getSizeInElements();
+
+unsigned int xOffsetChunk = (int) (i) % numWidth;
+unsigned int yOffsetChunk = (int) (i) / numWidth;
+
+chunk->m_colorBuffer.reset();
+for (unsigned int j = 0; j < numVertices; ++j)
+{
+unsigned int xOffsetPx = j % NUM_PX_CHUNK_W;
+unsigned int yOffsetPx = j / NUM_PX_CHUNK_W;
+unsigned int row = yOffsetPx + yOffsetChunk * NUM_PX_CHUNK_H;
+unsigned int totalOffset = fbWidth * row + (xOffsetPx + xOffsetChunk * NUM_PX_CHUNK_W);
+
+float dst = m_getPixelBuffer[totalOffset];
+chunk->m_colorBuffer.add(Color8888(0, 0, 0, (unsigned char) (dst * 255.0f)));
+}
+chunk->m_colorBuffer.update();
+}
+}
+m_gbuffer.unbind();
+m_lightShader.end();
+glEnable(GL_DEPTH_TEST);
+}*/

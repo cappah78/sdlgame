@@ -18,25 +18,28 @@ SpriteBatch::SpriteBatch(int size)
 	, m_lastTexture(0)
 	, m_drawCalls(0)
 	, m_blendEnabled(false)
-	, m_verticeBuffer(size * FLOATS_PER_SPRITE)
-	, m_indiceBuffer(size * 6, GL_ELEMENT_ARRAY_BUFFER)
+	, m_indiceBuffer(GL_ELEMENT_ARRAY_BUFFER)
 {
 	assert((size * 6) < 65535 && "Cannot draw more than 10922 items"); //(indices will run out)
 
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
+	std::vector<unsigned short> indiceData;
+	indiceData.reserve(size * 6);
+	m_verticeData.reserve(size * FLOATS_PER_SPRITE);
+
 	GLushort j = 0;
 	for (int i = 0; i < size * 6; i += 6, j += 4) 
 	{
-		m_indiceBuffer.add(j + 2);
-		m_indiceBuffer.add(j + 1);
-		m_indiceBuffer.add(j + 0);
-		m_indiceBuffer.add(j + 2);
-		m_indiceBuffer.add(j + 0);
-		m_indiceBuffer.add(j + 3);
+		indiceData.push_back(j + 2);
+		indiceData.push_back(j + 1);
+		indiceData.push_back(j + 0);
+		indiceData.push_back(j + 2);
+		indiceData.push_back(j + 0);
+		indiceData.push_back(j + 3);
     }
-	m_indiceBuffer.update();
+	m_indiceBuffer.upload(&indiceData[0], sizeof(indiceData[0]) * indiceData.size());
 
 	m_verticeBuffer.setAttribPointer(0, GL_FLOAT, 2, GL_FALSE, GL_FALSE, 4 * sizeof(float), 0);	//position
 	m_verticeBuffer.setAttribPointer(1, GL_FLOAT, 2, GL_FALSE, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));	//texcoords
@@ -145,28 +148,28 @@ void SpriteBatch::drawUnrotated(const Texture& t, float x, float y, float w, flo
 	float y2 = y + h;
 
 	//bottom left
-	m_verticeBuffer.add(x);
-	m_verticeBuffer.add(y);
-	m_verticeBuffer.add(u);
-	m_verticeBuffer.add(v);
+	m_verticeData.push_back(x);
+	m_verticeData.push_back(y);
+	m_verticeData.push_back(u);
+	m_verticeData.push_back(v);
 	
 	//top left
-	m_verticeBuffer.add(x);
-	m_verticeBuffer.add(y2);
-	m_verticeBuffer.add(u);
-	m_verticeBuffer.add(v2);
+	m_verticeData.push_back(x);
+	m_verticeData.push_back(y2);
+	m_verticeData.push_back(u);
+	m_verticeData.push_back(v2);
 
 	//top right
-	m_verticeBuffer.add(x2);
-	m_verticeBuffer.add(y2);
-	m_verticeBuffer.add(u2);
-	m_verticeBuffer.add(v2);
+	m_verticeData.push_back(x2);
+	m_verticeData.push_back(y2);
+	m_verticeData.push_back(u2);
+	m_verticeData.push_back(v2);
 
 	//bottom right
-	m_verticeBuffer.add(x2);
-	m_verticeBuffer.add(y);
-	m_verticeBuffer.add(u2);
-	m_verticeBuffer.add(v);
+	m_verticeData.push_back(x2);
+	m_verticeData.push_back(y);
+	m_verticeData.push_back(u2);
+	m_verticeData.push_back(v);
 
 	if (m_drawCalls > m_size)
 		flush();
@@ -212,25 +215,25 @@ void SpriteBatch::drawRotated(const Texture& t, float x, float y, float w, float
 	x4 += totalOffsetX;
 	y4 += totalOffsetY;
 
-	m_verticeBuffer.add(x1);
-	m_verticeBuffer.add(y1);
-	m_verticeBuffer.add(u);
-	m_verticeBuffer.add(v);
+	m_verticeData.push_back(x1);
+	m_verticeData.push_back(y1);
+	m_verticeData.push_back(u);
+	m_verticeData.push_back(v);
 
-	m_verticeBuffer.add(x2);
-	m_verticeBuffer.add(y2);
-	m_verticeBuffer.add(u);
-	m_verticeBuffer.add(v2);
+	m_verticeData.push_back(x2);
+	m_verticeData.push_back(y2);
+	m_verticeData.push_back(u);
+	m_verticeData.push_back(v2);
 
-	m_verticeBuffer.add(x3);
-	m_verticeBuffer.add(y3);
-	m_verticeBuffer.add(u2);
-	m_verticeBuffer.add(v2);
+	m_verticeData.push_back(x3);
+	m_verticeData.push_back(y3);
+	m_verticeData.push_back(u2);
+	m_verticeData.push_back(v2);
 
-	m_verticeBuffer.add(x4);
-	m_verticeBuffer.add(y4);
-	m_verticeBuffer.add(u2);
-	m_verticeBuffer.add(v);
+	m_verticeData.push_back(x4);
+	m_verticeData.push_back(y4);
+	m_verticeData.push_back(u2);
+	m_verticeData.push_back(v);
 
 	if (m_drawCalls > m_size)
 		flush();
@@ -245,9 +248,9 @@ void SpriteBatch::flush()
 	glBindVertexArray(m_vao);
 	m_indiceBuffer.bind();
 
-	m_verticeBuffer.update();
+	m_verticeBuffer.upload(&m_verticeData[0], sizeof(m_verticeData[0]) * m_verticeData.size());
 	glDrawElements(GL_TRIANGLES, m_drawCalls * 6, GL_UNSIGNED_SHORT, 0);
-	m_verticeBuffer.reset();
+	m_verticeData.clear();
 
 	m_drawCalls = 0;
 }

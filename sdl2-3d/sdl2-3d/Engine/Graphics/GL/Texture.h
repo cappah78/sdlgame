@@ -22,26 +22,15 @@ public:
 
 	~Texture();
 
+	bool isLoaded() const { return m_textureID != 0; };
 	void bind() const;
 	void bind(GLenum textureUnit) const;
 	void dispose();
 
-	const GLuint getTextureID() const
-	{
-		return m_textureID;
-	}
-	const unsigned int getWidth() const
-	{
-		return m_width;
-	}
-	const unsigned int getHeight() const
-	{
-		return m_height;
-	}
-	const unsigned char getNumComponents() const
-	{
-		return m_numComponents;
-	}
+	GLuint getTextureID() const { return m_textureID; }
+	unsigned int getWidth() const { return m_width; }
+	unsigned int getHeight() const { return m_height; }
+	unsigned char getNumComponents() const { return m_numComponents; }
 private:
 	void setupGLTexture(const Pixmap& pixmap, bool generateMipMaps, GLint minFilter, GLint magFilter,
 		GLint textureWrapS, GLint textureWrapT);
