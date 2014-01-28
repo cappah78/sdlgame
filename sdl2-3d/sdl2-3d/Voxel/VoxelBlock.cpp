@@ -67,69 +67,69 @@ bool BlockPropertyValue::operator==(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
-		float floatVal = *(float*) &value;	//convert float bits to float
+		float floatVal = *(float*) &valueBits;	//convert float bits to float
 		if (compare.type == LUA_FLOAT)
 		{
-			float cmpFloatVal = *(float*) &compare.value;
+			float cmpFloatVal = *(float*) &compare.valueBits;
 			return floatVal == cmpFloatVal;
 		}
-		return floatVal == (float) value;
+		return floatVal == (float) valueBits;
 	}
-	return value == compare.value;
+	return valueBits == compare.valueBits;
 }
 bool BlockPropertyValue::operator>(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
-		float floatVal = *(float*) &value;	//convert float bits to float
+		float floatVal = *(float*) &valueBits;	//convert float bits to float
 		if (compare.type == LUA_FLOAT)
 		{
-			float cmpFloatVal = *(float*) &compare.value;
+			float cmpFloatVal = *(float*) &compare.valueBits;
 			return floatVal > cmpFloatVal;
 		}
-		return floatVal > (float) value;
+		return floatVal > (float) valueBits;
 	}
-	return value > compare.value;
+	return valueBits > compare.valueBits;
 }
 bool BlockPropertyValue::operator>=(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
-		float floatVal = *(float*) &value;	//convert float bits to float
+		float floatVal = *(float*) &valueBits;	//convert float bits to float
 		if (compare.type == LUA_FLOAT)
 		{
-			float cmpFloatVal = *(float*) &compare.value;
+			float cmpFloatVal = *(float*) &compare.valueBits;
 			return floatVal >= cmpFloatVal;
 		}
-		return floatVal >= (float) value;
+		return floatVal >= (float) valueBits;
 	}
-	return value >= compare.value;
+	return valueBits >= compare.valueBits;
 }
 bool BlockPropertyValue::operator<(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
-		float floatVal = *(float*) &value;	//convert float bits to float
+		float floatVal = *(float*) &valueBits;	//convert float bits to float
 		if (compare.type == LUA_FLOAT)
 		{
-			float cmpFloatVal = *(float*) &compare.value;
+			float cmpFloatVal = *(float*) &compare.valueBits;
 			return floatVal < cmpFloatVal;
 		}
-		return floatVal < (float) value;
+		return floatVal < (float) valueBits;
 	}
-	return value < compare.value;
+	return valueBits < compare.valueBits;
 }
 bool BlockPropertyValue::operator<=(const BlockPropertyValue& compare) const
 {
 	if (type == LUA_FLOAT)
 	{
-		float floatVal = *(float*) &value;	//convert float bits to float
+		float floatVal = *(float*) &valueBits;	//convert float bits to float
 		if (compare.type == LUA_FLOAT)
 		{
-			float cmpFloatVal = *(float*) &compare.value;
+			float cmpFloatVal = *(float*) &compare.valueBits;
 			return floatVal <= cmpFloatVal;
 		}
-		return floatVal <= (float) value;
+		return floatVal <= (float) valueBits;
 	}
-	return value <= compare.value;
+	return valueBits <= compare.valueBits;
 }

@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <map>
 #include <vector>
+#include <glm\glm.hpp>
 
 #include <lua.hpp>
 #include <LuaBridge.h>
@@ -40,12 +41,16 @@ public:
 
 	void updateTickCountEvents();
 
+	void doBlockUpdate(const VoxelBlock& block, const glm::ivec3& blockPos);
+
 	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
 	inline const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }
 	inline BlockID getNumRegisteredBlocks() const { return m_lastRegisteredId; };
 private:
 
 	LuaTableData getTableData(luabridge::LuaRef ref) const;
+
+	void parseMethods(BlockProperties& properties);
 	void parseBlock(BlockProperties& properties);
 	void parseType(BlockProperties& properties);
 	void parseEvents(BlockProperties& properties);

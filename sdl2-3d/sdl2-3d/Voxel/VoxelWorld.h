@@ -68,6 +68,10 @@ private:
 
 	GBuffer m_gbuffer;
 
+	std::vector<glm::ivec3> m_updatedBlockPositions;
+
+	void doBlockUpdates();
+
 	inline static int fastFloor(float x)
 	{
 		int i = (int) x;

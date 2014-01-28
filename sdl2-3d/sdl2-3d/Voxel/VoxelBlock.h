@@ -49,8 +49,8 @@ enum EventEvaluator
 
 struct BlockPropertyValue
 {
-	BlockPropertyValue(int value, BlockPropertyValueType type) : value(value), type(type) {};
-	int value;
+	BlockPropertyValue(int valueBits, BlockPropertyValueType type) : valueBits(valueBits), type(type) {};
+	int valueBits;
 	BlockPropertyValueType type;
 
 	bool operator==(const BlockPropertyValue& compare) const;
@@ -62,18 +62,18 @@ struct BlockPropertyValue
 
 struct PerBlockProperty
 {
-	PerBlockProperty(luabridge::LuaRef ref) : ref(ref), prop(0, LUA_INT)
+	PerBlockProperty(luabridge::LuaRef ref) : ref(ref), defaultValue(0, LUA_INT)
 	{};
 	PerBlockProperty(const std::string& name, luabridge::LuaRef ref,
 		BlockPropertyValueType type, int value)
-		: name(name), ref(ref), prop(value, type)
+		: name(name), ref(ref), defaultValue(value, type)
 	{};
 
 	/** Name of the table key holding the value */
 	std::string name;
 	/** Reference to lua table value */
 	luabridge::LuaRef ref;
-	BlockPropertyValue prop;
+	BlockPropertyValue defaultValue;
 };
 
 /** A single event trigger for a block type */
@@ -135,22 +135,20 @@ struct BlockRenderData	// 8 bytes;
 /** The data stored for every block in a chunk */
 __declspec(align(16)) struct VoxelBlock
 {
-	VoxelBlock() : id(0), blockDataIndex(-1), skyVisible(false), solid(false), lightLevel(0), update(false) {};
+	VoxelBlock() : id(0), blockDataIndex(-1), skyVisible(false), solid(false), lightLevel(0) {};
 	//VoxelBlock(const VoxelBlock& copy) = delete;
 	BlockID id;
 	BlockColor color;
 	int blockDataIndex;
 	unsigned skyVisible : 1;
 	unsigned solid : 1;
-	/** true if should run onBlockUpdate */
-	unsigned update : 1;
 	unsigned lightLevel : 4;
 };
 
 /** Global constant properties for all the blocks of a single type. */
 struct BlockProperties
 {
-	BlockProperties(luabridge::LuaRef luaRef) : luaRef(luaRef) {}
+	BlockProperties(luabridge::LuaRef luaRef) : luaRef(luaRef), blockUpdateMethod(luaRef.state()) {}
 
 	/** Reference to the lua version of this block*/
 	luabridge::LuaRef luaRef;
@@ -158,6 +156,9 @@ struct BlockProperties
 	BlockRenderData renderData;
 	/** If this block is not transparent */
 	unsigned solid : 1;
+	
+	unsigned hasBlockUpdateMethod : 1;
+	luabridge::LuaRef blockUpdateMethod;
 
 	/** List of properties unique for every instance of this type */
 	std::vector<PerBlockProperty> perBlockProperties;

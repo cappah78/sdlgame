@@ -1,5 +1,6 @@
 #include "ChunkManager.h"
 
+
 std::unique_ptr<VoxelChunk>& ChunkManager::getChunk(const glm::ivec3& pos)
 {
 	auto it = m_loadedChunks.find(pos);
