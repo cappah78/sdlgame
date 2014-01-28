@@ -71,11 +71,14 @@ void GameScreen::resize(int width, int height)
 	m_camera.resize(width, height);
 }
 
+static int camSpeedTicks = 0;
 bool GameScreen::keyDown(SDL_Keysym key)
 {
 	if (key.sym == SDLK_r)
 	{
-	
+		//just some quick way to control speed
+		camSpeedTicks++;
+		m_cameraController.setCameraSpeed(10.0f * ((camSpeedTicks % 7) + 1));
 	}
 
 	if (key.sym == SDLK_t)
@@ -87,7 +90,7 @@ bool GameScreen::keyDown(SDL_Keysym key)
 	if (key.sym == SDLK_f)
 	{
 		//m_worldRenderer.doLights(m_camera);
-		m_world.doBlockUpdate(glm::ivec3(m_camera.m_position));
+		m_world.doBlockUpdate(glm::ivec3(glm::round(m_camera.m_position)));
 	}
 
 

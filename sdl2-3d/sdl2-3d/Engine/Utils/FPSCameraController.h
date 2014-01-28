@@ -18,6 +18,8 @@ public:
 
 	void update(float deltaSec);
 
+	void setCameraSpeed(float cameraSpeed);
+
 	bool keyDown(SDL_Keysym key);
 	bool keyUp(SDL_Keysym key);
 	bool mouseDown(Uint8 key, int xPos, int yPos);
@@ -26,6 +28,8 @@ public:
 private:
 	PerspectiveCamera& m_camera;
 	bool m_lmbPressed, m_rmbPressed;
+	float m_cameraSpeed;
+	float m_diagonalCameraSpeed;
 
 	bool
 		m_isWPressed,

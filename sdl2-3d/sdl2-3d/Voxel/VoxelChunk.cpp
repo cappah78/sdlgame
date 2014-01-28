@@ -179,12 +179,8 @@ void VoxelChunk::updateBlockData(const VoxelBlock& block, luabridge::LuaRef& tab
 
 void VoxelChunk::doBlockUpdate(const glm::ivec3& blockChunkPos, const glm::ivec3& blockWorldPos)
 {
-
 	const VoxelBlock& block = getBlock(getBlockIndex(blockChunkPos));
 	const BlockProperties& properties = m_propertyManager.getBlockProperties(block.id);
-
-	printf("update: %i : %i : %i : %i \n", blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, block.id);
-
 
 	if (!properties.hasBlockUpdateMethod)
 		return;

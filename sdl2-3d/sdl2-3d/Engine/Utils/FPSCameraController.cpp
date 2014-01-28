@@ -5,10 +5,7 @@
 #include <glm\gtx\rotate_vector.hpp>
 #include <glm\gtx\compatibility.hpp>
 
-static const float CAMERA_SPEED = 120.0f;
 static const float MOUSE_LOOK_SENSITIVITY = 0.2f;
-static const float DIAGONAL_SPEED = (float) glm::sqrt((CAMERA_SPEED * CAMERA_SPEED) / 2.0);
-
 static const glm::vec3 UP(0, 1, 0);
 
 FPSCameraController::FPSCameraController(PerspectiveCamera& camera, const glm::vec3& startDir)
@@ -19,12 +16,18 @@ FPSCameraController::FPSCameraController(PerspectiveCamera& camera, const glm::v
 	, m_isWPressed(false), m_isAPressed(false), m_isSPressed(false), m_isDPressed(false)
 	, m_isSpacePressed(false), m_isShiftPressed(false)
 {
-
+	setCameraSpeed(120.0f);
 }
 
 FPSCameraController::~FPSCameraController()
 {
 
+}
+
+void FPSCameraController::setCameraSpeed(float cameraSpeed)
+{
+	m_cameraSpeed = cameraSpeed;
+	m_diagonalCameraSpeed = glm::sqrt((cameraSpeed * cameraSpeed) / 2.0f);
 }
 
 void FPSCameraController::update(float deltaSec)
@@ -46,30 +49,30 @@ void FPSCameraController::update(float deltaSec)
 	if (w)
 	{
 		if (a)
-			m_camera.translateRelative(-DIAGONAL_SPEED * deltaSec, 0.0f, -DIAGONAL_SPEED * deltaSec);
+			m_camera.translateRelative(-m_diagonalCameraSpeed * deltaSec, 0.0f, -m_diagonalCameraSpeed * deltaSec);
 		else if (d)
-			m_camera.translateRelative(DIAGONAL_SPEED * deltaSec, 0.0f, -DIAGONAL_SPEED * deltaSec);
+			m_camera.translateRelative(m_diagonalCameraSpeed * deltaSec, 0.0f, -m_diagonalCameraSpeed * deltaSec);
 		else
-			m_camera.translateRelative(0.0f, 0.0f, -CAMERA_SPEED * deltaSec);
+			m_camera.translateRelative(0.0f, 0.0f, -m_cameraSpeed * deltaSec);
 	}
 	else if (s)
 	{
 		if (a)
-			m_camera.translateRelative(-DIAGONAL_SPEED * deltaSec, 0.0f, DIAGONAL_SPEED * deltaSec);
+			m_camera.translateRelative(-m_diagonalCameraSpeed * deltaSec, 0.0f, m_diagonalCameraSpeed * deltaSec);
 		else if (d)
-			m_camera.translateRelative(DIAGONAL_SPEED * deltaSec, 0.0f, DIAGONAL_SPEED * deltaSec);
+			m_camera.translateRelative(m_diagonalCameraSpeed * deltaSec, 0.0f, m_diagonalCameraSpeed * deltaSec);
 		else
-			m_camera.translateRelative(0.0f, 0.0f, CAMERA_SPEED * deltaSec);
+			m_camera.translateRelative(0.0f, 0.0f, m_cameraSpeed * deltaSec);
 	}
 	else if (a)
-		m_camera.translateRelative(-CAMERA_SPEED * deltaSec, 0.0f, 0.0f);
+		m_camera.translateRelative(-m_cameraSpeed * deltaSec, 0.0f, 0.0f);
 	else if (d)
-		m_camera.translateRelative(CAMERA_SPEED * deltaSec, 0.0f, 0.0f);
+		m_camera.translateRelative(m_cameraSpeed * deltaSec, 0.0f, 0.0f);
 
 	if (space)
-		m_camera.translateRelative(0.0f, CAMERA_SPEED * deltaSec, 0.0f);
+		m_camera.translateRelative(0.0f, m_cameraSpeed * deltaSec, 0.0f);
 	else if (shift)
-		m_camera.translateRelative(0.0f, -CAMERA_SPEED * deltaSec, 0.0f);
+		m_camera.translateRelative(0.0f, -m_cameraSpeed * deltaSec, 0.0f);
 
 	m_camera.lookAtDir(m_lookDir);
 }

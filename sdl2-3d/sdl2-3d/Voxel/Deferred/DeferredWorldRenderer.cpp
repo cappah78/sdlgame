@@ -410,10 +410,6 @@ static const unsigned char AO_STRENGTH = 80;
 inline unsigned char getAO(bool side, bool side2, bool corner)
 {
 	return side && side2 ? 2 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH;
-	/*if (side && side2)
-	return 2 * AO_STRENGTH;
-	else
-	return (side + side2 + corner) * AO_STRENGTH;*/
 }
 
 void DeferredWorldRenderer::buildChunkWithAO(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world)
