@@ -243,7 +243,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 		if (Frustum::aabbInFrustum(chunkBlockPos, glm::vec3(8), frustumCullMat))
 			m_visibleChunkList.push_back(it.second);
 	}
-	std::sort(m_visibleChunkList.begin(), m_visibleChunkList.end(), DistanceSort(camera.m_position));
+	//std::sort(m_visibleChunkList.begin(), m_visibleChunkList.end(), DistanceSort(camera.m_position));
 	world.getTileSet()->bind();
 
 	////////////////////////////////////////////////////////////////////////////////////////////

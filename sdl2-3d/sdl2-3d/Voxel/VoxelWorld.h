@@ -3,7 +3,7 @@
 
 #include "VoxelChunk.h"
 
-#include "TextureManager.h"
+#include "../Engine/Graphics/TextureManager.h"
 #include "PropertyManager.h"
 
 #include "ChunkManager.h"

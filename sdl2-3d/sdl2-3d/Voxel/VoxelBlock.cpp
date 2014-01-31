@@ -1,7 +1,7 @@
 #include "VoxelBlock.h"
 
 #include "PropertyManager.h"
-#include "TextureManager.h"
+#include "../Engine/Graphics/TextureManager.h"
 #include <assert.h>
 #include <algorithm>
 

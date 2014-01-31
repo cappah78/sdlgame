@@ -2,7 +2,8 @@
 #define PROPERTY_MANAGER_H_
 
 #include "VoxelBlock.h"
-#include "TextureManager.h"
+#include "../Engine/Graphics/TextureManager.h"
+#include "../Engine/Graphics/GL/TextureArray.h"
 
 #include <assert.h>
 #include <map>

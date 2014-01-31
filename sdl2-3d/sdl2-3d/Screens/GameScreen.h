@@ -33,6 +33,9 @@ private:
 	FPSCameraController m_cameraController;
 	PerspectiveCamera m_camera;
 
+	Shader m_modelShader;
+	Mesh m_mesh;
+
 	TextureManager m_textureManager;
 	VoxelWorld m_world;
 	WorldRenderer m_worldRenderer;

@@ -16,7 +16,7 @@
 class ChunkManager
 {
 public:
-	typedef std::unordered_map<const glm::ivec3, std::unique_ptr<VoxelChunk>, IVec3Hash> ChunkMap;
+	typedef std::unordered_map<const glm::ivec3, std::unique_ptr<VoxelChunk>, IVec3Hash, IVec3Equality> ChunkMap;
 
 	ChunkManager(PropertyManager& propertyManager) 
 		: m_propertyManager(propertyManager)

@@ -7,7 +7,6 @@
 typedef unsigned int GLuint;
 typedef int GLint;
 
-class CubeMap;
 class Camera;
 
 /** 
@@ -33,7 +32,7 @@ private:
 	GLint m_mvpLoc;
 
 	CubeMap m_cubeMap;
-	Mesh m_mesh;
+	//Mesh m_mesh;
 };
 
 #endif //SKYBOX_H_

@@ -25,8 +25,8 @@ static const char* SKYBOX_VERTEX_SHADER_PATH = "Assets/Shaders/skybox.vert";
 static const char* SKYBOX_FRAGMENT_SHADER_PATH = "Assets/Shaders/skybox.frag";
 
 SkyBox::SkyBox(float radius)
-	: m_mesh(SKYBOX_MODEL_PATH)
-	, m_transform(1)
+	: m_transform(1)
+	//, m_mesh(SKYBOX_MODEL_PATH)
 	, m_scale(glm::scale(radius * CORNER_RADIUS_MULTIPLIER, radius * CORNER_RADIUS_MULTIPLIER, radius * CORNER_RADIUS_MULTIPLIER))
 	, m_cubeMap(&SKYBOX_FACE_NAMES[0])
 {

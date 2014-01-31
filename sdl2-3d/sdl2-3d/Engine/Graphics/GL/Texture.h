@@ -12,20 +12,20 @@ typedef unsigned int GLenum;
 class Texture
 {
 public:
+	Texture() : m_textureID(0), m_width(0), m_height(0), m_numComponents(0) {};
 	Texture(const Pixmap& pixmap, bool generateMipMaps = false,
-		GLint minFilter = GL_NEAREST, GLint magFilter = GL_NEAREST, 
-		GLint textureWrapS = GL_CLAMP_TO_EDGE, GLint textureWrapT = GL_CLAMP_TO_EDGE);
+		GLint minFilter = GL_LINEAR, GLint magFilter = GL_NEAREST,
+		GLint textureWrapS = GL_REPEAT, GLint textureWrapT = GL_REPEAT);
 
 	Texture(const char* const fileName, bool generateMipMaps = false,
-		GLint minFilter = GL_NEAREST, GLint magFilter = GL_NEAREST,
-		GLint textureWrapS = GL_CLAMP_TO_EDGE, GLint textureWrapT = GL_CLAMP_TO_EDGE);
+		GLint minFilter = GL_LINEAR, GLint magFilter = GL_NEAREST,
+		GLint textureWrapS = GL_REPEAT, GLint textureWrapT = GL_REPEAT);
 
 	~Texture();
 
 	bool isLoaded() const { return m_textureID != 0; };
 	void bind() const;
 	void bind(GLenum textureUnit) const;
-	void dispose();
 
 	GLuint getTextureID() const { return m_textureID; }
 	unsigned int getWidth() const { return m_width; }

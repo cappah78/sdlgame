@@ -33,6 +33,7 @@
     <ClInclude Include="Engine\Graphics\Renderers\QuadRenderer.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SkyBox.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SpriteBatch.h" />
+    <ClInclude Include="Engine\Graphics\TextureManager.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Model\IKeyListener.h" />
     <ClInclude Include="Engine\Model\IMouseListener.h" />
@@ -53,7 +54,6 @@
     <ClInclude Include="Voxel\Deferred\DeferredWorldRenderer.h" />
     <ClInclude Include="Voxel\Deferred\PointLight.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
-    <ClInclude Include="Voxel\TextureManager.h" />
     <ClInclude Include="Voxel\PropertyManager.h" />
     <ClInclude Include="Voxel\VoxelBlock.h" />
     <ClInclude Include="Voxel\VoxelRenderer.h" />
@@ -81,6 +81,7 @@
     <ClCompile Include="Engine\Graphics\Renderers\QuadRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SkyBox.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SpriteBatch.cpp" />
+    <ClCompile Include="Engine\Graphics\TextureManager.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp" />
@@ -95,7 +96,6 @@
     <ClCompile Include="Voxel\ChunkManager.cpp" />
     <ClCompile Include="Voxel\Deferred\DeferredWorldRenderer.cpp" />
     <ClCompile Include="Voxel\Deferred\PointLight.cpp" />
-    <ClCompile Include="Voxel\TextureManager.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
     <ClCompile Include="Voxel\VoxelBlock.cpp" />
     <ClCompile Include="Voxel\VoxelRenderer.cpp" />
@@ -130,6 +130,8 @@
     <None Include="Assets\Shaders\geometry.vert" />
     <None Include="Assets\Shaders\lightcalc.frag" />
     <None Include="Assets\Shaders\lightcalc.vert" />
+    <None Include="Assets\Shaders\modelshader.frag" />
+    <None Include="Assets\Shaders\modelshader.vert" />
     <None Include="Assets\Shaders\multishadowmap.geom" />
     <None Include="Assets\Shaders\multishadowmap.vert" />
     <None Include="Assets\Shaders\quad.frag" />
@@ -156,9 +158,7 @@
     <Image Include="Assets\Models\Skybox\left.bmp" />
     <Image Include="Assets\Models\Skybox\right.bmp" />
     <Image Include="Assets\Models\Skybox\top.bmp" />
-    <Image Include="Assets\Textures\alphascribble.png" />
-    <Image Include="Assets\Textures\arrow.png" />
-    <Image Include="Assets\Textures\grass.png" />
+    <Image Include="Assets\Textures\defaultwhite.png" />
     <Image Include="Assets\Textures\MinecraftBlocks\anvil_base.png" />
     <Image Include="Assets\Textures\MinecraftBlocks\anvil_top_damaged_0.png" />
     <Image Include="Assets\Textures\MinecraftBlocks\anvil_top_damaged_1.png" />
@@ -437,8 +437,6 @@
     <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_silver.png" />
     <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_white.png" />
     <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_yellow.png" />
-    <Image Include="Assets\Textures\scribble.png" />
-    <Image Include="Assets\Textures\stripes.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BFD87650-6020-41DA-8A4C-CB7843B7CD65}</ProjectGuid>
