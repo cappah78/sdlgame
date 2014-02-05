@@ -25,6 +25,8 @@ public:
 	void setUniform3f(const char* const uniformName, const glm::vec3& vec);
 	void setUniformMatrix4f(const char* const uniformName, const glm::mat4& mat);
 
+	GLuint getShaderID() { return m_shaderID; };	//not const because state can easily be changed with this id
+
 private:
 	static bool s_begun;	// global state to avoid mixing multiple shaders.
 	bool m_begun;

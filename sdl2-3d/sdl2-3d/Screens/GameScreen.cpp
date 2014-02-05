@@ -23,14 +23,17 @@ static const float CAMERA_FAR = 280.0f;	//is also fog/chunk load distance
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
+#define RENDER_MODEL 0
+
 GameScreen::GameScreen()
-	: m_camera(CAMERA_SPAWN_POS,
-	CAMERA_SPAWN_DIR,
-	float(Game::graphics.getScreenWidth()),
-	float(Game::graphics.getScreenHeight()),
-	CAMERA_VERTICAL_FOV,
-	CAMERA_NEAR,
-	CAMERA_FAR)
+	: m_camera(
+		CAMERA_SPAWN_POS,
+		CAMERA_SPAWN_DIR,
+		float(Game::graphics.getScreenWidth()),
+		float(Game::graphics.getScreenHeight()),
+		CAMERA_VERTICAL_FOV,
+		CAMERA_NEAR,
+		CAMERA_FAR)
 	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
 	, m_textureManager()
 	, m_world(m_textureManager)
@@ -42,7 +45,8 @@ GameScreen::GameScreen()
 
 	glEnable(GL_DEPTH_TEST);
 
-	/* initialize crytek sponza model rendering /*
+#if RENDER_MODEL
+	///* initialize crytek sponza model rendering /*
 	m_modelShader.begin();
 	m_modelShader.setUniform1i("u_diffuseTex", 0);
 	m_modelShader.setUniform1i("u_normalTex", 1);
@@ -51,9 +55,10 @@ GameScreen::GameScreen()
 	m_modelShader.end();
 
 	m_mesh.loadMesh("Assets/Models/crysponza_bubbles/sponza.obj", m_textureManager);
-	std::shared_ptr<Mesh::ShaderAttributes> attribs(new Mesh::ShaderAttributes());
+	std::shared_ptr<Mesh::ShaderAttributes> attribs(new Mesh::ShaderAttributes(m_modelShader.getShaderID()));
 	m_mesh.setShaderAttributes(attribs);
-	*/
+	//*/
+#endif
 }
 
 void GameScreen::render(float deltaSec)
@@ -64,18 +69,17 @@ void GameScreen::render(float deltaSec)
 	m_cameraController.update(deltaSec);
 	m_camera.update();
 
+#if !RENDER_MODEL
 	m_world.update(deltaSec, m_camera);
 	m_worldRenderer.render(m_world, m_camera);
-
-	//m_deferredWorldRenderer.render(m_world, m_camera);	// wip renderer
-
-	/* renders crytek sponza model /*
+#else
+	///* renders crytek sponza model /*
 	m_modelShader.begin();
 	m_modelShader.setUniformMatrix4f("u_mvp", m_camera.m_combinedMatrix);
 	m_modelShader.setUniformMatrix4f("u_transform", glm::scale(glm::translate(glm::mat4(1), glm::vec3(0, 0, -20)), glm::vec3(0.1f, 0.1f, 0.1f)));
 	m_mesh.render();
 	m_modelShader.end();
-	*/
+#endif
 
 	Game::graphics.swap();
 }

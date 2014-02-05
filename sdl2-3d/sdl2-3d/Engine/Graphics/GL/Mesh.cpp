@@ -4,7 +4,6 @@
 #include <assert.h>
 #include <gl\glew.h>
 #include <assimp/cimport.h>
-#include <assimp/mesh.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <string>
@@ -50,10 +49,13 @@ void Mesh::initVertexBuffers(const aiScene* scene)
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
+	glGenBuffers(1, &m_matUbo);
+
 	printf("nummeshes: %i nummaterials: %i \n", scene->mNumMeshes, scene->mNumMaterials);
 
 	m_entries.reserve(scene->mNumMeshes);
 	m_materials.reserve(scene->mNumMaterials);
+	m_matProperties.reserve(scene->mNumMaterials);
 
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> normals;
@@ -228,13 +230,42 @@ void Mesh::initMaterials(const aiScene* scene, const std::string& filename, Text
 
 	// Initialize the materials
 	for (unsigned int i = 0; i < scene->mNumMaterials; i++) {
-		const aiMaterial* material = scene->mMaterials[i];
+		aiMaterial* material = scene->mMaterials[i];
 		MeshMaterial meshMaterial;
 
 		int numDiffuse = material->GetTextureCount(aiTextureType_DIFFUSE);
 		int numNormal = material->GetTextureCount(aiTextureType_HEIGHT);
 		int numSpecular = material->GetTextureCount(aiTextureType_SPECULAR);
 		int numOpacity = material->GetTextureCount(aiTextureType_OPACITY);
+
+		MeshMaterialProperties matProperties;
+
+		aiColor3D difCol(1.0f, 1.0f, 1.0f);
+		material->Get(AI_MATKEY_COLOR_DIFFUSE, difCol);
+		matProperties.diffuseColor = *((glm::vec3*) &difCol);
+		//printf("difcol: %f, %f, %f \n", difCol.r, difCol.g, difCol.b);
+
+		aiColor3D specCol(1.0f, 1.0f, 1.0f);
+		material->Get(AI_MATKEY_COLOR_SPECULAR, specCol);
+		matProperties.specularColor = *((glm::vec3*) &specCol);
+		//printf("specCol: %f, %f, %f \n", specCol.r, specCol.g, specCol.b);
+
+		aiColor3D emisCol(1.0f, 1.0f, 1.0f);
+		material->Get(AI_MATKEY_COLOR_EMISSIVE, emisCol);
+		matProperties.specularColor = *((glm::vec3*) &emisCol);
+		//printf("emisCol: %f, %f, %f \n", emisCol.r, emisCol.g, emisCol.b);
+
+		float transp(1.0f);
+		material->Get(AI_MATKEY_OPACITY, transp);
+		matProperties.materialAlpha = transp;
+		//printf("transp %f \n", transp);
+
+		float specExp(0.0f);	//whats default?
+		material->Get(AI_MATKEY_OPACITY, specExp);
+		matProperties.materialSpecExp = specExp;
+		//printf("specExp %f \n", specExp);
+
+		m_matProperties.push_back(matProperties);
 
 		aiString path;
 
@@ -294,6 +325,13 @@ void Mesh::setShaderAttributes(std::shared_ptr<ShaderAttributes> shaderAttribute
 		m_tangentBuffer->setAttribPointer(shaderAttributes->tangentLoc, GL_FLOAT, 3);
 		m_bitangentBuffer->setAttribPointer(shaderAttributes->bitangentLoc, GL_FLOAT, 3);
 	}
+
+	m_matUboIndex = glGetUniformBlockIndex(shaderAttributes->shaderID, shaderAttributes->materialUniformBufferName);
+	m_matUboBindingPoint = shaderAttributes->materialUniformBufferBindingPoint;
+
+	glBindBuffer(GL_UNIFORM_BUFFER, m_matUbo);
+	glUniformBlockBinding(shaderAttributes->shaderID, m_matUboIndex, m_matUboBindingPoint);
+	printf("block index: %i \n", m_matUboIndex);
 }
 
 
@@ -302,9 +340,14 @@ void Mesh::render()
 	glBindVertexArray(m_vao);
 
 	for (unsigned int i = 0; i < m_entries.size(); i++) {
-		const MeshEntry entry = m_entries.at(i);
+		const MeshEntry& entry = m_entries.at(i);
 		const unsigned int materialIndex = entry.materialIndex;
-		const MeshMaterial material = m_materials.at(materialIndex);
+		const MeshMaterial& material = m_materials.at(materialIndex);
+		const MeshMaterialProperties& matProperties = m_matProperties.at(materialIndex);
+
+		glBindBuffer(GL_UNIFORM_BUFFER, m_matUbo);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(MeshMaterialProperties), &matProperties, GL_STREAM_DRAW);
+		glBindBufferBase(GL_UNIFORM_BUFFER, m_matUboBindingPoint, m_matUbo);
 
 		if (material.diffuseTexture != INVALID_TEXTURE_ID)
 		{

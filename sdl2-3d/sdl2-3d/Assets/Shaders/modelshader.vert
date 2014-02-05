@@ -10,13 +10,21 @@ layout(location = 5) in vec3 in_bitangent;
 uniform mat4 u_mvp;
 uniform mat4 u_transform;
 
-out vec4 position;
-out vec2 texcoord;
+out vec4 v_position;
+out vec2 v_texcoord;
+out vec3 v_normal;
+out vec3 v_tangent;
+out vec3 v_bitangent;
+out vec4 v_color;
 
 void main()
 {
 	vec4 pos = u_transform * in_position;
 	gl_Position = u_mvp * pos;
-	position = pos;
-	texcoord = in_texcoord;
+	v_position = pos;
+	v_texcoord = in_texcoord;
+	v_normal = in_normal;
+	v_tangent = in_tangent;
+	v_bitangent = in_bitangent;
+	v_color = in_color;
 }

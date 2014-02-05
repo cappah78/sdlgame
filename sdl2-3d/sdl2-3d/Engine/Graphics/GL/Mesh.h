@@ -44,6 +44,17 @@ public:
 		GLuint specularTexture;
 		GLuint opacityTexture;
 	};
+
+	struct MeshMaterialProperties
+	{
+		glm::vec3 diffuseColor;
+		float materialAlpha;
+		glm::vec3 specularColor;
+		float materialSpecExp;
+		glm::vec3 materialEmissive;
+		float padding;
+	};
+
 	struct BufferFlags
 	{
 		BufferFlags()
@@ -64,16 +75,21 @@ public:
 	struct ShaderAttributes
 	{
 		static const unsigned int UNUSED_VERTEX_ATTRIBUTE_LOC = 0xFFFFFFFF;
-		ShaderAttributes(
+		ShaderAttributes(GLuint shaderID, GLuint materialUniformBufferBindingPoint = 1, const char* const materialUniformBufferName = "MaterialProperties",
 			unsigned int positionLoc = 0, unsigned int texcoordLoc = 1, unsigned int normalLoc = 2,
 			unsigned int colorLoc = 3, unsigned int tangentLoc = 4, unsigned int bitangentLoc = 5,
 			unsigned int diffuseTextureBindLoc = 0, unsigned int normalTextureBindLoc = 1,
 			unsigned int specularTextureBindLoc = 2, unsigned int opacityTextureBindLoc = 3)
-			: positionLoc(positionLoc), texcoordLoc(texcoordLoc), normalLoc(normalLoc)
+			: shaderID(shaderID), materialUniformBufferBindingPoint(materialUniformBufferBindingPoint)
+			, materialUniformBufferName(materialUniformBufferName)
+			, positionLoc(positionLoc), texcoordLoc(texcoordLoc), normalLoc(normalLoc)
 			, colorLoc(colorLoc), tangentLoc(tangentLoc), bitangentLoc(bitangentLoc)
 			, diffuseTextureBindLoc(diffuseTextureBindLoc), normalTextureBindLoc(normalTextureBindLoc)
 			, specularTextureBindLoc(specularTextureBindLoc), opacityTextureBindLoc(opacityTextureBindLoc)
 		{};
+		GLuint shaderID;
+		GLuint materialUniformBufferBindingPoint;
+		const char* const materialUniformBufferName;
 		unsigned int positionLoc;
 		unsigned int texcoordLoc;
 		unsigned int normalLoc;
@@ -106,6 +122,10 @@ public:
 	std::unique_ptr<VertexBuffer> m_colorBuffer;
 	std::vector<MeshEntry> m_entries;
 	std::vector<MeshMaterial> m_materials;
+	std::vector<MeshMaterialProperties> m_matProperties;
+	GLuint m_matUbo;
+	GLuint m_matUboBindingPoint;
+	GLuint m_matUboIndex;
 	BufferFlags m_bufferFlags;
 	std::shared_ptr<ShaderAttributes> m_shaderAttributes;
 
