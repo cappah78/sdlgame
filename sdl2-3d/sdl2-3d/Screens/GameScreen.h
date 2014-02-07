@@ -40,6 +40,9 @@ private:
 	ID3D11Device* m_device;
 	ID3D11DeviceContext* m_deviceContext;
 	ID3D11RenderTargetView* m_backBuffer;
+	ID3D11Buffer* m_vertexBuffer;
+	ID3D11VertexShader* m_vertexShader;
+	ID3D11PixelShader* m_pixelShader;
 	void renderOpenGL(float deltaSec);
 	void renderD3D(float deltaSec);
 	RenderMode m_renderMode;
