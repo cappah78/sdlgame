@@ -1,25 +1,26 @@
-﻿#include "GameScreen.h"
+#include "GameScreen.h"
 
 #include <glm\glm.hpp>
 #include <iostream>
 #include <stdio.h>
 #include <vector>
 
+#include <SDL_syswm.h>
+#include <d3d11.h>
+#pragma comment(lib, "d3d11.lib")
+
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../Voxel/VoxelRenderer.h"
-#include "../Engine/Graphics/GL/TextureArray.h"
-
 #include "../Game.h"
-#include "../Engine/Graphics/Color8888.h"
+#include "../Voxel/VoxelRenderer.h"
 
+#include "../Engine/Graphics/GL/TextureArray.h"
+#include "../Engine/Graphics/Color8888.h"
 #include "../Engine/Graphics/GL/Mesh.h"
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
-
-static const float CAMERA_FAR = 280.0f;	//is also fog/chunk load distance
-
+static const float CAMERA_FAR = 280.0f;
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
@@ -38,14 +39,17 @@ GameScreen::GameScreen()
 	, m_textureManager()
 	, m_world(m_textureManager)
 	, m_modelShader("Assets/Shaders/modelshader.vert", NULL, "Assets/Shaders/modelshader.frag")
+	, m_renderMode(RenderMode::OPENGL)
 {
+	initializeD3D();
+
 	Game::input.registerKeyListener(&m_cameraController);
 	Game::input.registerMouseListener(&m_cameraController);
 	Game::input.registerKeyListener(this);
 
 	glEnable(GL_DEPTH_TEST);
 
-#if RENDER_MODEL
+#if RENDER_MODEL //work in progress testing
 	///* initialize crytek sponza model rendering /*
 	m_modelShader.begin();
 	m_modelShader.setUniform1i("u_diffuseTex", 0);
@@ -61,32 +65,107 @@ GameScreen::GameScreen()
 #endif
 }
 
+#define RENDER_WITH_OPENGL 1;
 void GameScreen::render(float deltaSec)
 {
-	glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	switch (m_renderMode)
+	{
+	case OPENGL:
+		renderOpenGL(deltaSec);
+		break;
+	case D3D:
+		renderD3D(deltaSec);
+		break;
+	default:
+		assert(false);
+		break;
+	}
+}
 
+void GameScreen::renderD3D(float deltaSec)
+{
+	m_deviceContext->ClearRenderTargetView(m_backBuffer, &glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)[0]);
+	m_swapChain->Present(0, 0);
+}
+
+void GameScreen::renderOpenGL(float deltaSec)
+{
+	glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	
 	m_cameraController.update(deltaSec);
 	m_camera.update();
 
-#if !RENDER_MODEL
 	m_world.update(deltaSec, m_camera);
 	m_worldRenderer.render(m_world, m_camera);
-#else
-	///* renders crytek sponza model /*
+	
+	/* renders crytek sponza model /*
 	m_modelShader.begin();
 	m_modelShader.setUniformMatrix4f("u_mvp", m_camera.m_combinedMatrix);
 	m_modelShader.setUniformMatrix4f("u_transform", glm::scale(glm::translate(glm::mat4(1), glm::vec3(0, 0, -20)), glm::vec3(0.1f, 0.1f, 0.1f)));
 	m_mesh.render();
 	m_modelShader.end();
-#endif
-
+	*/
 	Game::graphics.swap();
+}
+
+void GameScreen::initializeD3D()
+{
+	SDL_SysWMinfo windowInfo;
+	SDL_VERSION(&windowInfo.version);
+	SDL_GetWindowWMInfo(Game::graphics.getWindow(), &windowInfo);
+	const HWND& windowsWindowHandle = windowInfo.info.win.window;
+
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
+
+	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.OutputWindow = windowsWindowHandle;
+	swapChainDesc.SampleDesc.Count = 4;
+	swapChainDesc.Windowed = TRUE;
+
+	D3D11CreateDeviceAndSwapChain(NULL,
+		D3D_DRIVER_TYPE_HARDWARE,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		D3D11_SDK_VERSION,
+		&swapChainDesc,
+		&m_swapChain,
+		&m_device,
+		NULL,
+		&m_deviceContext);
+
+	ID3D11Texture2D* backBufferSurface;
+
+	m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*) &backBufferSurface);
+	m_device->CreateRenderTargetView(backBufferSurface, NULL, &m_backBuffer);
+	backBufferSurface->Release();
+	m_deviceContext->OMSetRenderTargets(1, &m_backBuffer, NULL);
+
+	D3D11_VIEWPORT viewport;
+	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = 1600;
+	viewport.Height = 900;
+	m_deviceContext->RSSetViewports(1, &viewport);
+}
+
+void GameScreen::disposeD3D()
+{
+	m_swapChain->Release();
+	m_backBuffer->Release();
+	m_device->Release();
+	m_deviceContext->Release();
 }
 
 GameScreen::~GameScreen() 
 {
-
+	disposeD3D();
 }
 
 void GameScreen::resize(int width, int height) 
@@ -107,7 +186,18 @@ bool GameScreen::keyDown(SDL_Keysym key)
 
 	if (key.sym == SDLK_t)
 	{
-		m_deferredWorldRenderer.doLight(m_camera);
+		switch (m_renderMode)
+		{
+		case OPENGL:
+			m_renderMode = D3D;
+			break;
+		case D3D:
+			m_renderMode = OPENGL;
+			break;
+		default:
+			assert(false);
+			break;
+		}
 	}
 
 	if (key.sym == SDLK_f)
@@ -127,7 +217,13 @@ bool GameScreen::keyDown(SDL_Keysym key)
 
 	if (key.sym == SDLK_F1)
 	{
-		printf("Controls: \nWASD, Shift, Space to fly \nR to toggle different speeds \nPeriod to increase render distance \nComma to decrease render distance \nF to trigger a block update at location \nT to place a light at location(wip)\n");
+		printf("Controls: \n"
+			"WASD, Shift, Space to fly \n"
+			"R to toggle different speeds \n"
+			"Period to increase render distance \n"
+			"Comma to decrease render distance \n"
+			"F to trigger a block update at location \n"
+			"T to place a light at location(wip)\n");
 	}
 
 
