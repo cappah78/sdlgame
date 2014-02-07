@@ -85,6 +85,13 @@ void GameScreen::render(float deltaSec)
 void GameScreen::renderD3D(float deltaSec)
 {
 	m_deviceContext->ClearRenderTargetView(m_backBuffer, &glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)[0]);
+	/*
+	unsigned int stride = sizeof(glm::vec3);
+	unsigned int offset = 0;
+	m_deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_deviceContext->Draw(3, 0);
+	*/
 	m_swapChain->Present(0, 0);
 }
 
@@ -153,6 +160,49 @@ void GameScreen::initializeD3D()
 	viewport.Width = 1600;
 	viewport.Height = 900;
 	m_deviceContext->RSSetViewports(1, &viewport);
+
+	glm::vec3 vertices[] =
+	{
+		glm::vec3(0.0f, 0.5f, 0.0f),
+		glm::vec3(0.45f, -0.5f, 0.0f),
+		glm::vec3(-0.45f, -0.5f, 0.0f)
+	};
+
+	D3D11_BUFFER_DESC bufferDescription;
+	ZeroMemory(&bufferDescription, sizeof(D3D11_BUFFER_DESC));
+	bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDescription.ByteWidth = sizeof(vertices);
+	bufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	m_device->CreateBuffer(&bufferDescription, NULL, &m_vertexBuffer);
+
+	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
+	m_deviceContext->Map(m_vertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedSubresource);
+	memcpy(mappedSubresource.pData, vertices, sizeof(vertices));
+	m_deviceContext->Unmap(m_vertexBuffer, NULL);
+
+	/*
+	ID3D10Blob* vertexShaderBlob;
+	ID3D10Blob* pixelShaderBlob;
+	const char* const shaderPath = "Assets/Shaders/d3dtest.hlsl";
+	D3D10CompileShader(shaderPath, strlen(shaderPath), "VShader", NULL, NULL, "d3dtest.hlsl", "vs_5_0", 0, &vertexShaderBlob, NULL);
+	D3D10CompileShader(shaderPath, strlen(shaderPath), "PShader", NULL, NULL, "d3dtest.hlsl", "ps_5_0", 0, &pixelShaderBlob, NULL);
+	
+	m_device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), NULL, &m_vertexShader);
+	m_device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), NULL, &m_pixelShader);
+
+	ID3D11InputLayout* inputLayout;
+	D3D11_INPUT_ELEMENT_DESC inputElementDescription[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	m_device->CreateInputLayout(inputElementDescription, 1, vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
+
+	m_deviceContext->VSSetShader(m_vertexShader, 0, 0);
+	m_deviceContext->PSSetShader(m_pixelShader, 0, 0);
+	m_deviceContext->IASetInputLayout(inputLayout);
+	*/
 }
 
 void GameScreen::disposeD3D()
@@ -161,6 +211,8 @@ void GameScreen::disposeD3D()
 	m_backBuffer->Release();
 	m_device->Release();
 	m_deviceContext->Release();
+	m_pixelShader->Release();
+	m_vertexShader->Release();
 }
 
 GameScreen::~GameScreen() 
