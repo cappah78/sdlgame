@@ -17,6 +17,9 @@ struct IDXGISwapChain;
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct ID3D11RenderTargetView;
+struct ID3D11PixelShader;
+struct ID3D11VertexShader;
+struct ID3D11Buffer;
 class VoxelCache;
 class TextureArray;
 
@@ -32,22 +35,6 @@ public:
 	virtual bool keyUp(SDL_Keysym key) override;
 
 private:
-	//tmp d3d stuffs
-	enum RenderMode { OPENGL, D3D };
-	void initializeD3D();	//tmp testing stuffs
-	void disposeD3D();
-	IDXGISwapChain* m_swapChain;
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_deviceContext;
-	ID3D11RenderTargetView* m_backBuffer;
-	ID3D11Buffer* m_vertexBuffer;
-	ID3D11VertexShader* m_vertexShader;
-	ID3D11PixelShader* m_pixelShader;
-	void renderOpenGL(float deltaSec);
-	void renderD3D(float deltaSec);
-	RenderMode m_renderMode;
-	///
-
 	FPSCameraController m_cameraController;
 	PerspectiveCamera m_camera;
 	Shader m_modelShader;
@@ -57,6 +44,24 @@ private:
 	WorldRenderer m_worldRenderer;
 	VoxelRenderer m_voxelRenderer;
 	TextureArray* m_tileSet;
+
+	//tmp d3d stuffs
+	enum RenderMode { OPENGL, D3D };
+	void initializeD3D();	//tmp testing stuffs
+	void disposeD3D();
+	
+	IDXGISwapChain* m_swapChain;
+	ID3D11Device* m_device;
+	ID3D11DeviceContext* m_deviceContext;
+	ID3D11RenderTargetView* m_backBuffer;
+	ID3D11Buffer* m_vertexBuffer;
+	ID3D11VertexShader* m_vertexShader;
+	ID3D11PixelShader* m_pixelShader;
+
+	void renderOpenGL(float deltaSec);
+	void renderD3D(float deltaSec);
+	RenderMode m_renderMode;
+	///
 };
 
 #endif //GAME_SCREEN_H_
