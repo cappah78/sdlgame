@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <vector>
 
+
 #include <SDL_syswm.h>
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
@@ -41,7 +42,7 @@ GameScreen::GameScreen()
 	, m_modelShader("Assets/Shaders/modelshader.vert", NULL, "Assets/Shaders/modelshader.frag")
 	, m_renderMode(RenderMode::OPENGL)
 {
-	initializeD3D();
+//	initializeD3D();
 
 	Game::input.registerKeyListener(&m_cameraController);
 	Game::input.registerMouseListener(&m_cameraController);
@@ -84,21 +85,23 @@ void GameScreen::render(float deltaSec)
 
 void GameScreen::renderD3D(float deltaSec)
 {
-	m_deviceContext->ClearRenderTargetView(m_backBuffer, &glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)[0]);
 	/*
+	m_deviceContext->ClearRenderTargetView(m_backBuffer, &glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)[0]);
+	
 	unsigned int stride = sizeof(glm::vec3);
 	unsigned int offset = 0;
 	m_deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_deviceContext->Draw(3, 0);
-	*/
+	
 	m_swapChain->Present(0, 0);
+	*/
 }
 
 void GameScreen::renderOpenGL(float deltaSec)
 {
 	glClearColor(0.4f, 0.7f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	m_cameraController.update(deltaSec);
 	m_camera.update();
