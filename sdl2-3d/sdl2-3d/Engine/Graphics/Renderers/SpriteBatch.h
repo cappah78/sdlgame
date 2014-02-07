@@ -1,5 +1,4 @@
-#ifndef SPRITEBATCH_H_
-#define SPRITEBATCH_H_
+#pragma once
 
 #include <glm\glm.hpp>
 #include <vector>
@@ -71,5 +70,3 @@ private:
 	GLuint m_lastTexture;	//texture used by last draw call.
 	bool m_blendEnabled;
 };
-
-#endif //SPRITEBATCH_H_

@@ -1,5 +1,4 @@
-#ifndef VOXEL_RENDERER_H_
-#define VOXEL_RENDERER_H_
+#pragma once
 
 #include <gl\glew.h>
 #include <glm\glm.hpp>
@@ -111,5 +110,3 @@ private:
 
 	std::vector<Chunk*> m_chunkPool;
 };
-
-#endif //VOXEL_RENDERER_H_

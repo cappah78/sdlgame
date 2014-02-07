@@ -1,5 +1,4 @@
-#ifndef DEFERRED_WORLD_RENDERER_H_
-#define DEFERRED_WORLD_RENDERER_H_
+#pragma once
 
 #include "../VoxelWorld.h"
 #include "../VoxelRenderer.h"
@@ -55,5 +54,3 @@ private:
 	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_visibleChunkList;
 	std::vector<PointLight> m_pointLights;
 };
-
-#endif //DEFERRED_WORLD_RENDERER_H_

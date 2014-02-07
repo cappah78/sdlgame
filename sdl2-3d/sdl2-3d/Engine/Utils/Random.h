@@ -1,5 +1,4 @@
-#ifndef RANDOM_H_
-#define RANDOM_H_
+#pragma once
 
 #include <random>
 #include <iostream>
@@ -26,5 +25,3 @@ private:
 	Engine m_engine;
 	Distribution m_distribution;
 };
-
-#endif //RANDOM_H_

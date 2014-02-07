@@ -1,5 +1,4 @@
-#ifndef WORLD_RENDERER_H_
-#define WORLD_RENDERER_H_
+#pragma once
 
 #include "VoxelRenderer.h"
 #include "../Engine/Utils/Comparables.h"
@@ -49,5 +48,3 @@ private:
 
 	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_visibleChunkList;
 };
-
-#endif //WORLD_RENDERER_H_

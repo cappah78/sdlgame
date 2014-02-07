@@ -1,5 +1,4 @@
-#ifndef SHADER_H_
-#define SHADER_H_
+#pragma once
 
 #include <glm\glm.hpp>
 #include <unordered_map>
@@ -57,5 +56,3 @@ private:
 
 	std::unordered_map<const char*, GLint, StrHash, StrCmp> m_uniformLocMap;
 };
-
-#endif //SHADER_H_

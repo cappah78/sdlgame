@@ -1,5 +1,4 @@
-#ifndef I_MOUSE_LISTENER_H_
-#define I_MOUSE_LISTENER_H_
+#pragma once
 
 #include <SDL.h>
 
@@ -24,6 +23,3 @@ public:
 	/** Called when the mousewheel is scrolled, return if the event was handled and should not be received by other listeners */
 	virtual bool mouseScrolled(int amount) { return false; };
 };
-
-
-#endif // I_MOUSE_LISTENER_H_

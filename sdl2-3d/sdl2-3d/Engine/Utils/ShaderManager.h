@@ -1,5 +1,4 @@
-#ifndef SHADERMANAGER_H_
-#define SHADERMANAGER_H_
+#pragma once
 
 #include <string>
 #include <gl\glew.h>
@@ -15,5 +14,3 @@ private:
 	static void attachShaderSource(GLuint prog, GLenum type, const char * source);
 	static const std::string* getStringFromFile(const char* fileName);
 };
-
-#endif //SHADERMANAGER_H_

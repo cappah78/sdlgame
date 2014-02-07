@@ -1,5 +1,4 @@
-#ifndef MESH_H_
-#define MESH_H_
+#pragma once
 
 #include <vector>
 #include <glm\glm.hpp>
@@ -137,5 +136,3 @@ private:
 	void initVertexBuffers(const aiScene* scene);
 	void initMaterials(const aiScene* scene, const std::string& filename, TextureManager& textureManager);
 };
-
-#endif MESH_H_

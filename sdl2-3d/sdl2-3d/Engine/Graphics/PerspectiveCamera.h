@@ -1,5 +1,4 @@
-#ifndef PERSPECTIVE_CAMERA_H_
-#define PERSPECTIVE_CAMERA_H_
+#pragma once
 
 #include "Camera.h"
 
@@ -23,5 +22,3 @@ private:
 
 	void updateProjection();
 };
-
-#endif //PERSPECTIVE_CAMERA_H_

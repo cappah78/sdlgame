@@ -1,5 +1,4 @@
-#ifndef POINT_LIGHT_H_
-#define POINT_LIGHT_H_
+#pragma once
 
 #include <glm\glm.hpp>
 
@@ -17,5 +16,3 @@ struct PointLight
 	float constAtten;
 	float expAtten;
 };
-
-#endif //POINT_LIGHT_H_

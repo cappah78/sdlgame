@@ -1,5 +1,4 @@
-#ifndef VOXEL_CHUNK_H_
-#define VOXEL_CHUNK_H_
+#pragma once
 
 #include "PropertyManager.h"
 #include "../Engine/Utils/VoidDataList.h"
@@ -92,5 +91,3 @@ private:
 
 	PropertyManager& m_propertyManager;
 };
-
-#endif //VOXEL_CHUNK_H_

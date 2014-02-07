@@ -1,5 +1,4 @@
-#ifndef CUBE_MAP_H
-#define CUBE_MAP_H
+#pragma once
 
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
@@ -23,5 +22,3 @@ public:
 private:
 	GLuint m_textureID;
 };
-
-#endif //CUBE_MAP_H

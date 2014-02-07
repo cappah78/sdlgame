@@ -20,8 +20,8 @@
 // off every 'zig'.)
 //
 
-#ifndef NOISEUTILS_H
-#define NOISEUTILS_H
+#pragma once
+
 
 #include <stdlib.h>
 #include <string.h>
@@ -2536,5 +2536,3 @@ namespace noise
   }
 
 }
-
-#endif

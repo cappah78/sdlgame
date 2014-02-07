@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_H_
-#define GRAPHICS_H_
+#pragma once
 
 #include <SDL.h>
 
@@ -54,5 +53,3 @@ private:
 	Graphics(const Graphics& copy) {};
 	~Graphics() {};
 };
-
-#endif //GRAPHICS_H_

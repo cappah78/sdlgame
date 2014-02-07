@@ -1,5 +1,4 @@
-#ifndef CHECK_LUA_ERROR_H_
-#define CHECK_LUA_ERROR_H_
+#pragma once
 
 #include <lua.hpp>
 #include <LuaBridge.h>
@@ -15,6 +14,3 @@ inline void checkLuaError(lua_State *L, int status)
 		lua_pop(L, 1); // remove error message
 	}
 }
-
-
-#endif //CHECK_LUA_ERROR_H_

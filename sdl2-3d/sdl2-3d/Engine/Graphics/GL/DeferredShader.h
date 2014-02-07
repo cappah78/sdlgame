@@ -1,5 +1,4 @@
-#ifndef DEFERRED_SHADER_H_
-#define DEFERRED_SHADER_H_
+#pragma once
 
 #include "Shader.h"
 #include "GBuffer.h"
@@ -19,5 +18,3 @@ private:
 	Shader m_renderShader;
 	GBuffer m_gbuffer;
 };
-
-#endif DEFERRED_SHADER_H_

@@ -1,8 +1,6 @@
-#ifndef MATERIAL_H_
-#define MATERIAL_H_
+#pragma once
 
 #include "TextureRegion.h"
-
 /** 
 -WIP-
 
@@ -46,5 +44,3 @@ private:
 	const TextureRegion* m_specular;
 	const TextureRegion* m_occlusion;
 };
-
-#endif //MATERIAL_H_

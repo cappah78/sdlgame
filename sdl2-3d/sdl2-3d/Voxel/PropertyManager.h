@@ -1,5 +1,4 @@
-#ifndef PROPERTY_MANAGER_H_
-#define PROPERTY_MANAGER_H_
+#pragma once
 
 #include "VoxelBlock.h"
 #include "../Engine/Graphics/TextureManager.h"
@@ -69,5 +68,3 @@ private:
 	std::map<std::string, unsigned short> m_blockTextureIDNames;
 	std::vector<std::string> m_blockTextureNames;
 };
-
-#endif // PROPERTY_MANAGER_H_

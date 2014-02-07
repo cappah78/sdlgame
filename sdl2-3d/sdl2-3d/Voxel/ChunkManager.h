@@ -1,5 +1,4 @@
-#ifndef CHUNK_MANAGER_H_
-#define CHUNK_MANAGER_H_
+#pragma once
 
 #include "VoxelChunk.h"
 
@@ -59,5 +58,3 @@ private:
 	ChunkMap m_loadedChunks;
 	PropertyManager& m_propertyManager;
 };
-
-#endif //CHUNK_MANAGER_H_

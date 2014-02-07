@@ -1,5 +1,4 @@
-#ifndef QUAD_RENDERER_H_
-#define QUAD_RENDERER_H_
+#pragma once
 
 #include <GL\glew.h>
 #include "../GL/VertexBuffer.h"
@@ -30,5 +29,3 @@ private:
 	VertexBuffer m_positionBuffer;
 	VertexBuffer m_indiceBuffer;
 };
-
-#endif //QUAD_RENDERER_H_

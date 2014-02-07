@@ -1,5 +1,4 @@
-#ifndef VOID_DATA_LIST_H_
-#define VOID_DATA_LIST_H_
+#pragma once
 
 #include <vector>
 
@@ -36,5 +35,3 @@ public:
 private:
 	std::vector<unsigned char> m_data;
 };
-
-#endif //VOID_DATA_LIST_H_

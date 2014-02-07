@@ -1,5 +1,4 @@
-#ifndef PIXMAP_H_
-#define PIXMAP_H_
+#pragma once
 
 #include <string>
 
@@ -20,5 +19,3 @@ public:
 	/** Number of components per pixel (e.g. rgba == 4)*/
 	int m_numComponents;
 };
-
-#endif //PIXMAP_H_

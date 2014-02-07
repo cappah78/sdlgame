@@ -1,5 +1,4 @@
-#ifndef COMPARABLES_H_
-#define COMPARABLES_H_
+#pragma once
 
 /** Comparable so ivec3 can be used in maps*/
 struct IVec3Cmp
@@ -27,6 +26,3 @@ struct IVec3Hash
 		return (vec.x * 12582917 + vec.z) * 6291469 + vec.y;
 	}
 };
-
-
-#endif //COMPARABLES_H_

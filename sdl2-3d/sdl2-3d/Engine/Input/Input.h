@@ -1,4 +1,4 @@
-#ifndef INPUT_H_
+#pragma once
 
 #include <vector>
 
@@ -41,6 +41,3 @@ private:
 	static std::vector<IMouseListener*> m_mouseListeners;
 	static bool m_mouseCaptured;
 };
-
-#define INPUT_H_
-#endif //INPUT_H_

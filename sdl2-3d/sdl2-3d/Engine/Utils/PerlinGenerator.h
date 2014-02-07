@@ -1,5 +1,4 @@
-#ifndef PERLINGENERATOR_H_
-#define PERLINGENERATOR_H_
+#pragma once
 
 #include "Random.h"
 
@@ -24,5 +23,3 @@ private:
 	Random<float> m_random;
 	float m_gradients[GRADIENTS_TABLE_SIZE * 3];
 };
-
-#endif //PERLINGENERATOR_H_

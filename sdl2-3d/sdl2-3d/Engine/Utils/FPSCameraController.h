@@ -1,5 +1,4 @@
-#ifndef FPSCAMERACONTROLLER_H_
-#define FPSCAMERACONTROLLER_H_
+#pragma once
 
 #include "..\Model\IMouseListener.h"
 #include "..\Model\IKeyListener.h"
@@ -41,5 +40,3 @@ private:
 
 	glm::vec3 m_lookDir;
 };
-
-#endif //FPSCAMERACONTROLLER_H_

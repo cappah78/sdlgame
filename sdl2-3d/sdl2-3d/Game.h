@@ -1,5 +1,4 @@
-#ifndef GAME_H_
-#define GAME_H_
+#pragma once
 
 #include "Engine/Input/Input.h"
 #include "Engine/Graphics/Graphics.h"
@@ -46,5 +45,3 @@ private:
 	~Game() {};
 	Game(const Game& copy) = delete;
 };
-
-#endif //GAME_H_

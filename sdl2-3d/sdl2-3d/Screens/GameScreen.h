@@ -1,5 +1,4 @@
-#ifndef GAME_SCREEN_H_
-#define GAME_SCREEN_H_
+#pragma once
 
 #include "../Engine/Model/IScreen.h"
 #include "../Engine/Model/IMouseListener.h"
@@ -63,5 +62,3 @@ private:
 	RenderMode m_renderMode;
 	///
 };
-
-#endif //GAME_SCREEN_H_

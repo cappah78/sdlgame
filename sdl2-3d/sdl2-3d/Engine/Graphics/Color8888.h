@@ -1,5 +1,4 @@
-#ifndef COLOR8888_H_
-#define COLOR8888_H_
+#pragma once
 
 #include <assert.h>
 
@@ -49,6 +48,3 @@ struct Color8888
 		return i;
 	}
 };
-
-
-#endif //COLOR8888_H_

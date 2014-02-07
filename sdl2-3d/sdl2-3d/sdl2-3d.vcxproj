@@ -41,6 +41,7 @@
     <ClInclude Include="Engine\Utils\CheckGLError.h" />
     <ClInclude Include="Engine\Utils\CheckLuaError.h" />
     <ClInclude Include="Engine\Utils\Comparables.h" />
+    <ClInclude Include="Engine\Utils\FileReader.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
     <ClInclude Include="Engine\Utils\noiseutils.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
@@ -84,6 +85,7 @@
     <ClCompile Include="Engine\Graphics\TextureManager.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
+    <ClCompile Include="Engine\Utils\FileReader.cpp" />
     <ClCompile Include="Engine\Utils\FPSCameraController.cpp" />
     <ClCompile Include="Engine\Utils\noiseutils.cpp" />
     <ClCompile Include="Engine\Utils\PerlinGenerator.cpp" />
@@ -437,6 +439,11 @@
     <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_silver.png" />
     <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_white.png" />
     <Image Include="Assets\Textures\MinecraftBlocks\wool_colored_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Shaders\d3dtest.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BFD87650-6020-41DA-8A4C-CB7843B7CD65}</ProjectGuid>

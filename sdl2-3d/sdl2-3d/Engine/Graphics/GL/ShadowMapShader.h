@@ -1,5 +1,4 @@
-#ifndef SHADOW_MAP_SHADER_H_
-#define SHADOW_MAP_SHADER_H_
+#pragma once
 
 #include "GBuffer.h"
 #include "Shader.h"
@@ -18,5 +17,3 @@ private:
 
 
 };
-
-#endif //SHADOW_MAP_SHADER_H_

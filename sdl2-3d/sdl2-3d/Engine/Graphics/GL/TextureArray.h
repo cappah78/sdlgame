@@ -1,5 +1,4 @@
-#ifndef TEXTURE_ARRAY_H_
-#define TEXTURE_ARRAY_H_
+#pragma once
 
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
@@ -32,5 +31,3 @@ public:
 private:
 	GLuint m_textureID;
 };
-
-#endif //TEXTURE_ARRAY_H_

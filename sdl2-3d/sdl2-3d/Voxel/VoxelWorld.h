@@ -1,5 +1,4 @@
-#ifndef VOXEL_WORLD_H_
-#define VOXEL_WORLD_H_
+#pragma once
 
 #include "VoxelChunk.h"
 
@@ -88,5 +87,3 @@ private:
 	static int L_setBlockWithData(BlockID blockID, int x, int y, int z, luabridge::LuaRef perBlockData, lua_State* L);
 	static int L_getBlock(int x, int y, int z, lua_State* L);
 };
-
-#endif //VOXEL_WORLD_H_

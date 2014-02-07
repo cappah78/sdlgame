@@ -1,5 +1,4 @@
-#ifndef TEXTURE_H_
-#define TEXTURE_H_
+#pragma once
 
 class Pixmap;
 
@@ -44,5 +43,3 @@ private:
 	/** Amount of values per pixel (rgba = 4) */
 	unsigned char m_numComponents;
 };
-
-#endif //TEXTURE_H_

@@ -1,5 +1,4 @@
-#ifndef SKYBOX_H_
-#define SKYBOX_H_
+#pragma once
 
 #include "..\GL\Mesh.h" 
 #include "..\GL\CubeMap.h"
@@ -34,5 +33,3 @@ private:
 	CubeMap m_cubeMap;
 	//Mesh m_mesh;
 };
-
-#endif //SKYBOX_H_

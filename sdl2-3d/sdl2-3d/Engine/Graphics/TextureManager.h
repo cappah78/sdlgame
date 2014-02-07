@@ -1,5 +1,4 @@
-#ifndef TEXTURE_MANAGER_H_
-#define TEXTURE_MANAGER_H_
+#pragma once
 
 #include <string>
 #include <map>
@@ -26,5 +25,3 @@ private:
 	std::map<std::string, Texture*> m_textureNameMap;
 	std::map<std::string, GLuint> m_textureNameIDMap;
 };
-
-#endif //TEXTURE_MANAGER_H_

@@ -1,5 +1,4 @@
-#ifndef HEIGHTMAP_H_
-#define HEIGHTMAP_H_
+#pragma once
 
 #include "..\Utils\PerlinGenerator.h"
 
@@ -35,5 +34,3 @@ private:
 	float* m_heights;
 	PerlinGenerator m_perlin;
 };
-
-#endif //HEIGHTMAP_H_

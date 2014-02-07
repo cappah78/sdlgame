@@ -1,5 +1,4 @@
-#ifndef VOXEL_BLOCK_H_
-#define VOXEL_BLOCK_H_
+#pragma once
 
 /** Contains all block related structs / datatypes */
 
@@ -138,6 +137,3 @@ struct BlockProperties
 	/** List of events that can be triggered to run lua scripts without polling lua */
 	std::vector<BlockEventTrigger> events;
 };
-
-
-#endif //VOXEL_BLOCK_H_

@@ -20,8 +20,7 @@
 * THE SOFTWARE.
 */
 /****************************************************************************/
-#ifndef CHECKGLERROR_H_
-#define CHECKGLERROR_H_
+#pragma once
 
 void outputFailure(const char *file, const int line, const char *conditionString);
 
@@ -68,5 +67,3 @@ if (!(_condition_)) \
 * Internal function used by macro CHECK_GL_ERROR, use that instead.
 */
 bool checkGLError(const char *file, int line);
-
-#endif //CHECKGLERROR_H_

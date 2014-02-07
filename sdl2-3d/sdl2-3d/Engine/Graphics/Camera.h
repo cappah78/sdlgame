@@ -1,5 +1,4 @@
-#ifndef CAMERA_H_
-#define CAMERA_H_
+#pragma once
 
 #include <glm\glm.hpp>
 #include "Frustum.h"
@@ -52,5 +51,3 @@ public:
 	float m_near;
 	float m_far;
 };
-
-#endif //CAMERA_H_

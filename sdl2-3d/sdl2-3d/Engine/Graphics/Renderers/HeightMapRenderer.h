@@ -1,5 +1,4 @@
-#ifndef TERRAIN_H_
-#define TERRAIN_H_
+#pragma once
 
 #include <glm\glm.hpp>
 
@@ -51,5 +50,3 @@ private:
 	glm::vec2* m_texCoords;
 	glm::vec3* m_normals;
 };
-
-#endif //TERRAIN_H_

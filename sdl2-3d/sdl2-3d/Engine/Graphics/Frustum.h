@@ -1,5 +1,4 @@
-#ifndef FRUSTUM_H_
-#define FRUSTUM_H_
+#pragma once
 
 #include <glm\glm.hpp>
 
@@ -18,5 +17,3 @@ public:
 private:
 	glm::vec4 m_planes[6];
 };
-
-#endif //FRUSTUM_H_

@@ -1,5 +1,4 @@
-#ifndef GBUFFER_H_
-#define GBUFFER_H_
+#pragma once
 
 #include <gl\glew.h>
 #include <vector>
@@ -32,5 +31,3 @@ private:
 	std::vector<GLuint> m_textures;
 	GLuint m_depthTexture;
 };
-
-#endif //GBUFFER_H_

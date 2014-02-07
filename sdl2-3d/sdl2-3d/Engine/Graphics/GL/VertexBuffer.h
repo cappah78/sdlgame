@@ -1,5 +1,4 @@
-#ifndef VERTEX_BUFFER_H_
-#define VERTEX_BUFFER_H_
+#pragma once
 
 #include <gl\glew.h>
 #include "../../Utils/CheckGLError.h"
@@ -115,5 +114,3 @@ inline void clearBackingArray()
 	m_data = NULL;
 }; 
 */
-
-#endif //VERTEX_BUFFER_H_
