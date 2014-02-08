@@ -4,6 +4,7 @@
 #include <glm\glm.hpp>
 #include <memory>
 #include "VertexBuffer.h"
+#include "ConstantBuffer.h"
 #include "../TextureManager.h"
 
 struct aiMesh;
@@ -119,6 +120,7 @@ public:
 	std::unique_ptr<VertexBuffer> m_bitangentBuffer;
 	std::unique_ptr<VertexBuffer> m_texcoordBuffer;
 	std::unique_ptr<VertexBuffer> m_colorBuffer;
+	std::unique_ptr<ConstantBuffer> m_matUniformBuffer;
 	std::vector<MeshEntry> m_entries;
 	std::vector<MeshMaterial> m_materials;
 	std::vector<MeshMaterialProperties> m_matProperties;

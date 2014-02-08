@@ -100,9 +100,10 @@ void GameScreen::renderD3D(float deltaSec)
 	
 	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
+	m_deviceContext->IASetIndexBuffer(m_indiceBuffer, DXGI_FORMAT_R32_UINT, 0);
 	m_deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_deviceContext->Draw(3, 0);
+	m_deviceContext->DrawIndexed(6, 0, 0);
 	
 	m_swapChain->Present(0, 0);
 }
@@ -114,17 +115,18 @@ void GameScreen::renderOpenGL(float deltaSec)
 	
 	m_cameraController.update(deltaSec);
 	m_camera.update();
-
+#if !RENDER_MODEL
 	m_world.update(deltaSec, m_camera);
 	m_worldRenderer.render(m_world, m_camera);
-	
-	/* renders crytek sponza model /*
+#else
+	///* renders crytek sponza model /*
 	m_modelShader.begin();
 	m_modelShader.setUniformMatrix4f("u_mvp", m_camera.m_combinedMatrix);
 	m_modelShader.setUniformMatrix4f("u_transform", glm::scale(glm::translate(glm::mat4(1), glm::vec3(0, 0, -20)), glm::vec3(0.1f, 0.1f, 0.1f)));
 	m_mesh.render();
 	m_modelShader.end();
-	*/
+	//*/
+#endif //RENDER_MODEL
 	Game::graphics.swap();
 }
 
@@ -204,26 +206,49 @@ void GameScreen::initializeD3D()
 	m_device->CreateInputLayout(inputElementDescription, 2, vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
 	m_deviceContext->IASetInputLayout(inputLayout);
 
-	Vertex vertices[] =
 	{
-		{ glm::vec3(0.0f, 0.5f, 0.0f), glm::vec4(1.0, 0.0, 0.0, 1.0) },
-		{ glm::vec3(0.45f, -0.5f, 0.0f), glm::vec4(0.0, 1.0, 0.0, 1.0) },
-		{ glm::vec3(-0.45f, -0.5f, 0.0f), glm::vec4(0.0, 0.0, 1.0, 1.0) }
-	};
+		Vertex vertices[] =
+		{
+			{ glm::vec3(0.0f, 0.5f, 0.0f), glm::vec4(1.0, 0.0, 0.0, 1.0) },
+			{ glm::vec3(0.45f, 0.0f, 0.0f), glm::vec4(0.0, 1.0, 0.0, 1.0) },
+			{ glm::vec3(-0.45f, 0.0f, 0.0f), glm::vec4(0.0, 0.0, 1.0, 1.0) },
+			{ glm::vec3(0.0f, -0.5f, 0.0f), glm::vec4(1.0, 1.0, 1.0, 1.0) }
+		};
 
-	D3D11_BUFFER_DESC bufferDescription;
-	ZeroMemory(&bufferDescription, sizeof(D3D11_BUFFER_DESC));
-	bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
-	bufferDescription.ByteWidth = sizeof(Vertex) * 3;
-	bufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		D3D11_BUFFER_DESC bufferDescription;
+		ZeroMemory(&bufferDescription, sizeof(D3D11_BUFFER_DESC));
+		bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
+		bufferDescription.ByteWidth = sizeof(vertices);
+		bufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	m_device->CreateBuffer(&bufferDescription, NULL, &m_vertexBuffer);
+		m_device->CreateBuffer(&bufferDescription, NULL, &m_vertexBuffer);
 
-	D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-	m_deviceContext->Map(m_vertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedSubresource);
-	memcpy(mappedSubresource.pData, vertices, sizeof(vertices));
-	m_deviceContext->Unmap(m_vertexBuffer, NULL);
+		D3D11_MAPPED_SUBRESOURCE mappedSubresource;
+		m_deviceContext->Map(m_vertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedSubresource);
+		memcpy(mappedSubresource.pData, vertices, sizeof(vertices));
+		m_deviceContext->Unmap(m_vertexBuffer, NULL);
+	}
+	{
+		unsigned int indices[] =
+		{
+			0, 1, 2, 1, 3, 2
+		};
+
+		D3D11_BUFFER_DESC indexBufferDesc;
+		ZeroMemory(&indexBufferDesc, sizeof(D3D11_BUFFER_DESC));
+		indexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		indexBufferDesc.ByteWidth = sizeof(indices);
+		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		indexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+		m_device->CreateBuffer(&indexBufferDesc, NULL, &m_indiceBuffer);
+
+		D3D11_MAPPED_SUBRESOURCE mappedSubresource;
+		m_deviceContext->Map(m_indiceBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedSubresource);
+		memcpy(mappedSubresource.pData, indices, sizeof(indices));
+		m_deviceContext->Unmap(m_indiceBuffer, NULL);
+	}
 }
 
 void GameScreen::disposeD3D()

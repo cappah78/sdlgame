@@ -14,6 +14,7 @@
     <ClInclude Include="Engine\Graphics\Camera.h" />
     <ClInclude Include="Engine\Graphics\Color8888.h" />
     <ClInclude Include="Engine\Graphics\Frustum.h" />
+    <ClInclude Include="Engine\Graphics\GL\ConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\CubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\DeferredShader.h" />
     <ClInclude Include="Engine\Graphics\GL\DepthCubeMap.h" />

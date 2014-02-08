@@ -106,20 +106,19 @@ void Mesh::initVertexBuffers(const aiScene* scene)
 	if (m_bufferFlags.hasIndiceBuffer)
 		indices.reserve(numIndices);
 	if (m_bufferFlags.hasPositionBuffer)
-	{
 		positions.reserve(numVertices);
-	}
 	if (m_bufferFlags.hasNormalBuffer)
 		normals.reserve(numVertices);
+	if (m_bufferFlags.hasTexcoordBuffer)
+		texCoords.reserve(numVertices);
+	if (m_bufferFlags.hasColorBuffer)
+		colors.reserve(numVertices);
 	if (m_bufferFlags.hasTangentBitangentBuffer)
 	{
 		tangents.reserve(numVertices);
 		bitangents.reserve(numVertices);
 	}
-	if (m_bufferFlags.hasTexcoordBuffer)
-		texCoords.reserve(numVertices);
-	if (m_bufferFlags.hasColorBuffer)
-		colors.reserve(numVertices);
+
 
 	/* FIXME! 
 	* TODO: the max number of attributes are used, so if theres a submesh 
@@ -167,7 +166,7 @@ void Mesh::initVertexBuffers(const aiScene* scene)
 			for (unsigned int j = 0; j < numVerts; ++j)
 			{
 				const aiVector3D& vec = mesh->mTextureCoords[0][j];
-				texCoords.push_back(glm::vec2(vec.x, vec.y));
+				texCoords.emplace_back(vec.x, vec.y);
 			}
 		}
 		if (m_bufferFlags.hasColorBuffer)
@@ -176,7 +175,7 @@ void Mesh::initVertexBuffers(const aiScene* scene)
 			for (unsigned int j = 0; j < numVerts; ++j)
 			{
 				const aiColor4D& vec = mesh->mColors[0][j];
-				colors.push_back(glm::vec4(vec.r, vec.g, vec.b, vec.a));
+				colors.emplace_back(vec.r, vec.g, vec.b, vec.a);
 			}
 		}
 	}
@@ -243,31 +242,32 @@ void Mesh::initMaterials(const aiScene* scene, const std::string& filename, Text
 		aiColor3D difCol(1.0f, 1.0f, 1.0f);
 		material->Get(AI_MATKEY_COLOR_DIFFUSE, difCol);
 		matProperties.diffuseColor = *((glm::vec3*) &difCol);
-		//printf("difcol: %f, %f, %f \n", difCol.r, difCol.g, difCol.b);
 
 		aiColor3D specCol(1.0f, 1.0f, 1.0f);
 		material->Get(AI_MATKEY_COLOR_SPECULAR, specCol);
 		matProperties.specularColor = *((glm::vec3*) &specCol);
-		//printf("specCol: %f, %f, %f \n", specCol.r, specCol.g, specCol.b);
 
 		aiColor3D emisCol(1.0f, 1.0f, 1.0f);
 		material->Get(AI_MATKEY_COLOR_EMISSIVE, emisCol);
 		matProperties.specularColor = *((glm::vec3*) &emisCol);
-		//printf("emisCol: %f, %f, %f \n", emisCol.r, emisCol.g, emisCol.b);
 
 		float transp(1.0f);
 		material->Get(AI_MATKEY_OPACITY, transp);
 		matProperties.materialAlpha = transp;
-		//printf("transp %f \n", transp);
 
 		float specExp(0.0f);	//whats default?
 		material->Get(AI_MATKEY_OPACITY, specExp);
 		matProperties.materialSpecExp = specExp;
-		//printf("specExp %f \n", specExp);
 
 		m_matProperties.push_back(matProperties);
 
 		aiString path;
+
+		GLuint defaultTex = textureManager.getDefaultTextureID();
+		meshMaterial.diffuseTexture = defaultTex;
+		meshMaterial.normalTexture = defaultTex;
+		meshMaterial.opacityTexture = defaultTex;
+		meshMaterial.specularTexture = defaultTex;
 
 		if (numDiffuse > 0 && material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 		{
@@ -302,7 +302,6 @@ void Mesh::initMaterials(const aiScene* scene, const std::string& filename, Text
 			meshMaterial.opacityTexture = textureManager.getTextureID(fullPath);
 		}
 		m_materials.push_back(meshMaterial);
-		//printf("Materials: %i %i %i %i \n", meshMaterial.diffuseTexture, meshMaterial.normalTexture, meshMaterial.specularTexture, meshMaterial.opacityTexture);
 	}
 }
 
@@ -326,12 +325,11 @@ void Mesh::setShaderAttributes(std::shared_ptr<ShaderAttributes> shaderAttribute
 		m_bitangentBuffer->setAttribPointer(shaderAttributes->bitangentLoc, GL_FLOAT, 3);
 	}
 
-	m_matUboIndex = glGetUniformBlockIndex(shaderAttributes->shaderID, shaderAttributes->materialUniformBufferName);
-	m_matUboBindingPoint = shaderAttributes->materialUniformBufferBindingPoint;
-
-	glBindBuffer(GL_UNIFORM_BUFFER, m_matUbo);
-	glUniformBlockBinding(shaderAttributes->shaderID, m_matUboIndex, m_matUboBindingPoint);
-	printf("block index: %i \n", m_matUboIndex);
+	m_matUniformBuffer.reset(new ConstantBuffer(
+			shaderAttributes->shaderID,
+			shaderAttributes->materialUniformBufferBindingPoint, 
+			shaderAttributes->materialUniformBufferName
+		));
 }
 
 
@@ -345,58 +343,38 @@ void Mesh::render()
 		const MeshMaterial& material = m_materials.at(materialIndex);
 		const MeshMaterialProperties& matProperties = m_matProperties.at(materialIndex);
 
-		glBindBuffer(GL_UNIFORM_BUFFER, m_matUbo);
-		glBufferData(GL_UNIFORM_BUFFER, sizeof(MeshMaterialProperties), &matProperties, GL_STREAM_DRAW);
-		glBindBufferBase(GL_UNIFORM_BUFFER, m_matUboBindingPoint, m_matUbo);
+		m_matUniformBuffer->upload(&matProperties, sizeof(MeshMaterialProperties));
 
-		if (material.diffuseTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->diffuseTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, material.diffuseTexture);
-		}
-		if (material.normalTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->normalTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, material.normalTexture);
-		}
-		if (material.specularTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->specularTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, material.specularTexture);
-		}
-		if (material.opacityTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->opacityTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, material.opacityTexture);
-		}
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->diffuseTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.diffuseTexture);
+
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->normalTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.normalTexture);
+
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->specularTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.specularTexture);
+
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->opacityTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.opacityTexture);
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,
 			entry.numIndices,
 			GL_UNSIGNED_INT,
 			(void*) (sizeof(unsigned int) * entry.baseIndex),
 			entry.baseVertex);
-
-		if (material.diffuseTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->diffuseTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-		if (material.normalTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->normalTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-		if (material.specularTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->specularTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-		if (material.opacityTexture != INVALID_TEXTURE_ID)
-		{
-			glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->opacityTextureBindLoc);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
 	}
+
+	glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->diffuseTextureBindLoc);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->normalTextureBindLoc);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->specularTextureBindLoc);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->opacityTextureBindLoc);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindVertexArray(0);
 }

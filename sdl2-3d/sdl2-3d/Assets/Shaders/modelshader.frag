@@ -98,7 +98,7 @@ vec3 toSrgb(vec3 color)
 
 void main()
 {
-	if (texture2D(u_opacityTex, v_texcoord).r > 0.5)
+	if (texture2D(u_opacityTex, v_texcoord).r < 0.5)
 	{
 		discard;
 	}

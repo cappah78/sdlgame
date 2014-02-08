@@ -14,6 +14,11 @@ TextureManager::~TextureManager()
 	}
 }
 
+GLuint TextureManager::getDefaultTextureID()
+{
+	return m_defaultWhiteTexture.getTextureID();
+}
+
 GLuint TextureManager::getTextureID(const std::string texturename)
 {
 	auto it = m_textureNameIDMap.find(texturename);

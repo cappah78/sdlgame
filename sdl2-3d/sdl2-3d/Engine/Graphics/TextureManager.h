@@ -18,6 +18,7 @@ public:
 	TextureManager(const TextureManager& copy) = delete;
 	~TextureManager();
 
+	GLuint getDefaultTextureID();
 	GLuint getTextureID(const std::string texturename);
 	const Texture* getTexture(const std::string texturename);
 private:

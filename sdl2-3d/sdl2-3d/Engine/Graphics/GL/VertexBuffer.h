@@ -59,10 +59,6 @@ public:
 		bind();
 		glVertexAttribDivisor(m_attributeIdx, divisor);
 	}
-	inline void bindBufferBase(GLuint blockIndex , GLenum target = GL_UNIFORM_BUFFER)
-	{
-		glBindBufferBase(target, blockIndex, m_id);
-	}
 	inline void bind()
 	{
 		glBindBuffer(m_bufferType, m_id);
@@ -72,7 +68,7 @@ public:
 		bind();
 		glBufferData(m_bufferType, numBytes, NULL, m_drawUsage);
 	}
-	inline void upload(void* data, unsigned int numBytes)
+	inline void upload(const void* const data, unsigned int numBytes)
 	{
 		bind();
 		glBufferData(m_bufferType, numBytes, data, m_drawUsage);

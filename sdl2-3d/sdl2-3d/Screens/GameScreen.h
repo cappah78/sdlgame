@@ -54,6 +54,7 @@ private:
 	ID3D11DeviceContext* m_deviceContext;
 	ID3D11RenderTargetView* m_backBuffer;
 	ID3D11Buffer* m_vertexBuffer;
+	ID3D11Buffer* m_indiceBuffer;
 	ID3D11VertexShader* m_vertexShader;
 	ID3D11PixelShader* m_pixelShader;
 

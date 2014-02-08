@@ -93,6 +93,9 @@
     <Filter Include="Header Files\Voxel\Deferred">
       <UniqueIdentifier>{8b36763c-2bc6-4a26-ba2e-302415e15519}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Graphics\D3D">
+      <UniqueIdentifier>{57dc0229-da3c-4180-ba95-4f2d5e071d10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Utils\FileReader.h">
       <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\ConstantBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
