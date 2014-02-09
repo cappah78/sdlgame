@@ -39,7 +39,7 @@ SpriteBatch::SpriteBatch(int size)
 		indiceData.push_back(j + 0);
 		indiceData.push_back(j + 3);
     }
-	m_indiceBuffer.upload(&indiceData[0], sizeof(indiceData[0]) * indiceData.size());
+	m_indiceBuffer.update(&indiceData[0], sizeof(indiceData[0]) * indiceData.size());
 
 	m_verticeBuffer.setAttribPointer(0, GL_FLOAT, 2, GL_FALSE, GL_FALSE, 4 * sizeof(float), 0);	//position
 	m_verticeBuffer.setAttribPointer(1, GL_FLOAT, 2, GL_FALSE, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));	//texcoords
@@ -248,7 +248,7 @@ void SpriteBatch::flush()
 	glBindVertexArray(m_vao);
 	m_indiceBuffer.bind();
 
-	m_verticeBuffer.upload(&m_verticeData[0], sizeof(m_verticeData[0]) * m_verticeData.size());
+	m_verticeBuffer.update(&m_verticeData[0], sizeof(m_verticeData[0]) * m_verticeData.size());
 	glDrawElements(GL_TRIANGLES, m_drawCalls * 6, GL_UNSIGNED_SHORT, 0);
 	m_verticeData.clear();
 

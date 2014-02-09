@@ -3,7 +3,7 @@
 #include <sstream>
 #include <fstream>
 
-std::string FileReader::readStringFromFile(const char* const path)
+std::string FileReader::readStringFromFile(const char* path)
 {
 	if (path == NULL)
 		return 0;

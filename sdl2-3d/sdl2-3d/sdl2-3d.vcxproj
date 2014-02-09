@@ -19,6 +19,7 @@
     <ClInclude Include="Engine\Graphics\GL\DeferredShader.h" />
     <ClInclude Include="Engine\Graphics\GL\DepthCubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\GBuffer.h" />
+    <ClInclude Include="Engine\Graphics\GL\GLGraphicsProvider.h" />
     <ClInclude Include="Engine\Graphics\GL\Material.h" />
     <ClInclude Include="Engine\Graphics\GL\Mesh.h" />
     <ClInclude Include="Engine\Graphics\GL\Shader.h" />
@@ -28,6 +29,10 @@
     <ClInclude Include="Engine\Graphics\GL\VertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\HeightMap.h" />
+    <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h" />
+    <ClInclude Include="Engine\Graphics\Model\IShader.h" />
+    <ClInclude Include="Engine\Graphics\Model\IVertexBuffer.h" />
+    <ClInclude Include="Engine\Graphics\Model\ITexture.h" />
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h" />
     <ClInclude Include="Engine\Graphics\Pixmap.h" />
     <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h" />
@@ -69,6 +74,7 @@
     <ClCompile Include="Engine\Graphics\GL\CubeMap.cpp" />
     <ClCompile Include="Engine\Graphics\GL\DeferredShader.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GBuffer.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\GLGraphicsProvider.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Material.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\GL\Shader.cpp" />
@@ -77,6 +83,7 @@
     <ClCompile Include="Engine\Graphics\GL\TextureArray.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />
     <ClCompile Include="Engine\Graphics\HeightMap.cpp" />
+    <ClCompile Include="Engine\Graphics\Model\IGraphicsProvider.h" />
     <ClCompile Include="Engine\Graphics\PerspectiveCamera.cpp" />
     <ClCompile Include="Engine\Graphics\Pixmap.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp" />

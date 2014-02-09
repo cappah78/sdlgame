@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Model/IVertexBuffer.h"
+
 #include <gl\glew.h>
 #include "../../Utils/CheckGLError.h"
 #include <assert.h>
@@ -7,7 +9,7 @@
 
 #define NULL 0
 
-class VertexBuffer
+class VertexBuffer : public IVertexBuffer
 {
 public:
 	VertexBuffer(GLenum bufferType = GL_ARRAY_BUFFER, GLenum drawUsage = GL_STREAM_DRAW)
@@ -20,7 +22,7 @@ public:
 		glGenBuffers(1, &m_id);
 	};
 
-	~VertexBuffer()
+	virtual ~VertexBuffer()
 	{
 		glDeleteBuffers(1, &m_id);
 	};
@@ -59,7 +61,7 @@ public:
 		bind();
 		glVertexAttribDivisor(m_attributeIdx, divisor);
 	}
-	inline void bind()
+	virtual void bind() override
 	{
 		glBindBuffer(m_bufferType, m_id);
 	}
@@ -68,15 +70,10 @@ public:
 		bind();
 		glBufferData(m_bufferType, numBytes, NULL, m_drawUsage);
 	}
-	inline void upload(const void* const data, unsigned int numBytes)
+	void update(const void* data, unsigned int numBytes) override
 	{
 		bind();
 		glBufferData(m_bufferType, numBytes, data, m_drawUsage);
-	}
-	/** offset: offset within data array. */
-	inline void updateRange(void* data, unsigned int fromBytes, unsigned int numBytes)
-	{
-		glBufferSubData(m_bufferType, fromBytes, numBytes, data);
 	}
 
 private:

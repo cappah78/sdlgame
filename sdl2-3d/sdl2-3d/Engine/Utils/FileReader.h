@@ -5,7 +5,7 @@
 class FileReader
 {
 public:
-	static std::string readStringFromFile(const char* const path);
+	static std::string readStringFromFile(const char* path);
 
 private:
 	FileReader();

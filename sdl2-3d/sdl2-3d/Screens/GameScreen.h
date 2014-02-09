@@ -12,10 +12,6 @@
 #include "../Voxel/WorldRenderer.h"
 #include "../Voxel/Deferred/DeferredWorldRenderer.h"
 
-struct IDXGISwapChain;
-struct ID3D11Device;
-struct ID3D11DeviceContext;
-struct ID3D11RenderTargetView;
 struct ID3D11PixelShader;
 struct ID3D11VertexShader;
 struct ID3D11Buffer;
@@ -44,15 +40,9 @@ private:
 	VoxelRenderer m_voxelRenderer;
 	TextureArray* m_tileSet;
 
-	//tmp d3d stuffs
-	enum RenderMode { OPENGL, D3D };
 	void initializeD3D();	//tmp testing stuffs
 	void disposeD3D();
-	
-	IDXGISwapChain* m_swapChain;
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_deviceContext;
-	ID3D11RenderTargetView* m_backBuffer;
+
 	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_indiceBuffer;
 	ID3D11VertexShader* m_vertexShader;
@@ -60,6 +50,5 @@ private:
 
 	void renderOpenGL(float deltaSec);
 	void renderD3D(float deltaSec);
-	RenderMode m_renderMode;
 	///
 };

@@ -1,9 +1,10 @@
 #pragma once
 
+#include "../Model/IConstantBuffer.h"
 #include <gl\glew.h>
 #include "Shader.h"
 
-class ConstantBuffer
+class ConstantBuffer : public IConstantBuffer
 {
 public:
 	ConstantBuffer(GLuint shaderID, GLuint bindingPoint, const char* const blockName, GLenum drawUsage = GL_STREAM_DRAW)
@@ -17,23 +18,22 @@ public:
 		glUniformBlockBinding(shaderID, m_uboIndex, m_bindingPoint);
 		glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingPoint, m_ubo);
 	};
-	~ConstantBuffer()
+	virtual ~ConstantBuffer()
 	{
 		glDeleteBuffers(1, &m_ubo);
 	};
 	ConstantBuffer(const ConstantBuffer& copy) = delete;
 
-	inline void upload(const void* const data, unsigned int numBytes)
+	virtual void update(const void* data, unsigned int numBytes)
 	{
 		bind();
 		glBufferData(GL_UNIFORM_BUFFER, numBytes, data, m_drawUsage);
 	}
 
-	inline void bind()
+	virtual void bind()
 	{
 		glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
 	}
-
 
 private:
 	GLenum m_drawUsage;

@@ -50,7 +50,7 @@ VoxelRenderer::VoxelRenderer()
 		m_texcoordData.push_back(glm::vec2(1.0f, 1.0f));
 		m_texcoordData.push_back(glm::vec2(0.0f, 1.0f));
 	}
-	m_texcoordBuffer.upload(&m_texcoordData[0], m_texcoordData.size() * sizeof(m_texcoordData[0]));
+	m_texcoordBuffer.update(&m_texcoordData[0], m_texcoordData.size() * sizeof(m_texcoordData[0]));
 	m_texcoordData.clear();
 }
 
@@ -162,9 +162,9 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 		return;
 
 	glBindVertexArray(chunk->m_vao);
-	chunk->m_indiceBuffer.upload(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
-	chunk->m_pointBuffer.upload(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
-	chunk->m_colorBuffer.upload(&m_colorData[0], m_colorData.size() * sizeof(m_colorData[0]));
+	chunk->m_indiceBuffer.update(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
+	chunk->m_pointBuffer.update(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
+	chunk->m_colorBuffer.update(&m_colorData[0], m_colorData.size() * sizeof(m_colorData[0]));
 
 	m_indiceData.clear();
 	m_colorData.clear();

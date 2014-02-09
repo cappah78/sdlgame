@@ -1,20 +1,23 @@
 #pragma once
 
+#include "../Model/IShader.h"
+
 #include <glm\glm.hpp>
 #include <unordered_map>
 #include <gl\glew.h>
 
-class Shader
+class Shader : public IShader
 {
 public:
 	Shader();
+	Shader(GLuint shaderID);
 	Shader(const char* const vertexShaderPath, const char* const geomShaderPath, const char* const fragShaderPath);
-	virtual ~Shader();
+	virtual ~Shader() override;
 	Shader(const Shader& copy) = delete;
 
-	virtual void setupProgram(const char* const vertexShaderPath, const char* const geomShaderPath, const char* const fragShaderPath);
-	virtual void begin();
-	virtual void end();
+	void setupProgram(const char* const vertexShaderPath, const char* const geomShaderPath, const char* const fragShaderPath);
+	virtual void begin() override;
+	virtual void end() override;
 
 	//TODO: moar uniforms
 

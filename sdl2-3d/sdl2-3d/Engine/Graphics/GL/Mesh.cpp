@@ -49,8 +49,6 @@ void Mesh::initVertexBuffers(const aiScene* scene)
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
-	glGenBuffers(1, &m_matUbo);
-
 	printf("nummeshes: %i nummaterials: %i \n", scene->mNumMeshes, scene->mNumMaterials);
 
 	m_entries.reserve(scene->mNumMeshes);
@@ -183,35 +181,35 @@ void Mesh::initVertexBuffers(const aiScene* scene)
 	if (m_bufferFlags.hasIndiceBuffer)
 	{
 		m_indiceBuffer.reset(new VertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
-		m_indiceBuffer->upload(&indices[0], sizeof(indices[0]) * indices.size());
+		m_indiceBuffer->update(&indices[0], sizeof(indices[0]) * indices.size());
 	}
 	if (m_bufferFlags.hasPositionBuffer)
 	{
 		m_positionBuffer.reset(new VertexBuffer());
-		m_positionBuffer->upload(&positions[0], sizeof(positions[0]) * positions.size());
+		m_positionBuffer->update(&positions[0], sizeof(positions[0]) * positions.size());
 	}
 	if (m_bufferFlags.hasNormalBuffer)
 	{
 		m_normalBuffer.reset(new VertexBuffer());
-		m_normalBuffer->upload(&normals[0], sizeof(normals[0]) * normals.size());
+		m_normalBuffer->update(&normals[0], sizeof(normals[0]) * normals.size());
 	}
 	if (m_bufferFlags.hasTangentBitangentBuffer)
 	{
 		m_tangentBuffer.reset(new VertexBuffer());
-		m_tangentBuffer->upload(&tangents[0], sizeof(tangents[0]) * tangents.size());
+		m_tangentBuffer->update(&tangents[0], sizeof(tangents[0]) * tangents.size());
 
 		m_bitangentBuffer.reset(new VertexBuffer());
-		m_bitangentBuffer->upload(&bitangents[0], sizeof(bitangents[0]) * bitangents.size());
+		m_bitangentBuffer->update(&bitangents[0], sizeof(bitangents[0]) * bitangents.size());
 	}
 	if (m_bufferFlags.hasTexcoordBuffer)
 	{
 		m_texcoordBuffer.reset(new VertexBuffer());
-		m_texcoordBuffer->upload(&texCoords[0], sizeof(texCoords[0]) * texCoords.size());
+		m_texcoordBuffer->update(&texCoords[0], sizeof(texCoords[0]) * texCoords.size());
 	}
 	if (m_bufferFlags.hasColorBuffer)
 	{
 		m_colorBuffer.reset(new VertexBuffer());
-		m_colorBuffer->upload(&colors[0], sizeof(colors[0]) * colors.size());
+		m_colorBuffer->update(&colors[0], sizeof(colors[0]) * colors.size());
 	}
 }
 
@@ -343,7 +341,7 @@ void Mesh::render()
 		const MeshMaterial& material = m_materials.at(materialIndex);
 		const MeshMaterialProperties& matProperties = m_matProperties.at(materialIndex);
 
-		m_matUniformBuffer->upload(&matProperties, sizeof(MeshMaterialProperties));
+		m_matUniformBuffer->update(&matProperties, sizeof(MeshMaterialProperties));
 
 		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->diffuseTextureBindLoc);
 		glBindTexture(GL_TEXTURE_2D, material.diffuseTexture);

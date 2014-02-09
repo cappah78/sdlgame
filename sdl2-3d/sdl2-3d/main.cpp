@@ -131,8 +131,7 @@ int main(int argc, char *argv[])
 
 	int width, height;
 	SDL_GetWindowSize(mainwindow, &width, &height);
-	Game::graphics.setWindow(mainwindow);
-	Game::graphics.resizeScreen(width, height);
+	Game::graphics.initialize(width, height, mainwindow);
 
 	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
 

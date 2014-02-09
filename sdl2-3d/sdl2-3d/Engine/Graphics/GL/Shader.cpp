@@ -1,11 +1,11 @@
 #include "Shader.h"
 
+#include "../Model/IShader.h"
+
 #include "../../Utils/ShaderManager.h"
 #include "../../Utils/CheckGLError.h"
 
 bool Shader::s_begun = false;
-
-//#define SHADER_STRICT_UNIFORM_LOC
 
 Shader::Shader() 
 {
@@ -16,6 +16,14 @@ Shader::Shader(const char* const vertexShaderPath, const char* const geomShaderP
 	: m_begun(false)
 {
 	setupProgram(vertexShaderPath, geomShaderPath, fragShaderPath);
+	CHECK_GL_ERROR();
+}
+
+
+Shader::Shader(GLuint shaderID)
+: m_begun(false)
+, m_shaderID(shaderID)
+{
 	CHECK_GL_ERROR();
 }
 

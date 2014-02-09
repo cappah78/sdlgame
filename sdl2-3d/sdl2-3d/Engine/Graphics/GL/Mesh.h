@@ -124,9 +124,6 @@ public:
 	std::vector<MeshEntry> m_entries;
 	std::vector<MeshMaterial> m_materials;
 	std::vector<MeshMaterialProperties> m_matProperties;
-	GLuint m_matUbo;
-	GLuint m_matUboBindingPoint;
-	GLuint m_matUboIndex;
 	BufferFlags m_bufferFlags;
 	std::shared_ptr<ShaderAttributes> m_shaderAttributes;
 

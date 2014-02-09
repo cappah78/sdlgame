@@ -96,6 +96,9 @@
     <Filter Include="Header Files\Engine\Graphics\D3D">
       <UniqueIdentifier>{57dc0229-da3c-4180-ba95-4f2d5e071d10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Graphics\Model">
+      <UniqueIdentifier>{927bb3a6-0ae5-4daa-9a48-3dc0659d219d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h">
@@ -251,6 +254,21 @@
     <ClInclude Include="Engine\Graphics\GL\ConstantBuffer.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\ITexture.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\IVertexBuffer.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLGraphicsProvider.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\IShader.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -375,6 +393,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Utils\FileReader.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Model\IGraphicsProvider.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLGraphicsProvider.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

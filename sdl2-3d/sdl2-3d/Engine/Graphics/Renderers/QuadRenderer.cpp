@@ -6,10 +6,10 @@ QuadRenderer::QuadRenderer()
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
-	m_positionBuffer.upload(&QUAD_VERTICES[0], 12 * sizeof(float));
+	m_positionBuffer.update(&QUAD_VERTICES[0], 12 * sizeof(float));
 	m_positionBuffer.setAttribPointer(0, GL_FLOAT, 3);
 
-	m_indiceBuffer.upload(&QUAD_INDICES[0], 6 * sizeof(unsigned char));
+	m_indiceBuffer.update(&QUAD_INDICES[0], 6 * sizeof(unsigned char));
 }
 
 QuadRenderer::~QuadRenderer()

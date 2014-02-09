@@ -4,11 +4,13 @@ class Pixmap;
 
 #include <gl\glew.h>
 
+#include "../Model/ITexture.h"
+
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 
 /** Represents a texture on the gpu */
-class Texture
+class Texture : public ITexture
 {
 public:
 	Texture() : m_textureID(0), m_width(0), m_height(0), m_numComponents(0) {};
@@ -20,7 +22,7 @@ public:
 		GLint minFilter = GL_LINEAR, GLint magFilter = GL_NEAREST,
 		GLint textureWrapS = GL_REPEAT, GLint textureWrapT = GL_REPEAT);
 
-	~Texture();
+	virtual ~Texture() override;
 
 	bool isLoaded() const { return m_textureID != 0; };
 	void bind() const;

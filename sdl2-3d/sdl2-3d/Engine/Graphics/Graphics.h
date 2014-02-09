@@ -1,55 +1,44 @@
 #pragma once
 
-#include <SDL.h>
+struct SDL_Window;
 
-/** 
-Manages rendering related global variables and objects.
-*/
+struct ID3D11Device;
+struct ID3D11DeviceContext;
+
+
+/** Manages rendering related global variables and objects.*/
 class Graphics
 {
 public:
-	static inline void swap()
-	{
-		SDL_GL_SwapWindow(m_window);
-	};
+	enum RenderMode { OPENGL, D3D };
+private:
+	static const RenderMode INITIAL_RENDERMODE = OPENGL;
+public:
 
-	static inline unsigned int getScreenWidth()
-	{
-		return m_screenWidth;
-	};
+	static void initialize(unsigned int screenWidth, unsigned int screenHeight, SDL_Window* const window);
+	static void dispose();
+	static void resizeScreen(unsigned int screenWidth, unsigned int screenHeight);
+	static void setWindowTitle(const char* title);
 
-	static inline unsigned int getScreenHeight()
-	{
-		return m_screenHeight;
-	};
+	static void clear(float rCol, float gCol, float bCol, float aCol, bool clearColor = true, bool clearDepth = true);
+	static void swap();
 
-	static inline void resizeScreen(unsigned int screenWidth, unsigned int screenHeight)
-	{
-		m_screenWidth = screenWidth;
-		m_screenHeight = screenHeight;
-	};
+	static SDL_Window* getWindow();
+	static unsigned int getScreenWidth();
+	static unsigned int getScreenHeight();
 
-	static inline SDL_Window* const getWindow()
-	{
-		return m_window;
-	};
+	static inline RenderMode getRenderMode() { return s_renderMode; };
+	static void setRenderMode(RenderMode mode) { s_renderMode = mode; }
 
-	static inline void setWindowTitle(const char* title)
-	{
-		SDL_SetWindowTitle(m_window, title);
-	};
-
-	static inline void setWindow(SDL_Window* const window)
-	{
-		m_window = window;
-	}
+	static void initializeD3D();
+	static void disposeD3D();
+	static ID3D11Device* getDevice();
+	static ID3D11DeviceContext* getDeviceContext();
 
 private:
-	static SDL_Window* m_window;
-	static unsigned int m_screenWidth;
-	static unsigned int m_screenHeight;
+	static RenderMode s_renderMode;
 
-	Graphics();
+	Graphics() {};
 	Graphics(const Graphics& copy) {};
 	~Graphics() {};
 };
