@@ -1,16 +1,38 @@
 #pragma once
 
+#include <vector>
+
+struct VertexAttribute
+{
+	enum Format
+	{
+		UNSIGNED_BYTE, UNSIGNED_INT, INT, FLOAT
+	};
+
+	unsigned int m_attributeIndex;
+	const char* m_attributeName;
+	Format m_format;
+	unsigned int m_numElements;
+	bool m_normalize;
+};
+
 struct IVertexBufferParameters
 {
-	enum Format { 
-		R32_FLOAT, RG32_FLOAT, RGB32_FLOAT, RGBA32_FLOAT, 
-		R32_INT, RG32_INT, RGB32_INT, RGBA32_INT,
-		R32_UINT, RG32_UINT, RGB32_UINT, RGBA32_UINT
-	};
-	Format shaderFormat;
-	unsigned int strideBytes;
-	unsigned int offsetBytes;
-	unsigned int instanceStepRate;
+	std::vector<VertexAttribute> m_attributes;
+	unsigned int m_vertexSize;
+	unsigned int m_instanceStepRate;
+	//TODO: .cpp
+	IVertexBufferParameters(const VertexAttribute* attribute, unsigned int numAttributes, unsigned int instanceStepRate = 0)
+	{
+		m_instanceStepRate = instanceStepRate;
+		m_attributes.reserve(numAttributes);
+		for (unsigned int i = 0; i < numAttributes; ++i)
+		{
+			m_attributes.push_back(attribute[i]);
+			unsigned int dataSize = attribute->m_format == VertexAttribute::Format::UNSIGNED_BYTE ? 1 : 4;
+			m_vertexSize += dataSize * attribute->m_numElements;
+		}
+	}
 };
 
 class IVertexBuffer

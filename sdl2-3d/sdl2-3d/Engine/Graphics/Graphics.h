@@ -1,10 +1,9 @@
 #pragma once
 
 struct SDL_Window;
-
 struct ID3D11Device;
 struct ID3D11DeviceContext;
-
+class IGraphicsProvider;
 
 /** Manages rendering related global variables and objects.*/
 class Graphics
@@ -30,6 +29,7 @@ public:
 	static inline RenderMode getRenderMode() { return s_renderMode; };
 	static void setRenderMode(RenderMode mode) { s_renderMode = mode; }
 
+	static IGraphicsProvider& getGraphicsProvider();
 	static void initializeD3D();
 	static void disposeD3D();
 	static ID3D11Device* getDevice();
@@ -37,6 +37,7 @@ public:
 
 private:
 	static RenderMode s_renderMode;
+	static IGraphicsProvider* s_graphicsProvider;
 
 	Graphics() {};
 	Graphics(const Graphics& copy) {};

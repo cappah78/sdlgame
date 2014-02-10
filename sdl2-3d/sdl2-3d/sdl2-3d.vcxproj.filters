@@ -227,9 +227,6 @@
     <ClInclude Include="Engine\Graphics\GL\DeferredShader.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\ShadowMapShader.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Renderers\QuadRenderer.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
@@ -268,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Model\IShader.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\StateBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -373,9 +373,6 @@
     <ClCompile Include="Engine\Graphics\GL\DeferredShader.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\ShadowMapShader.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Renderers\QuadRenderer.cpp">
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
     </ClCompile>
@@ -398,6 +395,12 @@
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\GLGraphicsProvider.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Model\IStateBuffer.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\StateBuffer.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
   </ItemGroup>

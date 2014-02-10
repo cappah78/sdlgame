@@ -4,6 +4,7 @@
 
 class GLGraphicsProvider : public IGraphicsProvider
 {
+public:
 	GLGraphicsProvider();
 	virtual ~GLGraphicsProvider() override;
 
@@ -14,6 +15,7 @@ class GLGraphicsProvider : public IGraphicsProvider
 	virtual std::auto_ptr<IShader> createComputeShaderFromFile(const char* computeShaderFilePath) override;
 
 	virtual std::auto_ptr<ITexture> createTextureFromPixmap(const Pixmap& pixmap, const ITextureParameters& parameters) override;
-	virtual std::auto_ptr<IVertexBuffer> createVertexBuffer(IShader* shader, unsigned int bufferIndex, const char* bufferName, const IVertexBufferParameters& parameters) override;
+	virtual std::auto_ptr<IVertexBuffer> createVertexBuffer(IShader* shader, const IVertexBufferParameters& parameters) override;
 	virtual std::auto_ptr<IConstantBuffer> createConstantBuffer(IShader* shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters) override;
+	virtual std::auto_ptr<IStateBuffer> createStateBuffer() override;
 };

@@ -1,5 +1,7 @@
 #include "Graphics.h"
 
+#include "GL\GLGraphicsProvider.h"
+
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <gl\glew.h>
@@ -26,12 +28,15 @@ static unsigned int s_screenWidth;
 static unsigned int s_screenHeight;
 
 Graphics::RenderMode Graphics::s_renderMode = Graphics::INITIAL_RENDERMODE;
+IGraphicsProvider* Graphics::s_graphicsProvider = NULL;
 
 void Graphics::initialize(unsigned int screenWidth, unsigned int screenHeight, SDL_Window* const window)
 {
 	s_window = window;
 	s_screenWidth = screenWidth;
 	s_screenHeight = screenHeight;
+
+	s_graphicsProvider = new GLGraphicsProvider();
 
 	initializeD3D();
 }
