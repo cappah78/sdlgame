@@ -1,14 +1,15 @@
 #pragma once
 
+typedef unsigned long long Hash;
+
 class HashCode
 {
 public:
 	HashCode(const char* string) : hash(calculateCRC64(string)) {};
 	~HashCode() {};
 
-	const unsigned long hash;
+	const Hash hash;
 private:
-
 	class CRCBuilder
 	{
 	public:
@@ -16,10 +17,10 @@ private:
 
 		void AddByte(char data);
 		void AddBytes(const char* data, unsigned int dataSize);
-		unsigned long GetCRC64() const;
+		Hash GetCRC64() const;
 	private:
-		unsigned long m_CRC;
+		Hash m_CRC;
 	};
 
-	static unsigned long calculateCRC64(const char* string);
+	static Hash calculateCRC64(const char* string);
 };
