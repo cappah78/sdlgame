@@ -1,19 +1,9 @@
 #include "HashCode.h"
 
-unsigned long HashCode::calculateCRC64(const char* string)
-{
-	HashCode::CRCBuilder builder;
-	for (unsigned int pos = 0; string[pos]; ++pos)
-	{
-		builder.AddByte(string[pos]);
-	}
-	return builder.GetCRC64();
-}
-
-const unsigned long s_AllCRCBitsSet = 0xFFFFFFFFFFFFFFFFLL;
+const Hash s_AllCRCBitsSet = 0xFFFFFFFFFFFFFFFFLL;
 
 /** http://pages.pathcom.com/~vadco/crc.html */
-const unsigned long s_CRC64Table[256] =
+const Hash s_CRC64Table[256] =
 {
 	0x0000000000000000LL, 0x42F0E1EBA9EA3693LL,
 	0x85E1C3D753D46D26LL, 0xC711223CFA3E5BB5LL,
@@ -145,9 +135,9 @@ const unsigned long s_CRC64Table[256] =
 	0xD80C07CD676F8394LL, 0x9AFCE626CE85B507LL
 };
 
-inline unsigned long CalculateCRCValue(char data, unsigned long crc)
+inline unsigned long long CalculateCRCValue(char data, Hash crc)
 {
-	return s_CRC64Table[(static_cast<unsigned long>(crc) >> 56) ^ static_cast<unsigned char>(data)] ^ (crc << 8);
+	return s_CRC64Table[(static_cast<Hash>(crc) >> 56) ^ static_cast<unsigned char>(data)] ^ (crc << 8);
 }
 
 HashCode::CRCBuilder::CRCBuilder() :
@@ -169,12 +159,12 @@ void HashCode::CRCBuilder::AddBytes(const char* data, unsigned int dataSize)
 	}
 }
 
-unsigned long HashCode::CRCBuilder::GetCRC64() const
+Hash HashCode::CRCBuilder::GetCRC64() const
 {
 	return m_CRC ^ s_AllCRCBitsSet;
 }
 
-unsigned long HashCode::calculateCRC64(const char* string)
+Hash HashCode::calculateCRC64(const char* string)
 {
 	HashCode::CRCBuilder builder;
 	for (unsigned int pos = 0; string[pos]; ++pos)
