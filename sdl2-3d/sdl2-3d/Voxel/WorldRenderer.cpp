@@ -174,11 +174,7 @@ WorldRenderer::~WorldRenderer()
 
 inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 {
-	return (side && side2 ? 2 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH);
-	/*if (side && side2)
-		return 2 * AO_STRENGTH;
-	else
-		return (side + side2 + corner) * AO_STRENGTH;*/
+	return (side && side2 ? 3 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH / 2);
 }
 
 struct DistanceSort
@@ -372,7 +368,7 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 					// flip quad to avoid asymmetric color blending 
 					bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
 					renderChunk->addFace((Face) face, x, y, z, properties.getTextureID((Face) face),
-						vertexAO[2], vertexAO[1], vertexAO[0], vertexAO[3], flipQuad);
+						vertexAO[0], vertexAO[3], vertexAO[1], vertexAO[2], flipQuad);
 				}
 			}
 		}
