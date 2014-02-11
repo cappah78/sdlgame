@@ -66,8 +66,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
-    <ClInclude Include="Voxel\Deferred\DeferredWorldRenderer.h" />
-    <ClInclude Include="Voxel\Deferred\PointLight.h" />
     <ClInclude Include="Voxel\LuaVoxelConfig.h" />
     <ClInclude Include="Voxel\PropertyManager.h" />
     <ClInclude Include="Voxel\VoxelBlock.h" />
@@ -115,8 +113,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
     <ClCompile Include="Voxel\ChunkManager.cpp" />
-    <ClCompile Include="Voxel\Deferred\DeferredWorldRenderer.cpp" />
-    <ClCompile Include="Voxel\Deferred\PointLight.cpp" />
     <ClCompile Include="Voxel\PropertyManager.cpp" />
     <ClCompile Include="Voxel\VoxelBlock.cpp" />
     <ClCompile Include="Voxel\VoxelRenderer.cpp" />

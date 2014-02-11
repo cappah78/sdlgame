@@ -152,11 +152,7 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 };
 
 WorldRenderer::WorldRenderer()
-	: m_voxelShader("Assets/Shaders/voxelshader.vert", NULL, "Assets/Shaders/voxelshader.frag")
-	, m_numLoadedChunks(0)
-	, m_gbuffer(1)
-	, m_getPixelBuffer(Game::graphics.getScreenWidth() * Game::graphics.getScreenHeight())
-	, m_lightShader("Assets/Shaders/lightcalc.vert", NULL, "Assets/Shaders/lightcalc.frag")
+	: m_numLoadedChunks(0)
 {
 	m_iVoxelShader = Game::graphics.getGraphicsProvider().createShaderFromFile("Assets/Shaders/voxelshader.vert", "Assets/Shaders/voxelshader.frag");
 

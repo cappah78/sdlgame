@@ -55,7 +55,8 @@ VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	//////////////////////////////////////////////
 }
 
-static const unsigned int MAX_GENERATE_TIME_MS = 2;
+static const unsigned int MAX_GENERATE_TIME_MS = 3;
+static const unsigned int MAX_UNLOAD_TIME_MS = 4;
 
 void VoxelWorld::update(float deltaSec, const Camera& camera)
 {
@@ -110,7 +111,7 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 	{
 		m_chunkManager.unloadChunk(vec);
 
-		if (Game::getSDLTicks() - startUnload > MAX_GENERATE_TIME_MS)
+		if (Game::getSDLTicks() - startUnload > MAX_UNLOAD_TIME_MS)
 			return;
 	}
 }

@@ -87,12 +87,6 @@
     <Filter Include="Header Files\Engine\Graphics\GL">
       <UniqueIdentifier>{3298f005-bda8-426e-a8d7-4575d65643a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Voxel\Deferred">
-      <UniqueIdentifier>{9fea1296-0d3e-4bf0-9061-c1a4adcf0ac4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Voxel\Deferred">
-      <UniqueIdentifier>{8b36763c-2bc6-4a26-ba2e-302415e15519}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Engine\Graphics\D3D">
       <UniqueIdentifier>{57dc0229-da3c-4180-ba95-4f2d5e071d10}</UniqueIdentifier>
     </Filter>
@@ -241,12 +235,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\GL\DepthCubeMap.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Voxel\Deferred\DeferredWorldRenderer.h">
-      <Filter>Header Files\Voxel\Deferred</Filter>
-    </ClInclude>
-    <ClInclude Include="Voxel\Deferred\PointLight.h">
-      <Filter>Header Files\Voxel\Deferred</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\GL\Mesh.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
@@ -408,12 +396,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Renderers\QuadRenderer.cpp">
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="Voxel\Deferred\DeferredWorldRenderer.cpp">
-      <Filter>Source Files\Voxel\Deferred</Filter>
-    </ClCompile>
-    <ClCompile Include="Voxel\Deferred\PointLight.cpp">
-      <Filter>Source Files\Voxel\Deferred</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\Mesh.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>

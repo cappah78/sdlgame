@@ -56,18 +56,10 @@ private:
 
 	std::auto_ptr<IConstantBuffer> m_perFrameUniformDataBuffer;
 	std::auto_ptr<IConstantBuffer> m_perInstanceUniformDataBuffer;
-
 	std::auto_ptr<IShader> m_iVoxelShader;
-
-	Shader m_voxelShader;
 	VoxelRenderer m_renderer;
 
-	GBuffer m_gbuffer;
-	Shader m_lightShader;
-
 	unsigned int m_numLoadedChunks;
-
-	std::vector<float> m_getPixelBuffer;
 
 	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_visibleChunkList;
 };

@@ -100,16 +100,13 @@ struct BlockEventTrigger
 };
 
 /** The data stored for every block in a chunk */
-struct VoxelBlock
+__declspec(align(8)) struct VoxelBlock
 {
-	VoxelBlock() : id(0), blockDataIndex(-1), skyVisible(false), solid(false), lightLevel(0) {};
+	VoxelBlock() : id(0), blockDataIndex(-1), solid(false) {};
 	//VoxelBlock(const VoxelBlock& copy) = delete;
 	BlockID id;
-	BlockColor color;
 	int blockDataIndex;
-	unsigned skyVisible : 1;
 	unsigned solid : 1;
-	unsigned lightLevel : 4;
 };
 
 /** Global constant properties for all the blocks of a single type. */

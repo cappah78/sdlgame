@@ -10,8 +10,7 @@
 #include "../Voxel/VoxelRenderer.h"
 #include "../Voxel/VoxelWorld.h"
 #include "../Voxel/WorldRenderer.h"
-#include "../Voxel/Deferred/DeferredWorldRenderer.h"
-
+#include "../Engine/Graphics/GL/Mesh.h"
 struct ID3D11PixelShader;
 struct ID3D11VertexShader;
 struct ID3D11Buffer;
