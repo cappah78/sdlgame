@@ -255,7 +255,7 @@ void DeferredWorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk,
 					Color8888 col = faceValues[face]->color;
 
 					renderChunk->addFace((Face) face, x, y, z, properties.getTextureID((Face) face),
-						col, col, col, col, false);
+						0, 0, 0, 0, false);
 				}
 			}
 		}
@@ -519,7 +519,7 @@ void DeferredWorldRenderer::buildChunkWithAO(const std::unique_ptr<VoxelChunk>& 
 					// flip quad to avoid asymmetric color blending 
 					bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
 					renderChunk->addFace((Face) face, x, y, z, properties.getTextureID((Face) face),
-						perFaceCols[0], perFaceCols[3], perFaceCols[1], perFaceCols[2], flipQuad);
+						vertexAO[0], vertexAO[3], vertexAO[1], vertexAO[2], flipQuad);
 				}
 			}
 		}

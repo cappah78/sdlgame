@@ -7,7 +7,7 @@
 class ConstantBuffer : public IConstantBuffer
 {
 public:
-	ConstantBuffer(GLuint shaderID, GLuint bindingPoint, const char* const blockName, GLenum drawUsage = GL_STREAM_DRAW)
+	ConstantBuffer(GLuint shaderID, GLuint bindingPoint, const char* blockName, GLenum drawUsage = GL_STREAM_DRAW)
 		: m_drawUsage(drawUsage)
 		, m_bindingPoint(bindingPoint)
 	{

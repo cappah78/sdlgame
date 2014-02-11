@@ -19,10 +19,9 @@ Shader::Shader(const char* const vertexShaderPath, const char* const geomShaderP
 	CHECK_GL_ERROR();
 }
 
-
 Shader::Shader(GLuint shaderID)
-: m_begun(false)
-, m_shaderID(shaderID)
+	: m_begun(false)
+	, m_shaderID(shaderID)
 {
 	CHECK_GL_ERROR();
 }
@@ -45,6 +44,7 @@ void Shader::begin()
 	m_begun = true;
 	glUseProgram(m_shaderID);
 }
+
 void Shader::end()
 {
 	assert(s_begun);
@@ -52,6 +52,11 @@ void Shader::end()
 	s_begun = false;
 	m_begun = false;
 	//glUseProgram(0);	//optional
+}
+
+unsigned int Shader::getID()
+{
+	return m_shaderID;
 }
 
 void Shader::setUniform1i(const char* const uniformName, int val)

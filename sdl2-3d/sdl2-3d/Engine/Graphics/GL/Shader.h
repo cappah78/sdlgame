@@ -18,6 +18,7 @@ public:
 	void setupProgram(const char* const vertexShaderPath, const char* const geomShaderPath, const char* const fragShaderPath);
 	virtual void begin() override;
 	virtual void end() override;
+	virtual unsigned int getID() override;
 
 	//TODO: moar uniforms
 

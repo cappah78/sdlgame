@@ -5,6 +5,9 @@
 
 #include "../Engine/Graphics/Renderers/QuadRenderer.h"
 #include "../Engine/Graphics/GL/Texture.h"
+#include "../Engine/Graphics/Model/IConstantBuffer.h"
+#include "../Engine/Graphics/Model/IGraphicsProvider.h"
+
 #include <unordered_map>
 
 class VoxelWorld;
@@ -35,6 +38,26 @@ private:
 	void buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world);
 
 	RenderChunkMap m_renderChunks;
+
+	struct PerFrameUniformData
+	{
+		glm::mat4 mvp;
+		glm::vec3 camPos;
+		float fogStart;
+		glm::vec3 fogColor;
+		float fogEnd;
+	} m_perFrameUniformData;
+
+	struct PerInstanceUniformData
+	{
+		glm::vec3 chunkOffset;
+		float padding;
+	} m_perInstanceUniformData;
+
+	std::auto_ptr<IConstantBuffer> m_perFrameUniformDataBuffer;
+	std::auto_ptr<IConstantBuffer> m_perInstanceUniformDataBuffer;
+
+	std::auto_ptr<IShader> m_iVoxelShader;
 
 	Shader m_voxelShader;
 	VoxelRenderer m_renderer;

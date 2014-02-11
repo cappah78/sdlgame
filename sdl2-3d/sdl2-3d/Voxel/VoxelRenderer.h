@@ -27,7 +27,7 @@ private:
 		;
 	static const unsigned int MAX_FACES_PER_CHUNK = (CHUNK_SIZE / 2)*(CHUNK_SIZE / 2)*(CHUNK_SIZE / 2) * 6;
 	static const unsigned int SIZE_BITS = 5; //2^sizebits == chunksize or sqrt(chunkSize) + 1
-	static const unsigned int TEXTURE_ID_BITS = 12;
+	static const unsigned int TEXTURE_ID_BITS = 10;
 
 	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Vertex Data must be <= 32 bits");
 	static_assert(CHUNK_SIZE == 16, "This class hardcodes an amount of bits to use for x/y/z, dependant on CHUNK_SIZE");//change assert once fixd
@@ -36,17 +36,19 @@ private:
 	struct VoxelVertex
 	{
 		VoxelVertex() : x(0), y(0), z(0), textureIdx(0) {};
-		VoxelVertex(unsigned int x, unsigned int y, unsigned int z, unsigned int textureIdx)
+		VoxelVertex(unsigned int x, unsigned int y, unsigned int z, unsigned int textureIdx, unsigned int ao)
 			: x(x)
 			, y(y)
 			, z(z)
 			, textureIdx(textureIdx)
+			, ao(ao)
 		{};
 		unsigned x : SIZE_BITS;
 		unsigned y : SIZE_BITS;
 		unsigned z : SIZE_BITS;
 		unsigned textureIdx : TEXTURE_ID_BITS;
-		unsigned padding : 5;	// unused bits
+		unsigned ao : 7;
+		//unsigned padding : 5;	// unused bits
 	};
 public:
 	friend class WorldRenderer;
@@ -62,7 +64,7 @@ public:
 		- int textureIdx : texture index witin the TextureArray used for VoxelRenderer::beginRender
 		- Color8888 1-4 : color tint for the corners of this face
 		*/
-		void addFace(Face face, int x, int y, int z, int textureIdx, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4, bool flipQuad = false);
+		void addFace(Face face, int x, int y, int z, int textureIdx, unsigned char vertex1AO, unsigned char vertex2AO, unsigned char vertex3AO, unsigned char vertex4AO, bool flipQuad);
 		/** Offset to render with*/
 		glm::vec3 m_renderOffset;
 
@@ -78,7 +80,6 @@ public:
 		unsigned int m_numFaces;
 
 		VertexBuffer m_pointBuffer;
-		VertexBuffer m_colorBuffer;
 		VertexBuffer m_indiceBuffer;
 	};
 
@@ -104,7 +105,6 @@ private:
 	std::vector<glm::vec2> m_texcoordData;
 	VertexBuffer m_texcoordBuffer;
 
-	std::vector<Color8888> m_colorData;
 	std::vector<VoxelVertex> m_pointData;
 	std::vector<unsigned short> m_indiceData;
 

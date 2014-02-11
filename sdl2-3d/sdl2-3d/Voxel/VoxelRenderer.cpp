@@ -39,7 +39,6 @@ VoxelRenderer::VoxelRenderer()
 	glBindVertexArray(0);
 
 	m_pointData.reserve(MAX_FACES_PER_CHUNK * 4);
-	m_colorData.reserve(MAX_FACES_PER_CHUNK * 4);
 	m_indiceData.reserve(MAX_FACES_PER_CHUNK * 6);
 	m_texcoordData.reserve(MAX_FACES_PER_CHUNK * 4);
 
@@ -105,13 +104,12 @@ void VoxelRenderer::beginChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chun
 	chunk->m_begun = true;
 }
 
-void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID, Color8888 color1, Color8888 color2, Color8888 color3, Color8888 color4, bool flipQuad)
+void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID, unsigned char vertex1AO, unsigned char vertex2AO, unsigned char vertex3AO, unsigned char vertex4AO, bool flipQuad)
 {
 	assert(m_begun && "Chunk has not yet begun");
 
 	std::vector<unsigned short>& indiceData = m_renderer.m_indiceData;
 	std::vector<VoxelVertex>& pointData = m_renderer.m_pointData;
-	std::vector<Color8888>& colorData = m_renderer.m_colorData;
 
 	m_numFaces++;
 	unsigned int indiceIdx = indiceData.size();
@@ -136,20 +134,16 @@ void VoxelRenderer::Chunk::addFace(Face face, int x, int y, int z, int textureID
 		indiceData.push_back(j + 2);
 	}
 
+	unsigned int aoValues[] = { vertex1AO, vertex2AO, vertex3AO, vertex4AO };
 	for (int i = 0; i < 4; ++i)
 	{
 		int xOffset = g_faceVertexOffsetsInt[face][i][0];
 		int yOffset = g_faceVertexOffsetsInt[face][i][1];
 		int zOffset = g_faceVertexOffsetsInt[face][i][2];
 
-		VoxelVertex vertex(x + xOffset, y + yOffset, z + zOffset, textureID);
+		VoxelVertex vertex(x + xOffset, y + yOffset, z + zOffset, textureID, aoValues[i]);
 		pointData.push_back(vertex);
 	}
-
-	colorData.push_back(color1);
-	colorData.push_back(color2);
-	colorData.push_back(color3);
-	colorData.push_back(color4);
 }
 
 void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
@@ -164,10 +158,8 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 	glBindVertexArray(chunk->m_vao);
 	chunk->m_indiceBuffer.update(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
 	chunk->m_pointBuffer.update(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
-	chunk->m_colorBuffer.update(&m_colorData[0], m_colorData.size() * sizeof(m_colorData[0]));
 
 	m_indiceData.clear();
-	m_colorData.clear();
 	m_pointData.clear();
 
 	CHECK_GL_ERROR();
@@ -186,7 +178,6 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset
 
 	m_indiceBuffer.bind();
 	m_pointBuffer.setAttribPointer(POSITION_LOC, GL_UNSIGNED_INT, 1, GL_FALSE, GL_TRUE);
-	m_colorBuffer.setAttribPointer(COLOR_LOC, GL_UNSIGNED_BYTE, 4, GL_TRUE);
 	m_renderer.m_texcoordBuffer.setAttribPointer(TEXCOORD_LOC, GL_FLOAT, 2);
 
 	glBindVertexArray(0);

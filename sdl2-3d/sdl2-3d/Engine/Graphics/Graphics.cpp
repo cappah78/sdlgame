@@ -46,6 +46,11 @@ void Graphics::dispose()
 	disposeD3D();
 }
 
+IGraphicsProvider& Graphics::getGraphicsProvider()
+{
+	return *s_graphicsProvider;
+}
+
 void Graphics::clear(float rCol, float gCol, float bCol, float aCol, bool clearColor, bool clearDepth)
 {
 	unsigned int clearFlags = 0;

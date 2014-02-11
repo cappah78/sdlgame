@@ -138,7 +138,7 @@ std::auto_ptr<ITexture> GLGraphicsProvider::createTextureFromPixmap(const Pixmap
 {
 	return std::auto_ptr<ITexture>(new Texture(pixmap));
 }
-std::auto_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer(IShader* shader, const IVertexBufferParameters& parameters)
+std::auto_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer(std::auto_ptr<IShader>& shader, const IVertexBufferParameters& parameters)
 {
 	VertexBuffer* buffer = new VertexBuffer();
 	unsigned int offset = 0;
@@ -183,9 +183,9 @@ std::auto_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer(IShader* sha
 	return std::auto_ptr<IVertexBuffer>(buffer);
 }
 
-std::auto_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(IShader* shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)
+std::auto_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::auto_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)
 {
-	return std::auto_ptr<IConstantBuffer>(new ConstantBuffer(0, 0, 0));
+	return std::auto_ptr<IConstantBuffer>(new ConstantBuffer(shader->getID(), bufferIndex, bufferName));
 }
 
 std::auto_ptr<IStateBuffer> GLGraphicsProvider::createStateBuffer()

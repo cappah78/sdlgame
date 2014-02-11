@@ -1,12 +1,18 @@
 #version 330 core
 
-uniform float u_fogStart;
-uniform float u_fogEnd;
-uniform vec3 u_fogColor;
-uniform sampler2DArray texArr;
+uniform sampler2DArray u_texArr;
+
+layout (std140) uniform PerFrameData
+{
+	mat4 u_mvp;
+	vec3 u_camPos;
+	float u_fogStart;
+	vec3 u_fogColor;
+	float u_fogEnd;
+};
 
 in vec3 texCoord;
-in vec4 color;
+in float vertexAO;
 in float eyeDist;
 
 out vec4 out_color;
@@ -22,7 +28,7 @@ void main()
 {
     float fogFactor = computeLinearFogFactor();
 
-	vec4 texCol = texture(texArr, texCoord);
-	vec4 blockCol = vec4((texCol.rgb + color.rgb) * color.a , texCol.a);
+	vec4 texCol = texture(u_texArr, texCoord);
+	vec4 blockCol = vec4((texCol.rgb) * vertexAO, texCol.a);
 	out_color = mix(blockCol, vec4(u_fogColor, 1.0), fogFactor);
 }

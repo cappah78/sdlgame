@@ -14,6 +14,14 @@ struct VertexAttribute
 	Format m_format;
 	unsigned int m_numElements;
 	bool m_normalize;
+
+	VertexAttribute(unsigned int idx, const char* name, Format format, unsigned int numElements, bool normalize = false) : 
+		m_attributeIndex(idx), 
+		m_attributeName(name),
+		m_format(format),
+		m_numElements(numElements),
+		m_normalize(normalize)
+	{}
 };
 
 struct IVertexBufferParameters

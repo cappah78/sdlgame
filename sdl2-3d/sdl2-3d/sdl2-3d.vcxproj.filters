@@ -99,6 +99,15 @@
     <Filter Include="Header Files\Engine\Graphics\Model">
       <UniqueIdentifier>{927bb3a6-0ae5-4daa-9a48-3dc0659d219d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Entity">
+      <UniqueIdentifier>{c3d6c779-569e-4568-91ec-aef01d6cbb18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Entity">
+      <UniqueIdentifier>{c371afab-68f2-485e-adcb-2d3f8905bfd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{0db6a42f-ccd5-437a-a335-4bc04300bc00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h">
@@ -269,6 +278,30 @@
     <ClInclude Include="Engine\Graphics\GL\StateBuffer.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Entity\Entity.h">
+      <Filter>Header Files\Engine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entity\IComponent.h">
+      <Filter>Header Files\Engine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entity\IEntitySystem.h">
+      <Filter>Header Files\Engine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\KinematicsComponent.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\MovementSystem.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\SceneGraphComponent.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entity\ComponentUpdateSystem.h">
+      <Filter>Header Files\Engine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\SceneGraphUpdateSystem.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -402,6 +435,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\StateBuffer.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\MovementSystem.cpp">
+      <Filter>Source Files\Engine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\SceneGraphUpdateSystem.cpp">
+      <Filter>Source Files\Engine\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

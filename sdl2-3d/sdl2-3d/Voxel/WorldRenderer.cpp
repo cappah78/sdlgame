@@ -158,9 +158,11 @@ WorldRenderer::WorldRenderer()
 	, m_getPixelBuffer(Game::graphics.getScreenWidth() * Game::graphics.getScreenHeight())
 	, m_lightShader("Assets/Shaders/lightcalc.vert", NULL, "Assets/Shaders/lightcalc.frag")
 {
-	m_voxelShader.begin();
-	m_voxelShader.setUniform3f("u_fogColor", glm::vec3(0.4f, 0.7f, 1.0f));        //same as clearcolor
-	m_voxelShader.end();
+	m_iVoxelShader = Game::graphics.getGraphicsProvider().createShaderFromFile("Assets/Shaders/voxelshader.vert", "Assets/Shaders/voxelshader.frag");
+
+	m_perFrameUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 0, "PerFrameData", IConstantBufferParameters());
+	m_perInstanceUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 1, "PerInstanceData", IConstantBufferParameters());
+	m_perFrameUniformData.fogColor = glm::vec3(0.4f, 0.7f, 1.0f);
 
 	CHECK_GL_ERROR();
 }
@@ -172,7 +174,7 @@ WorldRenderer::~WorldRenderer()
 
 inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
 {
-	return side && side2 ? 2 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH;
+	return (side && side2 ? 2 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH);
 	/*if (side && side2)
 		return 2 * AO_STRENGTH;
 	else
@@ -246,19 +248,22 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	//std::sort(m_visibleChunkList.begin(), m_visibleChunkList.end(), DistanceSort(camera.m_position));
 	world.getTileSet()->bind();
 
-	////////////////////////////////////////////////////////////////////////////////////////////
+	m_iVoxelShader->begin();
 
-	m_voxelShader.begin();
-	m_voxelShader.setUniform1f("u_fogEnd", camera.m_far);
-	m_voxelShader.setUniform1f("u_fogStart", camera.m_far * 0.7f);
-	m_voxelShader.setUniform3f("u_camPos", camera.m_position);
-	m_voxelShader.setUniformMatrix4f("u_mvp", camera.m_combinedMatrix);
+	m_perFrameUniformData.camPos = camera.m_position;
+	m_perFrameUniformData.fogEnd = camera.m_far;
+	m_perFrameUniformData.fogStart = camera.m_far * 0.7f;
+	m_perFrameUniformData.mvp = camera.m_combinedMatrix;
+
+	m_perFrameUniformDataBuffer->update(&m_perFrameUniformData, sizeof(m_perFrameUniformData));
+
 	for (const std::shared_ptr<VoxelRenderer::Chunk>& chunk : m_visibleChunkList)
 	{
-		m_voxelShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
+		m_perInstanceUniformData.chunkOffset = chunk->m_renderOffset;
+		m_perInstanceUniformDataBuffer->update(&m_perInstanceUniformData, sizeof(m_perInstanceUniformData));
 		m_renderer.renderChunk(chunk);
 	}
-	m_voxelShader.end();
+	m_iVoxelShader->end();
 }
 
 const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos)
@@ -340,13 +345,11 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 					if (faceValues[face]->solid)
 						continue;
 
-					Color8888 perFaceCols[4];
 					unsigned char vertexAO[4];
 
 					for (int vertex = 0; vertex < 4; ++vertex)	//for every vertex
 					{
-						bool isSolid[3] = { false, false, false };
-						int r = 0, g = 0, b = 0, a = 0, numTransparent = 0;
+						bool isSolid[3];
 
 						for (int sample = 0; sample < 3; ++sample)	//3 times per vertex, order should be side, side, corner
 						{
@@ -355,47 +358,21 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 							char sampleYOffset = AO_CHECKS_OFFSET[face][vertex][sample][1];
 							char sampleZOffset = AO_CHECKS_OFFSET[face][vertex][sample][2];
 
-							// get the color for the block at the offset
 							// +1 because offset ranges from -1 to 1, and array index goes from 0-2
 							const VoxelBlock* blockProperties = surroundingBlockData[sampleXOffset + 1][sampleYOffset + 1][sampleZOffset + 1];
 
-							if (!blockProperties->solid)
-							{
-								//blend rgba
-								r += blockProperties->color.r;
-								g += blockProperties->color.g;
-								b += blockProperties->color.b;
-								a += blockProperties->color.a;
-								numTransparent++;
-							}
-							else
-								isSolid[sample] = true;
+							isSolid[sample] = blockProperties->solid;
 						}
-
-						//blend rgb
-						r += faceValues[face]->color.r;
-						g += faceValues[face]->color.g;
-						b += faceValues[face]->color.b;
-						a += faceValues[face]->color.a;
-						numTransparent++;
 
 						//get vertex ao contribution given the touching solid faces.
 						vertexAO[vertex] = getAO(isSolid[0], isSolid[1], isSolid[2]);
-						// average color of the 4 samples for smooth lighting, dont count solid blocks
-						perFaceCols[vertex] = Color8888(r / numTransparent, g / numTransparent, b / numTransparent, a / numTransparent);
 					}
-
-					// apply AO to alpha component only for every vertex color of the face
-					perFaceCols[0].a = vertexAO[0] > perFaceCols[0].a ? 0 : perFaceCols[0].a - vertexAO[0];
-					perFaceCols[1].a = vertexAO[1] > perFaceCols[1].a ? 0 : perFaceCols[1].a - vertexAO[1];
-					perFaceCols[2].a = vertexAO[2] > perFaceCols[2].a ? 0 : perFaceCols[2].a - vertexAO[2];
-					perFaceCols[3].a = vertexAO[3] > perFaceCols[3].a ? 0 : perFaceCols[3].a - vertexAO[3];
 
 					//get the rendering related properties for this block (texture id's).
 					// flip quad to avoid asymmetric color blending 
 					bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
 					renderChunk->addFace((Face) face, x, y, z, properties.getTextureID((Face) face),
-						perFaceCols[0], perFaceCols[3], perFaceCols[1], perFaceCols[2], flipQuad);
+						vertexAO[2], vertexAO[1], vertexAO[0], vertexAO[3], flipQuad);
 				}
 			}
 		}

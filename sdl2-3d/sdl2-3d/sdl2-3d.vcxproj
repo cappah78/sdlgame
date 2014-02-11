@@ -11,6 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Entity\ComponentUpdateSystem.h" />
+    <ClInclude Include="Engine\Entity\Entity.h" />
+    <ClInclude Include="Engine\Entity\IEntitySystem.h" />
+    <ClInclude Include="Engine\Entity\IComponent.h" />
     <ClInclude Include="Engine\Graphics\Camera.h" />
     <ClInclude Include="Engine\Graphics\Color8888.h" />
     <ClInclude Include="Engine\Graphics\Frustum.h" />
@@ -55,6 +59,10 @@
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
     <ClInclude Include="Engine\Utils\stb_image.h" />
     <ClInclude Include="Engine\Utils\VoidDataList.h" />
+    <ClInclude Include="Entity\KinematicsComponent.h" />
+    <ClInclude Include="Entity\MovementSystem.h" />
+    <ClInclude Include="Entity\SceneGraphComponent.h" />
+    <ClInclude Include="Entity\SceneGraphUpdateSystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
@@ -101,6 +109,8 @@
     <ClCompile Include="Engine\Utils\ShaderManager.cpp" />
     <ClCompile Include="Engine\Utils\stb_image.c" />
     <ClCompile Include="Engine\Utils\VoidDataList.cpp" />
+    <ClCompile Include="Entity\MovementSystem.cpp" />
+    <ClCompile Include="Entity\SceneGraphUpdateSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />

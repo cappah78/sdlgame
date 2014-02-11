@@ -29,7 +29,7 @@ public:
 	virtual std::auto_ptr<IShader> createComputeShaderFromFile(const char* computeShaderFilePath) = 0;
 
 	virtual std::auto_ptr<ITexture> createTextureFromPixmap(const Pixmap& pixmap, const ITextureParameters& parameters) = 0;
-	virtual std::auto_ptr<IVertexBuffer> createVertexBuffer(IShader* shader, const IVertexBufferParameters& parameters) = 0;
-	virtual std::auto_ptr<IConstantBuffer> createConstantBuffer(IShader* shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters) = 0;
+	virtual std::auto_ptr<IVertexBuffer> createVertexBuffer(std::auto_ptr<IShader>& shader, const IVertexBufferParameters& parameters) = 0;
+	virtual std::auto_ptr<IConstantBuffer> createConstantBuffer(std::auto_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters) = 0;
 	virtual std::auto_ptr<IStateBuffer> createStateBuffer() = 0;
 };
