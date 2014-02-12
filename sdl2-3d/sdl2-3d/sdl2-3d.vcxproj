@@ -34,6 +34,7 @@
     <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\HeightMap.h" />
     <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h" />
+    <ClInclude Include="Engine\Graphics\Model\IIndiceBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\IShader.h" />
     <ClInclude Include="Engine\Graphics\Model\IVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\ITexture.h" />

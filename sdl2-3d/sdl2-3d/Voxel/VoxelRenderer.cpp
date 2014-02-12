@@ -4,6 +4,10 @@
 #include <glm/gtx/transform.hpp>
 #include "../Engine/Utils/CheckGLError.h"
 
+#include "../Engine/Graphics/Model/IStateBuffer.h"
+#include "../Engine/Graphics/Model/IIndiceBuffer.h"
+#include "../Engine/Graphics/Model/IVertexBuffer.h"
+
 
 const char* VERT_SHADER_PATH = "Assets/Shaders/voxelshader.vert";
 const char* FRAG_SHADER_PATH = "Assets/Shaders/voxelshader.frag";
@@ -42,6 +46,8 @@ VoxelRenderer::VoxelRenderer()
 	m_indiceData.reserve(MAX_FACES_PER_CHUNK * 6);
 	m_texcoordData.reserve(MAX_FACES_PER_CHUNK * 4);
 
+	m_texcoordBuffer = Game::graphics.getGraphicsProvider().createVertexBuffer();
+
 	for (int i = 0; i < MAX_FACES_PER_CHUNK; ++i)
 	{
 		m_texcoordData.push_back(glm::vec2(1.0f, 0.0f));
@@ -49,8 +55,10 @@ VoxelRenderer::VoxelRenderer()
 		m_texcoordData.push_back(glm::vec2(1.0f, 1.0f));
 		m_texcoordData.push_back(glm::vec2(0.0f, 1.0f));
 	}
-	m_texcoordBuffer.update(&m_texcoordData[0], m_texcoordData.size() * sizeof(m_texcoordData[0]));
+	m_texcoordBuffer->update(&m_texcoordData[0], m_texcoordData.size() * sizeof(m_texcoordData[0]));
 	m_texcoordData.clear();
+
+	CHECK_GL_ERROR();
 }
 
 VoxelRenderer::~VoxelRenderer()
@@ -64,8 +72,10 @@ void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chu
 {
 	if (chunk->m_numFaces == 0)
 		return;
-	glBindVertexArray(chunk->m_vao);
+	//glBindVertexArray(chunk->m_vao);
+	chunk->m_state->enable();
 	glDrawElements(mode, chunk->m_numFaces * 6, GL_UNSIGNED_SHORT, 0);
+	chunk->m_state->disable();
 }
 
 const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset)
@@ -155,9 +165,11 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 	if (chunk->m_numFaces == 0)
 		return;
 
-	glBindVertexArray(chunk->m_vao);
-	chunk->m_indiceBuffer.update(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
-	chunk->m_pointBuffer.update(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
+	//glBindVertexArray(chunk->m_vao);
+	chunk->m_state->enable();
+	chunk->m_indiceBuffer->update(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
+	chunk->m_pointBuffer->update(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
+	chunk->m_state->disable();
 
 	m_indiceData.clear();
 	m_pointData.clear();
@@ -165,14 +177,37 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 	CHECK_GL_ERROR();
 }
 
-VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset
-	, VoxelRenderer& renderer)
-	: m_indiceBuffer(GL_ELEMENT_ARRAY_BUFFER)
-	, m_renderOffset(xOffset, yOffset, zOffset)
+VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, VoxelRenderer& renderer)
+	: m_renderOffset(xOffset, yOffset, zOffset)
 	, m_numFaces(0)
 	, m_begun(false)
 	, m_renderer(renderer)
 {
+	IGraphicsProvider& provider = Game::graphics.getGraphicsProvider();
+
+	m_state = provider.createStateBuffer();
+
+	m_indiceBuffer = provider.createIndiceBuffer(IIndiceBufferParameters(IIndiceBufferParameters::Format::UNSIGNED_SHORT));
+
+	VertexAttribute pointAttrib = { 0, "POINTDATA", VertexAttribute::Format::UNSIGNED_INT, 1 };
+	VertexAttributes pointAttributes(&pointAttrib, 1);
+
+	VertexAttribute texcoordAttrib(1, "TEXCOORD", VertexAttribute::Format::FLOAT, 2);
+	VertexAttributes texcoordAttributes(&texcoordAttrib, 1);
+
+	m_pointBuffer = provider.createVertexBuffer();
+
+	m_state->enable();
+	m_state->addVertexBuffer(m_pointBuffer);
+	m_state->addVertexBuffer(renderer.m_texcoordBuffer);
+	m_state->setIndiceBuffer(m_indiceBuffer);
+
+	renderer.m_texcoordBuffer->setVertexAttributeParameters(texcoordAttributes);
+	m_pointBuffer->setVertexAttributeParameters(pointAttributes);
+
+	m_state->disable();
+
+	/*
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
@@ -181,12 +216,12 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset
 	m_renderer.m_texcoordBuffer.setAttribPointer(TEXCOORD_LOC, GL_FLOAT, 2);
 
 	glBindVertexArray(0);
-
+	*/
 	CHECK_GL_ERROR();
 }
 
 VoxelRenderer::Chunk::~Chunk()
 {
-	glDeleteVertexArrays(1, &m_vao);
+	//glDeleteVertexArrays(1, &m_vao);
 	CHECK_GL_ERROR();
 }

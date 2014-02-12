@@ -74,6 +74,7 @@ void attachShaderSource(GLuint prog, GLenum type, const char * source)
 std::auto_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* vertexShaderFilePath, const char* pixelShaderFilePath)
 {
 	assert(vertexShaderFilePath && pixelShaderFilePath);
+	CHECK_GL_ERROR();
 
 	GLuint program = glCreateProgram();
 	std::string vertexShaderContents = FileReader::readStringFromFile(vertexShaderFilePath);
@@ -138,49 +139,15 @@ std::auto_ptr<ITexture> GLGraphicsProvider::createTextureFromPixmap(const Pixmap
 {
 	return std::auto_ptr<ITexture>(new Texture(pixmap));
 }
-std::auto_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer(std::auto_ptr<IShader>& shader, const IVertexBufferParameters& parameters)
+
+std::auto_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer()
+{	
+	return std::auto_ptr<IVertexBuffer>(new VertexBuffer());
+}
+
+std::auto_ptr<IIndiceBuffer> GLGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
 {
-	VertexBuffer* buffer = new VertexBuffer();
-	unsigned int offset = 0;
-	for (VertexAttribute attrib : parameters.m_attributes)
-	{
-		GLenum type;
-		unsigned int dataSize;
-		bool isIntegerType = false;
-		switch (attrib.m_format)
-		{
-		case VertexAttribute::Format::UNSIGNED_BYTE:
-			type = GL_UNSIGNED_BYTE;
-			dataSize = 1;
-			isIntegerType = true;
-			break;
-		case VertexAttribute::Format::UNSIGNED_INT:
-			type = GL_UNSIGNED_INT;
-			isIntegerType = true;
-			dataSize = 4;
-			break;
-		case VertexAttribute::Format::INT:
-			type = GL_INT;
-			isIntegerType = true;
-			dataSize = 4;
-			break;
-		case VertexAttribute::Format::FLOAT:
-			type = GL_FLOAT;
-			dataSize = 4;
-			break;
-		default:
-			assert(false);
-			type = GL_FLOAT;
-			dataSize = 4;
-			break;
-		}
-		if (attrib.m_normalize)
-			isIntegerType = false;
-		dataSize *= attrib.m_numElements;
-		buffer->setAttribPointer(attrib.m_attributeIndex, type, attrib.m_numElements, attrib.m_normalize, isIntegerType, parameters.m_vertexSize, offset);
-		offset += dataSize;
-	}
-	return std::auto_ptr<IVertexBuffer>(buffer);
+	return std::auto_ptr<IIndiceBuffer>(new VertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
 }
 
 std::auto_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::auto_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)

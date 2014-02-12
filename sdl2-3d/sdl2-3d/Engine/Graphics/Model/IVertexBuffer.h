@@ -24,14 +24,15 @@ struct VertexAttribute
 	{}
 };
 
-struct IVertexBufferParameters
+struct VertexAttributes
 {
 	std::vector<VertexAttribute> m_attributes;
 	unsigned int m_vertexSize;
 	unsigned int m_instanceStepRate;
 	//TODO: .cpp
-	IVertexBufferParameters(const VertexAttribute* attribute, unsigned int numAttributes, unsigned int instanceStepRate = 0)
+	VertexAttributes(const VertexAttribute* attribute, unsigned int numAttributes, unsigned int instanceStepRate = 0)
 	{
+		m_vertexSize = 0;
 		m_instanceStepRate = instanceStepRate;
 		m_attributes.reserve(numAttributes);
 		for (unsigned int i = 0; i < numAttributes; ++i)
@@ -49,6 +50,7 @@ public:
 	IVertexBuffer() {};
 	virtual ~IVertexBuffer() {};
 
+	virtual void setVertexAttributeParameters(const VertexAttributes& parameters) = 0;
 	virtual void update(const void* data, unsigned int numBytes) = 0;
 	virtual void bind() = 0;
 };

@@ -29,6 +29,7 @@ public:
 
 	bool isChunkGenerated(int chunkX, int chunkZ) const;
 	void setChunkGenerated(int chunkX, int chunkZ, bool isGenerated = true);
+
 private:
 	std::unique_ptr<VoxelChunk>& loadChunk(const glm::ivec3& pos);
 

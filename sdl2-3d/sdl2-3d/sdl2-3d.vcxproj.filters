@@ -290,6 +290,9 @@
     <ClInclude Include="Entity\SceneGraphUpdateSystem.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\IIndiceBuffer.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

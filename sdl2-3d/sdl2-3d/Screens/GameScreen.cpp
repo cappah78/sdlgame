@@ -121,6 +121,7 @@ void GameScreen::renderOpenGL(float deltaSec)
 
 void GameScreen::initializeD3D()
 {
+	/*
 	ID3D10Blob* vertexShaderBlob;
 	ID3D10Blob* pixelShaderBlob;
 	std::string fileData = FileReader::readStringFromFile("Assets/Shaders/d3dtest.hlsl");
@@ -193,12 +194,13 @@ void GameScreen::initializeD3D()
 		memcpy(mappedSubresource.pData, indices, sizeof(indices));
 		deviceContext->Unmap(m_indiceBuffer, NULL);
 	}
+	*/
 }
 
 void GameScreen::disposeD3D()
 {
-	m_pixelShader->Release();
-	m_vertexShader->Release();
+//	m_pixelShader->Release();
+//	m_vertexShader->Release();
 }
 
 GameScreen::~GameScreen() 

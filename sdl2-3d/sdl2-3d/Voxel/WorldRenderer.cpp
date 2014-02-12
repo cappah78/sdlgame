@@ -1,17 +1,18 @@
 #include "WorldRenderer.h"
 
 #include "VoxelWorld.h"
+#include "PropertyManager.h"
+
 #include "../Engine/Graphics/Camera.h"
 #include "../Engine/Graphics/GL/TextureArray.h"
-#include "../Engine/Graphics/Color8888.h"
-#include "PropertyManager.h"
-#include "../Game.h"
 #include "../Engine/Utils/CheckGLError.h"
-#include <algorithm>
-
-#include <glm\gtc\matrix_transform.hpp>
-
 #include "../Game.h"
+
+#include "../Engine/Graphics/Model/IShader.h"
+#include "../Engine/Graphics/Model/IConstantBuffer.h"
+
+#include <algorithm>
+#include <glm\gtc\matrix_transform.hpp>
 
 //face, vertex, offsetvec	//TODO: refactor so offsets are calculated programmatically instead of from this array.
 static const char AO_CHECKS_OFFSET[6][4][3][3] =
@@ -154,6 +155,8 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 WorldRenderer::WorldRenderer()
 	: m_numLoadedChunks(0)
 {
+	CHECK_GL_ERROR();
+
 	m_iVoxelShader = Game::graphics.getGraphicsProvider().createShaderFromFile("Assets/Shaders/voxelshader.vert", "Assets/Shaders/voxelshader.frag");
 
 	m_perFrameUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 0, "PerFrameData", IConstantBufferParameters());

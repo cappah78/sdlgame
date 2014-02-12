@@ -1,22 +1,25 @@
-﻿Build started 30/01/2014 00:44:27.
-     1>Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
+﻿Build started 12-2-2014 13:56:12.
+     1>Project "C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Ot /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\GL\Mesh.cpp
-         Mesh.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Ot /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Screens\GameScreen.cpp
+         GameScreen.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.exe" /INCREMENTAL /NOLOGO SDL2d.lib SDL2maind.lib assimpd.lib opengl32.lib glu32.lib glew32d.lib lua5.1.lib libnoise.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.lib" /MACHINE:X86 /NODEFAULTLIB:library Debug\Camera.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.exe" /INCREMENTAL /NOLOGO SDL2d.lib SDL2maind.lib assimpd.lib opengl32.lib glu32.lib glew32d.lib lua5.1.lib libnoise.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.lib" /MACHINE:X86 /NODEFAULTLIB:library Debug\Camera.obj
          Debug\Frustum.obj
          Debug\CubeMap.obj
          Debug\DeferredShader.obj
          Debug\GBuffer.obj
+         Debug\GLGraphicsProvider.obj
          Debug\Material.obj
          Debug\Mesh.obj
          Debug\Shader.obj
-         Debug\ShadowMapShader.obj
+         Debug\StateBuffer.obj
          Debug\Texture.obj
          Debug\TextureArray.obj
          Debug\Graphics.obj
          Debug\HeightMap.obj
+         Debug\IGraphicsProvider.obj
+         Debug\IStateBuffer.obj
          Debug\PerspectiveCamera.obj
          Debug\Pixmap.obj
          Debug\HeightMapRenderer.obj
@@ -26,27 +29,28 @@
          Debug\TextureManager.obj
          Debug\Input.obj
          Debug\CheckGLError.obj
+         Debug\FileReader.obj
          Debug\FPSCameraController.obj
          Debug\noiseutils.obj
          Debug\PerlinGenerator.obj
          Debug\ShaderManager.obj
          Debug\stb_image.obj
          Debug\VoidDataList.obj
+         Debug\MovementSystem.obj
+         Debug\SceneGraphUpdateSystem.obj
          Debug\Game.obj
          Debug\main.obj
          Debug\GameScreen.obj
          Debug\ChunkManager.obj
-         Debug\DeferredWorldRenderer.obj
-         Debug\PointLight.obj
          Debug\PropertyManager.obj
          Debug\VoxelBlock.obj
          Debug\VoxelRenderer.obj
          Debug\VoxelChunk.obj
          Debug\VoxelWorld.obj
          Debug\WorldRenderer.obj
-         sdl2-3d.vcxproj -> C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.exe
-     1>Done Building Project "C:\Users\Enrico\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
+         sdl2-3d.vcxproj -> C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Debug\sdl2-3d.exe
+     1>Done Building Project "C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.49
+Time Elapsed 00:00:03.22
