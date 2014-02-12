@@ -71,7 +71,7 @@ void attachShaderSource(GLuint prog, GLenum type, const char * source)
 	glDeleteShader(sh);
 }
 
-std::auto_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* vertexShaderFilePath, const char* pixelShaderFilePath)
+std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* vertexShaderFilePath, const char* pixelShaderFilePath)
 {
 	assert(vertexShaderFilePath && pixelShaderFilePath);
 	CHECK_GL_ERROR();
@@ -87,7 +87,7 @@ std::auto_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* vert
 
 	return std::auto_ptr<IShader>(new Shader(program));
 }
-std::auto_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
+std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
 	const char* vertexShaderFilePath, const char* hullShaderFilePath, const char* domainShaderFilePath, 
 	const char* geometryShaderFilePath, const char* pixelShaderFilePath)
 {
@@ -123,7 +123,7 @@ std::auto_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
 	return std::auto_ptr<IShader>(new Shader(program));
 }
 
-std::auto_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const char* computeShaderFilePath)
+std::unique_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const char* computeShaderFilePath)
 {
 	GLuint program = glCreateProgram();
 	if (computeShaderFilePath)
@@ -135,27 +135,27 @@ std::auto_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const cha
 	return std::auto_ptr<IShader>(new Shader(program));
 }
 
-std::auto_ptr<ITexture> GLGraphicsProvider::createTextureFromPixmap(const Pixmap& pixmap, const ITextureParameters& parameters)
+std::unique_ptr<ITexture> GLGraphicsProvider::createTextureFromPixmap(const Pixmap& pixmap, const ITextureParameters& parameters)
 {
 	return std::auto_ptr<ITexture>(new Texture(pixmap));
 }
 
-std::auto_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer()
+std::unique_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer()
 {	
 	return std::auto_ptr<IVertexBuffer>(new VertexBuffer());
 }
 
-std::auto_ptr<IIndiceBuffer> GLGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
+std::unique_ptr<IIndiceBuffer> GLGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
 {
 	return std::auto_ptr<IIndiceBuffer>(new VertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
 }
 
-std::auto_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::auto_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)
+std::unique_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::unique_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)
 {
 	return std::auto_ptr<IConstantBuffer>(new ConstantBuffer(shader->getID(), bufferIndex, bufferName));
 }
 
-std::auto_ptr<IStateBuffer> GLGraphicsProvider::createStateBuffer()
+std::unique_ptr<IStateBuffer> GLGraphicsProvider::createStateBuffer()
 {
 	return std::auto_ptr<IStateBuffer>(new StateBuffer());
 }

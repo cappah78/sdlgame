@@ -36,9 +36,9 @@ public:
 		unsigned int m_numFaces;
 		bool m_begun;
 
-		std::auto_ptr<IStateBuffer> m_state;
-		std::auto_ptr<IVertexBuffer> m_pointBuffer;
-		std::auto_ptr<IIndiceBuffer> m_indiceBuffer;
+		std::unique_ptr<IStateBuffer> m_state;
+		std::unique_ptr<IVertexBuffer> m_pointBuffer;
+		std::unique_ptr<IIndiceBuffer> m_indiceBuffer;
 	};
 
 	VoxelRenderer();
@@ -83,7 +83,7 @@ private:
 	bool m_blendEnabled;
 
 	std::vector<glm::vec2> m_texcoordData;
-	std::auto_ptr<IVertexBuffer> m_texcoordBuffer;
+	std::unique_ptr<IVertexBuffer> m_texcoordBuffer;
 
 	std::vector<VoxelVertex> m_pointData;
 	std::vector<unsigned short> m_indiceData;

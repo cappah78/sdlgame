@@ -8,9 +8,9 @@ public:
 	StateBuffer();
 	virtual ~StateBuffer() override;
 
-	virtual void setIndiceBuffer(std::auto_ptr<IIndiceBuffer>& buffer) override;
-	virtual void addVertexBuffer(std::auto_ptr<IVertexBuffer>& buffer) override;
-	virtual void addConstantBuffer(std::auto_ptr<IConstantBuffer>& buffer) override;
+	virtual void setIndiceBuffer(std::unique_ptr<IIndiceBuffer>& buffer) override;
+	virtual void addVertexBuffer(std::unique_ptr<IVertexBuffer>& buffer) override;
+	virtual void addConstantBuffer(std::unique_ptr<IConstantBuffer>& buffer) override;
 
 	virtual void enable() override;
 	virtual void disable() override;

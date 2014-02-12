@@ -53,7 +53,7 @@ private:
 	VoxelRenderer m_renderer;
 	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_visibleChunkList;
 
-	std::auto_ptr<IConstantBuffer> m_perFrameUniformDataBuffer;
-	std::auto_ptr<IConstantBuffer> m_perInstanceUniformDataBuffer;
-	std::auto_ptr<IShader> m_iVoxelShader;
+	std::unique_ptr<IConstantBuffer> m_perFrameUniformDataBuffer;
+	std::unique_ptr<IConstantBuffer> m_perInstanceUniformDataBuffer;
+	std::unique_ptr<IShader> m_iVoxelShader;
 };

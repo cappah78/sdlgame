@@ -22,19 +22,19 @@ StateBuffer::~StateBuffer()
 	glDeleteVertexArrays(1, &m_vao);
 }
 
-void StateBuffer::setIndiceBuffer(std::auto_ptr<IIndiceBuffer>& buffer)
+void StateBuffer::setIndiceBuffer(std::unique_ptr<IIndiceBuffer>& buffer)
 {
 	assert(m_isEnabled);
 	buffer->bind();
 }
 
-void StateBuffer::addVertexBuffer(std::auto_ptr<IVertexBuffer>& buffer)
+void StateBuffer::addVertexBuffer(std::unique_ptr<IVertexBuffer>& buffer)
 {
 	assert(m_isEnabled);
 	buffer->bind();
 }
 
-void StateBuffer::addConstantBuffer(std::auto_ptr<IConstantBuffer>& buffer)
+void StateBuffer::addConstantBuffer(std::unique_ptr<IConstantBuffer>& buffer)
 {
 	assert(m_isEnabled);
 	buffer->bind();
