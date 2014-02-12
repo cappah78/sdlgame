@@ -2,7 +2,6 @@
 
 #include "../Game.h"
 #include "../Engine/Graphics/Camera.h"
-#include "../Engine/Utils/CheckGLError.h"
 
 #include "../Engine/Graphics/Model/IStateBuffer.h"
 #include "../Engine/Graphics/Model/IIndiceBuffer.h"
@@ -40,9 +39,6 @@ VoxelRenderer::VoxelRenderer()
 	: m_begunChunk(false)
 	, m_blendEnabled(false)
 {
-	CHECK_GL_ERROR();
-	glBindVertexArray(0);
-
 	m_pointData.reserve(MAX_FACES_PER_CHUNK * 4);
 	m_indiceData.reserve(MAX_FACES_PER_CHUNK * 6);
 	m_texcoordData.reserve(MAX_FACES_PER_CHUNK * 4);
@@ -58,15 +54,12 @@ VoxelRenderer::VoxelRenderer()
 	}
 	m_texcoordBuffer->update(&m_texcoordData[0], m_texcoordData.size() * sizeof(m_texcoordData[0]));
 	m_texcoordData.clear();
-
-	CHECK_GL_ERROR();
 }
 
 VoxelRenderer::~VoxelRenderer()
 {
 	for (Chunk* chunk : m_chunkPool)
 		delete chunk;
-	CHECK_GL_ERROR();
 }
 
 void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk, GLenum mode)
@@ -81,8 +74,6 @@ void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chu
 
 const std::shared_ptr<VoxelRenderer::Chunk> VoxelRenderer::createChunk(float xOffset, float yOffset, float zOffset)
 {
-	CHECK_GL_ERROR();
-
 	if (m_chunkPool.size() > 0)
 	{
 		std::shared_ptr<VoxelRenderer::Chunk> chunk(m_chunkPool.back(), &returnChunk);
@@ -173,8 +164,6 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 
 	m_indiceData.clear();
 	m_pointData.clear();
-
-	CHECK_GL_ERROR();
 }
 
 VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, VoxelRenderer& renderer)
@@ -195,7 +184,6 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, VoxelRe
 	VertexAttribute texcoordAttrib( TEXCOORD_LOC, "TEXCOORD", VertexAttribute::Format::FLOAT, 2);
 	VertexAttributes texcoordAttributes(&texcoordAttrib, 1);
 
-
 	m_state->enable();
 	m_state->addVertexBuffer(m_pointBuffer);
 	m_state->addVertexBuffer(renderer.m_texcoordBuffer);
@@ -203,13 +191,9 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, VoxelRe
 	m_pointBuffer->setVertexAttributeParameters(pointAttributes);
 	renderer.m_texcoordBuffer->setVertexAttributeParameters(texcoordAttributes);
 	m_state->disable();
-
-
-	CHECK_GL_ERROR();
 }
 
 VoxelRenderer::Chunk::~Chunk()
 {
-	//glDeleteVertexArrays(1, &m_vao);
-	CHECK_GL_ERROR();
+
 }

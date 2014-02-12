@@ -14,3 +14,12 @@ static const char* LUA_WORLD_GETBLOCK_FUNCTION = "getBlock";
 static const char* LUA_INIT_SCRIPT = "Assets\\Scripts\\Init.lua";
 static const char* LUA_INIT_NAMESPACE = "Init";
 static const char* LUA_TICK_DURATION_SEC_NAME = "TickDurationSec";
+
+static const char* const LUA_BLOCKS_NAMESPACE = "Blocks";
+static const char* const LUA_INT_NAME = "int";
+static const char* const LUA_BOOL_NAME = "bool";
+static const char* const LUA_FLOAT_NAME = "float";
+static const char* const LUA_TICK_COUNT_NAME = "tickCount";
+static const char* const LUA_BLOCK_X_NAME = "x";
+static const char* const LUA_BLOCK_Y_NAME = "y";
+static const char* const LUA_BLOCK_Z_NAME = "z";
