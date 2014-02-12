@@ -1,21 +1,18 @@
 #pragma once
 
-#include "PropertyManager.h"
+#include "../Voxel/VoxelBlock.h"
 #include "../Engine/Utils/VoidDataList.h"
-#include "VoxelBlock.h"
 
 #include <glm\glm.hpp>
 #include <vector>
+
+class PropertyManager;
+class WorldRenderer;
 
 /** Chunk size in one dimension */
 static const unsigned int CHUNK_SIZE = 16;
 static const unsigned int CHUNK_SIZE_SQUARED = CHUNK_SIZE * CHUNK_SIZE;
 static const unsigned int CHUNK_SIZE_CUBED = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
-
-#include <vector>
-
-class PropertyManager;
-class WorldRenderer;
 
 class VoxelChunk
 {
@@ -34,10 +31,7 @@ public:
 	{
 		return getBlock(getBlockIndex(blockPos));
 	}
-	const BlockProperties& getBlockProperties(BlockID blockID) const
-	{
-		return m_propertyManager.getBlockProperties(blockID);
-	}
+	const BlockProperties& getBlockProperties(BlockID blockID) const;
 
 	inline int* getPerBlockDataList(unsigned int blockDataIndex) const
 	{

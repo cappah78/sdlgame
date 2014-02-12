@@ -1,13 +1,14 @@
 #include "VoxelRenderer.h"
 
-#include "..\Engine\Graphics\Camera.h"
-#include <glm/gtx/transform.hpp>
+#include "../Game.h"
+#include "../Engine/Graphics/Camera.h"
 #include "../Engine/Utils/CheckGLError.h"
 
 #include "../Engine/Graphics/Model/IStateBuffer.h"
 #include "../Engine/Graphics/Model/IIndiceBuffer.h"
 #include "../Engine/Graphics/Model/IVertexBuffer.h"
 
+#include <glm/gtx/transform.hpp>
 
 const char* VERT_SHADER_PATH = "Assets/Shaders/voxelshader.vert";
 const char* FRAG_SHADER_PATH = "Assets/Shaders/voxelshader.frag";
@@ -72,7 +73,7 @@ void VoxelRenderer::renderChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chu
 {
 	if (chunk->m_numFaces == 0)
 		return;
-	//glBindVertexArray(chunk->m_vao);
+
 	chunk->m_state->enable();
 	glDrawElements(mode, chunk->m_numFaces * 6, GL_UNSIGNED_SHORT, 0);
 	chunk->m_state->disable();
@@ -165,7 +166,6 @@ void VoxelRenderer::endChunk(const std::shared_ptr<VoxelRenderer::Chunk>& chunk)
 	if (chunk->m_numFaces == 0)
 		return;
 
-	//glBindVertexArray(chunk->m_vao);
 	chunk->m_state->enable();
 	chunk->m_indiceBuffer->update(&m_indiceData[0], m_indiceData.size() * sizeof(m_indiceData[0]));
 	chunk->m_pointBuffer->update(&m_pointData[0], m_pointData.size() * sizeof(m_pointData[0]));
@@ -186,37 +186,25 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, VoxelRe
 	IGraphicsProvider& provider = Game::graphics.getGraphicsProvider();
 
 	m_state = provider.createStateBuffer();
-
 	m_indiceBuffer = provider.createIndiceBuffer(IIndiceBufferParameters(IIndiceBufferParameters::Format::UNSIGNED_SHORT));
+	m_pointBuffer = provider.createVertexBuffer();
 
-	VertexAttribute pointAttrib = { 0, "POINTDATA", VertexAttribute::Format::UNSIGNED_INT, 1 };
+	VertexAttribute pointAttrib = { POSITION_LOC, "POINTDATA", VertexAttribute::Format::UNSIGNED_INT, 1 };
 	VertexAttributes pointAttributes(&pointAttrib, 1);
 
-	VertexAttribute texcoordAttrib(1, "TEXCOORD", VertexAttribute::Format::FLOAT, 2);
+	VertexAttribute texcoordAttrib( TEXCOORD_LOC, "TEXCOORD", VertexAttribute::Format::FLOAT, 2);
 	VertexAttributes texcoordAttributes(&texcoordAttrib, 1);
 
-	m_pointBuffer = provider.createVertexBuffer();
 
 	m_state->enable();
 	m_state->addVertexBuffer(m_pointBuffer);
 	m_state->addVertexBuffer(renderer.m_texcoordBuffer);
 	m_state->setIndiceBuffer(m_indiceBuffer);
-
-	renderer.m_texcoordBuffer->setVertexAttributeParameters(texcoordAttributes);
 	m_pointBuffer->setVertexAttributeParameters(pointAttributes);
-
+	renderer.m_texcoordBuffer->setVertexAttributeParameters(texcoordAttributes);
 	m_state->disable();
 
-	/*
-	glGenVertexArrays(1, &m_vao);
-	glBindVertexArray(m_vao);
 
-	m_indiceBuffer.bind();
-	m_pointBuffer.setAttribPointer(POSITION_LOC, GL_UNSIGNED_INT, 1, GL_FALSE, GL_TRUE);
-	m_renderer.m_texcoordBuffer.setAttribPointer(TEXCOORD_LOC, GL_FLOAT, 2);
-
-	glBindVertexArray(0);
-	*/
 	CHECK_GL_ERROR();
 }
 

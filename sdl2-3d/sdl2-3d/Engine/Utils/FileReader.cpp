@@ -5,7 +5,7 @@
 
 std::string FileReader::readStringFromFile(const char* path)
 {
-	if (path == NULL)
+	if (!path)
 		return 0;
 
 	std::ifstream file(path);

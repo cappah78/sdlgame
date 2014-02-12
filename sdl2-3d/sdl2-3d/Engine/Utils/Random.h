@@ -1,8 +1,6 @@
 #pragma once
 
 #include <random>
-#include <iostream>
-#include <stdio.h>
 
 template <typename T>
 class Random

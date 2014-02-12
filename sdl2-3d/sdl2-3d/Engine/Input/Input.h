@@ -1,13 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <SDL_keycode.h>
 
 class IKeyListener;
 class IMouseListener;
 class Game;
 
 struct SDL_Keysym;
-#include <SDL_keycode.h>
 
 /** 
 Manages input related data, listeners can register to this and 

@@ -10,7 +10,7 @@
 
 #include "../Engine/Utils/Comparables.h"
 
-#include "PropertyManager.h"
+class PropertyManager;
 
 class ChunkManager
 {

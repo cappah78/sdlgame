@@ -1,8 +1,8 @@
 #pragma once
 
+#include "../Engine/Entity/ComponentUpdateSystem.h"
 #include "SceneGraphComponent.h"
 #include "KinematicsComponent.h"
-#include "../Engine/Entity/ComponentUpdateSystem.h"
 
 class SceneGraphUpdateSystem : public ComponentUpdateSystem<SceneGraphComponent, KinematicsComponent>
 {

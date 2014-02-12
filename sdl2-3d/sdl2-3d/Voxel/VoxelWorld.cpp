@@ -4,30 +4,28 @@
 
 #include "../Game.h"
 #include "../Engine/Utils/CheckLuaError.h"
-#include "../Engine/Graphics/Color8888.h"
 #include "../Engine/Graphics/GL/TextureArray.h"
 #include "../Engine/Graphics/Camera.h"
 
 #include <lua.hpp>
 #include <LuaBridge.h>
 
-
 std::map<lua_State* const, VoxelWorld* const> VoxelWorld::stateWorldMap;
 
-//TODO: remove constant
+//TODO: remove hardcoded texture reso
 static const unsigned int BLOCK_TEX_RES = 16;
+
 static const float BLOCK_TO_CHUNK = 1 / (float) CHUNK_SIZE;
+static const float UPDATES_PER_SEC = 5.0f;
 
-const double blocksPerUnit = 492.0;
-
+static const double BLOCKS_PER_WORLDGEN_UNIT = 492.0;
 
 VoxelWorld::VoxelWorld(TextureManager& textureManager)
 	: m_L(luaL_newstate())
 	, m_textureManager(textureManager)
 	, m_chunkManager(m_propertyManager)
 	, m_timeAccumulator(0)
-	, m_tickDurationSec(1 / 5.0f)
-	, m_gbuffer(0)
+	, m_tickDurationSec(1.0f / UPDATES_PER_SEC)
 {
 	printf("Press F1 to print controls. \n");
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
@@ -193,7 +191,7 @@ void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 	{
 		for (int z = 0; z < sampleSize; ++z)
 		{
-			int height = (int) m_worldGenerator.GetValue((x + (from.x - 1))/ blocksPerUnit, (z + (from.z - 1)) / blocksPerUnit);
+			int height = (int) m_worldGenerator.GetValue((x + (from.x - 1)) / BLOCKS_PER_WORLDGEN_UNIT, (z + (from.z - 1)) / BLOCKS_PER_WORLDGEN_UNIT);
 			blockHeights[x * sampleSize + z] = height;
 		}
 	}
@@ -332,6 +330,12 @@ const BlockProperties& VoxelWorld::getBlockProperties(BlockID blockID)
 {
 	return m_propertyManager.getBlockProperties(blockID);
 }
+
+inline int fastFloor(float x)
+{
+	int i = (int) x;
+	return i - (i > x);
+};
 
 inline glm::ivec3 VoxelWorld::toChunkPos(const glm::ivec3& blockPos)
 {

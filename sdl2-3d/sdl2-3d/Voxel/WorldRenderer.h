@@ -2,7 +2,6 @@
 
 #include "VoxelRenderer.h"
 #include "../Engine/Utils/Comparables.h"
-
 #include "../Engine/Graphics/Model/IGraphicsProvider.h"
 
 #include <unordered_map>

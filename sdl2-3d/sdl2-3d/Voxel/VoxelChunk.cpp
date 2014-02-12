@@ -1,5 +1,9 @@
 #include "VoxelChunk.h"
 
+#include "../Engine/Graphics/Color8888.h"
+#include "../Voxel/VoxelBlock.h"
+#include "../Voxel/PropertyManager.h"
+
 #include <LuaBridge.h>
 #include <lua.h>
 
@@ -200,4 +204,9 @@ void VoxelChunk::doBlockUpdate(const glm::ivec3& blockChunkPos, const glm::ivec3
 	// update data with changes made in script, only if the block was not removed
 	if (hasProperties && block.id == oldID)
 		updateBlockData(block, luaBlockArg);
+}
+
+const BlockProperties& VoxelChunk::getBlockProperties(BlockID blockID) const
+{
+	return m_propertyManager.getBlockProperties(blockID);
 }

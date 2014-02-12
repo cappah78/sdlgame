@@ -1,8 +1,8 @@
 #include "GameScreen.h"
 
 #include <glm\glm.hpp>
-#include <iostream>
-#include <stdio.h>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <vector>
 
 #include <SDL_syswm.h>
@@ -13,15 +13,9 @@
 #pragma comment(lib, "d3d10.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-#include "../Engine/Utils/FileReader.h"
-
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "../Game.h"
 #include "../Voxel/VoxelRenderer.h"
 
-#include "../Engine/Graphics/GL/TextureArray.h"
-#include "../Engine/Graphics/Color8888.h"
 #include "../Engine/Graphics/GL/Mesh.h"
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
@@ -46,8 +40,6 @@ GameScreen::GameScreen()
 	, m_world(m_textureManager)
 	, m_modelShader("Assets/Shaders/modelshader.vert", NULL, "Assets/Shaders/modelshader.frag")
 {
-	initializeD3D();
-
 	Game::input.registerKeyListener(&m_cameraController);
 	Game::input.registerMouseListener(&m_cameraController);
 	Game::input.registerKeyListener(this);
@@ -72,18 +64,27 @@ GameScreen::GameScreen()
 
 void GameScreen::render(float deltaSec)
 {
-	switch (Game::graphics.getRenderMode())
-	{
-	case Graphics::RenderMode::OPENGL:
-		renderOpenGL(deltaSec);
-		break;
-	case Graphics::RenderMode::D3D:
-		renderD3D(deltaSec);
-		break;
-	default:
-		assert(false);
-		break;
-	}
+	Game::graphics.clear(0.4f, 0.7f, 1.0f, 1.0f);
+
+	m_cameraController.update(deltaSec);
+	m_camera.update();
+
+#if !RENDER_MODEL
+	m_world.update(deltaSec, m_camera);
+	m_worldRenderer.render(m_world, m_camera);
+#else
+
+	///* renders crytek sponza model /*
+	m_modelShader.begin();
+	m_modelShader.setUniformMatrix4f("u_mvp", m_camera.m_combinedMatrix);
+	m_modelShader.setUniformMatrix4f("u_transform", glm::scale(glm::translate(glm::mat4(1), glm::vec3(0, 0, -20)), glm::vec3(0.1f, 0.1f, 0.1f)));
+	m_mesh.render();
+	m_modelShader.end();
+	//*/
+
+#endif //RENDER_MODEL
+
+	Game::graphics.swap();
 }
 
 struct Vertex
@@ -92,120 +93,9 @@ struct Vertex
 	glm::vec4 color;
 };
 
-void GameScreen::renderD3D(float deltaSec)
-{
-	Game::graphics.clear(1.0f, 0.7f, 1.0f, 1.0f);
-	Game::graphics.swap();
-}
-
-void GameScreen::renderOpenGL(float deltaSec)
-{
-	Game::graphics.clear(0.4f, 0.7f, 1.0f, 1.0f);
-	
-	m_cameraController.update(deltaSec);
-	m_camera.update();
-#if !RENDER_MODEL
-	m_world.update(deltaSec, m_camera);
-	m_worldRenderer.render(m_world, m_camera);
-#else
-	///* renders crytek sponza model /*
-	m_modelShader.begin();
-	m_modelShader.setUniformMatrix4f("u_mvp", m_camera.m_combinedMatrix);
-	m_modelShader.setUniformMatrix4f("u_transform", glm::scale(glm::translate(glm::mat4(1), glm::vec3(0, 0, -20)), glm::vec3(0.1f, 0.1f, 0.1f)));
-	m_mesh.render();
-	m_modelShader.end();
-	//*/
-#endif //RENDER_MODEL
-	Game::graphics.swap();
-}
-
-void GameScreen::initializeD3D()
-{
-	/*
-	ID3D10Blob* vertexShaderBlob;
-	ID3D10Blob* pixelShaderBlob;
-	std::string fileData = FileReader::readStringFromFile("Assets/Shaders/d3dtest.hlsl");
-	const char* cStr = fileData.c_str();
-
-	static const int MAX_OPTIMIZE_FLAG = (1 << 15);
-	bool compiledVert = SUCCEEDED(D3DCompile(cStr, fileData.size(), "d3dtest.hlsl", NULL, NULL, "VShader", "vs_5_0", MAX_OPTIMIZE_FLAG, 0, &vertexShaderBlob, NULL));
-	bool compiledPix = SUCCEEDED(D3DCompile(cStr, fileData.size(), "d3dtest.hlsl", NULL, NULL, "PShader", "ps_5_0", MAX_OPTIMIZE_FLAG, 0, &pixelShaderBlob, NULL));
-	printf("compiled %i %i \n", compiledVert, compiledPix);
-	
-	auto device = Game::graphics.getDevice();
-	auto deviceContext = Game::graphics.getDeviceContext();
-
-	device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), NULL, &m_vertexShader);
-	device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), NULL, &m_pixelShader);
-
-	deviceContext->VSSetShader(m_vertexShader, 0, 0);
-	deviceContext->PSSetShader(m_pixelShader, 0, 0);
-
-	ID3D11InputLayout* inputLayout;
-	D3D11_INPUT_ELEMENT_DESC inputElementDescription[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-
-	device->CreateInputLayout(inputElementDescription, 2, vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
-	deviceContext->IASetInputLayout(inputLayout);
-
-	{
-		Vertex vertices[] =
-		{
-			{ glm::vec3(0.0f, 0.5f, 0.0f), glm::vec4(1.0, 0.0, 0.0, 1.0) },
-			{ glm::vec3(0.45f, 0.0f, 0.0f), glm::vec4(0.0, 1.0, 0.0, 1.0) },
-			{ glm::vec3(-0.45f, 0.0f, 0.0f), glm::vec4(0.0, 0.0, 1.0, 1.0) },
-			{ glm::vec3(0.0f, -0.5f, 0.0f), glm::vec4(1.0, 1.0, 1.0, 1.0) }
-		};
-
-		D3D11_BUFFER_DESC bufferDescription;
-		ZeroMemory(&bufferDescription, sizeof(D3D11_BUFFER_DESC));
-		bufferDescription.Usage = D3D11_USAGE_DYNAMIC;
-		bufferDescription.ByteWidth = sizeof(vertices);
-		bufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-		device->CreateBuffer(&bufferDescription, NULL, &m_vertexBuffer);
-
-		D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-		deviceContext->Map(m_vertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedSubresource);
-		memcpy(mappedSubresource.pData, vertices, sizeof(vertices));
-		deviceContext->Unmap(m_vertexBuffer, NULL);
-	}
-	{
-		unsigned int indices[] =
-		{
-			0, 1, 2, 1, 3, 2
-		};
-
-		D3D11_BUFFER_DESC indexBufferDesc;
-		ZeroMemory(&indexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-		indexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		indexBufferDesc.ByteWidth = sizeof(indices);
-		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		indexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-		device->CreateBuffer(&indexBufferDesc, NULL, &m_indiceBuffer);
-
-		D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-		deviceContext->Map(m_indiceBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedSubresource);
-		memcpy(mappedSubresource.pData, indices, sizeof(indices));
-		deviceContext->Unmap(m_indiceBuffer, NULL);
-	}
-	*/
-}
-
-void GameScreen::disposeD3D()
-{
-//	m_pixelShader->Release();
-//	m_vertexShader->Release();
-}
-
 GameScreen::~GameScreen() 
 {
-	disposeD3D();
+
 }
 
 void GameScreen::resize(int width, int height) 

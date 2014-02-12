@@ -1,62 +1,39 @@
-﻿Build started 12-2-2014 14:07:32.
+﻿Build started 12-2-2014 15:12:10.
      1>Project "C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\GL\StateBuffer.cpp Engine\Graphics\Model\IGraphicsProvider.h Engine\Graphics\Model\IStateBuffer.h Voxel\VoxelRenderer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\GL\DeferredShader.cpp Engine\Graphics\GL\GBuffer.cpp Engine\Graphics\HeightMap.cpp Engine\Graphics\Model\IGraphicsProvider.h Engine\Graphics\Renderers\HeightMapRenderer.cpp Engine\Input\Input.cpp Engine\Utils\PerlinGenerator.cpp Game.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\PropertyManager.cpp Voxel\VoxelBlock.cpp Voxel\VoxelChunk.cpp Voxel\VoxelRenderer.cpp Voxel\VoxelWorld.cpp Voxel\WorldRenderer.cpp main.cpp
+         main.cpp
+     1>c:\users\evoosten\documents\github\sdlgame\sdl2-3d\sdl2-3d\Engine/Input/Input.h(28): error C2061: syntax error : identifier 'SDL_Keysym'
+     1>c:\users\evoosten\documents\github\sdlgame\sdl2-3d\sdl2-3d\Engine/Input/Input.h(29): error C2061: syntax error : identifier 'SDL_Keysym'
+         Compiling...
+         DeferredShader.cpp
+     1>c:\users\evoosten\documents\github\sdlgame\sdl2-3d\sdl2-3d\Engine/Input/Input.h(28): error C2061: syntax error : identifier 'SDL_Keysym'
+     1>c:\users\evoosten\documents\github\sdlgame\sdl2-3d\sdl2-3d\Engine/Input/Input.h(29): error C2061: syntax error : identifier 'SDL_Keysym'
+         Compiling...
+         GBuffer.cpp
+     1>c:\users\evoosten\documents\github\sdlgame\sdl2-3d\sdl2-3d\Engine/Input/Input.h(28): error C2061: syntax error : identifier 'SDL_Keysym'
+     1>c:\users\evoosten\documents\github\sdlgame\sdl2-3d\sdl2-3d\Engine/Input/Input.h(29): error C2061: syntax error : identifier 'SDL_Keysym'
+         Compiling...
+         HeightMap.cpp
+         Compiling...
+         PerlinGenerator.cpp
+         HeightMapRenderer.cpp
+         Compiling...
+         Input.cpp
+         Compiling...
+         WorldRenderer.cpp
+         VoxelWorld.cpp
          VoxelRenderer.cpp
-         IStateBuffer.h
-         StateBuffer.cpp
+         GameScreen.cpp
+         Game.cpp
          Skipping... (no relevant changes detected)
+         VoxelChunk.cpp
+         VoxelBlock.cpp
+         PropertyManager.cpp
+         ChunkManager.cpp
          IGraphicsProvider.h
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib lua5.1.lib libnoise.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH:NO Release\Camera.obj
-         Release\Frustum.obj
-         Release\CubeMap.obj
-         Release\DeferredShader.obj
-         Release\GBuffer.obj
-         Release\GLGraphicsProvider.obj
-         Release\Material.obj
-         Release\Mesh.obj
-         Release\Shader.obj
-         Release\StateBuffer.obj
-         Release\Texture.obj
-         Release\TextureArray.obj
-         Release\Graphics.obj
-         Release\HeightMap.obj
-         Release\IGraphicsProvider.obj
-         Release\IStateBuffer.obj
-         Release\PerspectiveCamera.obj
-         Release\Pixmap.obj
-         Release\HeightMapRenderer.obj
-         Release\QuadRenderer.obj
-         Release\SkyBox.obj
-         Release\SpriteBatch.obj
-         Release\TextureManager.obj
-         Release\Input.obj
-         Release\CheckGLError.obj
-         Release\FileReader.obj
-         Release\FPSCameraController.obj
-         Release\noiseutils.obj
-         Release\PerlinGenerator.obj
-         Release\ShaderManager.obj
-         Release\stb_image.obj
-         Release\VoidDataList.obj
-         Release\MovementSystem.obj
-         Release\SceneGraphUpdateSystem.obj
-         Release\Game.obj
-         Release\main.obj
-         Release\GameScreen.obj
-         Release\ChunkManager.obj
-         Release\PropertyManager.obj
-         Release\VoxelBlock.obj
-         Release\VoxelRenderer.obj
-         Release\VoxelChunk.obj
-         Release\VoxelWorld.obj
-         Release\WorldRenderer.obj
-         Generating code
-         Finished generating code
-         sdl2-3d.vcxproj -> C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe
-     1>Done Building Project "C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:07.81
+Time Elapsed 00:00:15.51

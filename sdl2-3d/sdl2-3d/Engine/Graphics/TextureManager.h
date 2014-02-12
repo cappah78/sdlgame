@@ -2,12 +2,11 @@
 
 #include <string>
 #include <map>
-#include <vector>
-#include <assert.h>
 
 #include "GL/Texture.h"
 
 typedef unsigned int GLuint;
+class Texture;
 
 static const unsigned int INVALID_TEXTURE_ID = 0xFFFFFFFF;
 

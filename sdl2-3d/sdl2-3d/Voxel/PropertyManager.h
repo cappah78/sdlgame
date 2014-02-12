@@ -1,20 +1,16 @@
 #pragma once
 
 #include "VoxelBlock.h"
-#include "../Engine/Graphics/TextureManager.h"
-#include "../Engine/Graphics/GL/TextureArray.h"
 
-#include <assert.h>
 #include <map>
-#include <set>
 #include <vector>
 #include <memory>
-#include <glm\glm.hpp>
 
 #include <lua.hpp>
 #include <LuaBridge.h>
 
 struct lua_State;
+class TextureArray;
 
 /** contains a list of key-value pairs, and the base reference */
 struct LuaTableData

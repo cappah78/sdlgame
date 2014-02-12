@@ -35,18 +35,14 @@ public:
 		GLboolean normalized = false, GLboolean isIntegerType = false, GLuint stride = 0, 
 		GLuint offset = 0)
 	{
-		CHECK_GL_ERROR();
 		m_attributeIdx = attributeIdx;
 		m_isEnabled = true;
 
 		bind();		
-		CHECK_GL_ERROR();
-
 		if (isIntegerType)
 			glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, (const GLvoid*) offset);
 		else
 			glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, stride, (const GLvoid*) offset);
-		CHECK_GL_ERROR();
 		glEnableVertexAttribArray(attributeIdx);
 		CHECK_GL_ERROR();
 	};

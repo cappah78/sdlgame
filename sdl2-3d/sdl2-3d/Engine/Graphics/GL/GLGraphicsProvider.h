@@ -8,9 +8,7 @@ public:
 	GLGraphicsProvider();
 	virtual ~GLGraphicsProvider() override;
 
-	/** Simple version*/
 	virtual std::unique_ptr<IShader> createShaderFromFile(const char* vertexShaderFilePath, const char* pixelShaderFilePath) override;
-	/** Complex version */
 	virtual std::unique_ptr<IShader> createShaderFromFile(const char* vertexShaderFilePath, const char* hullShaderFilePath, const char* domainShaderFilePath, const char* geometryShaderFilePath, const char* pixelShaderFilePath) override;
 	virtual std::unique_ptr<IShader> createComputeShaderFromFile(const char* computeShaderFilePath) override;
 

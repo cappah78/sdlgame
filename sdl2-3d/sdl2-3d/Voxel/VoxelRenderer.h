@@ -1,14 +1,11 @@
 #pragma once
 
-#include <gl\glew.h>
-#include <glm\glm.hpp>
+#include "../Engine/Graphics/Model/IGraphicsProvider.h"
+#include "VoxelChunk.h"
 
 #include <assert.h>
 #include <memory>
-
-#include "../Engine/Graphics/Model/IGraphicsProvider.h"
-
-#include "VoxelChunk.h"
+#include <gl/glew.h>
 
 class Camera;
 
@@ -54,9 +51,11 @@ private:
 
 	static void returnChunk(Chunk* chunk);
 
+	static const unsigned int MAX_FACES_PER_CHUNK = (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * 6;
+
 	static const unsigned int POSITION_LOC = 0;
 	static const unsigned int TEXCOORD_LOC = 1;
-	static const unsigned int MAX_FACES_PER_CHUNK = (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * 6;
+
 	static const unsigned int SIZE_BITS = 5; // number of bits for position per axis
 	static const unsigned int TEXTURE_ID_BITS = 10;
 	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Vertex Data must be <= 32 bits");

@@ -11,9 +11,7 @@
 #include "../Voxel/VoxelWorld.h"
 #include "../Voxel/WorldRenderer.h"
 #include "../Engine/Graphics/GL/Mesh.h"
-struct ID3D11PixelShader;
-struct ID3D11VertexShader;
-struct ID3D11Buffer;
+
 class VoxelCache;
 class TextureArray;
 
@@ -37,17 +35,4 @@ private:
 	VoxelWorld m_world;
 	WorldRenderer m_worldRenderer;
 	VoxelRenderer m_voxelRenderer;
-	TextureArray* m_tileSet;
-
-	void initializeD3D();	//tmp testing stuffs
-	void disposeD3D();
-
-	ID3D11Buffer* m_vertexBuffer;
-	ID3D11Buffer* m_indiceBuffer;
-	ID3D11VertexShader* m_vertexShader;
-	ID3D11PixelShader* m_pixelShader;
-
-	void renderOpenGL(float deltaSec);
-	void renderD3D(float deltaSec);
-	///
 };

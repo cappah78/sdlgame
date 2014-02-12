@@ -1,13 +1,11 @@
 #pragma once
 
 /** Contains all block related structs / datatypes */
-
-#include "../Game.h"
-#include "../Engine/Graphics/Color8888.h"
-#include <string>
 #include <vector>
 #include <lua.hpp>
 #include <LuaBridge.h>
+
+struct Color8888;
 
 typedef unsigned short BlockID;
 typedef unsigned short TextureID;
