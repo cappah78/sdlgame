@@ -10,7 +10,7 @@
 #include <LuaBridge.h>
 
 struct lua_State;
-class TextureArray;
+class GLTextureArray;
 
 /** contains a list of key-value pairs, and the base reference */
 struct LuaTableData
@@ -35,7 +35,7 @@ public:
 
 	void updateTickCountEvents();
 	unsigned short getBlockTextureID(const std::string& textureName);
-	std::shared_ptr<TextureArray> generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight);
+	std::shared_ptr<GLTextureArray> generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight);
 
 	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
 	inline const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }

@@ -4,7 +4,7 @@
 #include "PropertyManager.h"
 
 #include "../Engine/Graphics/Camera.h"
-#include "../Engine/Graphics/GL/TextureArray.h"
+#include "../Engine/Graphics/GL/GLTextureArray.h"
 #include "../Engine/Utils/CheckGLError.h"
 #include "../Game.h"
 

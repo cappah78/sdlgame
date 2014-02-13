@@ -1,3 +1,4 @@
+/*
 #include "QuadRenderer.h"
 
 QuadRenderer::QuadRenderer()
@@ -24,3 +25,4 @@ void QuadRenderer::drawQuad()
 	m_indiceBuffer.bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0);
 }
+*/

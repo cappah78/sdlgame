@@ -1,11 +1,11 @@
-#include "CubeMap.h"
+#include "GLCubeMap.h"
 
 #include <gl\glew.h>
 #include <string>
 
 #include "../Pixmap.h"
 
-CubeMap::CubeMap(const char** textureNames)
+GLCubeMap::GLCubeMap(const char** textureNames)
 {
 	glGenTextures(1, &m_textureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureID);
@@ -23,18 +23,18 @@ CubeMap::CubeMap(const char** textureNames)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-CubeMap::~CubeMap()
+GLCubeMap::~GLCubeMap()
 {
 
 }
 
-void CubeMap::bind(GLenum textureUnit)
+void GLCubeMap::bind(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureID);
 }
 
-void CubeMap::dispose()
+void GLCubeMap::dispose()
 {
 	glDeleteTextures(1, &m_textureID);
 }

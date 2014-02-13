@@ -5,13 +5,14 @@
 #include "../Model/IVertexBuffer.h"
 #include "../Model/IShader.h"
 
-#include "VertexBuffer.h"
-#include "ConstantBuffer.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "StateBuffer.h"
+#include "GLVertexBuffer.h"
+#include "GLConstantBuffer.h"
+#include "GLShader.h"
+#include "GLTexture.h"
+#include "GLStateBuffer.h"
 
 #include "../../Utils/FileReader.h"
+#include "../../Utils/CheckGLError.h"
 
 GLGraphicsProvider::GLGraphicsProvider()
 {
@@ -85,7 +86,7 @@ std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* ve
 
 	glLinkProgram(program);
 
-	return std::auto_ptr<IShader>(new Shader(program));
+	return std::auto_ptr<IShader>(new GLShader(program));
 }
 std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
 	const char* vertexShaderFilePath, const char* hullShaderFilePath, const char* domainShaderFilePath, 
@@ -120,7 +121,7 @@ std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
 	}
 	glLinkProgram(program);
 
-	return std::auto_ptr<IShader>(new Shader(program));
+	return std::auto_ptr<IShader>(new GLShader(program));
 }
 
 std::unique_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const char* computeShaderFilePath)
@@ -132,30 +133,30 @@ std::unique_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const c
 		attachShaderSource(program, GL_COMPUTE_SHADER, contents.c_str());
 	}
 	glLinkProgram(program);
-	return std::auto_ptr<IShader>(new Shader(program));
+	return std::auto_ptr<IShader>(new GLShader(program));
 }
 
 std::unique_ptr<ITexture> GLGraphicsProvider::createTextureFromPixmap(const Pixmap& pixmap, const ITextureParameters& parameters)
 {
-	return std::auto_ptr<ITexture>(new Texture(pixmap));
+	return std::auto_ptr<ITexture>(new GLTexture(pixmap));
 }
 
 std::unique_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer()
 {	
-	return std::auto_ptr<IVertexBuffer>(new VertexBuffer());
+	return std::auto_ptr<IVertexBuffer>(new GLVertexBuffer());
 }
 
 std::unique_ptr<IIndiceBuffer> GLGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
 {
-	return std::auto_ptr<IIndiceBuffer>(new VertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
+	return std::auto_ptr<IIndiceBuffer>(new GLVertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
 }
 
 std::unique_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::unique_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)
 {
-	return std::auto_ptr<IConstantBuffer>(new ConstantBuffer(shader->getID(), bufferIndex, bufferName));
+	return std::auto_ptr<IConstantBuffer>(new GLConstantBuffer(shader->getID(), bufferIndex, bufferName));
 }
 
 std::unique_ptr<IStateBuffer> GLGraphicsProvider::createStateBuffer()
 {
-	return std::auto_ptr<IStateBuffer>(new StateBuffer());
+	return std::auto_ptr<IStateBuffer>(new GLStateBuffer());
 }

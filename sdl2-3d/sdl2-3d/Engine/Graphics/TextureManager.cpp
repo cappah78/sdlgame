@@ -29,7 +29,7 @@ GLuint TextureManager::getTextureID(const std::string texturename)
 	else
 	{
 		//Texture* t = new Texture(texturename.c_str(), true, GL_NEAREST, GL_NEAREST, GL_REPEAT, GL_REPEAT);
-		Texture* t = new Texture(texturename.c_str());
+		GLTexture* t = new GLTexture(texturename.c_str());
 		if (!t->isLoaded())
 		{
 			delete t;
@@ -42,7 +42,7 @@ GLuint TextureManager::getTextureID(const std::string texturename)
 	}
 }
 
-const Texture* TextureManager::getTexture(const std::string texturename)
+const GLTexture* TextureManager::getTexture(const std::string texturename)
 {
 	auto it = m_textureNameMap.find(texturename);
 	if (it != m_textureNameMap.end())
@@ -51,7 +51,7 @@ const Texture* TextureManager::getTexture(const std::string texturename)
 	}
 	else
 	{
-		Texture* t = new Texture(texturename.c_str());
+		GLTexture* t = new GLTexture(texturename.c_str());
 		if (!t->isLoaded())
 		{
 			delete t;

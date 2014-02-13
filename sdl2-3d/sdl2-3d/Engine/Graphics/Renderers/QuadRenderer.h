@@ -1,7 +1,8 @@
 #pragma once
+#if 0	// depricated for now
 
 #include <GL\glew.h>
-#include "../GL/VertexBuffer.h"
+#include "../GL/GLVertexBuffer.h"
 
 static float QUAD_VERTICES[] = { 
 	-1, 1, 0,
@@ -26,6 +27,7 @@ public:
 private:
 	GLuint m_vao;
 
-	VertexBuffer m_positionBuffer;
-	VertexBuffer m_indiceBuffer;
+	GLVertexBuffer m_positionBuffer;
+	GLVertexBuffer m_indiceBuffer;
 };
+#endif

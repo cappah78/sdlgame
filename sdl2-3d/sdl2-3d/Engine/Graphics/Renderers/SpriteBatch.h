@@ -1,8 +1,8 @@
 #pragma once
-
+#if 0	// depricated for now
 #include <glm\glm.hpp>
 #include <vector>
-#include "../GL/VertexBuffer.h"
+#include "../GL/GLVertexBuffer.h"
 
 typedef int GLint;
 typedef unsigned int GLuint;
@@ -55,8 +55,8 @@ private:
 	GLuint m_shader;
 	GLuint m_vao;
 
-	VertexBuffer m_verticeBuffer;
-	VertexBuffer m_indiceBuffer;
+	GLVertexBuffer m_verticeBuffer;
+	GLVertexBuffer m_indiceBuffer;
 
 	std::vector<float> m_verticeData;
 
@@ -69,4 +69,5 @@ private:
 
 	GLuint m_lastTexture;	//texture used by last draw call.
 	bool m_blendEnabled;
-};
+}; 
+#endif

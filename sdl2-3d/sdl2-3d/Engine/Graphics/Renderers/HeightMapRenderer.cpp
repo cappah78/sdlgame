@@ -1,3 +1,4 @@
+/*
 #include "HeightMapRenderer.h"
 
 #include <gl\glew.h>
@@ -183,3 +184,4 @@ float HeightMapRenderer::getHeightAt(const glm::vec3& position)
 
 	return result;
 }
+*/

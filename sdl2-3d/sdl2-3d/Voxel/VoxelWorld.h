@@ -13,7 +13,7 @@
 
 struct lua_State;
 class Camera;
-class TextureArray;
+class GLTextureArray;
 class TextureManager;
 
 static const unsigned int CHUNK_LOAD_RANGE = 16;
@@ -37,7 +37,7 @@ public:
 
 	lua_State* const L() const { return m_L; };
 
-	const std::shared_ptr<TextureArray> getTileSet() const { return m_textureArray; };
+	const std::shared_ptr<GLTextureArray> getTileSet() const { return m_textureArray; };
 	const TextureManager& getTextureManager() const { return m_textureManager; };
 	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 
@@ -64,7 +64,7 @@ private:
 	float m_timeAccumulator;
 	float m_tickDurationSec;
 
-	std::shared_ptr<TextureArray> m_textureArray;
+	std::shared_ptr<GLTextureArray> m_textureArray;
 	ChunkManager m_chunkManager;
 	TextureManager& m_textureManager;
 	PropertyManager m_propertyManager;

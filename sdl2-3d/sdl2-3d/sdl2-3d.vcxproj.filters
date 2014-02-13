@@ -102,6 +102,9 @@
     <Filter Include="Header Files\Entity">
       <UniqueIdentifier>{0db6a42f-ccd5-437a-a335-4bc04300bc00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Graphics\D3D">
+      <UniqueIdentifier>{f9317aeb-2fa7-4387-b015-8a3b5d536def}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Graphics\Camera.h">
@@ -194,32 +197,11 @@
     <ClInclude Include="Voxel\VoxelRenderer.h">
       <Filter>Header Files\Voxel</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\VertexBuffer.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\TextureArray.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\CubeMap.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\Material.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\Texture.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Utils\Comparables.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\VoidDataList.h">
       <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\GBuffer.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\Shader.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Frustum.h">
       <Filter>Header Files\Engine\Graphics</Filter>
@@ -227,26 +209,14 @@
     <ClInclude Include="Engine\Utils\noiseutils.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\DeferredShader.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Renderers\QuadRenderer.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\DepthCubeMap.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\Mesh.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\TextureManager.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utils\FileReader.h">
       <Filter>Header Files\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\ConstantBuffer.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Model\ITexture.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
@@ -262,9 +232,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Model\IShader.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\StateBuffer.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Entity\Entity.h">
       <Filter>Header Files\Engine\Entity</Filter>
@@ -292,6 +259,42 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Model\IIndiceBuffer.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\D3D\D3DGraphicsProvider.h">
+      <Filter>Header Files\Engine\Graphics\D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\D3D\D3DVertexBuffer.h">
+      <Filter>Header Files\Engine\Graphics\D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLConstantBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLCubeMap.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLDepthCubeMap.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLGBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLMesh.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLShader.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLStateBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLTexture.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLTextureArray.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -364,29 +367,11 @@
     <ClCompile Include="Voxel\VoxelRenderer.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\TextureArray.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\CubeMap.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\Material.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\Texture.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
     <ClCompile Include="Voxel\VoxelBlock.cpp">
       <Filter>Source Files\Voxel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\VoidDataList.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\GBuffer.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\Shader.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Frustum.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
@@ -394,14 +379,8 @@
     <ClCompile Include="Engine\Utils\noiseutils.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\DeferredShader.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Renderers\QuadRenderer.cpp">
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\Mesh.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\TextureManager.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
@@ -418,14 +397,38 @@
     <ClCompile Include="Engine\Graphics\Model\IStateBuffer.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\StateBuffer.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
-    </ClCompile>
     <ClCompile Include="Entity\MovementSystem.cpp">
       <Filter>Source Files\Engine\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Entity\SceneGraphUpdateSystem.cpp">
       <Filter>Source Files\Engine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\D3D\D3DVertexBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLVertexBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLTextureArray.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLTexture.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLStateBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLShader.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLGBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLCubeMap.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLMesh.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

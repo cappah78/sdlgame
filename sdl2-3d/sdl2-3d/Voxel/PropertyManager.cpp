@@ -7,7 +7,7 @@
 
 #include <unordered_map>
 #include <algorithm>
-#include "../Engine/Graphics/GL/TextureArray.h"
+#include "../Engine/Graphics/GL/GLTextureArray.h"
 
 static const std::string DEFAULT_BLOCK = "defaultblock";
 
@@ -48,9 +48,9 @@ unsigned short PropertyManager::getBlockTextureID(const std::string& textureName
 	}
 }
 
-std::shared_ptr<TextureArray> PropertyManager::generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight)
+std::shared_ptr<GLTextureArray> PropertyManager::generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight)
 {
-	return std::shared_ptr<TextureArray>(new TextureArray(m_blockTextureNames, blockTexWidth, blockTexHeight));
+	return std::shared_ptr<GLTextureArray>(new GLTextureArray(m_blockTextureNames, blockTexWidth, blockTexHeight));
 }
 
 BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string& blockname)

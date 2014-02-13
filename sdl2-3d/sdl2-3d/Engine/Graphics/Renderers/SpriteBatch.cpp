@@ -1,3 +1,4 @@
+/*
 #include "SpriteBatch.h"
 
 #include <assert.h>
@@ -271,4 +272,5 @@ void SpriteBatch::swapTexture(const Texture& texture)
 
 	m_lastTexture = texture.getTextureID();
 	texture.bind();
-}
+	}
+*/

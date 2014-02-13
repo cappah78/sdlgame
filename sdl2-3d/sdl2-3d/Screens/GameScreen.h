@@ -10,7 +10,9 @@
 #include "../Voxel/VoxelRenderer.h"
 #include "../Voxel/VoxelWorld.h"
 #include "../Voxel/WorldRenderer.h"
-#include "../Engine/Graphics/GL/Mesh.h"
+
+#include "../Engine/Graphics/GL/GLMesh.h"
+#include "../Engine/Graphics/GL/GLShader.h"
 
 class VoxelCache;
 class TextureArray;
@@ -29,8 +31,8 @@ public:
 private:
 	FPSCameraController m_cameraController;
 	PerspectiveCamera m_camera;
-	Shader m_modelShader;
-	Mesh m_mesh;
+	GLShader m_modelShader;
+	GLMesh m_mesh;
 	TextureManager m_textureManager;
 	VoxelWorld m_world;
 	WorldRenderer m_worldRenderer;

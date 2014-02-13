@@ -1,7 +1,8 @@
 #pragma once
+#if 0	// depricated for now
 
-#include "..\GL\Mesh.h" 
-#include "..\GL\CubeMap.h"
+#include "..\GL\GLMesh.h" 
+#include "..\GL\GLCubeMap.h"
 
 typedef unsigned int GLuint;
 typedef int GLint;
@@ -30,6 +31,7 @@ private:
 	GLuint m_skyBoxShader;
 	GLint m_mvpLoc;
 
-	CubeMap m_cubeMap;
-	//Mesh m_mesh;
+	GLCubeMap m_cubeMap;
+	GLMesh m_mesh;
 };
+#endif

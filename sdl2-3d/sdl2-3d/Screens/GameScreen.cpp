@@ -6,17 +6,17 @@
 #include <vector>
 
 #include <SDL_syswm.h>
+/*
 #include <d3d11.h>
 #include <d3d11shader.h>
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3d10.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+*/
 
 #include "../Game.h"
 #include "../Voxel/VoxelRenderer.h"
-
-#include "../Engine/Graphics/GL/Mesh.h"
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;

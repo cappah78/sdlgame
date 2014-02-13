@@ -4,7 +4,7 @@
 
 #include "../Game.h"
 #include "../Engine/Utils/CheckLuaError.h"
-#include "../Engine/Graphics/GL/TextureArray.h"
+#include "../Engine/Graphics/GL/GLTextureArray.h"
 #include "../Engine/Graphics/Camera.h"
 
 #include <lua.hpp>

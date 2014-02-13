@@ -1,4 +1,6 @@
 #pragma once
+#if 0	// depricated for now
+
 
 #include <glm\glm.hpp>
 
@@ -50,3 +52,4 @@ private:
 	glm::vec2* m_texCoords;
 	glm::vec3* m_normals;
 };
+#endif
