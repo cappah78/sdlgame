@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <memory>
 
-GLVertexBuffer::GLVertexBuffer(GLenum bufferType, GLenum drawUsage)
+GLVertexBuffer::GLVertexBuffer(unsigned int sizeBytes, const void* data, GLenum bufferType, GLenum drawUsage)
 	: m_id(0)
 	, m_bufferType(bufferType)
 	, m_drawUsage(drawUsage)
@@ -13,6 +13,11 @@ GLVertexBuffer::GLVertexBuffer(GLenum bufferType, GLenum drawUsage)
 	, m_attributeIdx(-1)
 {
 	glGenBuffers(1, &m_id);
+
+	if (data != NULL && sizeBytes != 0)
+		update(data, sizeBytes);
+	else if (sizeBytes != 0)
+		reserve(sizeBytes);
 }
 
 GLVertexBuffer::~GLVertexBuffer()

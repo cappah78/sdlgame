@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EDrawMode.h"
+
 struct IIndiceBufferParameters
 {
 	enum Format
@@ -7,8 +9,15 @@ struct IIndiceBufferParameters
 		UNSIGNED_BYTE, UNSIGNED_SHORT, UNSIGNED_INT
 	};
 
-	Format format;
-	IIndiceBufferParameters(Format format) : format(format) {};
+	Format m_format;
+	EDrawMode m_drawMode;
+
+	unsigned int m_sizeInBytes;
+	const void* m_data;
+
+	IIndiceBufferParameters(Format format, unsigned int sizeInBytes = 0, const void* data = NULL, EDrawMode drawMode = STATIC)
+		: m_sizeInBytes(sizeInBytes), m_data(data), m_format(format), m_drawMode(drawMode) 
+	{};
 };
 
 class IIndiceBuffer

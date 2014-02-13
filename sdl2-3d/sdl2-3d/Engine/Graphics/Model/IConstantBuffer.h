@@ -2,7 +2,12 @@
 
 struct IConstantBufferParameters
 {
+	unsigned int m_sizeInBytes;
+	const void* m_data;
 
+	IConstantBufferParameters(unsigned int sizeInBytes = 0, const void* data = NULL)
+		: m_sizeInBytes(sizeInBytes), m_data(data)
+	{};
 };
 
 class IConstantBuffer

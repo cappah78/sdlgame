@@ -33,6 +33,7 @@
     <ClInclude Include="Engine\Graphics\GL\GLTextureManager.h" />
     <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
+    <ClInclude Include="Engine\Graphics\Model\EDrawMode.h" />
     <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\IIndiceBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\IShader.h" />

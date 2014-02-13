@@ -33,7 +33,7 @@ public:
 
 	virtual std::unique_ptr<IStateBuffer> createStateBuffer() = 0;
 
-	virtual std::unique_ptr<IVertexBuffer> createVertexBuffer() = 0;
+	virtual std::unique_ptr<IVertexBuffer> createVertexBuffer(const IVertexBufferParameters& parameters) = 0;
 	virtual std::unique_ptr<IIndiceBuffer> createIndiceBuffer(const IIndiceBufferParameters& parameters) = 0;
 	virtual std::unique_ptr<IConstantBuffer> createConstantBuffer(std::unique_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters) = 0;
 };

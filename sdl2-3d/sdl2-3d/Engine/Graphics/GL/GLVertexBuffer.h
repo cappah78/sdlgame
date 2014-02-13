@@ -8,7 +8,7 @@
 class GLVertexBuffer : public IVertexBuffer, public IIndiceBuffer
 {
 public:
-	GLVertexBuffer(GLenum bufferType = GL_ARRAY_BUFFER, GLenum drawUsage = GL_STREAM_DRAW);
+	GLVertexBuffer(unsigned int sizeBytes = 0, const void* data = NULL, GLenum bufferType = GL_ARRAY_BUFFER, GLenum drawUsage = GL_STREAM_DRAW);
 	virtual ~GLVertexBuffer() override;
 	GLVertexBuffer(const GLVertexBuffer& copy) = delete;
 

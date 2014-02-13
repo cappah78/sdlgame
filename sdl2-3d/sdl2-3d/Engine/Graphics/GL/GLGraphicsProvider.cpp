@@ -13,6 +13,8 @@
 #include "GLTexture.h"
 #include "GLStateBuffer.h"
 
+#include "../Model/EDrawMode.h"
+
 #include "../../Utils/FileReader.h"
 #include "../../Utils/CheckGLError.h"
 
@@ -72,6 +74,22 @@ void attachShaderSource(GLuint prog, GLenum type, const char * source)
 
 	glAttachShader(prog, sh);
 	glDeleteShader(sh);
+}
+
+GLenum eDrawModeToGLDrawMode(EDrawMode drawMode)
+{
+	switch (drawMode)
+	{
+	case EDrawMode::STATIC:
+		return GL_STATIC_DRAW;
+	case EDrawMode::DYNAMIC:
+		return GL_DYNAMIC_DRAW;
+	case EDrawMode::STREAM:
+		return GL_STREAM_DRAW;
+	default:
+		assert(false);
+		return GL_STATIC_DRAW;
+	}
 }
 
 std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* vertexShaderFilePath, const char* pixelShaderFilePath)
@@ -143,14 +161,14 @@ std::unique_ptr<ITexture> GLGraphicsProvider::createTextureFromPixmap(const Pixm
 	return std::auto_ptr<ITexture>(new GLTexture(pixmap));
 }
 
-std::unique_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer()
+std::unique_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer(const IVertexBufferParameters& parameters)
 {	
-	return std::auto_ptr<IVertexBuffer>(new GLVertexBuffer());
+	return std::auto_ptr<IVertexBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
 }
 
 std::unique_ptr<IIndiceBuffer> GLGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
 {
-	return std::auto_ptr<IIndiceBuffer>(new GLVertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
+	return std::auto_ptr<IIndiceBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ELEMENT_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
 }
 
 std::unique_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::unique_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)

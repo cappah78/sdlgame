@@ -43,7 +43,7 @@ VoxelRenderer::VoxelRenderer()
 	m_indiceData.reserve(MAX_FACES_PER_CHUNK * 6);
 	m_texcoordData.reserve(MAX_FACES_PER_CHUNK * 4);
 
-	m_texcoordBuffer = Game::graphics.getGraphicsProvider().createVertexBuffer();
+	m_texcoordBuffer = Game::graphics.getGraphicsProvider().createVertexBuffer(IVertexBufferParameters());
 
 	for (int i = 0; i < MAX_FACES_PER_CHUNK; ++i)
 	{
@@ -176,7 +176,7 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, VoxelRe
 
 	m_state = provider.createStateBuffer();
 	m_indiceBuffer = provider.createIndiceBuffer(IIndiceBufferParameters(IIndiceBufferParameters::Format::UNSIGNED_SHORT));
-	m_pointBuffer = provider.createVertexBuffer();
+	m_pointBuffer = provider.createVertexBuffer(IVertexBufferParameters());
 
 	VertexAttribute pointAttrib = { POSITION_LOC, "POINTDATA", VertexAttribute::Format::UNSIGNED_INT, 1 };
 	VertexAttributes pointAttributes(&pointAttrib, 1);

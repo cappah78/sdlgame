@@ -35,6 +35,7 @@ GameScreen::GameScreen()
 	Game::input.registerKeyListener(this);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 
 #if RENDER_MODEL //work in progress testing
 	///* initialize crytek sponza model rendering /*

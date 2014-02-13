@@ -293,6 +293,9 @@
     <ClInclude Include="Engine\Graphics\GL\GLTextureManager.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\EDrawMode.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

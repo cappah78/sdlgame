@@ -42,7 +42,7 @@ std::unique_ptr<ITexture> D3DGraphicsProvider::createTextureFromPixmap(const Pix
 	return std::auto_ptr<ITexture>();
 }
 
-std::unique_ptr<IVertexBuffer> D3DGraphicsProvider::createVertexBuffer()
+std::unique_ptr<IVertexBuffer> D3DGraphicsProvider::createVertexBuffer(const IVertexBufferParameters& parameters)
 {
 	return std::auto_ptr<IVertexBuffer>();
 }

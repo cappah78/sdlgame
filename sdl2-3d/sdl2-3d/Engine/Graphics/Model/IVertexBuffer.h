@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "EDrawMode.h"
+
 struct VertexAttribute
 {
 	enum Format
@@ -42,6 +44,20 @@ struct VertexAttributes
 			m_vertexSize += dataSize * attribute->m_numElements;
 		}
 	}
+};
+
+struct IVertexBufferParameters
+{
+	unsigned int m_sizeInBytes;
+	const void* m_data;
+
+	bool m_isDynamic;
+
+	EDrawMode m_drawMode;
+
+	IVertexBufferParameters(unsigned int sizeInBytes = 0, const void* data = NULL, EDrawMode drawMode = STATIC, bool isDynamic = true) 
+		: m_sizeInBytes(sizeInBytes), m_data(data), m_drawMode(drawMode), m_isDynamic(isDynamic)
+	{};
 };
 
 class IVertexBuffer
