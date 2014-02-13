@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 /** Represents texture data on the cpu */
 class Pixmap
 {

@@ -20,7 +20,7 @@ static const float UPDATES_PER_SEC = 5.0f;
 
 static const double BLOCKS_PER_WORLDGEN_UNIT = 492.0;
 
-VoxelWorld::VoxelWorld(TextureManager& textureManager)
+VoxelWorld::VoxelWorld(GLTextureManager& textureManager)
 	: m_L(luaL_newstate())
 	, m_textureManager(textureManager)
 	, m_chunkManager(m_propertyManager)

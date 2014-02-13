@@ -1,7 +1,6 @@
 #include "Pixmap.h"
 
 #include "..\Utils\stb_image.h"
-#include <string>
 
 Pixmap::Pixmap(const char* const fileName)
 {

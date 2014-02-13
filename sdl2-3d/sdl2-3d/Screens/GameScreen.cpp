@@ -5,16 +5,6 @@
 
 #include <vector>
 
-#include <SDL_syswm.h>
-/*
-#include <d3d11.h>
-#include <d3d11shader.h>
-#include <d3dcompiler.h>
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3d10.lib")
-#pragma comment(lib, "d3dcompiler.lib")
-*/
-
 #include "../Game.h"
 #include "../Voxel/VoxelRenderer.h"
 
@@ -116,24 +106,12 @@ bool GameScreen::keyDown(SDL_Keysym key)
 
 	if (key.sym == SDLK_t)
 	{
-		switch (Game::graphics.getRenderMode())
-		{
-		case Graphics::RenderMode::OPENGL:
 
-			Game::graphics.setRenderMode(Graphics::RenderMode::D3D);
-			break;
-		case Graphics::RenderMode::D3D:
-			Game::graphics.setRenderMode(Graphics::RenderMode::OPENGL);
-			break;
-		default:
-			assert(false);
-			break;
-		}
 	}
 
 	if (key.sym == SDLK_f)
 	{
-		//m_world.doBlockUpdate(glm::ivec3(glm::round(m_camera.m_position)));
+
 	}
 
 	if (key.sym == SDLK_PERIOD)

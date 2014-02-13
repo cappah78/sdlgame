@@ -14,14 +14,14 @@
 struct lua_State;
 class Camera;
 class GLTextureArray;
-class TextureManager;
+class GLTextureManager;
 
 static const unsigned int CHUNK_LOAD_RANGE = 16;
 
 class VoxelWorld
 {
 public:
-	VoxelWorld(TextureManager& textureManager);
+	VoxelWorld(GLTextureManager& textureManager);
 	VoxelWorld(const VoxelWorld& copy) = delete;
 	~VoxelWorld();
 
@@ -38,7 +38,7 @@ public:
 	lua_State* const L() const { return m_L; };
 
 	const std::shared_ptr<GLTextureArray> getTileSet() const { return m_textureArray; };
-	const TextureManager& getTextureManager() const { return m_textureManager; };
+	const GLTextureManager& getTextureManager() const { return m_textureManager; };
 	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 
 	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
@@ -66,7 +66,7 @@ private:
 
 	std::shared_ptr<GLTextureArray> m_textureArray;
 	ChunkManager m_chunkManager;
-	TextureManager& m_textureManager;
+	GLTextureManager& m_textureManager;
 	PropertyManager m_propertyManager;
 	lua_State* m_L;
 	std::vector<glm::ivec3> m_updatedBlockPositions;

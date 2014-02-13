@@ -110,17 +110,11 @@
     <ClInclude Include="Engine\Graphics\Camera.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\HeightMap.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Pixmap.h">
       <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\Renderers\HeightMapRenderer.h">
-      <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Renderers\SkyBox.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
@@ -212,9 +206,6 @@
     <ClInclude Include="Engine\Graphics\Renderers\QuadRenderer.h">
       <Filter>Header Files\Engine\Graphics\Renderers</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\TextureManager.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Utils\FileReader.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
@@ -296,6 +287,9 @@
     <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GLTextureManager.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -307,9 +301,6 @@
     <ClCompile Include="Engine\Graphics\PerspectiveCamera.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\HeightMap.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Camera.cpp">
       <Filter>Source Files\Engine\Graphics</Filter>
     </ClCompile>
@@ -317,9 +308,6 @@
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Renderers\SkyBox.cpp">
-      <Filter>Source Files\Engine\Graphics\Renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\Renderers\HeightMapRenderer.cpp">
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Utils\ShaderManager.cpp">
@@ -382,9 +370,6 @@
     <ClCompile Include="Engine\Graphics\Renderers\QuadRenderer.cpp">
       <Filter>Source Files\Engine\Graphics\Renderers</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\TextureManager.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Utils\FileReader.cpp">
       <Filter>Source Files\Engine\Utils</Filter>
     </ClCompile>
@@ -429,6 +414,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\GLMesh.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\D3D\D3DGraphicsProvider.cpp">
+      <Filter>Source Files\Engine\Graphics\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GLTextureManager.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

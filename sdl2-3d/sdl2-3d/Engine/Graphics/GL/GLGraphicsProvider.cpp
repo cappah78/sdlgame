@@ -4,6 +4,8 @@
 #include "../Model/IConstantBuffer.h"
 #include "../Model/IVertexBuffer.h"
 #include "../Model/IShader.h"
+#include "../Model/IStateBuffer.h"
+#include "../Model/IIndiceBuffer.h"
 
 #include "GLVertexBuffer.h"
 #include "GLConstantBuffer.h"

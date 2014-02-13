@@ -17,7 +17,7 @@ GLMesh::GLMesh()
 
 }
 
-GLMesh::GLMesh(const std::string& fileName, TextureManager& textureManager)
+GLMesh::GLMesh(const std::string& fileName, GLTextureManager& textureManager)
 {
 	loadMesh(fileName, textureManager);
 }
@@ -27,7 +27,7 @@ GLMesh::~GLMesh()
 
 }
 
-void GLMesh::loadMesh(const std::string& filename, TextureManager& textureManager)
+void GLMesh::loadMesh(const std::string& filename, GLTextureManager& textureManager)
 {
 	const aiScene* scene = aiImportFile(filename.c_str(), aiPostProcessSteps::aiProcess_Triangulate 
 		| aiPostProcessSteps::aiProcess_GenSmoothNormals 
@@ -213,7 +213,7 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 	}
 }
 
-void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, TextureManager& textureManager)
+void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GLTextureManager& textureManager)
 {
 	// Extract the directory part from the file name
 	std::string::size_type slashIndex = filename.find_last_of("/");

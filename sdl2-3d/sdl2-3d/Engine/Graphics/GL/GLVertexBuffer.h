@@ -20,6 +20,7 @@ public:
 		GLboolean normalized = false, GLboolean isIntegerType = false, GLuint stride = 0,
 		GLuint offset = 0);
 	void setEnabled(bool enabled = true);
+
 	inline void setAttribDivisor(unsigned int divisor);
 	inline void reserve(unsigned int numBytes);
 

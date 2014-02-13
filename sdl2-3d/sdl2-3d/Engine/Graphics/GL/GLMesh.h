@@ -5,11 +5,10 @@
 #include <memory>
 #include "GLVertexBuffer.h"
 #include "GLConstantBuffer.h"
-#include "../TextureManager.h"
+#include "../GLTextureManager.h"
 
 struct aiMesh;
 struct aiScene;
-class Texture;
 
 /**
 -WIP-
@@ -103,13 +102,13 @@ public:
 	};
 
 	GLMesh();
-	GLMesh(const std::string& fileName, TextureManager& textureManager);
+	GLMesh(const std::string& fileName, GLTextureManager& textureManager);
 
 	~GLMesh();
 	
 	/** Give data required to render the mesh*/
 	void setShaderAttributes(std::shared_ptr<ShaderAttributes> shaderAttributes);
-	void loadMesh(const std::string& filename, TextureManager& textureManager);
+	void loadMesh(const std::string& filename, GLTextureManager& textureManager);
 
 	//TODO: make private and write interface
 	GLuint m_vao;
@@ -133,5 +132,5 @@ public:
 private:
 
 	void initVertexBuffers(const aiScene* scene);
-	void initMaterials(const aiScene* scene, const std::string& filename, TextureManager& textureManager);
+	void initMaterials(const aiScene* scene, const std::string& filename, GLTextureManager& textureManager);
 };

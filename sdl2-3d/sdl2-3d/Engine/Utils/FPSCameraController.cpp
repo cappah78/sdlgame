@@ -5,6 +5,7 @@
 #include <glm\gtx\rotate_vector.hpp>
 #include <glm\gtx\compatibility.hpp>
 
+static const float DEFAULT_CAMERA_SPEED = 120.0f;
 static const float MOUSE_LOOK_SENSITIVITY = 0.2f;
 static const glm::vec3 UP(0, 1, 0);
 
@@ -16,7 +17,7 @@ FPSCameraController::FPSCameraController(PerspectiveCamera& camera, const glm::v
 	, m_isWPressed(false), m_isAPressed(false), m_isSPressed(false), m_isDPressed(false)
 	, m_isSpacePressed(false), m_isShiftPressed(false)
 {
-	setCameraSpeed(120.0f);
+	setCameraSpeed(DEFAULT_CAMERA_SPEED);
 }
 
 FPSCameraController::~FPSCameraController()
@@ -27,7 +28,7 @@ FPSCameraController::~FPSCameraController()
 void FPSCameraController::setCameraSpeed(float cameraSpeed)
 {
 	m_cameraSpeed = cameraSpeed;
-	m_diagonalCameraSpeed = glm::sqrt((cameraSpeed * cameraSpeed) / 2.0f);
+	m_diagonalCameraSpeed = glm::sqrt((cameraSpeed * cameraSpeed) * 0.5f);
 }
 
 void FPSCameraController::update(float deltaSec)

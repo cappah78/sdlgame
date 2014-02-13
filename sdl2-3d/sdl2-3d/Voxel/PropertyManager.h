@@ -37,8 +37,8 @@ public:
 	unsigned short getBlockTextureID(const std::string& textureName);
 	std::shared_ptr<GLTextureArray> generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight);
 
-	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
 	inline const BlockProperties& getBlockProperties(BlockID blockID) const	{ return m_blockProperties[blockID]; }
+	inline BlockID getBlockID(const std::string& blockName)	const		{ return m_blockNameIDMap.at(blockName); };
 	inline BlockID getNumRegisteredBlocks() const { return m_blockProperties.size(); };
 private:
 
