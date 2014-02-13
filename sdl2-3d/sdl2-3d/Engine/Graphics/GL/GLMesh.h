@@ -5,7 +5,7 @@
 #include <memory>
 #include "GLVertexBuffer.h"
 #include "GLConstantBuffer.h"
-#include "../GLTextureManager.h"
+#include "GLTextureManager.h"
 
 struct aiMesh;
 struct aiScene;

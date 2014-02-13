@@ -1,8 +1,5 @@
 #pragma once
 
-typedef unsigned int GLuint;
-typedef unsigned int GLenum;
-
 #include <vector>
 #include <string>
 #include <gl\glew.h>

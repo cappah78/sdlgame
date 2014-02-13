@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-#include "GL/GLTexture.h"
+#include "GLTexture.h"
 
 typedef unsigned int GLuint;
 

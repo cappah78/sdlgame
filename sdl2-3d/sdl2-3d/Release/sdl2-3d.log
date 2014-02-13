@@ -1,13 +1,13 @@
-﻿Build started 13-2-2014 11:47:37.
+﻿Build started 13-2-2014 13:52:19.
      1>Project "C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\D3D\D3DGraphicsProvider.cpp Engine\Graphics\GL\GLGraphicsProvider.cpp Engine\Graphics\Renderers\SkyBox.cpp Voxel\ChunkManager.cpp Voxel\PropertyManager.cpp Voxel\VoxelChunk.cpp Voxel\VoxelRenderer.cpp
-         GLGraphicsProvider.cpp
-         D3DGraphicsProvider.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\Renderers\SkyBox.cpp Game.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\VoxelChunk.cpp Voxel\VoxelRenderer.cpp main.cpp
+         main.cpp
+         GameScreen.cpp
+         Game.cpp
          Skipping... (no relevant changes detected)
          VoxelRenderer.cpp
          VoxelChunk.cpp
-         PropertyManager.cpp
          ChunkManager.cpp
          SkyBox.cpp
        Link:
@@ -23,6 +23,7 @@
          Release\GLStateBuffer.obj
          Release\GLTexture.obj
          Release\GLTextureArray.obj
+         Release\GLTextureManager.obj
          Release\GLVertexBuffer.obj
          Release\Graphics.obj
          Release\IGraphicsProvider.obj
@@ -32,7 +33,6 @@
          Release\QuadRenderer.obj
          Release\SkyBox.obj
          Release\SpriteBatch.obj
-         Release\GLTextureManager.obj
          Release\Input.obj
          Release\CheckGLError.obj
          Release\FileReader.obj
@@ -61,4 +61,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:07.42
+Time Elapsed 00:00:12.09

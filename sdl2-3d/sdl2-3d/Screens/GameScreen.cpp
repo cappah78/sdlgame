@@ -46,7 +46,7 @@ GameScreen::GameScreen()
 	m_modelShader.end();
 
 	m_mesh.loadMesh("Assets/Models/crysponza_bubbles/sponza.obj", m_textureManager);
-	std::shared_ptr<Mesh::ShaderAttributes> attribs(new Mesh::ShaderAttributes(m_modelShader.getShaderID()));
+	std::shared_ptr<GLMesh::ShaderAttributes> attribs(new GLMesh::ShaderAttributes(m_modelShader.getShaderID()));
 	m_mesh.setShaderAttributes(attribs);
 	//*/
 #endif

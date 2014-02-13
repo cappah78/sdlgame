@@ -30,11 +30,13 @@
     <ClInclude Include="Engine\Graphics\GL\GLStateBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\GLTexture.h" />
     <ClInclude Include="Engine\Graphics\GL\GLTextureArray.h" />
+    <ClInclude Include="Engine\Graphics\GL\GLTextureManager.h" />
     <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\IIndiceBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\IShader.h" />
+    <ClInclude Include="Engine\Graphics\Model\ITextureArray.h" />
     <ClInclude Include="Engine\Graphics\Model\IVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\ITexture.h" />
     <ClInclude Include="Engine\Graphics\PerspectiveCamera.h" />
@@ -42,7 +44,6 @@
     <ClInclude Include="Engine\Graphics\Renderers\QuadRenderer.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SkyBox.h" />
     <ClInclude Include="Engine\Graphics\Renderers\SpriteBatch.h" />
-    <ClInclude Include="Engine\Graphics\GLTextureManager.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Model\IKeyListener.h" />
     <ClInclude Include="Engine\Model\IMouseListener.h" />
@@ -86,6 +87,7 @@
     <ClCompile Include="Engine\Graphics\GL\GLStateBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLTexture.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLTextureArray.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\GLTextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLVertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />
     <ClCompile Include="Engine\Graphics\Model\IGraphicsProvider.h" />
@@ -95,7 +97,6 @@
     <ClCompile Include="Engine\Graphics\Renderers\QuadRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SkyBox.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\SpriteBatch.cpp" />
-    <ClCompile Include="Engine\Graphics\GLTextureManager.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Utils\CheckGLError.cpp" />
     <ClCompile Include="Engine\Utils\FileReader.cpp" />

@@ -13,7 +13,7 @@
 
 #include "../Engine/Graphics/GL/GLMesh.h"
 #include "../Engine/Graphics/GL/GLShader.h"
-#include "../Engine/Graphics/GLTextureManager.h"
+#include "../Engine/Graphics/GL/GLTextureManager.h"
 
 /** Main screen containing executing the render and managing all entities */
 class GameScreen : public IScreen, public IKeyListener

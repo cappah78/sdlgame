@@ -11,6 +11,6 @@ public:
 	MovementSystem() {};
 	virtual ~MovementSystem() {};
 
-	virtual void processEntities();
+	virtual void processEntities(float deltaSec);
 private:
 };

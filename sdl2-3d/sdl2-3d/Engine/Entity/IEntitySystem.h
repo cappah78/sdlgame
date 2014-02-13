@@ -9,7 +9,7 @@ public:
 	IEntitySystem();
 	virtual ~IEntitySystem() {};
 
-	virtual void processEntities();
+	virtual void processEntities(float deltaSec);
 
 protected:
 	std::vector<COMPONENT> m_componentList;

@@ -11,11 +11,14 @@ public:
 	KinematicsComponent();
 	virtual ~KinematicsComponent() override;
 	
-	glm::quat orientation;
-	glm::vec3 position;
-	glm::vec3 velocity;
+	glm::quat m_orientation;
+	glm::vec3 m_position;
+	glm::vec3 m_velocity;
 
-	glm::quat targetOrientation;
-	glm::vec3 targetVelocity;
+	glm::quat m_targetOrientation;
+	glm::vec3 m_targetVelocity;
+
+	float m_acceleration;
+	float m_turnSpeed;
 private:
 };
