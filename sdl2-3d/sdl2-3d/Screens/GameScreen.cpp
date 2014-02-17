@@ -35,7 +35,6 @@ GameScreen::GameScreen()
 	Game::input.registerKeyListener(this);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
 
 #if RENDER_MODEL //work in progress testing
 	///* initialize crytek sponza model rendering /*
@@ -77,12 +76,6 @@ void GameScreen::render(float deltaSec)
 
 	Game::graphics.swap();
 }
-
-struct Vertex
-{
-	glm::vec3 position;
-	glm::vec4 color;
-};
 
 GameScreen::~GameScreen() 
 {

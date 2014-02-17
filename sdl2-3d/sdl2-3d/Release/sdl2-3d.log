@@ -1,31 +1,19 @@
-﻿Build started 13-2-2014 16:37:07.
+﻿Build started 17-2-2014 13:41:06.
      1>Project "C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\sdl2-3d\sdl2-3d.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\D3D\D3DGraphicsProvider.cpp Engine\Graphics\D3D\D3DVertexBuffer.cpp Engine\Graphics\GL\GLGraphicsProvider.cpp Engine\Graphics\GL\GLMesh.cpp Engine\Graphics\GL\GLStateBuffer.cpp Engine\Graphics\GL\GLVertexBuffer.cpp Engine\Graphics\Model\IGraphicsProvider.h Engine\Graphics\Model\IStateBuffer.h Engine\Graphics\Renderers\QuadRenderer.cpp Engine\Graphics\Renderers\SkyBox.cpp Engine\Graphics\Renderers\SpriteBatch.cpp Game.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\VoxelChunk.cpp Voxel\VoxelRenderer.cpp main.cpp
-         D3DGraphicsProvider.cpp
-         Compiling...
-         main.cpp
-         VoxelRenderer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Ox /Oi /Ot /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /MD /GS /Gy /fp:fast /Zc:wchar_t /Zc:forScope /openmp /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Engine\Graphics\Graphics.cpp Engine\Graphics\Renderers\SkyBox.cpp Screens\GameScreen.cpp Voxel\ChunkManager.cpp Voxel\VoxelChunk.cpp
          GameScreen.cpp
-         Game.cpp
-         GLVertexBuffer.cpp
-         GLStateBuffer.cpp
-         GLMesh.cpp
-         GLGraphicsProvider.cpp
-         D3DVertexBuffer.cpp
+         Graphics.cpp
          Skipping... (no relevant changes detected)
          VoxelChunk.cpp
          ChunkManager.cpp
-         SpriteBatch.cpp
          SkyBox.cpp
-         QuadRenderer.cpp
-         IStateBuffer.h
-         IGraphicsProvider.h
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.exe" /INCREMENTAL:NO /NOLOGO SDL2.lib SDL2main.lib opengl32.lib glu32.lib glew32.lib assimp.lib lua5.1.lib libnoise.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\evoosten\Documents\GitHub\sdlgame\sdl2-3d\Release\sdl2-3d.lib" /MACHINE:X86 /SAFESEH:NO Release\Camera.obj
          Release\D3DGraphicsProvider.obj
          Release\D3DVertexBuffer.obj
          Release\Frustum.obj
+         Release\GLAsyncRenderer.obj
          Release\GLCubeMap.obj
          Release\GLGBuffer.obj
          Release\GLGraphicsProvider.obj
@@ -72,4 +60,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:17.30
+Time Elapsed 00:00:08.97

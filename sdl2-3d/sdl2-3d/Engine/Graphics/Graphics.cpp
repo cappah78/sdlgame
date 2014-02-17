@@ -2,6 +2,8 @@
 
 #include "GL\GLGraphicsProvider.h"
 
+#include <assert.h>
+
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <gl\glew.h>
@@ -54,25 +56,25 @@ IGraphicsProvider& Graphics::getGraphicsProvider()
 void Graphics::clear(float rCol, float gCol, float bCol, float aCol, bool clearColor, bool clearDepth)
 {
 	unsigned int clearFlags = 0;
+	float colorClearVal[] = { rCol, gCol, bCol, aCol };
+	const float depthClearVal = 1.0f;
 
 	switch (s_renderMode)
 	{
 	case OPENGL:
-		glClearColor(rCol, gCol, bCol, aCol);
-		clearFlags |= clearColor ? GL_COLOR_BUFFER_BIT : 0;
-		clearFlags |= clearDepth ? GL_DEPTH_BUFFER_BIT : 0;
-		glClear(clearFlags);
+		if (clearColor)
+			glClearBufferfv(GL_COLOR, 0, colorClearVal);
+		if (clearDepth)
+			glClearBufferfv(GL_DEPTH, 0, &depthClearVal);
 		break;
 	case D3D:
-		float color[] = { rCol, gCol, bCol, aCol };
-
 		if (clearColor)
-			s_deviceContext->ClearRenderTargetView(s_renderTargetView, color);
+			s_deviceContext->ClearRenderTargetView(s_renderTargetView, colorClearVal);
 		if (clearDepth)
-			s_deviceContext->ClearDepthStencilView(s_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+			s_deviceContext->ClearDepthStencilView(s_depthStencilView, D3D11_CLEAR_DEPTH, depthClearVal, 0);
 		break;
 	}
-};
+}
 
 void Graphics::resizeScreen(unsigned int screenWidth, unsigned int screenHeight)
 {
@@ -133,7 +135,7 @@ void Graphics::initializeD3D()
 	swapChainDesc.Windowed = TRUE;                                  // windowed/full-screen mode
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;   // allow full-screen switching
 
-	D3D11CreateDeviceAndSwapChain(NULL,
+	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
 		NULL,
@@ -145,10 +147,13 @@ void Graphics::initializeD3D()
 		&s_device,
 		NULL,
 		&s_deviceContext);
+	assert(SUCCEEDED(result));
 
 	ID3D11Texture2D* backBufferPtr;
-	s_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*) &backBufferPtr);
-	s_device->CreateRenderTargetView(backBufferPtr, NULL, &s_renderTargetView);
+	result = s_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*) &backBufferPtr);
+	assert(SUCCEEDED(result));
+	result = s_device->CreateRenderTargetView(backBufferPtr, NULL, &s_renderTargetView);
+	assert(SUCCEEDED(result));
 	backBufferPtr->Release();
 
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
@@ -165,7 +170,8 @@ void Graphics::initializeD3D()
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = 0;
 	depthBufferDesc.MiscFlags = 0;
-	s_device->CreateTexture2D(&depthBufferDesc, NULL, &s_depthStencilBuffer);
+	result = s_device->CreateTexture2D(&depthBufferDesc, NULL, &s_depthStencilBuffer);
+	assert(SUCCEEDED(result));
 
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -184,7 +190,9 @@ void Graphics::initializeD3D()
 	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
 	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-	s_device->CreateDepthStencilState(&depthStencilDesc, &s_depthStencilState);
+	result = s_device->CreateDepthStencilState(&depthStencilDesc, &s_depthStencilState);
+	assert(SUCCEEDED(result));
+
 	s_deviceContext->OMSetDepthStencilState(s_depthStencilState, 1);
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
@@ -193,7 +201,8 @@ void Graphics::initializeD3D()
 	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
-	s_device->CreateDepthStencilView(s_depthStencilBuffer, &depthStencilViewDesc, &s_depthStencilView);
+	result = s_device->CreateDepthStencilView(s_depthStencilBuffer, &depthStencilViewDesc, &s_depthStencilView);
+	assert(SUCCEEDED(result));
 	s_deviceContext->OMSetRenderTargets(1, &s_renderTargetView, s_depthStencilView);
 
 	D3D11_RASTERIZER_DESC rasterDesc;
@@ -209,7 +218,9 @@ void Graphics::initializeD3D()
 	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
-	s_device->CreateRasterizerState(&rasterDesc, &s_rasterState);
+	result = s_device->CreateRasterizerState(&rasterDesc, &s_rasterState);
+	assert(SUCCEEDED(result));
+
 	s_deviceContext->RSSetState(s_rasterState);
 
 	D3D11_VIEWPORT viewport;

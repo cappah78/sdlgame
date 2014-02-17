@@ -33,9 +33,11 @@
     <ClInclude Include="Engine\Graphics\GL\GLTextureManager.h" />
     <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
+    <ClInclude Include="Engine\Graphics\Model\EBufferAccess.h" />
     <ClInclude Include="Engine\Graphics\Model\EDrawMode.h" />
     <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\Model\IIndiceBuffer.h" />
+    <ClInclude Include="Engine\Graphics\Model\IRenderThread.h" />
     <ClInclude Include="Engine\Graphics\Model\IShader.h" />
     <ClInclude Include="Engine\Graphics\Model\ITextureArray.h" />
     <ClInclude Include="Engine\Graphics\Model\IVertexBuffer.h" />
@@ -80,6 +82,7 @@
     <ClCompile Include="Engine\Graphics\D3D\D3DGraphicsProvider.cpp" />
     <ClCompile Include="Engine\Graphics\D3D\D3DVertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Frustum.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\GLAsyncRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLCubeMap.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLGBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLGraphicsProvider.cpp" />

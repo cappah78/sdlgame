@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "EDrawMode.h"
+#include "EBufferAccess.h"
 
 struct VertexAttribute
 {
@@ -51,12 +52,10 @@ struct IVertexBufferParameters
 	unsigned int m_sizeInBytes;
 	const void* m_data;
 
-	bool m_isDynamic;
-
 	EDrawMode m_drawMode;
 
-	IVertexBufferParameters(unsigned int sizeInBytes = 0, const void* data = NULL, EDrawMode drawMode = STATIC, bool isDynamic = true) 
-		: m_sizeInBytes(sizeInBytes), m_data(data), m_drawMode(drawMode), m_isDynamic(isDynamic)
+	IVertexBufferParameters(unsigned int sizeInBytes = 0, const void* data = NULL, EDrawMode drawMode = STATIC) 
+		: m_sizeInBytes(sizeInBytes), m_data(data), m_drawMode(drawMode)
 	{};
 };
 
@@ -68,5 +67,7 @@ public:
 
 	virtual void setVertexAttributeParameters(const VertexAttributes& parameters) = 0;
 	virtual void update(const void* data, unsigned int numBytes) = 0;
+	virtual void map(unsigned int numBytes, const void* data, EBufferAccess accessMode, EBufferAccessSync syncMode) = 0;
+	virtual void unmap() = 0;
 	virtual void bind() = 0;
 };

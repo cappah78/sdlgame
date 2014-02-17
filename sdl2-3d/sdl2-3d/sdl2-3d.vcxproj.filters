@@ -296,6 +296,12 @@
     <ClInclude Include="Engine\Graphics\Model\EDrawMode.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\EBufferAccess.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Model\IRenderThread.h">
+      <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -426,6 +432,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\GLTextureManager.cpp">
       <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLAsyncRenderer.cpp">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

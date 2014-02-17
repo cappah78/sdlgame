@@ -1,3 +1,6 @@
 #pragma once
 
-enum EDrawMode { STATIC, DYNAMIC, STREAM };
+enum EDrawMode 
+{ 
+	STATIC, DYNAMIC, STREAM 
+};

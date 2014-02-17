@@ -7,6 +7,8 @@
 #include "../Model/IStateBuffer.h"
 #include "../Model/IIndiceBuffer.h"
 
+#include "../D3D/D3DVertexBuffer.h"
+
 #include "../../Utils/FileReader.h"
 
 
@@ -44,12 +46,12 @@ std::unique_ptr<ITexture> D3DGraphicsProvider::createTextureFromPixmap(const Pix
 
 std::unique_ptr<IVertexBuffer> D3DGraphicsProvider::createVertexBuffer(const IVertexBufferParameters& parameters)
 {
-	return std::auto_ptr<IVertexBuffer>();
+	return std::auto_ptr<IVertexBuffer>(new D3DVertexBuffer(D3D11_BIND_VERTEX_BUFFER, parameters.m_sizeInBytes, parameters.m_data, parameters.m_drawMode));
 }
 
 std::unique_ptr<IIndiceBuffer> D3DGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
 {
-	return std::auto_ptr<IIndiceBuffer>();
+	return std::auto_ptr<IIndiceBuffer>(new D3DVertexBuffer(D3D11_BIND_INDEX_BUFFER, parameters.m_sizeInBytes, parameters.m_data, parameters.m_drawMode));
 }
 
 std::unique_ptr<IConstantBuffer> D3DGraphicsProvider::createConstantBuffer(std::unique_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)

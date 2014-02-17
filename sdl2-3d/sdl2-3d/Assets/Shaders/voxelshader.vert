@@ -33,9 +33,12 @@ layout (std140) uniform PerInstanceData
 layout(location = 0) in uint in_point;
 layout(location = 1) in vec2 in_texCoord;
 
-out vec3 texCoord;
-out float vertexAO;
-out float eyeDist;
+out VS_OUT
+{
+	vec3 texCoord;
+	float vertexAO;
+	float eyeDist;
+} out_vs;
 
 void main(void)
 {
@@ -51,15 +54,15 @@ void main(void)
 	float textureId = float((in_point & TEXTURE_ID_MASK) >> POSITION_BITS_3);
 
 	float ao = float ((in_point & UNUSED_BITS_MASK) >> POSITION_AND_TEXTURE_BITS);
-	vertexAO = 1.0 - (ao * AO_MULT);
+	out_vs.vertexAO = 1.0 - (ao * AO_MULT);
 
 	vec3 position = vec3(x, y, z) + u_chunkOffset;
 
 	// offset the vertices by the position
 	gl_Position = u_mvp * vec4(position, 1.0);
 
-	eyeDist = length(position - u_camPos); 
+	out_vs.eyeDist = length(position - u_camPos); 
 
 	// supply 3d texcoord to fragment shader
-	texCoord = vec3(in_texCoord, textureId);
+	out_vs.texCoord = vec3(in_texCoord, textureId);
 }

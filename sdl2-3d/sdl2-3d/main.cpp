@@ -9,6 +9,7 @@
 #include <io.h>
 #include <SDL.h>
 #include <SDL_video.h>
+#include <SDL_thread.h>
 
 /* If using gl3.h */
 /* Ensure we are using opengl's core profile only */
@@ -45,7 +46,7 @@ void initGL()
 {
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit(); 
-
+	
 	if (GLEW_OK != err)
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	else 	//clear invalid enum bullshit error
@@ -62,7 +63,7 @@ void redirectIOToConsole()
 	long lStdHandle;
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
 	FILE *fp;
-
+	
 	AllocConsole();
 
 	// set the screen buffer to be big enough to let us scroll text

@@ -69,6 +69,16 @@ inline void GLVertexBuffer::bind()
 	glBindBuffer(m_bufferType, m_id);
 }
 
+inline void GLVertexBuffer::map(unsigned int numBytes, const void* data, EBufferAccess accessMode, EBufferAccessSync syncMode)
+{
+	
+}
+
+inline void GLVertexBuffer::unmap()
+{
+
+}
+
 inline void GLVertexBuffer::update(const void* data, unsigned int numBytes)
 {
 	bind();
