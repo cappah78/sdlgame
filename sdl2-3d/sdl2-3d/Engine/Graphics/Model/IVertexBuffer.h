@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "EDrawMode.h"
-#include "EBufferAccess.h"
+#include "EBufferMapFlagBits.h"
 
 struct VertexAttribute
 {
@@ -66,8 +66,8 @@ public:
 	virtual ~IVertexBuffer() {};
 
 	virtual void setVertexAttributeParameters(const VertexAttributes& parameters) = 0;
-	virtual void update(const void* data, unsigned int numBytes) = 0;
-	virtual void map(unsigned int numBytes, const void* data, EBufferAccess accessMode, EBufferAccessSync syncMode) = 0;
+	virtual void resize(unsigned int numBytes, const void* data = 0) = 0;
+	virtual void* map(unsigned int numBytes, unsigned int offset, BufferMapFlags mapFlags) = 0;
 	virtual void unmap() = 0;
 	virtual void bind() = 0;
 };

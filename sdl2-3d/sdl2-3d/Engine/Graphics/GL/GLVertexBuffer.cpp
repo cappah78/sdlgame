@@ -10,14 +10,13 @@ GLVertexBuffer::GLVertexBuffer(unsigned int sizeBytes, const void* data, GLenum 
 	, m_bufferType(bufferType)
 	, m_drawUsage(drawUsage)
 	, m_isEnabled(false)
+	, m_isInitialized(false)
 	, m_attributeIdx(-1)
 {
 	glGenBuffers(1, &m_id);
 
-	if (data != NULL && sizeBytes != 0)
-		update(data, sizeBytes);
-	else if (sizeBytes != 0)
-		reserve(sizeBytes);
+	if (sizeBytes != 0)
+		resize(sizeBytes, data);
 }
 
 GLVertexBuffer::~GLVertexBuffer()
@@ -58,10 +57,13 @@ inline void GLVertexBuffer::setAttribDivisor(unsigned int divisor)
 	glVertexAttribDivisor(m_attributeIdx, divisor);
 }
 
-inline void GLVertexBuffer::reserve(unsigned int numBytes)
+inline void GLVertexBuffer::resize(unsigned int numBytes, const void* data)
 {
 	bind();
-	glBufferData(m_bufferType, numBytes, NULL, m_drawUsage);
+	if (data && m_isInitialized)
+		glBufferData(m_bufferType, numBytes, NULL, m_drawUsage);
+	m_isInitialized = true;
+	glBufferData(m_bufferType, numBytes, data, m_drawUsage);
 }
 
 inline void GLVertexBuffer::bind()
@@ -69,20 +71,30 @@ inline void GLVertexBuffer::bind()
 	glBindBuffer(m_bufferType, m_id);
 }
 
-inline void GLVertexBuffer::map(unsigned int numBytes, const void* data, EBufferAccess accessMode, EBufferAccessSync syncMode)
+GLenum mapFlagsToGLBitfield(BufferMapFlags flags)
 {
-	
+	GLenum bitfield = 0;
+	if (flags & EBufferMapFlagBits::WRITE)
+		bitfield |= GL_MAP_READ_BIT;
+	if (flags & EBufferMapFlagBits::READ)
+		bitfield |= GL_MAP_READ_BIT;
+	if (flags & EBufferMapFlagBits::ASYNC)
+		bitfield |= GL_MAP_UNSYNCHRONIZED_BIT;
+	if (flags & EBufferMapFlagBits::INVALIDATE_RANGE)
+		bitfield |= GL_MAP_INVALIDATE_RANGE_BIT;
+	if (flags & EBufferMapFlagBits::INVALIDATE_BUFFER)
+		bitfield |= GL_MAP_INVALIDATE_BUFFER_BIT;
+	return bitfield;
+}
+
+inline void* GLVertexBuffer::map(unsigned int numBytes, unsigned int offset, BufferMapFlags mapFlags)
+{
+	return glMapBufferRange(m_bufferType, offset, numBytes, mapFlagsToGLBitfield(mapFlags));
 }
 
 inline void GLVertexBuffer::unmap()
 {
-
-}
-
-inline void GLVertexBuffer::update(const void* data, unsigned int numBytes)
-{
-	bind();
-	glBufferData(m_bufferType, numBytes, data, m_drawUsage);
+	glUnmapBuffer(m_bufferType);
 }
 
 void GLVertexBuffer::setVertexAttributeParameters(const VertexAttributes& parameters)

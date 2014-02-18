@@ -181,35 +181,35 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 	if (m_bufferFlags.hasIndiceBuffer)
 	{
 		m_indiceBuffer.reset(new GLVertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
-		m_indiceBuffer->update(&indices[0], sizeof(indices[0]) * indices.size());
+		m_indiceBuffer->resize(sizeof(indices[0]) * indices.size(), &indices[0]);
 	}
 	if (m_bufferFlags.hasPositionBuffer)
 	{
 		m_positionBuffer.reset(new GLVertexBuffer());
-		m_positionBuffer->update(&positions[0], sizeof(positions[0]) * positions.size());
+		m_positionBuffer->resize(sizeof(positions[0]) * positions.size(), &positions[0]);
 	}
 	if (m_bufferFlags.hasNormalBuffer)
 	{
 		m_normalBuffer.reset(new GLVertexBuffer());
-		m_normalBuffer->update(&normals[0], sizeof(normals[0]) * normals.size());
+		m_normalBuffer->resize(sizeof(normals[0]) * normals.size(), &normals[0]);
 	}
 	if (m_bufferFlags.hasTangentBitangentBuffer)
 	{
 		m_tangentBuffer.reset(new GLVertexBuffer());
-		m_tangentBuffer->update(&tangents[0], sizeof(tangents[0]) * tangents.size());
+		m_tangentBuffer->resize(sizeof(tangents[0]) * tangents.size(), &tangents[0]);
 
 		m_bitangentBuffer.reset(new GLVertexBuffer());
-		m_bitangentBuffer->update(&bitangents[0], sizeof(bitangents[0]) * bitangents.size());
+		m_bitangentBuffer->resize(sizeof(bitangents[0]) * bitangents.size(), &bitangents[0]);
 	}
 	if (m_bufferFlags.hasTexcoordBuffer)
 	{
 		m_texcoordBuffer.reset(new GLVertexBuffer());
-		m_texcoordBuffer->update(&texCoords[0], sizeof(texCoords[0]) * texCoords.size());
+		m_texcoordBuffer->resize(sizeof(texCoords[0]) * texCoords.size(), &texCoords[0]);
 	}
 	if (m_bufferFlags.hasColorBuffer)
 	{
 		m_colorBuffer.reset(new GLVertexBuffer());
-		m_colorBuffer->update(&colors[0], sizeof(colors[0]) * colors.size());
+		m_colorBuffer->resize(sizeof(colors[0]) * colors.size(), &colors[0]);
 	}
 }
 

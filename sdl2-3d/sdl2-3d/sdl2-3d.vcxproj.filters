@@ -296,10 +296,10 @@
     <ClInclude Include="Engine\Graphics\Model\EDrawMode.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\Model\EBufferAccess.h">
+    <ClInclude Include="Engine\Graphics\Model\IRenderThread.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\Model\IRenderThread.h">
+    <ClInclude Include="Engine\Graphics\Model\EBufferMapFlagBits.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,6 +27,6 @@ public:
 	IIndiceBuffer() {};
 	virtual ~IIndiceBuffer() {};
 
-	virtual void update(const void* data, unsigned int numBytes) = 0;
+	virtual void resize(unsigned int numBytes, const void* data) = 0;
 	virtual void bind() = 0;
 };

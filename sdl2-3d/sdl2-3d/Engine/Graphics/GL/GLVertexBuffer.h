@@ -13,9 +13,9 @@ public:
 	GLVertexBuffer(const GLVertexBuffer& copy) = delete;
 
 	virtual inline void bind() override;
-	virtual inline void update(const void* data, unsigned int numBytes) override;
+	virtual inline void resize(unsigned int numBytes, const void* data = 0) override;
 	virtual void setVertexAttributeParameters(const VertexAttributes& parameters) override;
-	virtual inline void map(unsigned int numBytes, const void* data, EBufferAccess accessMode, EBufferAccessSync syncMode) override;
+	virtual inline void* map(unsigned int numBytes, unsigned int offset, BufferMapFlags mapFlags) override;
 	virtual inline void unmap() override;
 
 	void setAttribPointer(GLuint attributeIdx, GLenum type, unsigned int valuesPerVertex,
@@ -24,7 +24,6 @@ public:
 	void setEnabled(bool enabled = true);
 
 	inline void setAttribDivisor(unsigned int divisor);
-	inline void reserve(unsigned int numBytes);
 
 private:
 
@@ -33,4 +32,5 @@ private:
 	GLenum m_bufferType;
 	GLenum m_drawUsage;
 	bool m_isEnabled;
+	bool m_isInitialized;
 };

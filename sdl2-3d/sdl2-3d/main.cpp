@@ -138,15 +138,15 @@ int main(int argc, char *argv[])
 
 	glEnable(GL_CULL_FACE);	/* Back face culling gets enabled here!--*/
 	glCullFace(GL_BACK);
-
-	GameScreen gameScreen;
-	Game::setScreen(&gameScreen);
-
-	Game::startGameLoop(); // blocks untill Game::shutdownGameLoop()
-	CHECK_GL_ERROR();
+	
+	{
+		GameScreen gameScreen;
+		Game::setScreen(&gameScreen);
+		Game::startGameLoop(); // blocks untill Game::shutdownGameLoop()
+		CHECK_GL_ERROR();
+	}
 
     SDL_GL_DeleteContext(maincontext);
-	//TODO: fix breakpoint trigger O.o?
     SDL_DestroyWindow(mainwindow);
     SDL_Quit();
 

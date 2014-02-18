@@ -59,9 +59,12 @@ void Game::startGameLoop()
 		Uint32 newTime = SDL_GetTicks();
 		float deltaSec = (float) (newTime - startTime) / 1000.0f;
 		startTime = newTime;
+
+		render(deltaSec);
+		CHECK_GL_ERROR();
+
 		timePassed += deltaSec;
 		renderCount++;
-
 		if (timePassed >= 1.0f)	//setting fps in title here
 		{
 			_itoa_s(renderCount, title, 10);
@@ -71,9 +74,6 @@ void Game::startGameLoop()
 			timePassed = 0.0;
 			renderCount = 0;
 		}
-
-		render(deltaSec);
-		CHECK_GL_ERROR();
 	}
 }
 
