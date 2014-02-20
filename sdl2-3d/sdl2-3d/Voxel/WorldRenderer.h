@@ -2,9 +2,11 @@
 
 #include "VoxelRenderer.h"
 #include "../Engine/Utils/Comparables.h"
-#include "../Engine/Graphics/Model/IGraphicsProvider.h"
 
 #include <unordered_map>
+
+class IConstantBuffer;
+class IShader;
 
 class VoxelWorld;
 class Camera;
@@ -33,17 +35,19 @@ private:
 	struct PerFrameUniformData
 	{
 		glm::mat4 mvp;
-		glm::vec3 camPos;
+		glm::vec4 camPos;
+		glm::vec4 fogColor;
 		float fogStart;
-		glm::vec3 fogColor;
 		float fogEnd;
+		float padding;
+		float padding2;
 	} m_perFrameUniformData;
 
-	struct PerInstanceUniformData
+	struct PerChunkUniformData
 	{
 		glm::vec3 chunkOffset;
 		float padding;
-	} m_perInstanceUniformData;
+	} m_perChunkUniformData;
 
 	RenderChunkMap m_renderChunks;
 	unsigned int m_numLoadedChunks;
@@ -52,6 +56,6 @@ private:
 	std::vector<std::shared_ptr<VoxelRenderer::Chunk>> m_visibleChunkList;
 
 	std::unique_ptr<IConstantBuffer> m_perFrameUniformDataBuffer;
-	std::unique_ptr<IConstantBuffer> m_perInstanceUniformDataBuffer;
+	std::unique_ptr<IConstantBuffer> m_perChunkUniformDataBuffer;
 	std::unique_ptr<IShader> m_iVoxelShader;
 };

@@ -290,9 +290,6 @@
     <ClInclude Include="Engine\Graphics\Model\ITextureArray.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\GLTextureManager.h">
-      <Filter>Header Files\Engine\Graphics\GL</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Model\EDrawMode.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClInclude>
@@ -301,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Model\EBufferMapFlagBits.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Mesh.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -429,9 +429,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\D3D\D3DGraphicsProvider.cpp">
       <Filter>Source Files\Engine\Graphics\D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\GL\GLTextureManager.cpp">
-      <Filter>Source Files\Engine\Graphics\GL</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\GL\GLAsyncRenderer.cpp">
       <Filter>Header Files\Engine\Graphics\GL</Filter>

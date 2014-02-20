@@ -6,8 +6,7 @@
 
 #include "../../Utils/CheckGLError.h"
 
-GLTextureArray::GLTextureArray(const std::vector<const char*>& imageNames, 
-	unsigned int textureWidth, unsigned int textureHeight,
+GLTextureArray::GLTextureArray(const char** filePaths, unsigned int numTextures, unsigned int textureWidth, unsigned int textureHeight,
 	bool generateMipMaps,
 	GLint minFilter, GLint magFilter,
 	GLint textureWrapS, GLint textureWrapT)
@@ -16,19 +15,19 @@ GLTextureArray::GLTextureArray(const std::vector<const char*>& imageNames,
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureID);
 
 	//glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, textureWidth, textureHeight, imageNames.size());
-	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, textureWidth, textureHeight, imageNames.size(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, textureWidth, textureHeight, numTextures, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, minFilter);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, magFilter);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, textureWrapS);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, textureWrapT);
-	int i = 0;
-	for (const char* imageName : imageNames)
+
+	for (unsigned int i = 0; i < numTextures; ++i)
 	{
+		const char* imageName = filePaths[i];
 		Pixmap p(imageName);
 		assert(p.m_width == textureWidth && "Image width does not match with the width of this array");
 		assert(p.m_height == textureHeight && "Image height does not match with the height of this array");
 		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, textureWidth, textureHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE, p.m_data);
-		++i;
 	}
 
 	if (generateMipMaps)
@@ -84,7 +83,7 @@ void GLTextureArray::dispose()
 	glDeleteTextures(1, &m_textureID);
 }
 
-void GLTextureArray::bind() const
+void GLTextureArray::bind()
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureID);

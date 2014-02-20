@@ -8,6 +8,9 @@ class IShader;
 class ITexture;
 struct ITextureParameters;
 
+class ITextureArray;
+struct ITextureArrayParameters;
+
 class IConstantBuffer;
 struct IConstantBufferParameters;
 
@@ -29,7 +32,10 @@ public:
 	virtual std::unique_ptr<IShader> createShaderFromFile(const char* vertexShaderFilePath, const char* hullShaderFilePath, const char* domainShaderFilePath, const char* geometryShaderFilePath, const char* pixelShaderFilePath) = 0;
 	virtual std::unique_ptr<IShader> createComputeShaderFromFile(const char* computeShaderFilePath) = 0;
 
-	virtual std::unique_ptr<ITexture> createTextureFromPixmap(const Pixmap& pixmap, const ITextureParameters& parameters) = 0;
+	virtual std::unique_ptr<ITexture> createTexture(const ITextureParameters& parameters) = 0;
+	virtual std::unique_ptr<ITextureArray> createTextureArray(const ITextureArrayParameters& parameters) = 0;
+
+	virtual const ITexture* getManagedTexture(const char* filePath) = 0;
 
 	virtual std::unique_ptr<IStateBuffer> createStateBuffer() = 0;
 

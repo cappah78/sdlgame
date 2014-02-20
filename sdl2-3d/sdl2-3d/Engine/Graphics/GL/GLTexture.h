@@ -25,8 +25,8 @@ public:
 	virtual ~GLTexture() override;
 
 	bool isLoaded() const { return m_textureID != 0; };
-	void bind() const;
-	void bind(GLenum GLTextureUnit) const;
+	virtual void bind(unsigned int index) const override;
+	virtual void unbind(unsigned int index) const override;
 
 	GLuint getTextureID() const { return m_textureID; }
 	unsigned int getWidth() const { return m_width; }

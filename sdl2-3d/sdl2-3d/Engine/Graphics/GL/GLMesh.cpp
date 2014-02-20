@@ -1,5 +1,7 @@
 #include "GLMesh.h"
+
 #include "GLTexture.h"
+#include "GLGraphicsProvider.h"
 
 #include <assert.h>
 #include <gl\glew.h>
@@ -17,9 +19,9 @@ GLMesh::GLMesh()
 
 }
 
-GLMesh::GLMesh(const std::string& fileName, GLTextureManager& textureManager)
+GLMesh::GLMesh(const std::string& fileName, GLGraphicsProvider& provider)
 {
-	loadMesh(fileName, textureManager);
+	loadMesh(fileName, provider);
 }
 
 GLMesh::~GLMesh()
@@ -27,7 +29,7 @@ GLMesh::~GLMesh()
 
 }
 
-void GLMesh::loadMesh(const std::string& filename, GLTextureManager& textureManager)
+void GLMesh::loadMesh(const std::string& filename, GLGraphicsProvider& provider)
 {
 	const aiScene* scene = aiImportFile(filename.c_str(), aiPostProcessSteps::aiProcess_Triangulate 
 		| aiPostProcessSteps::aiProcess_GenSmoothNormals 
@@ -41,7 +43,7 @@ void GLMesh::loadMesh(const std::string& filename, GLTextureManager& textureMana
 		printf("Error parsing '%s' : %s\n", filename.c_str(), aiGetErrorString());
 
 	initVertexBuffers(scene);
-	initMaterials(scene, filename, textureManager);
+	initMaterials(scene, filename, provider);
 }
 
 void GLMesh::initVertexBuffers(const aiScene* scene)
@@ -213,7 +215,7 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 	}
 }
 
-void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GLTextureManager& textureManager)
+void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GLGraphicsProvider& provider)
 {
 	// Extract the directory part from the file name
 	std::string::size_type slashIndex = filename.find_last_of("/");
@@ -261,7 +263,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 
 		aiString path;
 
-		GLuint defaultTex = textureManager.getDefaultTextureID();
+		const ITexture* defaultTex = provider.getManagedTexture("fixme");
 		meshMaterial.diffuseTexture = defaultTex;
 		meshMaterial.normalTexture = defaultTex;
 		meshMaterial.opacityTexture = defaultTex;
@@ -273,7 +275,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.diffuseTexture = textureManager.getTextureID(fullPath);
+			meshMaterial.diffuseTexture = provider.getManagedTexture(fullPath.c_str());
 		}
 		if (numNormal > 0 && material->GetTexture(aiTextureType_HEIGHT, 0, &path) == AI_SUCCESS)
 		{
@@ -281,7 +283,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.normalTexture = textureManager.getTextureID(fullPath);
+			meshMaterial.normalTexture = provider.getManagedTexture(fullPath.c_str());
 		}
 		if (numSpecular > 0 && material->GetTexture(aiTextureType_SPECULAR, 0, &path) == AI_SUCCESS)
 		{
@@ -289,7 +291,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.specularTexture = textureManager.getTextureID(fullPath);
+			meshMaterial.specularTexture = provider.getManagedTexture(fullPath.c_str());
 		}
 		if (numOpacity > 0 && material->GetTexture(aiTextureType_OPACITY, 0, &path) == AI_SUCCESS)
 		{
@@ -297,7 +299,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.opacityTexture = textureManager.getTextureID(fullPath);
+			meshMaterial.opacityTexture = provider.getManagedTexture(fullPath.c_str());
 		}
 		m_materials.push_back(meshMaterial);
 	}
@@ -343,17 +345,10 @@ void GLMesh::render()
 
 		m_matUniformBuffer->update(&matProperties, sizeof(MeshMaterialProperties));
 
-		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->diffuseTextureBindLoc);
-		glBindTexture(GL_TEXTURE_2D, material.diffuseTexture);
-
-		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->normalTextureBindLoc);
-		glBindTexture(GL_TEXTURE_2D, material.normalTexture);
-
-		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->specularTextureBindLoc);
-		glBindTexture(GL_TEXTURE_2D, material.specularTexture);
-
-		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->opacityTextureBindLoc);
-		glBindTexture(GL_TEXTURE_2D, material.opacityTexture);
+		material.diffuseTexture->bind(m_shaderAttributes->diffuseTextureBindLoc);
+		material.normalTexture->bind(m_shaderAttributes->normalTextureBindLoc);
+		material.specularTexture->bind(m_shaderAttributes->specularTextureBindLoc);
+		material.opacityTexture->bind(m_shaderAttributes->opacityTextureBindLoc);
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,
 			entry.numIndices,

@@ -30,9 +30,9 @@
     <ClInclude Include="Engine\Graphics\GL\GLStateBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\GLTexture.h" />
     <ClInclude Include="Engine\Graphics\GL\GLTextureArray.h" />
-    <ClInclude Include="Engine\Graphics\GL\GLTextureManager.h" />
     <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
+    <ClInclude Include="Engine\Graphics\Mesh.h" />
     <ClInclude Include="Engine\Graphics\Model\EBufferMapFlagBits.h" />
     <ClInclude Include="Engine\Graphics\Model\EDrawMode.h" />
     <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h" />
@@ -91,7 +91,6 @@
     <ClCompile Include="Engine\Graphics\GL\GLStateBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLTexture.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLTextureArray.cpp" />
-    <ClCompile Include="Engine\Graphics\GL\GLTextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLVertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Graphics.cpp" />
     <ClCompile Include="Engine\Graphics\Model\IGraphicsProvider.h" />

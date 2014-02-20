@@ -11,6 +11,7 @@
 #include "GLConstantBuffer.h"
 #include "GLShader.h"
 #include "GLTexture.h"
+#include "GLTextureArray.h"
 #include "GLStateBuffer.h"
 
 #include "../Model/EDrawMode.h"
@@ -25,7 +26,10 @@ GLGraphicsProvider::GLGraphicsProvider()
 
 GLGraphicsProvider::~GLGraphicsProvider()
 {
-
+	for (auto it = m_loadedTextureMap.begin(); it != m_loadedTextureMap.end(); ++it)
+	{
+		delete it->second;
+	}
 }
 
 void attachShaderSource(GLuint prog, GLenum type, const char * source)
@@ -106,8 +110,9 @@ std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* ve
 
 	glLinkProgram(program);
 
-	return std::auto_ptr<IShader>(new GLShader(program));
+	return std::unique_ptr<IShader>(new GLShader(program));
 }
+
 std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
 	const char* vertexShaderFilePath, const char* hullShaderFilePath, const char* domainShaderFilePath, 
 	const char* geometryShaderFilePath, const char* pixelShaderFilePath)
@@ -141,7 +146,7 @@ std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
 	}
 	glLinkProgram(program);
 
-	return std::auto_ptr<IShader>(new GLShader(program));
+	return std::unique_ptr<IShader>(new GLShader(program));
 }
 
 std::unique_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const char* computeShaderFilePath)
@@ -153,30 +158,59 @@ std::unique_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const c
 		attachShaderSource(program, GL_COMPUTE_SHADER, contents.c_str());
 	}
 	glLinkProgram(program);
-	return std::auto_ptr<IShader>(new GLShader(program));
+	return std::unique_ptr<IShader>(new GLShader(program));
 }
 
-std::unique_ptr<ITexture> GLGraphicsProvider::createTextureFromPixmap(const Pixmap& pixmap, const ITextureParameters& parameters)
+std::unique_ptr<ITexture> GLGraphicsProvider::createTexture(const ITextureParameters& parameters)
 {
-	return std::auto_ptr<ITexture>(new GLTexture(pixmap));
+	//TODO: filter settings
+	GLTexture* texture = new GLTexture(parameters.filePath);
+	assert(texture->isLoaded());
+	std::string textureFilePathString(parameters.filePath);
+	m_loadedTextureMap.insert(std::make_pair(textureFilePathString, texture));
+
+	return std::unique_ptr<ITexture>(texture);
+}
+
+std::unique_ptr<ITextureArray> GLGraphicsProvider::createTextureArray(const ITextureArrayParameters& parameters)
+{
+	//TODO: filter settings
+	return std::unique_ptr<ITextureArray>(new GLTextureArray(parameters.filePaths, parameters.numTextures, parameters.arrayWidth, parameters.arrayHeight));
+}
+
+const ITexture* GLGraphicsProvider::getManagedTexture(const char* filePath)
+{
+	std::string filePathString(filePath);
+	auto it = m_loadedTextureMap.find(filePathString);
+	if (it == m_loadedTextureMap.end())
+	{
+		GLTexture* texture = new GLTexture(filePath);
+		assert(texture->isLoaded());
+		m_loadedTextureMap.insert(std::make_pair(filePathString, texture));
+		return texture;
+	}
+	else
+	{
+		return it->second;
+	}
 }
 
 std::unique_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer(const IVertexBufferParameters& parameters)
 {	
-	return std::auto_ptr<IVertexBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
+	return std::unique_ptr<IVertexBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
 }
 
 std::unique_ptr<IIndiceBuffer> GLGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
 {
-	return std::auto_ptr<IIndiceBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ELEMENT_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
+	return std::unique_ptr<IIndiceBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ELEMENT_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
 }
 
 std::unique_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::unique_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)
 {
-	return std::auto_ptr<IConstantBuffer>(new GLConstantBuffer(shader->getID(), bufferIndex, bufferName));
+	return std::unique_ptr<IConstantBuffer>(new GLConstantBuffer(shader->getID(), bufferIndex, bufferName));
 }
 
 std::unique_ptr<IStateBuffer> GLGraphicsProvider::createStateBuffer()
 {
-	return std::auto_ptr<IStateBuffer>(new GLStateBuffer());
+	return std::unique_ptr<IStateBuffer>(new GLStateBuffer());
 }

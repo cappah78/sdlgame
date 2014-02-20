@@ -26,8 +26,7 @@ GameScreen::GameScreen()
 		CAMERA_NEAR,
 		CAMERA_FAR)
 	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
-	, m_textureManager()
-	, m_world(m_textureManager)
+	, m_world()
 	, m_modelShader("Assets/Shaders/modelshader.vert", NULL, "Assets/Shaders/modelshader.frag")
 {
 	Game::input.registerKeyListener(&m_cameraController);

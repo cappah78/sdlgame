@@ -158,10 +158,15 @@ WorldRenderer::WorldRenderer()
 	CHECK_GL_ERROR();
 
 	m_iVoxelShader = Game::graphics.getGraphicsProvider().createShaderFromFile("Assets/Shaders/voxelshader.vert", "Assets/Shaders/voxelshader.frag");
+	CHECK_GL_ERROR();
 
 	m_perFrameUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 0, "PerFrameData", IConstantBufferParameters());
-	m_perInstanceUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 1, "PerInstanceData", IConstantBufferParameters());
-	m_perFrameUniformData.fogColor = glm::vec3(0.4f, 0.7f, 1.0f);
+	CHECK_GL_ERROR();
+
+	m_perChunkUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 1, "PerChunkData", IConstantBufferParameters());
+	CHECK_GL_ERROR();
+
+	m_perFrameUniformData.fogColor = glm::vec4(0.4f, 0.7f, 1.0f, 1.0f);
 
 	CHECK_GL_ERROR();
 }
@@ -245,7 +250,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 
 	m_iVoxelShader->begin();
 
-	m_perFrameUniformData.camPos = camera.m_position;
+	m_perFrameUniformData.camPos = glm::vec4(camera.m_position, 0.0f);
 	m_perFrameUniformData.fogEnd = camera.m_far;
 	m_perFrameUniformData.fogStart = camera.m_far * 0.7f;
 	m_perFrameUniformData.mvp = camera.m_combinedMatrix;
@@ -254,8 +259,8 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 
 	for (const std::shared_ptr<VoxelRenderer::Chunk>& chunk : m_visibleChunkList)
 	{
-		m_perInstanceUniformData.chunkOffset = chunk->m_renderOffset;
-		m_perInstanceUniformDataBuffer->update(&m_perInstanceUniformData, sizeof(m_perInstanceUniformData));
+		m_perChunkUniformData.chunkOffset = chunk->m_renderOffset;
+		m_perChunkUniformDataBuffer->update(&m_perChunkUniformData, sizeof(m_perChunkUniformData));
 		m_renderer.renderChunk(chunk);
 	}
 	m_iVoxelShader->end();

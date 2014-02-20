@@ -48,9 +48,15 @@ unsigned short PropertyManager::getBlockTextureID(const std::string& textureName
 	}
 }
 
-std::shared_ptr<GLTextureArray> PropertyManager::generateBlockTextureArray(unsigned int blockTexWidth, unsigned int blockTexHeight)
+const std::vector<std::string>& PropertyManager::getRegisteredBlockTextureNames() const
 {
-	return std::shared_ptr<GLTextureArray>(new GLTextureArray(m_blockTextureNames, blockTexWidth, blockTexHeight));
+	return m_blockTextureNames;
+}
+
+unsigned int PropertyManager::getTextureSize() const
+{
+	//TODO: remove hardcoded val
+	return 16;
 }
 
 BlockID PropertyManager::registerBlockType(lua_State* const L, const std::string& blockname)

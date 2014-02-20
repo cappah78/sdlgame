@@ -11,17 +11,19 @@
 
 #include "../Engine/Utils/noiseutils.h"
 
+#include <memory>
+
 struct lua_State;
 class Camera;
-class GLTextureArray;
-class GLTextureManager;
+class ITextureArray;
+class IGraphicsProvider;
 
 static const unsigned int CHUNK_LOAD_RANGE = 16;
 
 class VoxelWorld
 {
 public:
-	VoxelWorld(GLTextureManager& textureManager);
+	VoxelWorld();
 	VoxelWorld(const VoxelWorld& copy) = delete;
 	~VoxelWorld();
 
@@ -37,8 +39,7 @@ public:
 
 	lua_State* const L() const { return m_L; };
 
-	const std::shared_ptr<GLTextureArray> getTileSet() const { return m_textureArray; };
-	const GLTextureManager& getTextureManager() const { return m_textureManager; };
+	const std::unique_ptr<ITextureArray>& getTileSet() const { return m_textureArray; };
 	const PropertyManager& getPropertyManager() const { return m_propertyManager; };
 
 	inline static glm::ivec3 toChunkPos(const glm::ivec3& blockPos);
@@ -64,9 +65,8 @@ private:
 	float m_timeAccumulator;
 	float m_tickDurationSec;
 
-	std::shared_ptr<GLTextureArray> m_textureArray;
+	std::unique_ptr<ITextureArray> m_textureArray;
 	ChunkManager m_chunkManager;
-	GLTextureManager& m_textureManager;
 	PropertyManager m_propertyManager;
 	lua_State* m_L;
 	std::vector<glm::ivec3> m_updatedBlockPositions;

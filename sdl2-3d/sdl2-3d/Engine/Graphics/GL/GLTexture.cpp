@@ -34,16 +34,16 @@ GLTexture::~GLTexture()
 	glDeleteTextures(1, &m_textureID);
 }
 
-void GLTexture::bind() const
+void GLTexture::bind(unsigned int index) const
 {
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0 + index);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
-void GLTexture::bind(GLenum textureUnit) const
+void GLTexture::unbind(unsigned int index) const
 {
-	glActiveTexture(textureUnit);
-	glBindTexture(GL_TEXTURE_2D, m_textureID);
+	glActiveTexture(GL_TEXTURE0 + index);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void GLTexture::setupGLTexture(const Pixmap& pixmap, bool generateMipMaps, GLint minFilter, GLint magFilter,

@@ -2,6 +2,7 @@
 
 #include "../Model/IConstantBuffer.h"
 #include <gl\glew.h>
+#include "../../Utils/CheckGLError.h"
 
 class GLConstantBuffer : public IConstantBuffer
 {
@@ -11,11 +12,16 @@ public:
 		, m_bindingPoint(bindingPoint)
 	{
 		glGenBuffers(1, &m_ubo);
-
+		CHECK_GL_ERROR();
 		m_uboIndex = glGetUniformBlockIndex(shaderID, blockName);
+		CHECK_GL_ERROR();
 		glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
 		glUniformBlockBinding(shaderID, m_uboIndex, m_bindingPoint);
+		CHECK_GL_ERROR();
+
 		glBindBufferBase(GL_UNIFORM_BUFFER, m_bindingPoint, m_ubo);
+		CHECK_GL_ERROR();
+
 	};
 	virtual ~GLConstantBuffer()
 	{

@@ -2,6 +2,8 @@
 
 #include "LuaVoxelConfig.h"
 
+#include "../Engine/Graphics/Model/IGraphicsProvider.h"
+
 #include "../Game.h"
 #include "../Engine/Utils/CheckLuaError.h"
 #include "../Engine/Graphics/GL/GLTextureArray.h"
@@ -20,9 +22,8 @@ static const float UPDATES_PER_SEC = 5.0f;
 
 static const double BLOCKS_PER_WORLDGEN_UNIT = 492.0;
 
-VoxelWorld::VoxelWorld(GLTextureManager& textureManager)
+VoxelWorld::VoxelWorld()
 	: m_L(luaL_newstate())
-	, m_textureManager(textureManager)
 	, m_chunkManager(m_propertyManager)
 	, m_timeAccumulator(0)
 	, m_tickDurationSec(1.0f / UPDATES_PER_SEC)
@@ -31,8 +32,31 @@ VoxelWorld::VoxelWorld(GLTextureManager& textureManager)
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
 	Game::initLua(m_L);
 	initializeLuaWorld();
-	m_textureArray = m_propertyManager.generateBlockTextureArray(16, 16);
+	
+	IGraphicsProvider& provider = Game::graphics.getGraphicsProvider();
 
+	const std::vector<std::string>& blockTextureNames = m_propertyManager.getRegisteredBlockTextureNames();
+	ITextureArrayParameters parameters;
+	const char** filePaths = new const char*[blockTextureNames.size()];
+	for (unsigned int i = 0; i < blockTextureNames.size(); ++i)
+	{
+		filePaths[i] = blockTextureNames[i].c_str();
+		printf("path: %s \n", blockTextureNames[i].c_str());
+	}
+	parameters.filePaths = filePaths;
+	parameters.numTextures = blockTextureNames.size();
+	parameters.arrayWidth = m_propertyManager.getTextureSize();
+	parameters.arrayHeight = m_propertyManager.getTextureSize();
+	
+	TextureSettings textureSettings;
+	textureSettings.magFilter = TextureSettings::NEAREST;
+	textureSettings.minFilter = TextureSettings::MIPMAP_LINEAR;
+	textureSettings.uWrap = TextureSettings::CLAMP;
+	textureSettings.vWrap = TextureSettings::CLAMP;
+	parameters.textureSettings = textureSettings;
+
+	m_textureArray = provider.createTextureArray(parameters);
+	delete[] filePaths;
 	////////////////Map generation//////////////	//WIP!
 	// TODO: remove statics //
 	////////////////////////////////////////////

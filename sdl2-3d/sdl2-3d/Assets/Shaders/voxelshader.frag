@@ -5,10 +5,12 @@ uniform sampler2DArray u_texArr;
 layout (std140) uniform PerFrameData
 {
 	mat4 u_mvp;
-	vec3 u_camPos;
+	vec4 u_camPos;
+	vec4 u_fogColor;
 	float u_fogStart;
-	vec3 u_fogColor;
 	float u_fogEnd;
+	float padding;
+	float padding2;
 };
 
 in VS_OUT
@@ -33,5 +35,5 @@ void main()
 
 	vec4 texCol = texture(u_texArr, in_fs.texCoord);
 	vec4 blockCol = vec4((texCol.rgb) * in_fs.vertexAO, texCol.a);
-	out_color = mix(blockCol, vec4(u_fogColor, 1.0), fogFactor);
+	out_color = mix(blockCol, u_fogColor, fogFactor);
 }

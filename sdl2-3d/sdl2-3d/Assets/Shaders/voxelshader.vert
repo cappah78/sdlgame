@@ -16,16 +16,18 @@ const float AO_MULT = (1.0 / 255.0);
 layout (std140) uniform PerFrameData
 {
 	mat4 u_mvp;
-	vec3 u_camPos;
+	vec4 u_camPos;
+	vec4 u_fogColor;
 	float u_fogStart;
-	vec3 u_fogColor;
 	float u_fogEnd;
+	float padding;
+	float padding2;
 };
 
-layout (std140) uniform PerInstanceData
+layout (std140) uniform PerChunkData
 {
 	vec3 u_chunkOffset;
-	float padding;
+	float padding3;
 };
 
 // Bit layout: u = unused, i = textureid, x/y/z = pos within chunk //
