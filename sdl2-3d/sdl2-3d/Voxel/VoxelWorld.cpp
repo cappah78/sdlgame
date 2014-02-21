@@ -213,52 +213,72 @@ void VoxelWorld::doBlockUpdates()
 	m_updatedBlockPositions.clear();
 }
 
-BlockID* VoxelWorld::getBlockLayer(int height)	//temp/wip
+const BlockID* const VoxelWorld::getBlockLayer(int height)	//temp/wip
 {
-	BlockID* ids = new BlockID[5];
+	static const BlockID hillTops[] =
+	{
+		m_propertyManager.getBlockID("SnowBlock"),
+		m_propertyManager.getBlockID("GrassSnowBlock"),
+		m_propertyManager.getBlockID("DirtBlock"),
+		m_propertyManager.getBlockID("StoneBlock"),
+		m_propertyManager.getBlockID("StoneBlock")
+	};
+	static const BlockID hillMids[] =
+	{
+		m_propertyManager.getBlockID("GrassSnowBlock"),
+		m_propertyManager.getBlockID("DirtBlock"),
+		m_propertyManager.getBlockID("StoneBlock"),
+		m_propertyManager.getBlockID("StoneBlock"),
+		m_propertyManager.getBlockID("StoneBlock")
+	};
+	static const BlockID plains[] =
+	{
+		m_propertyManager.getBlockID("GrassBlock"),
+		m_propertyManager.getBlockID("DirtBlock"),
+		m_propertyManager.getBlockID("StoneBlock"),
+		m_propertyManager.getBlockID("StoneBlock"),
+		m_propertyManager.getBlockID("StoneBlock")
+	};
+	static const BlockID beach[] =
+	{
+		m_propertyManager.getBlockID("SandBlock"),
+		m_propertyManager.getBlockID("SandBlock"),
+		m_propertyManager.getBlockID("DirtBlock"),
+		m_propertyManager.getBlockID("StoneBlock"),
+		m_propertyManager.getBlockID("StoneBlock")
+	};
+	static const BlockID water[] =
+	{
+		m_propertyManager.getBlockID("WaterBlock"),
+		m_propertyManager.getBlockID("WaterBlock"),
+		m_propertyManager.getBlockID("WaterBlock"),
+		m_propertyManager.getBlockID("WaterBlock"),
+		m_propertyManager.getBlockID("WaterBlock"),
+	};
 
 	if (height >= 30)	// hill tops
 	{
-		ids[0] = m_propertyManager.getBlockID("SnowBlock");
-		ids[1] = m_propertyManager.getBlockID("GrassSnowBlock");
-		ids[2] = m_propertyManager.getBlockID("DirtBlock");
-		ids[3] = m_propertyManager.getBlockID("StoneBlock");
-		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+		return hillTops;
 	}
 	else if (height >= 20 && height < 30) //hill mid
 	{
-		ids[0] = m_propertyManager.getBlockID("GrassSnowBlock");
-		ids[1] = m_propertyManager.getBlockID("DirtBlock");
-		ids[2] = m_propertyManager.getBlockID("StoneBlock");
-		ids[3] = m_propertyManager.getBlockID("StoneBlock");
-		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+		return hillMids;
 	}
 	else if(height >= -12 && height < 20) //plains / lower hills
 	{
-		ids[0] = m_propertyManager.getBlockID("GrassBlock");
-		ids[1] = m_propertyManager.getBlockID("DirtBlock");
-		ids[2] = m_propertyManager.getBlockID("StoneBlock");
-		ids[3] = m_propertyManager.getBlockID("StoneBlock");
-		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+		return plains;
 	}
 	else if(height <= -12 && height > -18) //beach
 	{
-		ids[0] = m_propertyManager.getBlockID("SandBlock");
-		ids[1] = m_propertyManager.getBlockID("SandBlock");
-		ids[2] = m_propertyManager.getBlockID("DirtBlock");
-		ids[3] = m_propertyManager.getBlockID("StoneBlock");
-		ids[4] = m_propertyManager.getBlockID("StoneBlock");
+		return beach;
 	}
 	else if(height <= -18) //water
 	{
-		ids[0] = m_propertyManager.getBlockID("WaterBlock");
-		ids[1] = m_propertyManager.getBlockID("WaterBlock");
-		ids[2] = m_propertyManager.getBlockID("WaterBlock");
-		ids[3] = m_propertyManager.getBlockID("WaterBlock");
-		ids[4] = m_propertyManager.getBlockID("WaterBlock");
+		return water;
 	}
 
-	return ids;
+	assert(false);
+	return water;
 }
 
 void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
@@ -300,7 +320,7 @@ void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 			else
 				blockSampleHeight = height + (int) (glm::sin(x / 0.0123) * 2.0f) + (int) (glm::cos(z / 0.0123) * 2.0f);
 
-			BlockID* ids = getBlockLayer(blockSampleHeight);
+			const BlockID* const ids = getBlockLayer(blockSampleHeight);
 
 			int idx = depth;
 			for (int y = height - idx; y < height; ++y)
@@ -310,7 +330,6 @@ void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)
 				else
 					setBlock(stone, glm::ivec3(x + from.x, y, z + from.z));
 			}
-			delete[] ids;
 		}
 	}
 }

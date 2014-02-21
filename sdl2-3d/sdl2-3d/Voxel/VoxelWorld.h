@@ -56,7 +56,7 @@ private:
 	void initializeTileSet();
 	void generateChunk(const glm::ivec3& chunkPos);
 
-	BlockID* getBlockLayer(int height);
+	const BlockID* const getBlockLayer(int height);
 
 	static int L_registerBlockType(lua_State* L);
 	static int L_setBlock(BlockID blockID, int x, int y, int z, lua_State* L);

@@ -35,5 +35,6 @@ void main()
 
 	vec4 texCol = texture(u_texArr, in_fs.texCoord);
 	vec4 blockCol = vec4((texCol.rgb) * in_fs.vertexAO, texCol.a);
-	out_color = mix(blockCol, u_fogColor, fogFactor);
+	vec4 combinedCol = mix(blockCol, u_fogColor, fogFactor);
+	out_color = combinedCol;
 }
