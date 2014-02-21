@@ -13,140 +13,154 @@
 #include <algorithm>
 #include <glm\gtc\matrix_transform.hpp>
 
+static unsigned int getSolidBitMask(int xOffset, int yOffset, int zOffset)
+{
+	return 1 << ((zOffset + 1) + 3 * ((yOffset + 1) + 3 * (xOffset + 1)));
+}
+
+static const unsigned int SOLID_FACE_MASKS[6] =
+{
+	getSolidBitMask(0, 1, 0), 
+	getSolidBitMask(0, -1, 0),
+	getSolidBitMask(0, 0, -1), 
+	getSolidBitMask(0, 0, 1),
+	getSolidBitMask(1, 0, 0),
+	getSolidBitMask(-1, 0, 0)
+};
+
 //face, vertex, offsetvec	//TODO: refactor so offsets are calculated programmatically instead of from this array.
-static const char AO_CHECKS_OFFSET[6][4][3][3] =
+static const unsigned int AO_CHECKS_MASKS[6][4][3] =
 {
 	{ //above
 		{ //v1
-			{ 0, 1, -1 },	//left
-			{ 1, 1, 0 },	//front
-			{ 1, 1, -1 }	//frontleft
+			getSolidBitMask(0, 1, -1),	//left
+			getSolidBitMask(1, 1, 0),	//front
+			getSolidBitMask(1, 1, -1)	//frontleft
 		},
 		{ //v2
-			{ 1, 1, 0 },	//front
-			{ 0, 1, 1 },	//right
-			{ 1, 1, 1 }		//frontright
+			getSolidBitMask(1, 1, 0),	//front
+			getSolidBitMask(0, 1, 1),	//right
+			getSolidBitMask(1, 1, 1)		//frontright
 		},
 		{ //v3
-			{ 0, 1, 1 },	//right
-			{ -1, 1, 0 },	//back
-			{ -1, 1, 1 }	//backright
+			getSolidBitMask(0, 1, 1),	//right
+			getSolidBitMask(-1, 1, 0),	//back
+			getSolidBitMask(-1, 1, 1)	//backright
 		},
 		{ //v4
-			{ 0, 1, -1 },	//left
-			{ -1, 1, 0 },	//back
-			{ -1, 1, -1 }	//backleft
+			getSolidBitMask(0, 1, -1),	//left
+			getSolidBitMask(-1, 1, 0),	//back
+			getSolidBitMask(-1, 1, -1)	//backleft
 		}
 	},
 	{ //below
 		{ //v1
-			{ 0, -1, 1 },	//right
-			{ 1, -1, 0 },	//front
-			{ 1, -1, 1 }	//frontright
+			getSolidBitMask(0, -1, 1),	//right
+			getSolidBitMask(1, -1, 0),	//front
+			getSolidBitMask(1, -1, 1)	//frontright
 		},
 		{ //v2
-			{ 1, -1, 0 },	//front
-			{ 0, -1, -1 },	//left
-			{ 1, -1, -1 }	//frontleft
+			getSolidBitMask(1, -1, 0),	//front
+			getSolidBitMask(0, -1, -1),	//left
+			getSolidBitMask(1, -1, -1)	//frontleft
 		},
 		{ //v3
-			{ 0, -1, -1 },	//left
-			{ -1, -1, 0 },	//back
-			{ -1, -1, -1 }	//backleft
+			getSolidBitMask(0, -1, -1),	//left
+			getSolidBitMask(-1, -1, 0),	//back
+			getSolidBitMask(-1, -1, -1)	//backleft
 		},
 		{ //v4
-			{ 0, -1, 1 },	//right
-			{ -1, -1, 0 },	//back
-			{ -1, -1, 1 }	//backright
+			getSolidBitMask(0, -1, 1),	//right
+			getSolidBitMask(-1, -1, 0),	//back
+			getSolidBitMask(-1, -1, 1)	//backright
 		}
 	},
 	{ //left
 		{ //v1
-			{ 0, 1, -1 },
-			{ -1, 0, -1 },
-			{ -1, 1, -1 }
+			getSolidBitMask(0, 1, -1),
+			getSolidBitMask(-1, 0, -1),
+			getSolidBitMask(-1, 1, -1)
 		},
 		{ //v2
-			{ -1, 0, -1 },
-			{ 0, -1, -1 },
-			{ -1, -1, -1 }
+			getSolidBitMask(-1, 0, -1),
+			getSolidBitMask(0, -1, -1),
+			getSolidBitMask(-1, -1, -1)
 		},
 		{ //v3
-			{ 0, -1, -1 },
-			{ 1, 0, -1 },
-			{ 1, -1, -1 }
+			getSolidBitMask(0, -1, -1),
+			getSolidBitMask(1, 0, -1),
+			getSolidBitMask(1, -1, -1)
 		},
 		{ //v4
-			{ 0, 1, -1 },
-			{ 1, 0, -1 },
-			{ 1, 1, -1 }
+			getSolidBitMask(0, 1, -1),
+			getSolidBitMask(1, 0, -1),
+			getSolidBitMask(1, 1, -1)
 		}
 	},
 	{ //right
 		{ //v1
-			{ 0, 1, 1 },
-			{ 1, 0, 1 },
-			{ 1, 1, 1 }
+			getSolidBitMask(0, 1, 1),
+			getSolidBitMask(1, 0, 1),
+			getSolidBitMask(1, 1, 1)
 		},
 		{ //v2
-			{ 1, 0, 1 },
-			{ 0, -1, 1 },
-			{ 1, -1, 1 }
+			getSolidBitMask(1, 0, 1),
+			getSolidBitMask(0, -1, 1),
+			getSolidBitMask(1, -1, 1)
 		},
 		{ //v3
-			{ 0, -1, 1 },
-			{ -1, 0, 1 },
-			{ -1, -1, 1 }
+			getSolidBitMask(0, -1, 1),
+			getSolidBitMask(-1, 0, 1),
+			getSolidBitMask(-1, -1, 1)
 		},
 		{ //v4
-			{ 0, 1, 1 },
-			{ -1, 0, 1 },
-			{ -1, 1, 1 }
+			getSolidBitMask(0, 1, 1),
+			getSolidBitMask(-1, 0, 1),
+			getSolidBitMask( -1, 1, 1)
 		}
 	},
 	{ //front
 		{ //v2
-			{ 1, 1, 0 },
-			{ 1, 0, -1 },
-			{ 1, 1, -1 }
+			getSolidBitMask(1, 1, 0),
+			getSolidBitMask(1, 0, -1),
+			getSolidBitMask(1, 1, -1)
 		},
 		{ //v3
-			{ 1, 0, -1 },
-			{ 1, -1, 0 },
-			{ 1, -1, -1 }
+			getSolidBitMask(1, 0, -1),
+			getSolidBitMask(1, -1, 0),
+			getSolidBitMask(1, -1, -1)
 		},
 		{ //v4
-			{ 1, 0, 1 },
-			{ 1, -1, 0 },
-			{ 1, -1, 1 }
+			getSolidBitMask(1, 0, 1),
+			getSolidBitMask(1, -1, 0),
+			getSolidBitMask(1, -1, 1)
 		},
 		{ //v1
-			{ 1, 0, 1 },
-			{ 1, 1, 0 },
-			{ 1, 1, 1 }
+			getSolidBitMask(1, 0, 1),
+			getSolidBitMask(1, 1, 0),
+			getSolidBitMask(1, 1, 1)
 		}
-
 	},
 	{ //back
 		{ //v2
-			{ -1, 1, 0 },
-			{ -1, 0, 1 },
-			{ -1, 1, 1 }
+			getSolidBitMask(-1, 1, 0),
+			getSolidBitMask(-1, 0, 1),
+			getSolidBitMask(-1, 1, 1)
 		},
 		{ //v3
-			{ -1, 0, 1 },
-			{ -1, -1, 0 },
-			{ -1, -1, 1 }
+			getSolidBitMask(-1, 0, 1),
+			getSolidBitMask(-1, -1, 0),
+			getSolidBitMask(-1, -1, 1)
 		},
 		{ //v4
-			{ -1, 0, -1 },
-			{ -1, -1, 0 },
-			{ -1, -1, -1 }
+			getSolidBitMask(-1, 0, -1),
+			getSolidBitMask(-1, -1, 0),
+			getSolidBitMask(-1, -1, -1)
 		},
 		{ //v1
-			{ -1, 0, -1 },
-			{ -1, 1, 0 },
-			{ -1, 1, -1 }
+			getSolidBitMask(-1, 0, -1),
+			getSolidBitMask(-1, 1, 0),
+			getSolidBitMask(-1, 1, -1)
 		}
 	}
 };
@@ -283,11 +297,6 @@ void WorldRenderer::removeRenderChunk(const glm::ivec3& pos)
 	}
 }
 
-const VoxelBlock* getBlockData(const glm::vec3& blockPos)
-{
-	return 0;
-}
-
 void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world)
 {
 	const glm::ivec3& chunkPos = chunk->m_pos;
@@ -311,33 +320,13 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 				int worldY = chunkPos.y * CHUNK_SIZE + y;
 				int worldZ = chunkPos.z * CHUNK_SIZE + z;
 
-				//get the 8 surrounding blocks (including pos)
-				const VoxelBlock* surroundingBlockData[3][3][3];
-				for (int i = 0; i < 3; ++i)
-				{
-					for (int j = 0; j < 3; ++j)
-					{
-						for (int k = 0; k < 3; ++k)
-						{
-							glm::ivec3 pos(worldX + (i - 1), worldY + (j - 1), worldZ + (k - 1));
-							surroundingBlockData[i][j][k] = &world.getBlock(pos);
-						}
-					}
-				}
-				const VoxelBlock* above = surroundingBlockData[1][2][1];
-				const VoxelBlock* below = surroundingBlockData[1][0][1];
-				const VoxelBlock* front = surroundingBlockData[2][1][1];
-				const VoxelBlock* back = surroundingBlockData[0][1][1];
-				const VoxelBlock* right = surroundingBlockData[1][1][2];
-				const VoxelBlock* left = surroundingBlockData[1][1][0];
-				// store the 6 adjacent blocks so we can check if they're solid.
-				const VoxelBlock* faceValues[6] = { above, below, left, right, front, back };
+				unsigned int solidBits = world.getSolidSurroundingBlockBits(glm::ivec3(worldX, worldY, worldZ));
 
 				// for every face of the block
 				for (int face = 0; face < 6; ++face)
 				{
 					// if the face is invisible, continue (if no airblock or transparant block touching face)
-					if (faceValues[face]->solid)
+					if (solidBits & SOLID_FACE_MASKS[face])
 						continue;
 
 					unsigned char vertexAO[4];
@@ -349,15 +338,8 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 						// sample 3 times per vertex, for the touching blocks; side, side, corner
 						for (int sample = 0; sample < 3; ++sample)	
 						{
-							// Get the offset to sample with.
-							char sampleXOffset = AO_CHECKS_OFFSET[face][vertex][sample][0];
-							char sampleYOffset = AO_CHECKS_OFFSET[face][vertex][sample][1];
-							char sampleZOffset = AO_CHECKS_OFFSET[face][vertex][sample][2];
-
-							// +1 because offset ranges from -1 to 1, and array index goes from 0-2
-							const VoxelBlock* blockProperties = surroundingBlockData[sampleXOffset + 1][sampleYOffset + 1][sampleZOffset + 1];
-
-							isSolid[sample] = blockProperties->solid;
+							unsigned int bitMask = AO_CHECKS_MASKS[face][vertex][sample];
+							isSolid[sample] = (solidBits & bitMask) != 0;
 						}
 
 						vertexAO[vertex] = getAO(isSolid[0], isSolid[1], isSolid[2]);

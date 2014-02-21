@@ -29,40 +29,19 @@ VoxelWorld::VoxelWorld()
 	, m_tickDurationSec(1.0f / UPDATES_PER_SEC)
 {
 	printf("Press F1 to print controls. \n");
+
 	stateWorldMap.insert(std::make_pair(m_L, this));	// dirty way to retrieve a world object after a lua->c++ call.
 	Game::initLua(m_L);
 	initializeLuaWorld();
-	
-	IGraphicsProvider& provider = Game::graphics.getGraphicsProvider();
+	initializeTileSet();
 
-	const std::vector<std::string>& blockTextureNames = m_propertyManager.getRegisteredBlockTextureNames();
-	ITextureArrayParameters parameters;
-	const char** filePaths = new const char*[blockTextureNames.size()];
-	for (unsigned int i = 0; i < blockTextureNames.size(); ++i)
-	{
-		filePaths[i] = blockTextureNames[i].c_str();
-		printf("path: %s \n", blockTextureNames[i].c_str());
-	}
-	parameters.filePaths = filePaths;
-	parameters.numTextures = blockTextureNames.size();
-	parameters.arrayWidth = m_propertyManager.getTextureSize();
-	parameters.arrayHeight = m_propertyManager.getTextureSize();
-	
-	TextureSettings textureSettings;
-	textureSettings.magFilter = TextureSettings::NEAREST;
-	textureSettings.minFilter = TextureSettings::MIPMAP_LINEAR;
-	textureSettings.uWrap = TextureSettings::CLAMP;
-	textureSettings.vWrap = TextureSettings::CLAMP;
-	parameters.textureSettings = textureSettings;
-
-	m_textureArray = provider.createTextureArray(parameters);
-	delete[] filePaths;
 	////////////////Map generation//////////////	//WIP!
 	// TODO: remove statics //
 	////////////////////////////////////////////
 	static module::Perlin perlin;
 	perlin.SetOctaveCount(4);
 	perlin.SetFrequency(2.5);
+	perlin.SetNoiseQuality(NoiseQuality::QUALITY_FAST);
 
 	static module::Turbulence turbulence;
 	turbulence.SetFrequency(4.0);
@@ -136,6 +115,88 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 		if (Game::getSDLTicks() - startUnload > MAX_UNLOAD_TIME_MS)
 			return;
 	}
+}
+
+void VoxelWorld::initializeTileSet()
+{
+	IGraphicsProvider& provider = Game::graphics.getGraphicsProvider();
+
+	const std::vector<std::string>& blockTextureNames = m_propertyManager.getRegisteredBlockTextureNames();
+	ITextureArrayParameters parameters;
+	const char** filePaths = new const char*[blockTextureNames.size()];
+	for (unsigned int i = 0; i < blockTextureNames.size(); ++i)
+	{
+		filePaths[i] = blockTextureNames[i].c_str();
+	}
+	parameters.filePaths = filePaths;
+	parameters.numTextures = blockTextureNames.size();
+	parameters.arrayWidth = m_propertyManager.getTextureSize();
+	parameters.arrayHeight = m_propertyManager.getTextureSize();
+
+	TextureSettings textureSettings;
+	textureSettings.magFilter = TextureSettings::NEAREST;
+	textureSettings.minFilter = TextureSettings::MIPMAP_LINEAR;
+	textureSettings.uWrap = TextureSettings::CLAMP;
+	textureSettings.vWrap = TextureSettings::CLAMP;
+	parameters.textureSettings = textureSettings;
+
+	m_textureArray = provider.createTextureArray(parameters);
+	delete[] filePaths;
+}
+
+bool isOnBorder(const glm::ivec3& pos, int min, int max)
+{
+	if (pos.x == min || pos.y == min || pos.z == min)
+		return true;
+	if (pos.x == max || pos.y == max || pos.z == max)
+		return true;
+	return false;
+}
+
+unsigned int VoxelWorld::getSolidSurroundingBlockBits(const glm::ivec3& blockPos)
+{
+	unsigned int solidBits = 0;
+	const glm::ivec3& blockChunkPos = toChunkBlockPos(blockPos);
+	if (isOnBorder(blockChunkPos, 0, CHUNK_SIZE - 1))
+	{
+		for (unsigned int x = 0; x < 3; ++x)
+		{
+			for (unsigned int y = 0; y < 3; ++y)
+			{
+				for (unsigned int z = 0; z < 3; ++z)
+				{
+					glm::ivec3 pos = blockPos + glm::ivec3(x - 1, y - 1, z - 1);
+					unsigned int bitIdx = z + 3 * (y + 3 * x);
+					if (getBlock(pos).solid)
+					{
+						solidBits |= (1 << bitIdx);
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		const glm::ivec3& chunkPos = toChunkPos(blockPos);
+		const std::unique_ptr<VoxelChunk>& chunk = m_chunkManager.getChunk(chunkPos);
+
+		for (unsigned int x = 0; x < 3; ++x)
+		{
+			for (unsigned int y = 0; y < 3; ++y)
+			{
+				for (unsigned int z = 0; z < 3; ++z)
+				{
+					glm::ivec3 pos = blockChunkPos + glm::ivec3(x - 1, y - 1, z - 1);
+					unsigned int bitIdx = z + 3 * (y + 3 * x);
+					if (chunk->getBlock(pos).solid)
+					{
+						solidBits |= (1 << bitIdx);
+					}
+				}
+			}
+		}
+	}
+	return solidBits;
 }
 
 void VoxelWorld::doBlockUpdates()

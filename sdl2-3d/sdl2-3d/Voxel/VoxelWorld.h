@@ -33,6 +33,7 @@ public:
 
 	const VoxelBlock& getBlock(const glm::ivec3& pos);
 	const BlockProperties& getBlockProperties(BlockID blockID);
+	unsigned int VoxelWorld::getSolidSurroundingBlockBits(const glm::ivec3& blockPos);
 
 	const ChunkManager::ChunkMap& getChunks();
 	std::unique_ptr<VoxelChunk>& getChunk(const glm::ivec3& chunkPos);
@@ -52,6 +53,7 @@ private:
 
 	void doBlockUpdates();
 	void initializeLuaWorld();
+	void initializeTileSet();
 	void generateChunk(const glm::ivec3& chunkPos);
 
 	BlockID* getBlockLayer(int height);
