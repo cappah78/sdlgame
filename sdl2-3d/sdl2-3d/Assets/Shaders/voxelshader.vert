@@ -63,7 +63,7 @@ void main(void)
 	// offset the vertices by the position
 	gl_Position = u_mvp * vec4(position, 1.0);
 
-	out_vs.eyeDist = length(position - u_camPos); 
+	out_vs.eyeDist = length(position - u_camPos.xyz); 
 
 	// supply 3d texcoord to fragment shader
 	out_vs.texCoord = vec3(in_texCoord, textureId);
