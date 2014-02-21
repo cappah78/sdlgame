@@ -10,7 +10,6 @@
 #include <LuaBridge.h>
 
 struct lua_State;
-class GLTextureArray;
 
 /** contains a list of key-value pairs, and the base reference */
 struct LuaTableData

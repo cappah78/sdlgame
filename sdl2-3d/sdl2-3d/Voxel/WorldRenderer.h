@@ -45,8 +45,7 @@ private:
 
 	struct PerChunkUniformData
 	{
-		glm::vec3 chunkOffset;
-		float padding;
+		glm::vec4 chunkOffset;
 	} m_perChunkUniformData;
 
 	RenderChunkMap m_renderChunks;

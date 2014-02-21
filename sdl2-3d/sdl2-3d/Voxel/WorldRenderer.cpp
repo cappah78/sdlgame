@@ -4,12 +4,11 @@
 #include "PropertyManager.h"
 
 #include "../Engine/Graphics/Camera.h"
-#include "../Engine/Graphics/GL/GLTextureArray.h"
-#include "../Engine/Utils/CheckGLError.h"
 #include "../Game.h"
 
 #include "../Engine/Graphics/Model/IShader.h"
 #include "../Engine/Graphics/Model/IConstantBuffer.h"
+#include "../Engine/Graphics/Model/ITextureArray.h"
 
 #include <algorithm>
 #include <glm\gtc\matrix_transform.hpp>
@@ -155,20 +154,11 @@ static const char AO_CHECKS_OFFSET[6][4][3][3] =
 WorldRenderer::WorldRenderer()
 	: m_numLoadedChunks(0)
 {
-	CHECK_GL_ERROR();
-
 	m_iVoxelShader = Game::graphics.getGraphicsProvider().createShaderFromFile("Assets/Shaders/voxelshader.vert", "Assets/Shaders/voxelshader.frag");
-	CHECK_GL_ERROR();
-
 	m_perFrameUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 0, "PerFrameData", IConstantBufferParameters());
-	CHECK_GL_ERROR();
-
 	m_perChunkUniformDataBuffer = Game::graphics.getGraphicsProvider().createConstantBuffer(m_iVoxelShader, 1, "PerChunkData", IConstantBufferParameters());
-	CHECK_GL_ERROR();
 
 	m_perFrameUniformData.fogColor = glm::vec4(0.4f, 0.7f, 1.0f, 1.0f);
-
-	CHECK_GL_ERROR();
 }
 
 WorldRenderer::~WorldRenderer()
@@ -259,7 +249,7 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 
 	for (const std::shared_ptr<VoxelRenderer::Chunk>& chunk : m_visibleChunkList)
 	{
-		m_perChunkUniformData.chunkOffset = chunk->m_renderOffset;
+		m_perChunkUniformData.chunkOffset = glm::vec4(chunk->m_renderOffset, 0.0f);
 		m_perChunkUniformDataBuffer->update(&m_perChunkUniformData, sizeof(m_perChunkUniformData));
 		m_renderer.renderChunk(chunk);
 	}
@@ -291,6 +281,11 @@ void WorldRenderer::removeRenderChunk(const glm::ivec3& pos)
 		m_renderChunks.erase(it);
 		m_numLoadedChunks--;
 	}
+}
+
+const VoxelBlock* getBlockData(const glm::vec3& blockPos)
+{
+	return 0;
 }
 
 void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world)
@@ -346,12 +341,13 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 						continue;
 
 					unsigned char vertexAO[4];
-
-					for (int vertex = 0; vertex < 4; ++vertex)	//for every vertex
+					// for every vertex of the face
+					for (int vertex = 0; vertex < 4; ++vertex)
 					{
 						bool isSolid[3];
 
-						for (int sample = 0; sample < 3; ++sample)	//3 times per vertex, order should be side, side, corner
+						// sample 3 times per vertex, for the touching blocks; side, side, corner
+						for (int sample = 0; sample < 3; ++sample)	
 						{
 							// Get the offset to sample with.
 							char sampleXOffset = AO_CHECKS_OFFSET[face][vertex][sample][0];
@@ -364,12 +360,10 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 							isSolid[sample] = blockProperties->solid;
 						}
 
-						//get vertex ao contribution given the touching solid faces.
 						vertexAO[vertex] = getAO(isSolid[0], isSolid[1], isSolid[2]);
 					}
 
-					//get the rendering related properties for this block (texture id's).
-					// flip quad to avoid asymmetric color blending 
+					// Flip quad when needed to avoid asymmetric vertex color interpolation 
 					bool flipQuad = vertexAO[1] + vertexAO[3] > vertexAO[0] + vertexAO[2];
 					renderChunk->addFace((Face) face, x, y, z, properties.getTextureID((Face) face),
 						vertexAO[0], vertexAO[3], vertexAO[1], vertexAO[2], flipQuad);

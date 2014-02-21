@@ -7,7 +7,6 @@
 
 #include <unordered_map>
 #include <algorithm>
-#include "../Engine/Graphics/GL/GLTextureArray.h"
 
 static const std::string DEFAULT_BLOCK = "defaultblock";
 
@@ -55,7 +54,7 @@ const std::vector<std::string>& PropertyManager::getRegisteredBlockTextureNames(
 
 unsigned int PropertyManager::getTextureSize() const
 {
-	//TODO: remove hardcoded val
+	//TODO: remove hardcoded val!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	return 16;
 }
 

@@ -16,8 +16,8 @@ const float AO_MULT = (1.0 / 255.0);
 layout (std140) uniform PerFrameData
 {
 	mat4 u_mvp;
-	vec4 u_camPos;
-	vec4 u_fogColor;
+	vec4 u_camPos;		//xyz used
+	vec4 u_fogColor;	//rgb used
 	float u_fogStart;
 	float u_fogEnd;
 	float padding;
@@ -26,8 +26,7 @@ layout (std140) uniform PerFrameData
 
 layout (std140) uniform PerChunkData
 {
-	vec3 u_chunkOffset;
-	float padding3;
+	vec4 u_chunkOffset;	//xyz used
 };
 
 // Bit layout: u = unused, i = textureid, x/y/z = pos within chunk //
@@ -58,7 +57,7 @@ void main(void)
 	float ao = float ((in_point & UNUSED_BITS_MASK) >> POSITION_AND_TEXTURE_BITS);
 	out_vs.vertexAO = 1.0 - (ao * AO_MULT);
 
-	vec3 position = vec3(x, y, z) + u_chunkOffset;
+	vec3 position = vec3(x, y, z) + u_chunkOffset.xyz;
 
 	// offset the vertices by the position
 	gl_Position = u_mvp * vec4(position, 1.0);

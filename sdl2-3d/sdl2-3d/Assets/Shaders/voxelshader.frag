@@ -5,8 +5,8 @@ uniform sampler2DArray u_texArr;
 layout (std140) uniform PerFrameData
 {
 	mat4 u_mvp;
-	vec4 u_camPos;
-	vec4 u_fogColor;
+	vec4 u_camPos;		//xyz used
+	vec4 u_fogColor;	//rgb used
 	float u_fogStart;
 	float u_fogEnd;
 	float padding;

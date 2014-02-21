@@ -78,6 +78,7 @@ void attachShaderSource(GLuint prog, GLenum type, const char * source)
 
 	glAttachShader(prog, sh);
 	glDeleteShader(sh);
+	CHECK_GL_ERROR();
 }
 
 GLenum eDrawModeToGLDrawMode(EDrawMode drawMode)
@@ -110,7 +111,9 @@ std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(const char* ve
 
 	glLinkProgram(program);
 
-	return std::unique_ptr<IShader>(new GLShader(program));
+	IShader* shader = new GLShader(program);
+	CHECK_GL_ERROR();
+	return std::unique_ptr<IShader>(shader);
 }
 
 std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
@@ -146,7 +149,9 @@ std::unique_ptr<IShader> GLGraphicsProvider::createShaderFromFile(
 	}
 	glLinkProgram(program);
 
-	return std::unique_ptr<IShader>(new GLShader(program));
+	IShader* shader = new GLShader(program);
+	CHECK_GL_ERROR();
+	return std::unique_ptr<IShader>(shader);
 }
 
 std::unique_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const char* computeShaderFilePath)
@@ -158,7 +163,10 @@ std::unique_ptr<IShader> GLGraphicsProvider::createComputeShaderFromFile(const c
 		attachShaderSource(program, GL_COMPUTE_SHADER, contents.c_str());
 	}
 	glLinkProgram(program);
-	return std::unique_ptr<IShader>(new GLShader(program));
+
+	IShader* shader = new GLShader(program);
+	CHECK_GL_ERROR();
+	return std::unique_ptr<IShader>(shader);
 }
 
 std::unique_ptr<ITexture> GLGraphicsProvider::createTexture(const ITextureParameters& parameters)
@@ -175,7 +183,9 @@ std::unique_ptr<ITexture> GLGraphicsProvider::createTexture(const ITextureParame
 std::unique_ptr<ITextureArray> GLGraphicsProvider::createTextureArray(const ITextureArrayParameters& parameters)
 {
 	//TODO: filter settings
-	return std::unique_ptr<ITextureArray>(new GLTextureArray(parameters.filePaths, parameters.numTextures, parameters.arrayWidth, parameters.arrayHeight));
+	ITextureArray* textureArray = new GLTextureArray(parameters.filePaths, parameters.numTextures, parameters.arrayWidth, parameters.arrayHeight);
+	CHECK_GL_ERROR();
+	return std::unique_ptr<ITextureArray>(textureArray);
 }
 
 const ITexture* GLGraphicsProvider::getManagedTexture(const char* filePath)
@@ -197,20 +207,28 @@ const ITexture* GLGraphicsProvider::getManagedTexture(const char* filePath)
 
 std::unique_ptr<IVertexBuffer> GLGraphicsProvider::createVertexBuffer(const IVertexBufferParameters& parameters)
 {	
-	return std::unique_ptr<IVertexBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
+	IVertexBuffer* vertexBuffer = new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode));
+	CHECK_GL_ERROR();
+	return std::unique_ptr<IVertexBuffer>(vertexBuffer);
 }
 
 std::unique_ptr<IIndiceBuffer> GLGraphicsProvider::createIndiceBuffer(const IIndiceBufferParameters& parameters)
 {
-	return std::unique_ptr<IIndiceBuffer>(new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ELEMENT_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode)));
+	IIndiceBuffer* indiceBuffer = new GLVertexBuffer(parameters.m_sizeInBytes, parameters.m_data, GL_ELEMENT_ARRAY_BUFFER, eDrawModeToGLDrawMode(parameters.m_drawMode));
+	CHECK_GL_ERROR();
+	return std::unique_ptr<IIndiceBuffer>(indiceBuffer);
 }
 
 std::unique_ptr<IConstantBuffer> GLGraphicsProvider::createConstantBuffer(std::unique_ptr<IShader>& shader, unsigned int bufferIndex, const char* bufferName, const IConstantBufferParameters& parameters)
 {
-	return std::unique_ptr<IConstantBuffer>(new GLConstantBuffer(shader->getID(), bufferIndex, bufferName));
+	IConstantBuffer* constantBuffer = new GLConstantBuffer(shader->getID(), bufferIndex, bufferName);
+	CHECK_GL_ERROR();
+	return std::unique_ptr<IConstantBuffer>(constantBuffer);
 }
 
 std::unique_ptr<IStateBuffer> GLGraphicsProvider::createStateBuffer()
 {
-	return std::unique_ptr<IStateBuffer>(new GLStateBuffer());
+	IStateBuffer* stateBuffer = new GLStateBuffer();
+	CHECK_GL_ERROR();
+	return std::unique_ptr<IStateBuffer>(stateBuffer);
 }
