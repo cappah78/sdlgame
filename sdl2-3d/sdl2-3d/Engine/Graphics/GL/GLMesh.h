@@ -106,7 +106,7 @@ public:
 
 	GLMesh();
 	GLMesh(const std::string& fileName, GLGraphicsProvider& provider);
-
+	GLMesh(const GLMesh& copy) = delete;
 	~GLMesh();
 	
 	/** Give data required to render the mesh*/

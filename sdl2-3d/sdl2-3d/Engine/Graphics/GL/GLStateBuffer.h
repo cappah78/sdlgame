@@ -6,6 +6,7 @@ class GLStateBuffer : public IStateBuffer
 {
 public:
 	GLStateBuffer();
+	GLStateBuffer(const GLStateBuffer& copy) = delete;
 	virtual ~GLStateBuffer() override;
 
 	virtual void setIndiceBuffer(std::unique_ptr<IIndiceBuffer>& buffer) override;

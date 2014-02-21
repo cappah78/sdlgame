@@ -22,6 +22,8 @@ public:
 		GLint minFilter = GL_LINEAR, GLint magFilter = GL_NEAREST,
 		GLint GLTextureWrapS = GL_REPEAT, GLint GLTextureWrapT = GL_REPEAT);
 
+	GLTexture(const GLTexture& copy) = delete;
+
 	virtual ~GLTexture() override;
 
 	bool isLoaded() const { return m_textureID != 0; };

@@ -39,6 +39,7 @@ VoxelWorld::VoxelWorld()
 	// TODO: remove statics //
 	////////////////////////////////////////////
 	static module::Perlin perlin;
+	perlin.SetSeed(42);
 	perlin.SetOctaveCount(4);
 	perlin.SetFrequency(2.5);
 	perlin.SetNoiseQuality(NoiseQuality::QUALITY_FAST);

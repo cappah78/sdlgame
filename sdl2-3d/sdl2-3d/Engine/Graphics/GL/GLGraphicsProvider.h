@@ -12,6 +12,7 @@ class GLGraphicsProvider : public IGraphicsProvider
 {
 public:
 	GLGraphicsProvider();
+	GLGraphicsProvider(const GLGraphicsProvider& copy) = delete;
 	virtual ~GLGraphicsProvider() override;
 
 	virtual std::unique_ptr<IShader> createShaderFromFile(const char* vertexShaderFilePath, const char* pixelShaderFilePath) override;

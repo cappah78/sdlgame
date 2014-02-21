@@ -14,6 +14,7 @@ public:
 	right, left, top, bottom, front, back
 	*/
 	GLCubeMap(const char** textureNames);
+	GLCubeMap(const GLCubeMap& copy) = delete;
 	~GLCubeMap();
 
 	void bind(GLenum textureUnit);

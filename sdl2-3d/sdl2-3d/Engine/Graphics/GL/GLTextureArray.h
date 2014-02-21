@@ -20,7 +20,7 @@ public:
 		GLint minFilter = GL_LINEAR_MIPMAP_LINEAR, GLint magFilter = GL_NEAREST,
 		GLint textureWrapS = GL_CLAMP_TO_EDGE, GLint textureWrapT = GL_CLAMP_TO_EDGE);
 
-	GLTextureArray(const GLTextureArray& copyMe);
+	GLTextureArray(const GLTextureArray& copyMe) = delete;
 	~GLTextureArray();
 
 	virtual void bind() override;

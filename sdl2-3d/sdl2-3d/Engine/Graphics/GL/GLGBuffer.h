@@ -11,6 +11,7 @@ class GLGBuffer
 public:
 
 	GLGBuffer(unsigned int numTextures, unsigned int width = Game::graphics.getScreenWidth(), unsigned int height = Game::graphics.getScreenHeight());
+	GLGBuffer(const GLGBuffer& copy) = delete;
 	~GLGBuffer();
 
 	void unbind();

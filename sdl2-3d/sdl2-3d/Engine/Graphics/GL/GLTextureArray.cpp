@@ -68,11 +68,6 @@ GLTextureArray::GLTextureArray(const std::vector<std::string>& imageNames,
 	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }
 
-GLTextureArray::GLTextureArray(const GLTextureArray& copyMe)
-{
-
-}
-
 GLTextureArray::~GLTextureArray()
 {
 
