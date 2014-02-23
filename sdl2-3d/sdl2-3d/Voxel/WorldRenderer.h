@@ -16,7 +16,7 @@ class WorldRenderer
 public:
 	typedef std::unordered_map<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>, IVec3Hash, IVec3Equality> RenderChunkMap;
 
-	static const unsigned char AO_STRENGTH = 80;
+	static const unsigned char AO_STRENGTH = 10;
 
 	WorldRenderer();
 	~WorldRenderer();
@@ -26,11 +26,13 @@ public:
 
 private:
 
-	inline static unsigned char getAO(bool side, bool side2, bool corner);
-
-	void removeRenderChunk(const glm::ivec3& pos);
+	void updateChunks(VoxelWorld& world, const Camera& camera);
+	void findVisibleChunks(VoxelWorld& world, const Camera& camera);
+	void renderVisibleChunks(VoxelWorld& world, const Camera& camera);
 	void buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world);
-	const std::shared_ptr<VoxelRenderer::Chunk> getRenderChunk(const glm::ivec3& pos);
+
+	void unloadRenderChunk(const glm::ivec3& pos);
+	const std::shared_ptr<VoxelRenderer::Chunk> loadRenderChunk(const glm::ivec3& pos);
 
 	struct PerFrameUniformData
 	{

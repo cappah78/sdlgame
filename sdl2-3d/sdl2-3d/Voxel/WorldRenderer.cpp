@@ -13,19 +13,24 @@
 #include <algorithm>
 #include <glm\gtc\matrix_transform.hpp>
 
-static unsigned int getSolidBitMask(int xOffset, int yOffset, int zOffset)
+static unsigned int getSolidBlockMask(int xOffset, int yOffset, int zOffset)
 {
 	return 1 << ((zOffset + 1) + 3 * ((yOffset + 1) + 3 * (xOffset + 1)));
 }
 
+inline unsigned char getAO(bool side, bool side2, bool corner)
+{
+	return (side && side2 ? 3 * WorldRenderer::AO_STRENGTH : (side + corner + side2) * WorldRenderer::AO_STRENGTH);
+}
+
 static const unsigned int SOLID_FACE_MASKS[6] =
 {
-	getSolidBitMask(0, 1, 0), 
-	getSolidBitMask(0, -1, 0),
-	getSolidBitMask(0, 0, -1), 
-	getSolidBitMask(0, 0, 1),
-	getSolidBitMask(1, 0, 0),
-	getSolidBitMask(-1, 0, 0)
+	getSolidBlockMask(0, 1, 0),
+	getSolidBlockMask(0, -1, 0),
+	getSolidBlockMask(0, 0, -1),
+	getSolidBlockMask(0, 0, 1),
+	getSolidBlockMask(1, 0, 0),
+	getSolidBlockMask(-1, 0, 0)
 };
 
 //face, vertex, offsetvec	//TODO: refactor so offsets are calculated programmatically instead of from this array.
@@ -33,134 +38,134 @@ static const unsigned int AO_CHECKS_MASKS[6][4][3] =
 {
 	{ //above
 		{ //v1
-			getSolidBitMask(0, 1, -1),	//left
-			getSolidBitMask(1, 1, 0),	//front
-			getSolidBitMask(1, 1, -1)	//frontleft
+			getSolidBlockMask(0, 1, -1),	//left
+			getSolidBlockMask(1, 1, 0),	//front
+			getSolidBlockMask(1, 1, -1)	//frontleft
 		},
 		{ //v2
-			getSolidBitMask(1, 1, 0),	//front
-			getSolidBitMask(0, 1, 1),	//right
-			getSolidBitMask(1, 1, 1)		//frontright
+			getSolidBlockMask(1, 1, 0),	//front
+			getSolidBlockMask(0, 1, 1),	//right
+			getSolidBlockMask(1, 1, 1)		//frontright
 		},
 		{ //v3
-			getSolidBitMask(0, 1, 1),	//right
-			getSolidBitMask(-1, 1, 0),	//back
-			getSolidBitMask(-1, 1, 1)	//backright
+			getSolidBlockMask(0, 1, 1),	//right
+			getSolidBlockMask(-1, 1, 0),	//back
+			getSolidBlockMask(-1, 1, 1)	//backright
 		},
 		{ //v4
-			getSolidBitMask(0, 1, -1),	//left
-			getSolidBitMask(-1, 1, 0),	//back
-			getSolidBitMask(-1, 1, -1)	//backleft
+			getSolidBlockMask(0, 1, -1),	//left
+			getSolidBlockMask(-1, 1, 0),	//back
+			getSolidBlockMask(-1, 1, -1)	//backleft
 		}
 	},
 	{ //below
 		{ //v1
-			getSolidBitMask(0, -1, 1),	//right
-			getSolidBitMask(1, -1, 0),	//front
-			getSolidBitMask(1, -1, 1)	//frontright
+			getSolidBlockMask(0, -1, 1),	//right
+			getSolidBlockMask(1, -1, 0),	//front
+			getSolidBlockMask(1, -1, 1)	//frontright
 		},
 		{ //v2
-			getSolidBitMask(1, -1, 0),	//front
-			getSolidBitMask(0, -1, -1),	//left
-			getSolidBitMask(1, -1, -1)	//frontleft
+			getSolidBlockMask(1, -1, 0),	//front
+			getSolidBlockMask(0, -1, -1),	//left
+			getSolidBlockMask(1, -1, -1)	//frontleft
 		},
 		{ //v3
-			getSolidBitMask(0, -1, -1),	//left
-			getSolidBitMask(-1, -1, 0),	//back
-			getSolidBitMask(-1, -1, -1)	//backleft
+			getSolidBlockMask(0, -1, -1),	//left
+			getSolidBlockMask(-1, -1, 0),	//back
+			getSolidBlockMask(-1, -1, -1)	//backleft
 		},
 		{ //v4
-			getSolidBitMask(0, -1, 1),	//right
-			getSolidBitMask(-1, -1, 0),	//back
-			getSolidBitMask(-1, -1, 1)	//backright
+			getSolidBlockMask(0, -1, 1),	//right
+			getSolidBlockMask(-1, -1, 0),	//back
+			getSolidBlockMask(-1, -1, 1)	//backright
 		}
 	},
 	{ //left
 		{ //v1
-			getSolidBitMask(0, 1, -1),
-			getSolidBitMask(-1, 0, -1),
-			getSolidBitMask(-1, 1, -1)
+			getSolidBlockMask(0, 1, -1),
+			getSolidBlockMask(-1, 0, -1),
+			getSolidBlockMask(-1, 1, -1)
 		},
 		{ //v2
-			getSolidBitMask(-1, 0, -1),
-			getSolidBitMask(0, -1, -1),
-			getSolidBitMask(-1, -1, -1)
+			getSolidBlockMask(-1, 0, -1),
+			getSolidBlockMask(0, -1, -1),
+			getSolidBlockMask(-1, -1, -1)
 		},
 		{ //v3
-			getSolidBitMask(0, -1, -1),
-			getSolidBitMask(1, 0, -1),
-			getSolidBitMask(1, -1, -1)
+			getSolidBlockMask(0, -1, -1),
+			getSolidBlockMask(1, 0, -1),
+			getSolidBlockMask(1, -1, -1)
 		},
 		{ //v4
-			getSolidBitMask(0, 1, -1),
-			getSolidBitMask(1, 0, -1),
-			getSolidBitMask(1, 1, -1)
+			getSolidBlockMask(0, 1, -1),
+			getSolidBlockMask(1, 0, -1),
+			getSolidBlockMask(1, 1, -1)
 		}
 	},
 	{ //right
 		{ //v1
-			getSolidBitMask(0, 1, 1),
-			getSolidBitMask(1, 0, 1),
-			getSolidBitMask(1, 1, 1)
+			getSolidBlockMask(0, 1, 1),
+			getSolidBlockMask(1, 0, 1),
+			getSolidBlockMask(1, 1, 1)
 		},
 		{ //v2
-			getSolidBitMask(1, 0, 1),
-			getSolidBitMask(0, -1, 1),
-			getSolidBitMask(1, -1, 1)
+			getSolidBlockMask(1, 0, 1),
+			getSolidBlockMask(0, -1, 1),
+			getSolidBlockMask(1, -1, 1)
 		},
 		{ //v3
-			getSolidBitMask(0, -1, 1),
-			getSolidBitMask(-1, 0, 1),
-			getSolidBitMask(-1, -1, 1)
+			getSolidBlockMask(0, -1, 1),
+			getSolidBlockMask(-1, 0, 1),
+			getSolidBlockMask(-1, -1, 1)
 		},
 		{ //v4
-			getSolidBitMask(0, 1, 1),
-			getSolidBitMask(-1, 0, 1),
-			getSolidBitMask( -1, 1, 1)
+			getSolidBlockMask(0, 1, 1),
+			getSolidBlockMask(-1, 0, 1),
+			getSolidBlockMask( -1, 1, 1)
 		}
 	},
 	{ //front
 		{ //v2
-			getSolidBitMask(1, 1, 0),
-			getSolidBitMask(1, 0, -1),
-			getSolidBitMask(1, 1, -1)
+			getSolidBlockMask(1, 1, 0),
+			getSolidBlockMask(1, 0, -1),
+			getSolidBlockMask(1, 1, -1)
 		},
 		{ //v3
-			getSolidBitMask(1, 0, -1),
-			getSolidBitMask(1, -1, 0),
-			getSolidBitMask(1, -1, -1)
+			getSolidBlockMask(1, 0, -1),
+			getSolidBlockMask(1, -1, 0),
+			getSolidBlockMask(1, -1, -1)
 		},
 		{ //v4
-			getSolidBitMask(1, 0, 1),
-			getSolidBitMask(1, -1, 0),
-			getSolidBitMask(1, -1, 1)
+			getSolidBlockMask(1, 0, 1),
+			getSolidBlockMask(1, -1, 0),
+			getSolidBlockMask(1, -1, 1)
 		},
 		{ //v1
-			getSolidBitMask(1, 0, 1),
-			getSolidBitMask(1, 1, 0),
-			getSolidBitMask(1, 1, 1)
+			getSolidBlockMask(1, 0, 1),
+			getSolidBlockMask(1, 1, 0),
+			getSolidBlockMask(1, 1, 1)
 		}
 	},
 	{ //back
 		{ //v2
-			getSolidBitMask(-1, 1, 0),
-			getSolidBitMask(-1, 0, 1),
-			getSolidBitMask(-1, 1, 1)
+			getSolidBlockMask(-1, 1, 0),
+			getSolidBlockMask(-1, 0, 1),
+			getSolidBlockMask(-1, 1, 1)
 		},
 		{ //v3
-			getSolidBitMask(-1, 0, 1),
-			getSolidBitMask(-1, -1, 0),
-			getSolidBitMask(-1, -1, 1)
+			getSolidBlockMask(-1, 0, 1),
+			getSolidBlockMask(-1, -1, 0),
+			getSolidBlockMask(-1, -1, 1)
 		},
 		{ //v4
-			getSolidBitMask(-1, 0, -1),
-			getSolidBitMask(-1, -1, 0),
-			getSolidBitMask(-1, -1, -1)
+			getSolidBlockMask(-1, 0, -1),
+			getSolidBlockMask(-1, -1, 0),
+			getSolidBlockMask(-1, -1, -1)
 		},
 		{ //v1
-			getSolidBitMask(-1, 0, -1),
-			getSolidBitMask(-1, 1, 0),
-			getSolidBitMask(-1, 1, -1)
+			getSolidBlockMask(-1, 0, -1),
+			getSolidBlockMask(-1, 1, 0),
+			getSolidBlockMask(-1, 1, -1)
 		}
 	}
 };
@@ -180,56 +185,34 @@ WorldRenderer::~WorldRenderer()
 	m_visibleChunkList.clear();
 }
 
-inline unsigned char WorldRenderer::getAO(bool side, bool side2, bool corner)
+void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 {
-	return (side && side2 ? 3 * AO_STRENGTH : (side + corner + side2) * AO_STRENGTH / 2);
+	updateChunks(world, camera);
+	findVisibleChunks(world, camera);
+	renderVisibleChunks(world, camera);
 }
-
-struct DistanceSort
-{
-	DistanceSort(const glm::vec3& pos) : camPos(pos) {};
-	glm::vec3 camPos;
-
-	bool operator()(const std::shared_ptr<VoxelRenderer::Chunk>& lhs, const std::shared_ptr<VoxelRenderer::Chunk>& rhs) {
-		glm::vec3 delta1 = camPos - lhs->m_renderOffset;
-		glm::vec3 delta2 = camPos - rhs->m_renderOffset;
-		//return glm::dot(delta1, delta1) < glm::dot(delta2, delta2);
-		//faster but less accurate
-		return (delta1.x + delta1.y + delta1.z) < (delta2.x + delta2.y + delta2.z);
-	}
-};
 
 static const unsigned int MAX_MS_CHUNK_GEN_PER_FRAME = 2;
 
-void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
+void WorldRenderer::updateChunks(VoxelWorld& world, const Camera& camera)
 {
-	static const float sphereCullRad = CHUNK_SIZE / 2.0f;
 	const float cullRangeSquared = (camera.m_far + CHUNK_SIZE) * (camera.m_far + CHUNK_SIZE);
-
-	const PropertyManager& propertyManager = world.getPropertyManager();
-
 	unsigned int startTicks = Game::getSDLTicks();
 
-	glm::mat4 frustumCullMat = glm::transpose(camera.m_combinedMatrix);
-	const glm::vec3 extent = glm::vec3(CHUNK_SIZE / 2);
-
-	const ChunkManager::ChunkMap& chunks = world.getChunks();
-	for (auto& it : chunks)
+	for (const auto& it : world.getChunks())
 	{
 		const std::unique_ptr<VoxelChunk>& chunk = it.second;
 		const glm::ivec3& chunkPos = it.first;
-		glm::vec3 chunkWorldPos = glm::vec3(chunkPos) * (float) CHUNK_SIZE;
 
+		glm::vec3 chunkWorldPos = glm::vec3(chunkPos) * (float) CHUNK_SIZE;
 		glm::vec3 dist = camera.m_position - chunkWorldPos;
+
 		if (glm::dot(dist, dist) > cullRangeSquared)	// removing chunk data from gpu if out of camera.far range
 		{
-			removeRenderChunk(chunkPos);
+			unloadRenderChunk(chunkPos);
 			chunk->m_shouldUpdate = true;
 			continue;
 		}
-
-		//if (!Frustum::aabbInFrustum(chunkWorldPos, glm::vec3(8), frustumCullMat))
-		//	continue;
 
 		if (Game::getSDLTicks() - startTicks > MAX_MS_CHUNK_GEN_PER_FRAME)	//smooth out over multiple frames
 			continue;	//continue, not break because we still want to remove chunks that are out of range even when past max time
@@ -239,17 +222,26 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 
 		buildChunk(chunk, world);
 	}
+}
+
+void WorldRenderer::findVisibleChunks(VoxelWorld& world, const Camera& camera)
+{
+	glm::mat4 frustumCullMat = glm::transpose(camera.m_combinedMatrix);
+	const glm::vec3 extent = glm::vec3(CHUNK_SIZE / 2);
 
 	m_visibleChunkList.clear();
 	m_visibleChunkList.reserve(m_numLoadedChunks);
 
 	for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>>& it : m_renderChunks)
 	{
-		glm::vec3 chunkBlockPos = glm::vec3(it.first * (int)CHUNK_SIZE) + extent;
+		glm::vec3 chunkBlockPos = glm::vec3(it.first * (int) CHUNK_SIZE) + extent;
 		if (Frustum::aabbInFrustum(chunkBlockPos, glm::vec3(8), frustumCullMat))
 			m_visibleChunkList.push_back(it.second);
 	}
-	//std::sort(m_visibleChunkList.begin(), m_visibleChunkList.end(), DistanceSort(camera.m_position));
+}
+
+void WorldRenderer::renderVisibleChunks(VoxelWorld& world, const Camera& camera)
+{
 	world.getTileSet()->bind();
 
 	m_iVoxelShader->begin();
@@ -270,37 +262,10 @@ void WorldRenderer::render(VoxelWorld& world, const Camera& camera)
 	m_iVoxelShader->end();
 }
 
-const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::getRenderChunk(const glm::ivec3& pos)
-{
-	auto it = m_renderChunks.find(pos);
-	if (it != m_renderChunks.end())
-		return it->second;
-	else
-	{
-		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE);
-		//printf("Creating: %i %i %i \n", pos.x, pos.y, pos.z);
-
-		m_renderChunks.insert(std::make_pair(pos, chunk));
-		m_numLoadedChunks++;
-		return chunk;
-	}
-}
-
-void WorldRenderer::removeRenderChunk(const glm::ivec3& pos)
-{
-	auto it = m_renderChunks.find(pos);
-	if (it != m_renderChunks.end())
-	{
-		//printf("Removing: %i %i %i \n", pos.x, pos.y, pos.z);
-		m_renderChunks.erase(it);
-		m_numLoadedChunks--;
-	}
-}
-
 void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWorld& world)
 {
 	const glm::ivec3& chunkPos = chunk->m_pos;
-	auto& renderChunk = getRenderChunk(chunkPos);
+	const std::shared_ptr<VoxelRenderer::Chunk>& renderChunk = loadRenderChunk(chunkPos);
 
 	m_renderer.beginChunk(renderChunk);
 	for (int x = 0; x < CHUNK_SIZE; ++x)
@@ -356,96 +321,27 @@ void WorldRenderer::buildChunk(const std::unique_ptr<VoxelChunk>& chunk, VoxelWo
 	m_renderer.endChunk(renderChunk);
 }
 
-
-
-/*
-void WorldRenderer::bakeLight(const glm::vec3& lightPos, float lightRadius)
+const std::shared_ptr<VoxelRenderer::Chunk> WorldRenderer::loadRenderChunk(const glm::ivec3& pos)
 {
-static const unsigned int NUM_PX_CHUNK_W = 256;
-static const unsigned int NUM_PX_CHUNK_H = 50;
+	auto it = m_renderChunks.find(pos);
+	if (it != m_renderChunks.end())
+		return it->second;
+	else
+	{
+		const std::shared_ptr<VoxelRenderer::Chunk>& chunk = m_renderer.createChunk((float) pos.x * CHUNK_SIZE, (float) pos.y * CHUNK_SIZE, (float) pos.z * CHUNK_SIZE);
 
-std::vector<std::shared_ptr<VoxelRenderer::Chunk>> chunks;
-
-float lightDistanceSqr = (lightRadius + CHUNK_SIZE) * (lightRadius + CHUNK_SIZE);
-for (const std::pair<glm::ivec3, std::shared_ptr<VoxelRenderer::Chunk>> it : m_renderChunks)
-{
-glm::vec3 chunkBlockPos(it.first * (int) CHUNK_SIZE);
-glm::vec3 dst = chunkBlockPos - lightPos;
-float dstSqr = glm::dot(dst, dst);
-if (dstSqr < lightDistanceSqr)
-chunks.push_back(it.second);
+		m_renderChunks.insert(std::make_pair(pos, chunk));
+		m_numLoadedChunks++;
+		return chunk;
+	}
 }
 
-if (chunks.size() == 0)
-return;
-
-const unsigned int screenWidth = Game::graphics.getScreenWidth();
-const unsigned int screenHeight = Game::graphics.getScreenHeight();
-
-//amount of chunks drawn to a single buffer at a time (w*h)
-const unsigned int numWidth = (int) screenWidth / NUM_PX_CHUNK_W;
-const unsigned int numHeight = (int) screenHeight / NUM_PX_CHUNK_H;
-
-m_lightShader.begin();
-m_lightShader.setUniform2f("u_screenSize", glm::vec2(screenWidth, screenHeight));
-m_lightShader.setUniform3f("u_camPos", lightPos);
-m_lightShader.setUniform1f("u_lightDistance", lightRadius);
-
-m_gbuffer.bindForWriting();
-m_gbuffer.setReadBuffer(0);
-glReadBuffer(GL_COLOR_ATTACHMENT0);
-glClearColor(0, 0, 0, 1.0);
-glDisable(GL_DEPTH_TEST);
-glClear(GL_DEPTH_BUFFER_BIT);
-
-while (chunks.size() > 0)
+void WorldRenderer::unloadRenderChunk(const glm::ivec3& pos)
 {
-std::vector<std::shared_ptr<VoxelRenderer::Chunk>> currentChunks;
-
-for (unsigned int i = 0; i < (numWidth + numHeight) && chunks.size() > 0; ++i)
-{
-currentChunks.push_back(chunks.at(chunks.size() - 1));
-chunks.pop_back();
+	auto it = m_renderChunks.find(pos);
+	if (it != m_renderChunks.end())
+	{
+		m_renderChunks.erase(it);
+		m_numLoadedChunks--;
+	}
 }
-
-glClear(GL_COLOR_BUFFER_BIT);
-for (unsigned int i = 0, size = currentChunks.size(); i < size; ++i)
-{
-unsigned int xOffset = i % numWidth;
-unsigned int yOffset = i / numWidth;
-
-const std::shared_ptr<VoxelRenderer::Chunk> chunk = currentChunks.at(i);
-m_lightShader.setUniform2f("u_renderOffset", glm::vec2(NUM_PX_CHUNK_W * xOffset, NUM_PX_CHUNK_H * yOffset));
-m_lightShader.setUniform3f("u_chunkOffset", chunk->m_renderOffset);
-m_renderer.renderChunk(chunk, GL_POINTS);
-}
-
-const unsigned int fbWidth = NUM_PX_CHUNK_W * numWidth;
-const unsigned int fbHeight = NUM_PX_CHUNK_H * numHeight;
-glReadPixels(0, 0, fbWidth, fbHeight, GL_RED, GL_FLOAT, &m_getPixelBuffer[0]);
-for (unsigned int i = 0, size = currentChunks.size(); i < size; ++i)
-{
-const std::shared_ptr <VoxelRenderer::Chunk>& chunk = currentChunks[i];
-unsigned int numVertices = chunk->m_pointBuffer.getSizeInElements();
-
-unsigned int xOffsetChunk = (int) (i) % numWidth;
-unsigned int yOffsetChunk = (int) (i) / numWidth;
-
-chunk->m_colorBuffer.reset();
-for (unsigned int j = 0; j < numVertices; ++j)
-{
-unsigned int xOffsetPx = j % NUM_PX_CHUNK_W;
-unsigned int yOffsetPx = j / NUM_PX_CHUNK_W;
-unsigned int row = yOffsetPx + yOffsetChunk * NUM_PX_CHUNK_H;
-unsigned int totalOffset = fbWidth * row + (xOffsetPx + xOffsetChunk * NUM_PX_CHUNK_W);
-
-float dst = m_getPixelBuffer[totalOffset];
-chunk->m_colorBuffer.add(Color8888(0, 0, 0, (unsigned char) (dst * 255.0f)));
-}
-chunk->m_colorBuffer.update();
-}
-}
-m_gbuffer.unbind();
-m_lightShader.end();
-glEnable(GL_DEPTH_TEST);
-}*/

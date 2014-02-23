@@ -190,6 +190,7 @@ std::unique_ptr<ITextureArray> GLGraphicsProvider::createTextureArray(const ITex
 
 const ITexture* GLGraphicsProvider::getManagedTexture(const char* filePath)
 {
+	printf("gettex: %s \n", filePath);
 	std::string filePathString(filePath);
 	auto it = m_loadedTextureMap.find(filePathString);
 	if (it == m_loadedTextureMap.end())

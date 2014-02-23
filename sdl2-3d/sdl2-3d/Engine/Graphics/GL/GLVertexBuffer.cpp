@@ -60,9 +60,10 @@ inline void GLVertexBuffer::setAttribDivisor(unsigned int divisor)
 inline void GLVertexBuffer::resize(unsigned int numBytes, const void* data)
 {
 	bind();
+	/*
 	if (data && m_isInitialized)
 		glBufferData(m_bufferType, numBytes, NULL, m_drawUsage);
-	m_isInitialized = true;
+	m_isInitialized = true;*/
 	glBufferData(m_bufferType, numBytes, data, m_drawUsage);
 }
 

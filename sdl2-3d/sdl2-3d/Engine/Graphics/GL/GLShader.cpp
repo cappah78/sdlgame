@@ -7,6 +7,7 @@
 
 bool GLShader::s_begun = false;
 
+
 GLShader::GLShader() 
 {
 
@@ -51,7 +52,7 @@ void GLShader::end()
 	assert(m_begun);
 	s_begun = false;
 	m_begun = false;
-	//glUseProgram(0);	//optional
+	glUseProgram(0);	//optional
 }
 
 unsigned int GLShader::getID()

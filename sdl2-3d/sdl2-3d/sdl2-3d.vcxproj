@@ -32,7 +32,6 @@
     <ClInclude Include="Engine\Graphics\GL\GLTextureArray.h" />
     <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
-    <ClInclude Include="Engine\Graphics\Mesh.h" />
     <ClInclude Include="Engine\Graphics\Model\EBufferMapFlagBits.h" />
     <ClInclude Include="Engine\Graphics\Model\EDrawMode.h" />
     <ClInclude Include="Engine\Graphics\Model\IConstantBuffer.h" />

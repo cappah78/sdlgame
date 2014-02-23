@@ -30,6 +30,7 @@ private:
 	PerspectiveCamera m_camera;
 	GLShader m_modelShader;
 	GLMesh m_mesh;
+
 	VoxelWorld m_world;
 	WorldRenderer m_worldRenderer;
 	VoxelRenderer m_voxelRenderer;

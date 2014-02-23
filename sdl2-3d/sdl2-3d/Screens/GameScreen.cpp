@@ -26,7 +26,6 @@ GameScreen::GameScreen()
 		CAMERA_NEAR,
 		CAMERA_FAR)
 	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
-	, m_world()
 	, m_modelShader("Assets/Shaders/modelshader.vert", NULL, "Assets/Shaders/modelshader.frag")
 {
 	Game::input.registerKeyListener(&m_cameraController);
@@ -44,7 +43,8 @@ GameScreen::GameScreen()
 	m_modelShader.setUniform1i("u_opacityTex", 3);
 	m_modelShader.end();
 
-	m_mesh.loadMesh("Assets/Models/crysponza_bubbles/sponza.obj", m_textureManager);
+	m_mesh.loadMesh("Assets/Models/crysponza_bubbles/sponza.obj");
+
 	std::shared_ptr<GLMesh::ShaderAttributes> attribs(new GLMesh::ShaderAttributes(m_modelShader.getShaderID()));
 	m_mesh.setShaderAttributes(attribs);
 	//*/
@@ -66,7 +66,7 @@ void GameScreen::render(float deltaSec)
 	///* renders crytek sponza model /*
 	m_modelShader.begin();
 	m_modelShader.setUniformMatrix4f("u_mvp", m_camera.m_combinedMatrix);
-	m_modelShader.setUniformMatrix4f("u_transform", glm::scale(glm::translate(glm::mat4(1), glm::vec3(0, 0, -20)), glm::vec3(0.1f, 0.1f, 0.1f)));
+	m_modelShader.setUniformMatrix4f("u_transform", glm::scale(glm::translate(glm::mat4(1), glm::vec3(0, 0, -20)), glm::vec3(1.0f, 1.0f, 1.0f)));
 	m_mesh.render();
 	m_modelShader.end();
 	//*/

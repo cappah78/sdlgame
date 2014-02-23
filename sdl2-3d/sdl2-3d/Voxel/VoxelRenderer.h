@@ -53,11 +53,9 @@ private:
 
 	static const unsigned int MAX_FACES_PER_CHUNK = (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * (CHUNK_SIZE / 2) * 6;
 
-	static const unsigned int POSITION_LOC = 0;
-	static const unsigned int TEXCOORD_LOC = 1;
-
 	static const unsigned int SIZE_BITS = 5; // number of bits for position per axis
-	static const unsigned int TEXTURE_ID_BITS = 10;
+	static const unsigned int TEXTURE_ID_BITS = 11;
+	static const unsigned int AO_BITS = 6;
 	static_assert(SIZE_BITS * 3 + TEXTURE_ID_BITS <= 32, "Vertex Data must be <= 32 bits");
 
 	/** block x/y/z/textureid packed into one integer */
@@ -75,7 +73,7 @@ private:
 		unsigned y : SIZE_BITS;
 		unsigned z : SIZE_BITS;
 		unsigned textureIdx : TEXTURE_ID_BITS;
-		unsigned ao : 7;
+		unsigned ao : AO_BITS;
 	};
 
 	bool m_begunChunk;

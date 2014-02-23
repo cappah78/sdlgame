@@ -39,7 +39,7 @@ VoxelWorld::VoxelWorld()
 	// TODO: remove statics //
 	////////////////////////////////////////////
 	static module::Perlin perlin;
-	perlin.SetSeed(42);
+	perlin.SetSeed(242);
 	perlin.SetOctaveCount(4);
 	perlin.SetFrequency(2.5);
 	perlin.SetNoiseQuality(NoiseQuality::QUALITY_FAST);
@@ -66,7 +66,7 @@ void VoxelWorld::update(float deltaSec, const Camera& camera)
 
 	unsigned int start = Game::getSDLTicks();
 
-	float loadDistance = (camera.m_far / (float) CHUNK_SIZE) - 1.0f;
+	float loadDistance = (camera.m_far / (float) CHUNK_SIZE);
 	glm::ivec3 cameraChunkPos = toChunkPos(glm::ivec3(camera.m_position));
 
 	glm::ivec3 minRange = cameraChunkPos - (int) loadDistance;
@@ -215,48 +215,26 @@ void VoxelWorld::doBlockUpdates()
 
 const BlockID* const VoxelWorld::getBlockLayer(int height)	//temp/wip
 {
-	static const BlockID hillTops[] =
-	{
-		m_propertyManager.getBlockID("SnowBlock"),
-		m_propertyManager.getBlockID("GrassSnowBlock"),
-		m_propertyManager.getBlockID("DirtBlock"),
-		m_propertyManager.getBlockID("StoneBlock"),
-		m_propertyManager.getBlockID("StoneBlock")
-	};
-	static const BlockID hillMids[] =
-	{
-		m_propertyManager.getBlockID("GrassSnowBlock"),
-		m_propertyManager.getBlockID("DirtBlock"),
-		m_propertyManager.getBlockID("StoneBlock"),
-		m_propertyManager.getBlockID("StoneBlock"),
-		m_propertyManager.getBlockID("StoneBlock")
-	};
-	static const BlockID plains[] =
-	{
-		m_propertyManager.getBlockID("GrassBlock"),
-		m_propertyManager.getBlockID("DirtBlock"),
-		m_propertyManager.getBlockID("StoneBlock"),
-		m_propertyManager.getBlockID("StoneBlock"),
-		m_propertyManager.getBlockID("StoneBlock")
-	};
-	static const BlockID beach[] =
-	{
-		m_propertyManager.getBlockID("SandBlock"),
-		m_propertyManager.getBlockID("SandBlock"),
-		m_propertyManager.getBlockID("DirtBlock"),
-		m_propertyManager.getBlockID("StoneBlock"),
-		m_propertyManager.getBlockID("StoneBlock")
-	};
-	static const BlockID water[] =
-	{
-		m_propertyManager.getBlockID("WaterBlock"),
-		m_propertyManager.getBlockID("WaterBlock"),
-		m_propertyManager.getBlockID("WaterBlock"),
-		m_propertyManager.getBlockID("WaterBlock"),
-		m_propertyManager.getBlockID("WaterBlock"),
-	};
+	static const BlockID snowBlock = m_propertyManager.getBlockID("SnowBlock");
+	static const BlockID grassSnow = m_propertyManager.getBlockID("GrassSnowBlock");
+	static const BlockID grass = m_propertyManager.getBlockID("GrassBlock");
+	static const BlockID dirt = m_propertyManager.getBlockID("DirtBlock");
+	static const BlockID sand = m_propertyManager.getBlockID("SandBlock");
+	static const BlockID stone = m_propertyManager.getBlockID("StoneBlock");
+	static const BlockID water = m_propertyManager.getBlockID("WaterBlock");
 
-	if (height >= 30)	// hill tops
+	static const BlockID hillPeaks [] = { snowBlock, snowBlock, snowBlock, grassSnow, stone };
+	static const BlockID hillTops[] = { snowBlock, grassSnow, dirt, stone, stone };
+	static const BlockID hillMids [] = { grassSnow, dirt, stone, stone, stone };
+	static const BlockID plains [] = { grass, dirt, stone, stone, stone };
+	static const BlockID beach [] = { sand, sand, dirt, stone, stone };
+	static const BlockID ocean[] = { water, water, water, water, water };
+
+	if (height >= 38)
+	{
+		return hillPeaks;
+	}
+	else if (height >= 30 && height < 38)	// hill tops
 	{
 		return hillTops;
 	}
@@ -274,11 +252,11 @@ const BlockID* const VoxelWorld::getBlockLayer(int height)	//temp/wip
 	}
 	else if(height <= -18) //water
 	{
-		return water;
+		return ocean;
 	}
 
 	assert(false);
-	return water;
+	return ocean;
 }
 
 void VoxelWorld::generateChunk(const glm::ivec3& chunkPos)

@@ -299,9 +299,6 @@
     <ClInclude Include="Engine\Graphics\Model\EBufferMapFlagBits.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\Mesh.h">
-      <Filter>Header Files\Engine\Graphics</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

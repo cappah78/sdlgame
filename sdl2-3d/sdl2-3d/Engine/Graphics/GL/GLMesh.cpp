@@ -1,7 +1,9 @@
 #include "GLMesh.h"
 
+#include "../../Utils/CheckGLError.h"
 #include "GLTexture.h"
 #include "GLGraphicsProvider.h"
+#include "../../../Game.h"
 
 #include <assert.h>
 #include <gl\glew.h>
@@ -19,9 +21,9 @@ GLMesh::GLMesh()
 
 }
 
-GLMesh::GLMesh(const std::string& fileName, GLGraphicsProvider& provider)
+GLMesh::GLMesh(const std::string& fileName)
 {
-	loadMesh(fileName, provider);
+	loadMesh(fileName);
 }
 
 GLMesh::~GLMesh()
@@ -29,7 +31,7 @@ GLMesh::~GLMesh()
 
 }
 
-void GLMesh::loadMesh(const std::string& filename, GLGraphicsProvider& provider)
+void GLMesh::loadMesh(const std::string& filename)
 {
 	const aiScene* scene = aiImportFile(filename.c_str(), aiPostProcessSteps::aiProcess_Triangulate 
 		| aiPostProcessSteps::aiProcess_GenSmoothNormals 
@@ -41,15 +43,18 @@ void GLMesh::loadMesh(const std::string& filename, GLGraphicsProvider& provider)
 
 	if (!scene)
 		printf("Error parsing '%s' : %s\n", filename.c_str(), aiGetErrorString());
-
+	CHECK_GL_ERROR();
 	initVertexBuffers(scene);
-	initMaterials(scene, filename, provider);
+	CHECK_GL_ERROR();
+	initMaterials(scene, filename);
+	CHECK_GL_ERROR();
 }
 
 void GLMesh::initVertexBuffers(const aiScene* scene)
 {
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
+	CHECK_GL_ERROR();
 
 	printf("nummeshes: %i nummaterials: %i \n", scene->mNumMeshes, scene->mNumMaterials);
 
@@ -179,10 +184,11 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 			}
 		}
 	}
+	glBindVertexArray(m_vao);
 
 	if (m_bufferFlags.hasIndiceBuffer)
 	{
-		m_indiceBuffer.reset(new GLVertexBuffer(GL_ELEMENT_ARRAY_BUFFER));
+		m_indiceBuffer.reset(new GLVertexBuffer(0, 0, GL_ELEMENT_ARRAY_BUFFER));
 		m_indiceBuffer->resize(sizeof(indices[0]) * indices.size(), &indices[0]);
 	}
 	if (m_bufferFlags.hasPositionBuffer)
@@ -213,9 +219,10 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 		m_colorBuffer.reset(new GLVertexBuffer());
 		m_colorBuffer->resize(sizeof(colors[0]) * colors.size(), &colors[0]);
 	}
+	glBindVertexArray(0);
 }
 
-void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GLGraphicsProvider& provider)
+void GLMesh::initMaterials(const aiScene* scene, const std::string& filename)
 {
 	// Extract the directory part from the file name
 	std::string::size_type slashIndex = filename.find_last_of("/");
@@ -263,11 +270,14 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 
 		aiString path;
 
-		const ITexture* defaultTex = provider.getManagedTexture("fixme");
-		meshMaterial.diffuseTexture = defaultTex;
-		meshMaterial.normalTexture = defaultTex;
-		meshMaterial.opacityTexture = defaultTex;
-		meshMaterial.specularTexture = defaultTex;
+		IGraphicsProvider& provider = Game::graphics.getGraphicsProvider();
+
+		const GLTexture* defaultTex = (GLTexture*) provider.getManagedTexture("Assets/Textures/defaultwhite.png");
+		const GLuint defaultTexID = defaultTex->getTextureID();
+		meshMaterial.diffuseTexture = defaultTexID;
+		meshMaterial.normalTexture = defaultTexID;
+		meshMaterial.opacityTexture = defaultTexID;
+		meshMaterial.specularTexture = defaultTexID;
 
 		if (numDiffuse > 0 && material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 		{
@@ -275,7 +285,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.diffuseTexture = provider.getManagedTexture(fullPath.c_str());
+			meshMaterial.diffuseTexture = ((GLTexture*) provider.getManagedTexture(fullPath.c_str()))->getTextureID();
 		}
 		if (numNormal > 0 && material->GetTexture(aiTextureType_HEIGHT, 0, &path) == AI_SUCCESS)
 		{
@@ -283,7 +293,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.normalTexture = provider.getManagedTexture(fullPath.c_str());
+			meshMaterial.normalTexture = ((GLTexture*) provider.getManagedTexture(fullPath.c_str()))->getTextureID();
 		}
 		if (numSpecular > 0 && material->GetTexture(aiTextureType_SPECULAR, 0, &path) == AI_SUCCESS)
 		{
@@ -291,7 +301,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.specularTexture = provider.getManagedTexture(fullPath.c_str());
+			meshMaterial.specularTexture = ((GLTexture*) provider.getManagedTexture(fullPath.c_str()))->getTextureID();
 		}
 		if (numOpacity > 0 && material->GetTexture(aiTextureType_OPACITY, 0, &path) == AI_SUCCESS)
 		{
@@ -299,7 +309,7 @@ void GLMesh::initMaterials(const aiScene* scene, const std::string& filename, GL
 			if (p.substr(0, 2) == ".\\")
 				p = p.substr(2, p.size() - 2);
 			std::string fullPath = dir + "/" + p;
-			meshMaterial.opacityTexture = provider.getManagedTexture(fullPath.c_str());
+			meshMaterial.opacityTexture = ((GLTexture*) provider.getManagedTexture(fullPath.c_str()))->getTextureID();
 		}
 		m_materials.push_back(meshMaterial);
 	}
@@ -330,8 +340,8 @@ void GLMesh::setShaderAttributes(std::shared_ptr<ShaderAttributes> shaderAttribu
 			shaderAttributes->materialUniformBufferBindingPoint, 
 			shaderAttributes->materialUniformBufferName
 		));
+	glBindVertexArray(0);
 }
-
 
 void GLMesh::render()
 {
@@ -339,16 +349,23 @@ void GLMesh::render()
 
 	for (unsigned int i = 0; i < m_entries.size(); i++) {
 		const MeshEntry& entry = m_entries.at(i);
-		const unsigned int materialIndex = entry.materialIndex;
+		const unsigned int& materialIndex = entry.materialIndex;
 		const MeshMaterial& material = m_materials.at(materialIndex);
 		const MeshMaterialProperties& matProperties = m_matProperties.at(materialIndex);
 
 		m_matUniformBuffer->update(&matProperties, sizeof(MeshMaterialProperties));
 
-		material.diffuseTexture->bind(m_shaderAttributes->diffuseTextureBindLoc);
-		material.normalTexture->bind(m_shaderAttributes->normalTextureBindLoc);
-		material.specularTexture->bind(m_shaderAttributes->specularTextureBindLoc);
-		material.opacityTexture->bind(m_shaderAttributes->opacityTextureBindLoc);
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->diffuseTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.diffuseTexture);
+
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->normalTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.normalTexture);
+
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->specularTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.specularTexture);
+
+		glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->opacityTextureBindLoc);
+		glBindTexture(GL_TEXTURE_2D, material.opacityTexture);
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,
 			entry.numIndices,
@@ -368,8 +385,6 @@ void GLMesh::render()
 
 	glActiveTexture(GL_TEXTURE0 + m_shaderAttributes->opacityTextureBindLoc);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glBindVertexArray(0);
 }
 /*
 void GLMesh::render(unsigned int numInstances, const glm::mat4* wvpMats, const glm::mat4* worldMats)

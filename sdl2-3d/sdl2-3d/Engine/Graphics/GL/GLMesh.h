@@ -23,9 +23,9 @@ public:
 	struct MeshEntry {
 		static const unsigned int INVALID_MATERIAL = 0xFFFFFFFF;
 		MeshEntry()
-			: numIndices(0)
-			, baseVertex(0)
-			, baseIndex(0)
+			: numIndices(0xFFFFFFFF)
+			, baseVertex(0xFFFFFFFF)
+			, baseIndex(0xFFFFFFFF)
 			, materialIndex(INVALID_MATERIAL)
 		{};
 		unsigned int numIndices;
@@ -41,10 +41,10 @@ public:
 		, specularTexture(0)
 		, opacityTexture(0)
 		{};
-		const ITexture* diffuseTexture;
-		const ITexture* normalTexture;
-		const ITexture* specularTexture;
-		const ITexture* opacityTexture;
+		GLuint diffuseTexture;
+		GLuint normalTexture;
+		GLuint specularTexture;
+		GLuint opacityTexture;
 	};
 
 	struct MeshMaterialProperties
@@ -105,13 +105,13 @@ public:
 	};
 
 	GLMesh();
-	GLMesh(const std::string& fileName, GLGraphicsProvider& provider);
+	GLMesh(const std::string& fileName);
 	GLMesh(const GLMesh& copy) = delete;
 	~GLMesh();
 	
 	/** Give data required to render the mesh*/
 	void setShaderAttributes(std::shared_ptr<ShaderAttributes> shaderAttributes);
-	void loadMesh(const std::string& filename, GLGraphicsProvider& provider);
+	void loadMesh(const std::string& filename);
 
 	//TODO: make private and write interface
 	GLuint m_vao;
@@ -135,5 +135,5 @@ public:
 private:
 
 	void initVertexBuffers(const aiScene* scene);
-	void initMaterials(const aiScene* scene, const std::string& filename, GLGraphicsProvider& provider);
+	void initMaterials(const aiScene* scene, const std::string& filename);
 };

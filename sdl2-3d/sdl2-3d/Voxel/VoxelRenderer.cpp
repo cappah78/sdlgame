@@ -178,10 +178,10 @@ VoxelRenderer::Chunk::Chunk(float xOffset, float yOffset, float zOffset, VoxelRe
 	m_indiceBuffer = provider.createIndiceBuffer(IIndiceBufferParameters(IIndiceBufferParameters::Format::UNSIGNED_SHORT));
 	m_pointBuffer = provider.createVertexBuffer(IVertexBufferParameters());
 
-	VertexAttribute pointAttrib = { POSITION_LOC, "POINTDATA", VertexAttribute::Format::UNSIGNED_INT, 1 };
+	VertexAttribute pointAttrib = { 0, "POINTDATA", VertexAttribute::Format::UNSIGNED_INT, 1 };
 	VertexAttributes pointAttributes(&pointAttrib, 1);
 
-	VertexAttribute texcoordAttrib( TEXCOORD_LOC, "TEXCOORD", VertexAttribute::Format::FLOAT, 2);
+	VertexAttribute texcoordAttrib( 1, "TEXCOORD", VertexAttribute::Format::FLOAT, 2);
 	VertexAttributes texcoordAttributes(&texcoordAttrib, 1);
 
 	m_state->enable();

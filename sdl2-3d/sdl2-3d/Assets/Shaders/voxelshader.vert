@@ -11,7 +11,7 @@ const uint POSITION_BITS_MASK = 0x00007FFFu;
 const uint TEXTURE_ID_MASK = 0x01FF8000u;
 const uint UNUSED_BITS_MASK = 0xFE000000u;
 
-const float AO_MULT = (1.0 / 255.0);
+const float AO_MULT = (1.0 / 128.0);
 
 layout (std140) uniform PerFrameData
 {
