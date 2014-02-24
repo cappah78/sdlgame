@@ -60,7 +60,9 @@ void GLTexture::setupGLTexture(const Pixmap& pixmap, bool generateMipMaps, GLint
 	GLint textureWrapS, GLint textureWrapT)
 {
 	if (!pixmap.m_data)
+	{
 		return;
+	}
 
 	GLint internalFormat;
 	GLenum format = GL_RGB;
@@ -85,6 +87,8 @@ void GLTexture::setupGLTexture(const Pixmap& pixmap, bool generateMipMaps, GLint
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureWrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureWrapT);
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 	if (generateMipMaps)
 	{
 		glTexStorage2D(GL_TEXTURE_2D, 3, internalFormat, m_width, m_height);
@@ -95,7 +99,6 @@ void GLTexture::setupGLTexture(const Pixmap& pixmap, bool generateMipMaps, GLint
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, pixmap.m_data);
 	}
-
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

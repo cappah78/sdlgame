@@ -21,28 +21,25 @@ GLMesh::GLMesh()
 
 }
 
-GLMesh::GLMesh(const std::string& fileName)
-{
-	loadMesh(fileName);
-}
-
 GLMesh::~GLMesh()
 {
 
 }
 
-void GLMesh::loadMesh(const std::string& filename)
+void GLMesh::loadMesh(const std::string& filename, bool flipUV)
 {
-	const aiScene* scene = aiImportFile(filename.c_str(), aiPostProcessSteps::aiProcess_Triangulate 
-		| aiPostProcessSteps::aiProcess_GenSmoothNormals 
-		| aiPostProcessSteps::aiProcess_FlipUVs 
-		| aiPostProcessSteps::aiProcess_CalcTangentSpace 
-		| aiPostProcessSteps::aiProcess_JoinIdenticalVertices 
-		| aiPostProcessSteps::aiProcess_ImproveCacheLocality
-		| aiPostProcessSteps::aiProcess_OptimizeMeshes);
+	unsigned int flags = aiPostProcessSteps::aiProcess_Triangulate
+		| aiPostProcessSteps::aiProcess_GenSmoothNormals
+		| aiPostProcessSteps::aiProcess_CalcTangentSpace;
+	if (flipUV)
+		flags |= aiPostProcessSteps::aiProcess_FlipUVs;
+	const aiScene* scene = aiImportFile(filename.c_str(), flags);
 
 	if (!scene)
+	{
 		printf("Error parsing '%s' : %s\n", filename.c_str(), aiGetErrorString());
+		//return;
+	}
 	CHECK_GL_ERROR();
 	initVertexBuffers(scene);
 	CHECK_GL_ERROR();
@@ -56,7 +53,7 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 	glBindVertexArray(m_vao);
 	CHECK_GL_ERROR();
 
-	printf("nummeshes: %i nummaterials: %i \n", scene->mNumMeshes, scene->mNumMaterials);
+	printf("numMeshes: %i, numMaterials %i \n", scene->mNumMeshes, scene->mNumMaterials);
 
 	m_entries.reserve(scene->mNumMeshes);
 	m_materials.reserve(scene->mNumMaterials);
@@ -124,7 +121,6 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 		bitangents.reserve(numVertices);
 	}
 
-
 	/* FIXME! 
 	* TODO: the max number of attributes are used, so if theres a submesh 
 	* that doesnt have the same amount of attributes, things go wrong.
@@ -184,6 +180,7 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 			}
 		}
 	}
+
 	glBindVertexArray(m_vao);
 
 	if (m_bufferFlags.hasIndiceBuffer)
@@ -219,6 +216,7 @@ void GLMesh::initVertexBuffers(const aiScene* scene)
 		m_colorBuffer.reset(new GLVertexBuffer());
 		m_colorBuffer->resize(sizeof(colors[0]) * colors.size(), &colors[0]);
 	}
+
 	glBindVertexArray(0);
 }
 
@@ -340,6 +338,7 @@ void GLMesh::setShaderAttributes(std::shared_ptr<ShaderAttributes> shaderAttribu
 			shaderAttributes->materialUniformBufferBindingPoint, 
 			shaderAttributes->materialUniformBufferName
 		));
+
 	glBindVertexArray(0);
 }
 

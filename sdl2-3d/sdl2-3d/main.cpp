@@ -137,9 +137,6 @@ int main(int argc, char *argv[])
 	Game::graphics.initialize(width, height, mainwindow);
 
 	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
-
-	glEnable(GL_CULL_FACE);	/* Back face culling gets enabled here!--*/
-	glCullFace(GL_BACK);
 	
 	{
 		GameScreen gameScreen;

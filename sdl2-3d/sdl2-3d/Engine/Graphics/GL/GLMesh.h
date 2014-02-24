@@ -105,13 +105,12 @@ public:
 	};
 
 	GLMesh();
-	GLMesh(const std::string& fileName);
 	GLMesh(const GLMesh& copy) = delete;
 	~GLMesh();
 	
 	/** Give data required to render the mesh*/
 	void setShaderAttributes(std::shared_ptr<ShaderAttributes> shaderAttributes);
-	void loadMesh(const std::string& filename);
+	void loadMesh(const std::string& filename, bool flipUV);
 
 	//TODO: make private and write interface
 	GLuint m_vao;

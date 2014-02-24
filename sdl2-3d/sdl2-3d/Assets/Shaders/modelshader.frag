@@ -40,6 +40,8 @@ void main()
   
 	vec3 normal = normalize(normalMapSample.x * normalSpaceX + normalMapSample.y * normalSpaceY + normalMapSample.z * normalSpaceZ);
 	vec3 diffuse = texture2D(u_diffuseTex, v_texcoord).rgb * u_materialDiffuse;
+	//vec3 diffuse = texture2D(u_diffuseTex, v_texcoord).rgb;
+
 	vec3 specular = texture2D(u_specularTex, v_texcoord).rgb * u_materialSpecular;
 
 	out_color = vec4(diffuse, 1.0);
