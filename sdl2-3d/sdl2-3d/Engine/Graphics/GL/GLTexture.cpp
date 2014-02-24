@@ -34,13 +34,23 @@ GLTexture::~GLTexture()
 	glDeleteTextures(1, &m_textureID);
 }
 
-void GLTexture::bind(unsigned int index) const
+void GLTexture::bind(IShader& shader, unsigned int index)
+{
+	bind(index);
+}
+
+void GLTexture::unbind(IShader& shader, unsigned int index)
+{
+	unbind(index);
+}
+
+inline void GLTexture::bind(unsigned int index)
 {
 	glActiveTexture(GL_TEXTURE0 + index);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
-void GLTexture::unbind(unsigned int index) const
+inline void GLTexture::unbind(unsigned int index)
 {
 	glActiveTexture(GL_TEXTURE0 + index);
 	glBindTexture(GL_TEXTURE_2D, 0);

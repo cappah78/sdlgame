@@ -10,6 +10,7 @@
 #include <SDL.h>
 #include <SDL_video.h>
 #include <SDL_thread.h>
+#include <IL\il.h>
 
 /* If using gl3.h */
 /* Ensure we are using opengl's core profile only */
@@ -128,6 +129,7 @@ int main(int argc, char *argv[])
 
 	CHECK_GL_ERROR();
 	initGL();
+	ilInit();
 	CHECK_GL_ERROR();
 
 	int width, height;

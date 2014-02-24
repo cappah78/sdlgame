@@ -23,7 +23,11 @@ public:
 	GLTextureArray(const GLTextureArray& copyMe) = delete;
 	~GLTextureArray();
 
-	virtual void bind() override;
+
+	virtual void bind(IShader& shader, unsigned int index = 0) override;
+	virtual void unbind(IShader& shader, unsigned int index = 0) override;
+	inline void bind(unsigned int index = 0);
+	inline void unbind(unsigned int index = 0);
 
 	void bind(GLenum textureUnit) const;
 	void dispose();

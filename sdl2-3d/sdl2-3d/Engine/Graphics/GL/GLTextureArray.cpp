@@ -78,14 +78,24 @@ void GLTextureArray::dispose()
 	glDeleteTextures(1, &m_textureID);
 }
 
-void GLTextureArray::bind()
+void GLTextureArray::bind(IShader& shader, unsigned int index)
 {
-	glActiveTexture(GL_TEXTURE0);
+	bind(index);
+}
+
+void GLTextureArray::unbind(IShader& shader, unsigned int index)
+{
+	unbind(index);
+}
+
+inline void GLTextureArray::bind(unsigned int index)
+{
+	glActiveTexture(GL_TEXTURE0 + index);
 	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureID);
 }
 
-void GLTextureArray::bind(GLenum textureUnit) const
+inline void GLTextureArray::unbind(unsigned int index)
 {
-	glActiveTexture(textureUnit);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureID);
+	glActiveTexture(GL_TEXTURE0 + index);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }

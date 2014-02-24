@@ -1,6 +1,7 @@
 #pragma once
 
 class Pixmap;
+class IShader;
 
 struct TextureSettings
 {
@@ -23,6 +24,6 @@ class ITexture
 public:
 	ITexture() {};
 	virtual ~ITexture() {};
-	virtual void bind(unsigned int index = 0) const = 0;
-	virtual void unbind(unsigned int index = 0) const = 0;
+	virtual void bind(IShader& shader, unsigned int index = 0) = 0;
+	virtual void unbind(IShader& shader, unsigned int index = 0) = 0;
 };

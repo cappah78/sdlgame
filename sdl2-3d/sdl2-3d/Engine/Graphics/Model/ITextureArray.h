@@ -19,6 +19,8 @@ public:
 	ITextureArray() {};
 	virtual ~ITextureArray() {};
 
-	virtual void bind() = 0;
+	virtual void bind(IShader& shader, unsigned int index = 0) = 0;
+	virtual void unbind(IShader& shader, unsigned int index = 0) = 0;
+
 private:
 };

@@ -16,4 +16,6 @@ public:
 	int m_height;
 	/** Number of components per pixel (e.g. rgba == 4)*/
 	int m_numComponents;
+
+	unsigned int m_ilID;
 };

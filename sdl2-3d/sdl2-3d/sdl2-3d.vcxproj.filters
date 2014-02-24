@@ -233,20 +233,8 @@
     <ClInclude Include="Engine\Entity\IEntitySystem.h">
       <Filter>Header Files\Engine\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Entity\KinematicsComponent.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity\MovementSystem.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity\SceneGraphComponent.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Entity\ComponentUpdateSystem.h">
       <Filter>Header Files\Engine\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity\SceneGraphUpdateSystem.h">
-      <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Model\IIndiceBuffer.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
@@ -390,12 +378,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Model\IStateBuffer.h">
       <Filter>Header Files\Engine\Graphics\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity\MovementSystem.cpp">
-      <Filter>Source Files\Engine\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity\SceneGraphUpdateSystem.cpp">
-      <Filter>Source Files\Engine\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\D3D\D3DVertexBuffer.cpp">
       <Filter>Source Files\Engine\Graphics\D3D</Filter>

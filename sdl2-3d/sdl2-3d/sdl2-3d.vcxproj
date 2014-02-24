@@ -61,10 +61,6 @@
     <ClInclude Include="Engine\Utils\ShaderManager.h" />
     <ClInclude Include="Engine\Utils\stb_image.h" />
     <ClInclude Include="Engine\Utils\VoidDataList.h" />
-    <ClInclude Include="Entity\KinematicsComponent.h" />
-    <ClInclude Include="Entity\MovementSystem.h" />
-    <ClInclude Include="Entity\SceneGraphComponent.h" />
-    <ClInclude Include="Entity\SceneGraphUpdateSystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Screens\GameScreen.h" />
     <ClInclude Include="Voxel\ChunkManager.h" />
@@ -108,8 +104,6 @@
     <ClCompile Include="Engine\Utils\ShaderManager.cpp" />
     <ClCompile Include="Engine\Utils\stb_image.c" />
     <ClCompile Include="Engine\Utils\VoidDataList.cpp" />
-    <ClCompile Include="Entity\MovementSystem.cpp" />
-    <ClCompile Include="Entity\SceneGraphUpdateSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screens\GameScreen.cpp" />
@@ -493,13 +487,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(ProjectDir)..\Includes\Libnoise-1.0.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(ProjectDir)..\Includes\Libnoise-1.0.0\include;$(ProjectDir)..\Includes\devIL\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\Lua\2.1;$(ProjectDir)..\Libs\Debug;$(LibraryPath)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(ProjectDir)..\Includes\Libnoise-1.0.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Includes\SDL2-2.0.1\include;$(ProjectDir)..\Includes\glew-1.10.0\include;$(ProjectDir)..\Includes\glsdk_0.5.0\include;$(ProjectDir)..\Includes\assimp-3.0.1270\include;$(ProjectDir)..\Includes\LuaBridge\include;$(ProjectDir)..\Includes\Lua-2.1\include;$(ProjectDir)..\Includes\Libnoise-1.0.0\include;$(ProjectDir)..\Includes\devIL\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\Lua\2.1;$(ProjectDir)..\Libs\Release;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(VCInstallDir)bin;$(WindowsSdkDir)bin\NETFX 4.0 Tools;$(WindowsSdkDir)bin;$(VSInstallDir)Common7\Tools\bin;$(VSInstallDir)Common7\tools;$(VSInstallDir)Common7\ide;$(ProgramFiles)\HTML Help Workshop;$(FrameworkSDKDir)\bin;$(MSBuildToolsPath32);$(VSInstallDir);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
     <SourcePath>$(SourcePath)</SourcePath>
@@ -524,7 +518,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2d.lib;SDL2maind.lib;assimpd.lib;opengl32.lib;glu32.lib;glew32d.lib;lua5.1.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2d.lib;SDL2maind.lib;assimpd.lib;opengl32.lib;glu32.lib;glew32d.lib;lua5.1.lib;libnoise.lib;devIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <AdditionalOptions>/NODEFAULTLIB:library</AdditionalOptions>
     </Link>
@@ -549,7 +543,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;lua5.1.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;glew32.lib;assimp.lib;lua5.1.lib;libnoise.lib;devIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>

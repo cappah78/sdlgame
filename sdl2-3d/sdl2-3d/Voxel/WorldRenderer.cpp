@@ -242,7 +242,7 @@ void WorldRenderer::findVisibleChunks(VoxelWorld& world, const Camera& camera)
 
 void WorldRenderer::renderVisibleChunks(VoxelWorld& world, const Camera& camera)
 {
-	world.getTileSet()->bind();
+	world.getTileSet()->bind(*m_iVoxelShader.get());
 
 	m_iVoxelShader->begin();
 
