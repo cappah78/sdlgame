@@ -20,6 +20,7 @@
     <ClInclude Include="Engine\Graphics\D3D\D3DGraphicsProvider.h" />
     <ClInclude Include="Engine\Graphics\D3D\D3DVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Frustum.h" />
+    <ClInclude Include="Engine\Graphics\GL\GLCommandQueue.h" />
     <ClInclude Include="Engine\Graphics\GL\GLConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\GLCubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\GLDepthCubeMap.h" />
@@ -77,7 +78,6 @@
     <ClCompile Include="Engine\Graphics\D3D\D3DGraphicsProvider.cpp" />
     <ClCompile Include="Engine\Graphics\D3D\D3DVertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Frustum.cpp" />
-    <ClCompile Include="Engine\Graphics\GL\GLAsyncRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLCubeMap.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLGBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLGraphicsProvider.cpp" />
