@@ -16,21 +16,23 @@
 #pragma comment(lib, "d3d10.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-static IDXGISwapChain* s_swapChain;
-static ID3D11Device* s_device;
-static ID3D11DeviceContext* s_deviceContext;
-static ID3D11RenderTargetView* s_renderTargetView;
-static ID3D11Texture2D* s_depthStencilBuffer;
-static ID3D11DepthStencilState* s_depthStencilState;
-static ID3D11DepthStencilView* s_depthStencilView;
-static ID3D11RasterizerState* s_rasterState;
-
-static SDL_Window* s_window;
-static unsigned int s_screenWidth;
-static unsigned int s_screenHeight;
-
 Graphics::RenderMode Graphics::s_renderMode = Graphics::INITIAL_RENDERMODE;
 IGraphicsProvider* Graphics::s_graphicsProvider = NULL;
+
+SDL_Window* Graphics::s_window = NULL;
+unsigned int Graphics::s_screenWidth = 0;
+unsigned int Graphics::s_screenHeight = 0;
+
+SDL_GLContext Graphics::s_glContext = NULL;
+
+IDXGISwapChain* Graphics::s_swapChain = NULL;
+ID3D11Device* Graphics::s_device = NULL;
+ID3D11DeviceContext* Graphics::s_deviceContext = NULL;
+ID3D11RenderTargetView* Graphics::s_renderTargetView = NULL;
+ID3D11Texture2D* Graphics::s_depthStencilBuffer = NULL;
+ID3D11DepthStencilState* Graphics::s_depthStencilState = NULL;
+ID3D11DepthStencilView* Graphics::s_depthStencilView = NULL;
+ID3D11RasterizerState* Graphics::s_rasterState = NULL;
 
 void Graphics::initialize(unsigned int screenWidth, unsigned int screenHeight, SDL_Window* const window)
 {
@@ -40,11 +42,13 @@ void Graphics::initialize(unsigned int screenWidth, unsigned int screenHeight, S
 
 	s_graphicsProvider = new GLGraphicsProvider();
 
+	initializeGL();
 	initializeD3D();
 }
 
 void Graphics::dispose()
 {
+	disposeGL();
 	disposeD3D();
 }
 
@@ -76,12 +80,6 @@ void Graphics::clear(float rCol, float gCol, float bCol, float aCol, bool clearC
 	}
 }
 
-void Graphics::resizeScreen(unsigned int screenWidth, unsigned int screenHeight)
-{
-	s_screenWidth = screenWidth;
-	s_screenHeight = screenHeight;
-}
-
 void Graphics::swap()
 {
 	switch (s_renderMode)
@@ -93,6 +91,12 @@ void Graphics::swap()
 		s_swapChain->Present(0, 0);	//swap without vsync
 		break;
 	}
+}
+
+void Graphics::resizeScreen(unsigned int screenWidth, unsigned int screenHeight)
+{
+	s_screenWidth = screenWidth;
+	s_screenHeight = screenHeight;
 }
 
 void Graphics::setWindowTitle(const char* title)
@@ -113,6 +117,38 @@ unsigned int Graphics::getScreenWidth()
 unsigned int Graphics::getScreenHeight()
 {
 	return s_screenHeight;
+}
+
+void Graphics::initializeGL()
+{
+	s_glContext = SDL_GL_CreateContext(s_window);
+
+	const char *error = SDL_GetError();
+	if (*error != '\0')
+	{
+		printf("SDL Error at initializeGL() : %s \n", error);
+		SDL_ClearError();
+	}
+
+	SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is uncapped
+
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+
+	if (GLEW_OK != err)
+	{
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+	}
+	else
+	{	
+		//clear invalid enum bullshit error
+		for (GLenum glErr = glGetError(); glErr != GL_NO_ERROR; glErr = glGetError());
+	}
+}
+
+void Graphics::disposeGL()
+{
+	SDL_GL_DeleteContext(s_glContext);
 }
 
 void Graphics::initializeD3D()
@@ -254,4 +290,9 @@ ID3D11Device* Graphics::getDevice()
 ID3D11DeviceContext* Graphics::getDeviceContext()
 {
 	return s_deviceContext;
+}
+
+SDL_GLContext Graphics::getGLContext()
+{
+	return s_glContext;
 }

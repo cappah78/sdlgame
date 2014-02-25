@@ -2,7 +2,6 @@
 
 #include "Game.h"
 #include "Screens/GameScreen.h"
-#include "Engine/Utils/CheckGLError.h"
 
 #include <windows.h>
 #include <fcntl.h>
@@ -42,18 +41,6 @@ void checkSDLError(int line = -1) {
 		SDL_ClearError();
 	}
 }
-
-void initGL()
-{
-	glewExperimental = GL_TRUE;
-	GLenum err = glewInit(); 
-	
-	if (GLEW_OK != err)
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-	else 	//clear invalid enum bullshit error
-		for (GLenum glErr = glGetError(); glErr != GL_NO_ERROR; glErr = glGetError());
-}
-
 
 // maximum mumber of lines the output console should have
 static const WORD MAX_CONSOLE_LINES = 500;
@@ -104,7 +91,6 @@ int main(int argc, char *argv[])
 	redirectIOToConsole();
 
     SDL_Window *mainwindow;
-    SDL_GLContext maincontext;
  
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         sdldie("Unable to initialize SDL");
@@ -121,35 +107,27 @@ int main(int argc, char *argv[])
     if (!mainwindow)
         sdldie("Unable to create window");
     checkSDLError(__LINE__);
-	
-    maincontext = SDL_GL_CreateContext(mainwindow);
-    checkSDLError(__LINE__);
- 
-    SDL_GL_SetSwapInterval(0);	//1 is vsync 0 is uncapped
 
-	CHECK_GL_ERROR();
-	initGL();
 	ilInit();
-	CHECK_GL_ERROR();
 
 	int width, height;
 	SDL_GetWindowSize(mainwindow, &width, &height);
 	Game::graphics.initialize(width, height, mainwindow);
 
 	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
-	
+
 	{
 		GameScreen gameScreen;
 		Game::setScreen(&gameScreen);
-		Game::startGameLoop(); // blocks untill Game::shutdownGameLoop()
-		CHECK_GL_ERROR();
+		Game::startLoop(); // blocks untill Game::stopLoop()
 	}
 
-    SDL_GL_DeleteContext(maincontext);
     SDL_DestroyWindow(mainwindow);
     SDL_Quit();
 
 	printf("Bye");
-
+#ifdef _DEBUG
+	SDL_Delay(1000);
+#endif //_DEBUG
     return 0;
 }

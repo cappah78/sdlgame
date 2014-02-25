@@ -73,7 +73,7 @@ void Input::keyDown(SDL_Keysym& key)
 	{
 		if (!m_mouseCaptured)
 		{
-			Game::shutdownGameLoop();
+			Game::stopLoop();
 		}
 		else
 		{

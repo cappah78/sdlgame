@@ -13,10 +13,12 @@ class IScreen;
 class Game
 {
 public:
-	static void startGameLoop();
-	static void shutdownGameLoop();
+	static void startLoop();
+	static void stopLoop();
 
+	static void update(float deltaSec);
 	static void render(float deltaSec);
+
 	static void resize(int width, int height);
 	static void setScreen(IScreen* screen);
 	inline static unsigned int getSDLTicks() { return SDL_GetTicks(); };

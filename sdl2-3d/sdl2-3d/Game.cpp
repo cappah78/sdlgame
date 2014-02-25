@@ -10,7 +10,7 @@
 IScreen* Game::m_currScreen = NULL;
 bool Game::m_running = true;
 
-void Game::startGameLoop()
+void Game::startLoop()
 {
 	Uint32 startTime = SDL_GetTicks();
 	Uint32 renderCount = 0;
@@ -95,7 +95,7 @@ void Game::setScreen(IScreen* screen)
 	m_currScreen = screen;
 }
 
-void Game::shutdownGameLoop()
+void Game::stopLoop()
 {
 	m_running = false;
 }
