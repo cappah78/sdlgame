@@ -412,6 +412,9 @@
     <ClCompile Include="Engine\Graphics\D3D\D3DGraphicsProvider.cpp">
       <Filter>Source Files\Engine\Graphics\D3D</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\GL\GLCommandQueue.cpp">
+      <Filter>Source Files\Engine\Graphics\GL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Textures\MinecraftBlocks\fire_layer_0.png.mcmeta">

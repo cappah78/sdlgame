@@ -78,6 +78,7 @@
     <ClCompile Include="Engine\Graphics\D3D\D3DGraphicsProvider.cpp" />
     <ClCompile Include="Engine\Graphics\D3D\D3DVertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Frustum.cpp" />
+    <ClCompile Include="Engine\Graphics\GL\GLCommandQueue.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLCubeMap.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLGBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\GL\GLGraphicsProvider.cpp" />
