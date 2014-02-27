@@ -42,13 +42,20 @@ void Graphics::initialize(unsigned int screenWidth, unsigned int screenHeight, S
 
 	s_graphicsProvider = new GLGraphicsProvider();
 
-	initializeGL();
-	initializeD3D();
+	switch (s_renderMode)
+	{
+	case OPENGL:
+		s_glContext = initializeGL();
+		break;
+	case D3D:
+		initializeD3D();
+		break;
+	}
 }
 
 void Graphics::dispose()
 {
-	disposeGL();
+	disposeGL(s_glContext);
 	disposeD3D();
 }
 
@@ -119,9 +126,9 @@ unsigned int Graphics::getScreenHeight()
 	return s_screenHeight;
 }
 
-void Graphics::initializeGL()
+SDL_GLContext Graphics::initializeGL()
 {
-	s_glContext = SDL_GL_CreateContext(s_window);
+	SDL_GLContext context = SDL_GL_CreateContext(s_window);
 
 	const char *error = SDL_GetError();
 	if (*error != '\0')
@@ -144,11 +151,12 @@ void Graphics::initializeGL()
 		//clear invalid enum bullshit error
 		for (GLenum glErr = glGetError(); glErr != GL_NO_ERROR; glErr = glGetError());
 	}
+	return context;
 }
 
-void Graphics::disposeGL()
+void Graphics::disposeGL(SDL_GLContext context)
 {
-	SDL_GL_DeleteContext(s_glContext);
+	SDL_GL_DeleteContext(context);
 }
 
 void Graphics::initializeD3D()

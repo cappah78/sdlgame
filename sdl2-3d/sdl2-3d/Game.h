@@ -16,8 +16,6 @@ public:
 	static void startLoop();
 	static void stopLoop();
 
-	static void update(float deltaSec);
-	static void render(float deltaSec);
 
 	static void resize(int width, int height);
 	static void setScreen(IScreen* screen);
@@ -26,10 +24,10 @@ public:
 	/** Setup a lua state, loading the libaries and fixing the print() */
 	static void initLua(lua_State* const L);
 	/** Get the currently set lua_State */
-	static lua_State* const L() { return m_L; };
+	static lua_State* const L() { return s_L; };
 	static void setLuaState(lua_State* L)
 	{
-		m_L = L;
+		s_L = L;
 	};
 
 	static Input const input;
@@ -37,9 +35,20 @@ public:
 
 private:
 
-	static bool m_running;
-	static IScreen* m_currScreen;
-	static lua_State* m_L;
+	static void handleInput();
+	static void update(float deltaSec);
+	static void render(float deltaSec);
+	static void updateFPSCounter(float deltaSec);
+
+	static void startRenderThread();
+	static void stopRenderThread();
+	static int renderThreadLoop(void* ptr);
+
+	static SDL_Thread* s_renderThread;
+
+	static bool s_running;
+	static IScreen* s_currScreen;
+	static lua_State* s_L;
 
 	Game() {};
 	~Game() {};

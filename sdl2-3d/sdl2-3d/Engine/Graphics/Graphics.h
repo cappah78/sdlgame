@@ -40,10 +40,12 @@ public:
 	static ID3D11DeviceContext* getDeviceContext();
 	static SDL_GLContext getGLContext();
 
+
+	static SDL_GLContext initializeGL();
+	static void disposeGL(SDL_GLContext context);
+
 private:
 
-	static void initializeGL();
-	static void disposeGL();
 	static void initializeD3D();
 	static void disposeD3D();
 
