@@ -45,6 +45,7 @@ private:
 	static int renderThreadLoop(void* ptr);
 
 	static SDL_Thread* s_renderThread;
+	static bool s_renderThreadRunning;
 
 	static bool s_running;
 	static IScreen* s_currScreen;

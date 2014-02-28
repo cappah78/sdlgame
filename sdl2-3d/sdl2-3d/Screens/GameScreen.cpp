@@ -14,7 +14,7 @@ static const float CAMERA_FAR = 280.0f;
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
-#define RENDER_MODEL 1
+#define RENDER_MODEL 0
 
 GameScreen::GameScreen()
 	: m_camera(

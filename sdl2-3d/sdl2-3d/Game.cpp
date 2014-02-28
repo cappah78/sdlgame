@@ -4,6 +4,8 @@
 #include <SDL_thread.h>
 #include <lua.hpp>
 
+#include "Engine\Graphics\GL\GLCommandQueue.h"
+
 #include "Engine\Utils\CheckGLError.h"
 
 #include "Screens/GameScreen.h"
@@ -11,12 +13,12 @@
 IScreen* Game::s_currScreen = NULL;
 bool Game::s_running = true;
 SDL_Thread* Game::s_renderThread = NULL;
+bool Game::s_renderThreadRunning = true;
 
 void Game::startLoop()
 {
+	startRenderThread();
 	Uint32 startTime = SDL_GetTicks();
-	Uint32 renderCount = 0;
-	float timePassed = 0;
 	
 	while (s_running) 
 	{
@@ -30,9 +32,16 @@ void Game::startLoop()
 	}
 }
 
+GLCommandQueue s_glCommandQueue;
+
 int Game::renderThreadLoop(void* ptr)
 {
 	SDL_GLContext context = Game::graphics.initializeGL();
+
+	while (s_renderThreadRunning)
+	{
+		s_glCommandQueue.update();
+	}
 
 	Game::graphics.disposeGL(context);
 
@@ -46,7 +55,7 @@ void Game::startRenderThread()
 
 void Game::stopRenderThread()
 {
-
+	s_renderThreadRunning = false;
 }
 
 void Game::render(float deltaSec)
@@ -130,6 +139,7 @@ void Game::setScreen(IScreen* screen)
 void Game::stopLoop()
 {
 	s_running = false;
+	stopRenderThread();
 }
 
 int luaPrint(lua_State* L)

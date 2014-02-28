@@ -30,8 +30,8 @@ struct SDL_mutex;
 class GLCommandQueue
 {
 public:
-	GLCommandQueue();
-	~GLCommandQueue();
+	GLCommandQueue() {};
+	~GLCommandQueue() {};
 	GLCommandQueue(const GLCommandQueue& copy) = delete;
 
 	static void update();
@@ -53,7 +53,7 @@ public:
 	void glqVertexAttribDivisor(GLuint index, GLuint divisor);
 
 	void glqGenBuffers(GLsizei numBuffers, GLuint* buffers);
-	void glqBindBuffer(GLuint bufferID);
+	void glqBindBuffer(GLenum target, GLuint bufferID);
 	void glqBufferData(GLenum target, GLsizei size, const GLvoid* data, GLenum usage);
 	void glqBufferSubData(GLenum target, GLsizei offset, GLsizei size, const GLvoid* data);
 	void glqUniformBlockBinding(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
@@ -73,6 +73,7 @@ public:
 
 private:
 
+	static inline void addCommand(GLCommand& command);
 	static std::vector<GLCommand> s_commandQueue;
 	static SDL_mutex* s_mutex;
 };
