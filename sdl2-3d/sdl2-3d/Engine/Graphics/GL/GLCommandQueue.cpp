@@ -1,109 +1,101 @@
 #include "GLCommandQueue.h"
 
+#include <vector>
 #include <GL/glew.h>
-
 #include <SDL_thread.h>
 
-std::vector<GLCommand> GLCommandQueue::s_commandQueue;
-SDL_mutex* GLCommandQueue::s_mutex = SDL_CreateMutex();
+std::vector<GLCommand> s_commandQueue;
+SDL_mutex* s_mutex = SDL_CreateMutex();
 
-
-inline void GLCommandQueue::addCommand(GLCommand& command)
-{
-	SDL_LockMutex(s_mutex);
-	s_commandQueue.emplace_back(command);
-	SDL_UnlockMutex(s_mutex);
+#define __1ARGCOMMAND(type1, glCall, arg1) \
+{ \
+class Command : public GLCommand	\
+{	\
+public:	\
+	Command(type1 arg1) : m_arg1(arg1) {}; \
+	type1 m_arg1;	\
+	virtual void execute() override	\
+	{	\
+		glCall(m_arg1); \
+	}	\
+};	\
+	addCommand(Command(arg1)); \
 }
 
-void GLCommandQueue::update()
+#define __2ARGCOMMAND(type1, type2, glCall, arg1, arg2) \
+{ \
+class Command : public GLCommand	\
+{	\
+public:	\
+	Command(type1 arg1, type2 arg2) : m_arg1(arg1), m_arg2(arg2) {}; \
+	type1 m_arg1;	\
+	type2 m_arg2;	\
+	virtual void execute() override	\
+	{	\
+		glCall(m_arg1, m_arg2); \
+	}	\
+};	\
+	addCommand(Command(arg1, arg2)); \
+}
+
+#define __3ARGCOMMAND(type1, type2, type3, glCall, arg1, arg2, arg3) \
+{ \
+class Command : public GLCommand	\
+{	\
+public:	\
+	Command(type1 arg1, type2 arg2, type3 arg3) : m_arg1(arg1), m_arg2(arg2), m_arg3(arg3) {}; \
+	type1 m_arg1;	\
+	type2 m_arg2;	\
+	type3 m_arg3;	\
+	virtual void execute() override	\
+	{	\
+		glCall(m_arg1, m_arg2, m_arg3); \
+	}	\
+};	\
+	addCommand(Command(arg1, arg2, arg3)); \
+}
+
+#define __4ARGCOMMAND(type1, type2, type3, type4, glCall, arg1, arg2, arg3, arg4) \
+{ \
+class Command : public GLCommand	\
+{	\
+public:	\
+	Command(type1 arg1, type2 arg2, type3 arg3, type4 arg4) : m_arg1(arg1), m_arg2(arg2), m_arg3(arg3), m_arg4(arg4) {}; \
+	type1 m_arg1;	\
+	type2 m_arg2;	\
+	type3 m_arg3;	\
+	type4 m_arg4;	\
+	virtual void execute() override	\
+	{	\
+		glCall(m_arg1, m_arg2, m_arg3, m_arg4); \
+	}	\
+};	\
+	addCommand(Command(arg1, arg2, arg3, arg4)); \
+}
+
+
+namespace GLCommandQueue
 {
-	SDL_LockMutex(s_mutex);
-	for (GLCommand command : s_commandQueue)
+	inline void addCommand(GLCommand& command)
 	{
-		command.execute();
+		SDL_LockMutex(s_mutex);
+		s_commandQueue.emplace_back(command);
+		SDL_UnlockMutex(s_mutex);
 	}
-	s_commandQueue.clear();
-	SDL_UnlockMutex(s_mutex);
-}
 
-void GLCommandQueue::glqGenVertexArrays(GLsizei numVAOs, GLuint* vaos)
-{
-	class GenVertexArraysCommand : public GLCommand 
-	{ 
-	public:
-		GenVertexArraysCommand(GLsizei numVAOs, GLuint* vaos) : m_numVAOs(numVAOs), m_vaos(vaos) {}
-		GLsizei m_numVAOs;
-		GLuint* m_vaos;
-		virtual void execute() override 
-		{ 
-			glGenVertexArrays(m_numVAOs, m_vaos); 
-		}
-	};
-	addCommand(GenVertexArraysCommand(numVAOs, vaos));
-}
-
-void GLCommandQueue::glqBindVertexArray(GLuint vao)
-{
-	class BindVertexArrayCommand : public GLCommand
+	void update()
 	{
-	public:
-		BindVertexArrayCommand(GLuint vao) : m_vao(vao) {};
-		virtual void execute()
+		SDL_LockMutex(s_mutex);
+		for (GLCommand command : s_commandQueue)
 		{
-			glBindVertexArray(m_vao);
+			command.execute();
 		}
-		GLuint m_vao;
-	};
-	addCommand(BindVertexArrayCommand(vao));
+		s_commandQueue.clear();
+		SDL_UnlockMutex(s_mutex);
+	}
 }
 
-void GLCommandQueue::glqGenBuffers(GLsizei numBuffers, GLuint* buffers)
-{
-	class GenBuffersCommand : public GLCommand
-	{
-	public:
-		GenBuffersCommand(GLsizei numBuffers, GLuint* buffers) : m_numBuffers(numBuffers), m_buffers(buffers) {}
-		GLsizei m_numBuffers;
-		GLuint* m_buffers;
-		virtual void execute()
-		{
-			glGenBuffers(m_numBuffers, m_buffers);
-		}
-	};
-	addCommand(GenBuffersCommand(numBuffers, buffers));
-}
-void GLCommandQueue::glqBindBuffer(GLenum target, GLuint bufferID)
-{
-	class BindBufferCommand : public GLCommand
-	{
-	public:
-		BindBufferCommand(GLenum target, GLuint bufferID) : m_target(target), m_bufferID(bufferID) {}
-		GLenum m_target;
-		GLuint m_bufferID;
-		virtual void execute()
-		{
-			glBindBuffer(m_target, m_bufferID);
-		}
-	};
-	addCommand(BindBufferCommand(target, bufferID));
-}
-void GLCommandQueue::glqBufferData(GLenum target, GLsizei size, const GLvoid* data, GLenum usage)
-{
-	class BufferDataCommand : public GLCommand
-	{
-	public:
-		BufferDataCommand(GLenum target, GLsizei size, const GLvoid* data, GLenum usage)
-			: m_target(target), m_size(size), m_data(data), m_usage(usage) {}
-		GLenum m_target; 
-		GLsizei m_size; 
-		const GLvoid* m_data; 
-		GLenum m_usage;
-		virtual void execute()
-		{
-			glBufferData(m_target, m_size, m_data, m_usage);
-		}
-	};
-	addCommand(BufferDataCommand(target, size, data, usage));
-}
+using namespace GLCommandQueue;
 
-
+void glqGenVertexArrays(GLsizei n, GLuint* arrays) { __2ARGCOMMAND(GLsizei, GLuint*, glGenVertexArrays, n, arrays); }
+void glqGenBuffers(GLsizei n, GLuint* buffers) { __2ARGCOMMAND(GLsizei, GLuint*, glGenBuffers, n, buffers); }

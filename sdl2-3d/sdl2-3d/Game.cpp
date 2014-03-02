@@ -4,7 +4,6 @@
 #include <SDL_thread.h>
 #include <lua.hpp>
 
-#include "Engine\Graphics\GL\GLCommandQueue.h"
 
 #include "Engine\Utils\CheckGLError.h"
 
@@ -32,7 +31,7 @@ void Game::startLoop()
 	}
 }
 
-GLCommandQueue s_glCommandQueue;
+
 
 int Game::renderThreadLoop(void* ptr)
 {
@@ -40,7 +39,7 @@ int Game::renderThreadLoop(void* ptr)
 
 	while (s_renderThreadRunning)
 	{
-		s_glCommandQueue.update();
+		GLCommandQueue::update();
 	}
 
 	Game::graphics.disposeGL(context);

@@ -2,6 +2,7 @@
 
 #include "Engine/Input/Input.h"
 #include "Engine/Graphics/Graphics.h"
+#include "Engine\Graphics\GL\GLCommandQueue.h"
 
 #include <SDL.h>
 #include <lua.hpp>
