@@ -290,6 +290,9 @@
     <ClInclude Include="Engine\Graphics\GL\GLCommandQueue.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLCommandQueueMacros.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
