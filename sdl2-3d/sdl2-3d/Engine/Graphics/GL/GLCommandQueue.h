@@ -44,8 +44,6 @@ public:
 	virtual void execute() {};
 };
 
-struct SDL_mutex;
-
 namespace GLCommandQueue
 {
 	void update();
@@ -56,6 +54,7 @@ namespace GLCommandQueue
 
 void glqEnable(GLenum target);
 void glqDisable(GLenum target);
+
 /* Vertex Arrays */
 void glqVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer);
 void glqVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer);
@@ -103,6 +102,7 @@ void glqGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid
 void glqGetBufferPointerv(GLenum target, GLenum pname, GLvoid** params);
 // Vertex Array Object Queries
 bool glqIsVertexArray(GLuint arr, GLboolean* out);
+
 /* Viewport and Clipping */
 // Controlling the Viewport
 void glqDepthRange(GLclampd n, GLclampd f);
@@ -113,6 +113,7 @@ void glqClipPlane(GLenum p, GLdouble eqn[4]);
 void glqClampColor(GLenum target, GLenum clamp);
 // Flatshading
 void glqProvokingVertex(GLenum provokeMode);
+
 /* Rendering Control and Queries */
 // Conditional Rendering
 void glqBeginConditionalRender(GLuint id, GLenum mode);
@@ -131,6 +132,7 @@ bool glqIsQuery(GLuint id, GLboolean* out);
 void glqGetQueryiv(GLenum target, GLenum pname, GLint* params);
 void glqGetQueryObjectiv(GLuint id, GLenum pname, GLint* params);
 void glqGetQueryObjectuiv(GLuint id, GLenum pname, GLuint* params);
+
 /* Shader and Programs */
 // Shader Objects
 GLuint glqCreateShader(GLenum type, GLuint* out);
@@ -157,6 +159,7 @@ void glqGetUniformIndies(GLuint program, GLsizei uniformCount, const GLchar** un
 void glqGetActiveUniformName(GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformName);
 void glqGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name);
 void GetActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params);
+
 /* Loading Uniform Variables in Default Uniform Block */
 void glqUniform1i(GLint location, GLint value);
 void glqUniform2i(GLint location, GLint value1, GLint value2);
@@ -203,6 +206,7 @@ void glqGetProgramiv(GLuint program, GLenum pname, GLint* params);
 // Fragment Shaders
 void glqBindFragDataLocation(GLuint program, GLuint colorNumber, const GLchar* name);
 GLint glqGetFragDataLocation(GLuint program, const GLchar* name, GLint* out);
+
 /* Shader Queries */
 GLboolean glqIsShader(GLuint shader, GLboolean* out);
 void glqGetShaderiv(GLuint shader, GLenum pname, GLint* params);
@@ -215,6 +219,7 @@ void glqGetShaderSource(GLuint shader, GLsizei bufSize, GLsizei* length, GLchar*
 //void GetUniform{if ui}v(uint program, int location, T *params);
 GLboolean glqIsProgram(GLuint program, GLboolean* out);
 void glqGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
+
 /* Rasterization */
 // Multisampling
 void glqGetMultisamplefv(GLenum pname, GLuint index, float* val);
@@ -235,6 +240,7 @@ void glqPolygonOffset(GLfloat factor, GLfloat units);
 // Pixel Rectangles
 void glqPixelStorei(GLenum pname, GLint value);
 void glqPixelstoref(GLenum pname, GLfloat value);
+
 /* Texturing */
 void glqActiveTexture(GLenum texture);
 // Texture Image Specification
@@ -274,11 +280,13 @@ void glqGetTexParameterfv(GLenum target, GLenum value, GLfloat* data);
 void glqGetTexLevelParameteriv(GLenum target, GLint lod, GLenum value, GLint* data);
 void glqGetTexLevelParameterfv(GLenum target, GLint lod, GLenum value, GLfloat* data);
 //TODO: Texture Queries
+
 /* Drawing, Reading and Copying Pixels */
 // Reading Pixels
 void glqReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data);
 void glqReadBuffer(GLenum src);
 void glqBlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
+
 /* Per-Fragment Operations */
 void glqScissor(GLint left, GLint bottom, GLsizei width, GLsizei height);
 void glqSampleCoverage(GLclampf value, GLboolean invert);
@@ -313,6 +321,7 @@ void glqClearBufferiv(GLenum buffer, GLint drawbuffer, const GLint* value);
 void glqClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat* value);
 void glqClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint* value);
 void glqClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
+
 /* Framebuffer Objects */
 void glqBindFramebuffer(GLenum target, GLuint framebuffer);
 void glqDeleteFramebuffers(GLsizei n, GLuint *framebuffers);
@@ -331,6 +340,7 @@ void glqFramebufferTextureLayer(GLenum target, GLenum attachment, GLuint texture
 GLenum glqCheckFramebufferStatus(GLenum target, GLenum* out);
 //TODO: Framebuffer Object Queries
 //TODO: Renderbuffer Object Queries
+
 /* Synchronization */
 void glqFlush();
 void glqFinish();
