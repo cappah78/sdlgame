@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#define NULL 0
+
 typedef unsigned int GLenum;
 typedef unsigned int GLbitfield;
 typedef unsigned int GLuint;
@@ -37,6 +39,72 @@ typedef uint64_t GLuint64EXT;
 #endif
 typedef GLint64EXT  GLint64;
 typedef GLuint64EXT GLuint64;
+
+
+
+class Functor
+{
+public:
+	virtual ~Functor() {}
+	virtual void operator()() = 0;
+};
+
+template <class CALLEEPTR, class MEMFUNPTR, class ARG1>
+class MemberFunctor : public Functor
+{
+public:
+	MemberFunctor(const CALLEEPTR& callee, const MEMFUNPTR& function, ARG1 arg1) :
+		m_calleeptr(callee), m_function(function), m_arg1(arg1)
+	{
+	}
+
+	virtual void operator()()
+	{
+		if (m_calleeptr != NULL && m_function != NULL)
+		{
+			((*m_calleeptr).*m_function)(m_arg1);
+		}
+	}
+
+private:
+	const CALLEEPTR& m_calleeptr;
+	const MEMFUNPTR& m_function;
+	ARG1 m_arg1;
+};
+
+template <class CALLEEPTR, class CALLEE, class RET, class TYPE1, class ARG1>
+inline Functor* DeferCall(const CALLEEPTR& callee, RET(CALLEE::*function)(TYPE1), const ARG1& arg1)
+{
+	return new MemberFunctor<CALLEEPTR, RET(CALLEE::*)(TYPE1), ARG1>(callee, function, arg1);
+}
+
+template <class TYPE>
+class Referencer
+{
+public:
+	Referencer(TYPE& type) : m_type(type) {};
+	operator TYPE&() const
+	{
+		return m_type;
+	}
+private:
+	TYPE& m_type;
+};
+
+template <class TYPE>
+inline Referencer<TYPE> Reference(TYPE& type)
+{
+	return Referencer<TYPE>(type);
+}
+
+class Foo
+{
+public:
+	void Bar(const float & rVal) {  }
+};
+
+
+
 
 class GLCommand
 {
@@ -266,7 +334,9 @@ void glqCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsiz
 void glqTexImage3DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
 void glqTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
 void glqTexBuffer(GLenum target, GLenum internalformat, GLuint buffer);
-void glqTexParameteri(GLenum target, GLenum pname, GLint param);void glqTexParameterf(GLenum target, GLenum pname, GLfloat param);void glqTexParameteriv(GLenum target, GLenum pname, GLint* params);
+void glqTexParameteri(GLenum target, GLenum pname, GLint param);
+void glqTexParameterf(GLenum target, GLenum pname, GLfloat param);
+void glqTexParameteriv(GLenum target, GLenum pname, GLint* params);
 void glqTexParameterfv(GLenum target, GLenum pname, GLfloat* params);
 //void TexParameterI{i ui}v(enum target, enum pname, T *params);
 void glqGenerateMipmap(GLenum target);

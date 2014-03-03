@@ -9,15 +9,21 @@
 std::vector<GLCommand> s_commandQueue;
 SDL_mutex* s_mutex = SDL_CreateMutex();
 
-
-
 namespace GLCommandQueue
 {
+
 	inline void addCommand(GLCommand& command)
 	{
 		SDL_LockMutex(s_mutex);
 		s_commandQueue.emplace_back(command);
 		SDL_UnlockMutex(s_mutex);
+
+		Foo aFoo;
+		float aValue = 1.0;
+
+		Functor * pCall = DeferCall(&aFoo, &Foo::Bar, Reference(aValue));
+		(*pCall)();
+
 	}
 
 	void update()
@@ -33,7 +39,6 @@ namespace GLCommandQueue
 }
 
 using namespace GLCommandQueue;
-
 
 
 void glqEnable(GLenum target) { __1ARGCOMMAND(GLenum, glEnable, target) }
@@ -250,7 +255,9 @@ void glqCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsiz
 void glqTexImage3DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
 void glqTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
 void glqTexBuffer(GLenum target, GLenum internalformat, GLuint buffer);
-void glqTexParameteri(GLenum target, GLenum pname, GLint param);void glqTexParameterf(GLenum target, GLenum pname, GLfloat param);void glqTexParameteriv(GLenum target, GLenum pname, GLint* params);
+void glqTexParameteri(GLenum target, GLenum pname, GLint param);
+void glqTexParameterf(GLenum target, GLenum pname, GLfloat param);
+void glqTexParameteriv(GLenum target, GLenum pname, GLint* params);
 void glqTexParameterfv(GLenum target, GLenum pname, GLfloat* params);
 //void TexParameterI{i ui}v(enum target, enum pname, T *params);
 void glqGenerateMipmap(GLenum target);
