@@ -11,6 +11,8 @@
 #include <SDL_thread.h>
 #include <IL\il.h>
 
+#include "Engine\Graphics\GL\GLCommandQueue.h"
+
 /* If using gl3.h */
 /* Ensure we are using opengl's core profile only */
 #define GL3_PROTOTYPES 1
@@ -117,6 +119,7 @@ int main(int argc, char *argv[])
 	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
 
 	{
+		testFunctor();
 		GameScreen gameScreen;
 		Game::setScreen(&gameScreen);
 		Game::startLoop(); // blocks untill Game::stopLoop()

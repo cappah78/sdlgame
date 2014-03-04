@@ -9,6 +9,21 @@
 std::vector<GLCommand> s_commandQueue;
 SDL_mutex* s_mutex = SDL_CreateMutex();
 
+void thing(int& val)
+{
+	printf("da: %i \n", val);
+	val++;
+}
+
+void testFunctor()
+{
+	int val2 = 42;
+
+	Functor* call = CreateFunctor<int&>(thing, val2);
+	(*call)();
+	printf("daa: %i \n", val2);
+}
+
 namespace GLCommandQueue
 {
 
@@ -17,13 +32,6 @@ namespace GLCommandQueue
 		SDL_LockMutex(s_mutex);
 		s_commandQueue.emplace_back(command);
 		SDL_UnlockMutex(s_mutex);
-
-		Foo aFoo;
-		float aValue = 1.0;
-
-		Functor * pCall = DeferCall(&aFoo, &Foo::Bar, Reference(aValue));
-		(*pCall)();
-
 	}
 
 	void update()

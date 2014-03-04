@@ -40,7 +40,7 @@ typedef uint64_t GLuint64EXT;
 typedef GLint64EXT  GLint64;
 typedef GLuint64EXT GLuint64;
 
-
+/*
 
 class Functor
 {
@@ -97,14 +97,77 @@ inline Referencer<TYPE> Reference(TYPE& type)
 	return Referencer<TYPE>(type);
 }
 
+*/
+class Functor
+{
+public:
+	virtual ~Functor() {}
+	virtual void operator()() = 0;
+};
+
+template <class TYPE>
+class Referencer
+{
+public:
+	Referencer(TYPE& type) : m_type(type) {};
+	operator TYPE&() const
+	{
+		return m_type;
+	}
+private:
+	TYPE& m_type;
+};
+
+template <class TYPE>
+inline Referencer<TYPE> Reference(TYPE& type)
+{
+	return Referencer<TYPE>(type);
+}
+
+template <class TYPE1>
+class ValueFunctor : public Functor
+{
+public:
+	ValueFunctor(void(*function)(TYPE1), const TYPE1& arg1) : m_function(function), m_arg1(arg1) {}
+	virtual void operator()() { m_function(m_arg1); }
+private:
+	void(*m_function)(TYPE1);
+	const TYPE1& m_arg1;
+};
+/*
+template <class TYPE1>
+class RefFunctor : public Functor
+{
+public:
+	RefFunctor(void(*function)(TYPE1&), TYPE1& arg1) : m_function(function), m_arg1(arg1) {}
+	virtual void operator()() { m_function(m_arg1); }
+private:
+	void(*m_function)(TYPE1&);
+	TYPE1& m_arg1;
+};*/
+
+template <class TYPE1>
+inline Functor* CreateFunctor(void(*function)(TYPE1), const TYPE1& arg1)
+{
+	printf("val \n");
+	return new ValueFunctor<TYPE1>(function, arg1);
+}
+/*
+template <class TYPE1>
+inline Functor* CreateFunctor(void(*function)(TYPE1&), TYPE1& arg1)
+{
+	printf("ref \n");
+	return new RefFunctor<TYPE1>(function, arg1);
+}
+*/
 class Foo
 {
 public:
-	void Bar(const float & rVal) {  }
+	void bar(float val1) {}
+	void bar2(const float & val1, const bool& val2) {}
 };
 
-
-
+void testFunctor();
 
 class GLCommand
 {
