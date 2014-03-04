@@ -26,7 +26,6 @@ typedef struct __GLsync* GLsync;
 typedef ptrdiff_t GLintptr;
 typedef ptrdiff_t GLsizeiptr;
 
-
 #if defined(_MSC_VER) && _MSC_VER < 1400
 typedef __int64 GLint64EXT;
 typedef unsigned __int64 GLuint64EXT;
@@ -40,64 +39,6 @@ typedef uint64_t GLuint64EXT;
 typedef GLint64EXT  GLint64;
 typedef GLuint64EXT GLuint64;
 
-/*
-
-class Functor
-{
-public:
-	virtual ~Functor() {}
-	virtual void operator()() = 0;
-};
-
-template <class CALLEEPTR, class MEMFUNPTR, class ARG1>
-class MemberFunctor : public Functor
-{
-public:
-	MemberFunctor(const CALLEEPTR& callee, const MEMFUNPTR& function, ARG1 arg1) :
-		m_calleeptr(callee), m_function(function), m_arg1(arg1)
-	{
-	}
-
-	virtual void operator()()
-	{
-		if (m_calleeptr != NULL && m_function != NULL)
-		{
-			((*m_calleeptr).*m_function)(m_arg1);
-		}
-	}
-
-private:
-	const CALLEEPTR& m_calleeptr;
-	const MEMFUNPTR& m_function;
-	ARG1 m_arg1;
-};
-
-template <class CALLEEPTR, class CALLEE, class RET, class TYPE1, class ARG1>
-inline Functor* DeferCall(const CALLEEPTR& callee, RET(CALLEE::*function)(TYPE1), const ARG1& arg1)
-{
-	return new MemberFunctor<CALLEEPTR, RET(CALLEE::*)(TYPE1), ARG1>(callee, function, arg1);
-}
-
-template <class TYPE>
-class Referencer
-{
-public:
-	Referencer(TYPE& type) : m_type(type) {};
-	operator TYPE&() const
-	{
-		return m_type;
-	}
-private:
-	TYPE& m_type;
-};
-
-template <class TYPE>
-inline Referencer<TYPE> Reference(TYPE& type)
-{
-	return Referencer<TYPE>(type);
-}
-
-*/
 class Functor
 {
 public:
@@ -119,53 +60,27 @@ private:
 };
 
 template <class TYPE>
-inline Referencer<TYPE> Reference(TYPE& type)
+inline Referencer<TYPE> reference(TYPE& type)
 {
 	return Referencer<TYPE>(type);
 }
 
-template <class TYPE1>
-class ValueFunctor : public Functor
+template <class TYPE1, class PARAM1>
+class FreeFunctor : public Functor
 {
 public:
-	ValueFunctor(void(*function)(TYPE1), const TYPE1& arg1) : m_function(function), m_arg1(arg1) {}
+	FreeFunctor(void(*function)(TYPE1), const PARAM1& arg1) : m_function(function), m_arg1(arg1) {}
 	virtual void operator()() { m_function(m_arg1); }
 private:
 	void(*m_function)(TYPE1);
-	const TYPE1& m_arg1;
+	const PARAM1& m_arg1;
 };
-/*
-template <class TYPE1>
-class RefFunctor : public Functor
+/* Create a functor to a c free function, reference arguments must be wrapped with reference(arg) */
+template <class TYPE1, class PARAM1>
+inline Functor* createFunctor(void(*function)(TYPE1), const PARAM1& arg1)
 {
-public:
-	RefFunctor(void(*function)(TYPE1&), TYPE1& arg1) : m_function(function), m_arg1(arg1) {}
-	virtual void operator()() { m_function(m_arg1); }
-private:
-	void(*m_function)(TYPE1&);
-	TYPE1& m_arg1;
-};*/
-
-template <class TYPE1>
-inline Functor* CreateFunctor(void(*function)(TYPE1), const TYPE1& arg1)
-{
-	printf("val \n");
-	return new ValueFunctor<TYPE1>(function, arg1);
+	return new FreeFunctor<TYPE1, PARAM1>(function, arg1);
 }
-/*
-template <class TYPE1>
-inline Functor* CreateFunctor(void(*function)(TYPE1&), TYPE1& arg1)
-{
-	printf("ref \n");
-	return new RefFunctor<TYPE1>(function, arg1);
-}
-*/
-class Foo
-{
-public:
-	void bar(float val1) {}
-	void bar2(const float & val1, const bool& val2) {}
-};
 
 void testFunctor();
 

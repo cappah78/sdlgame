@@ -19,14 +19,13 @@ void testFunctor()
 {
 	int val2 = 42;
 
-	Functor* call = CreateFunctor<int&>(thing, val2);
+	Functor* call = createFunctor(thing, reference(val2));
 	(*call)();
 	printf("daa: %i \n", val2);
 }
 
 namespace GLCommandQueue
 {
-
 	inline void addCommand(GLCommand& command)
 	{
 		SDL_LockMutex(s_mutex);
