@@ -21,7 +21,7 @@
     <ClInclude Include="Engine\Graphics\D3D\D3DVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Frustum.h" />
     <ClInclude Include="Engine\Graphics\GL\GLCommandQueue.h" />
-    <ClInclude Include="Engine\Graphics\GL\GLCommandQueueMacros.h" />
+    <ClInclude Include="Engine\Graphics\GL\Functors.h" />
     <ClInclude Include="Engine\Graphics\GL\GLConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\GLCubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\GLDepthCubeMap.h" />

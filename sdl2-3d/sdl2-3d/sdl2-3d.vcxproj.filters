@@ -290,7 +290,7 @@
     <ClInclude Include="Engine\Graphics\GL\GLCommandQueue.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\GL\GLCommandQueueMacros.h">
+    <ClInclude Include="Engine\Graphics\GL\Functors.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
   </ItemGroup>

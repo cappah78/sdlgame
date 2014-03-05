@@ -1,6 +1,6 @@
 #include "GLCommandQueue.h"
 
-#include "GLCommandQueueMacros.h"
+#include "Functors.h"
 
 #include <vector>
 #include <GL/glew.h>
@@ -11,17 +11,27 @@ SDL_mutex* s_mutex = SDL_CreateMutex();
 
 void thing(int& val)
 {
-	printf("da: %i \n", val);
+	printf("called: %i \n", val);
 	val++;
+	//return val;
+}
+
+long dafuq(int one, bool two, float three, double four, short five, char six, int seven, bool eight, float nine, double ten, short eleven, char twelve)
+{
+	return 42;
 }
 
 void testFunctor()
 {
 	int val2 = 42;
 
-	Functor* call = createFunctor(thing, reference(val2));
+	Functor<void>* call = createFunctor(thing, reference(val2));
 	(*call)();
-	printf("daa: %i \n", val2);
+	printf("after call: %i \n", val2);
+
+	Functor<long>* dafuqcall = createFunctor(dafuq, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+	long result = (*dafuqcall)();
+	printf("result: %i \n", result);
 }
 
 namespace GLCommandQueue
@@ -48,15 +58,15 @@ namespace GLCommandQueue
 using namespace GLCommandQueue;
 
 
-void glqEnable(GLenum target) { __1ARGCOMMAND(GLenum, glEnable, target) }
-void glqDisable(GLenum target) { __1ARGCOMMAND(GLenum, glDisable, target) }
+void glqEnable(GLenum target);
+void glqDisable(GLenum target);
 
 /* Vertex Arrays */
-void glqVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer) { __6ARGCOMMAND(GLuint, GLint, GLenum, GLboolean, GLsizei, const GLvoid*, glVertexAttribPointer, index, size, type, normalized, stride, pointer) }
-void glqVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer) { __5ARGCOMMAND(GLuint, GLint, GLenum, GLsizei, const GLvoid*, glVertexAttribIPointer, index, size, type, stride, pointer) }
-void glqEnableVertexAttribArray(GLuint index) { __1ARGCOMMAND(GLuint, glEnableVertexAttribArray, index) }
-void glqDisableVertexAttribArray(GLuint index) { __1ARGCOMMAND(GLuint, glDisableVertexAttribArray, index) }
-void glqPrimitiveRestartIndex(GLuint index) { __1ARGCOMMAND(GLuint, glPrimitiveRestartIndex, index) }
+void glqVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer);
+void glqVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer);
+void glqEnableVertexAttribArray(GLuint index);
+void glqDisableVertexAttribArray(GLuint index);
+void glqPrimitiveRestartIndex(GLuint index);
 // Drawing Commands
 void glqDrawArrays(GLenum mode, GLint first, GLsizei count);
 void glqMultiDrawArrays(GLenum mode, GLint* first, GLsizei* count, GLsizei primcount);

@@ -38,50 +38,6 @@ typedef uint64_t GLuint64EXT;
 #endif
 typedef GLint64EXT  GLint64;
 typedef GLuint64EXT GLuint64;
-
-class Functor
-{
-public:
-	virtual ~Functor() {}
-	virtual void operator()() = 0;
-};
-
-template <class TYPE>
-class Referencer
-{
-public:
-	Referencer(TYPE& type) : m_type(type) {};
-	operator TYPE&() const
-	{
-		return m_type;
-	}
-private:
-	TYPE& m_type;
-};
-
-template <class TYPE>
-inline Referencer<TYPE> reference(TYPE& type)
-{
-	return Referencer<TYPE>(type);
-}
-
-template <class TYPE1, class PARAM1>
-class FreeFunctor : public Functor
-{
-public:
-	FreeFunctor(void(*function)(TYPE1), const PARAM1& arg1) : m_function(function), m_arg1(arg1) {}
-	virtual void operator()() { m_function(m_arg1); }
-private:
-	void(*m_function)(TYPE1);
-	const PARAM1& m_arg1;
-};
-/* Create a functor to a c free function, reference arguments must be wrapped with reference(arg) */
-template <class TYPE1, class PARAM1>
-inline Functor* createFunctor(void(*function)(TYPE1), const PARAM1& arg1)
-{
-	return new FreeFunctor<TYPE1, PARAM1>(function, arg1);
-}
-
 void testFunctor();
 
 class GLCommand
