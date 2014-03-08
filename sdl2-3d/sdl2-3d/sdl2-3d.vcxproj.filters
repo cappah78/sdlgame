@@ -293,6 +293,9 @@
     <ClInclude Include="Engine\Graphics\GL\Functors.h">
       <Filter>Header Files\Engine\Graphics\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Utils\Functor.h">
+      <Filter>Header Files\Engine\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

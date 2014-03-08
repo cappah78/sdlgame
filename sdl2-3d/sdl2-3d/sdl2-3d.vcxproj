@@ -57,6 +57,7 @@
     <ClInclude Include="Engine\Utils\Comparables.h" />
     <ClInclude Include="Engine\Utils\FileReader.h" />
     <ClInclude Include="Engine\Utils\FPSCameraController.h" />
+    <ClInclude Include="Engine\Utils\Functor.h" />
     <ClInclude Include="Engine\Utils\noiseutils.h" />
     <ClInclude Include="Engine\Utils\PerlinGenerator.h" />
     <ClInclude Include="Engine\Utils\Random.h" />
@@ -539,6 +540,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <MinimalRebuild>true</MinimalRebuild>
       <OpenMPSupport>true</OpenMPSupport>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

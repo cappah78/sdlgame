@@ -1,37 +1,43 @@
 #include "GLCommandQueue.h"
 
-#include "Functors.h"
-
 #include <vector>
 #include <GL/glew.h>
 #include <SDL_thread.h>
 
+#include "../../Utils/Functor.h"
+
 std::vector<GLCommand> s_commandQueue;
 SDL_mutex* s_mutex = SDL_CreateMutex();
 
-void thing(int& val)
+
+int someIntMethod(int& someIntRef, const char* someMessage)
 {
-	printf("called: %i \n", val);
-	val++;
-	//return val;
+	printf("called someIntMethod: %i %s \n", someIntRef, someMessage);
+	return someIntRef++;
 }
 
-long dafuq(int one, bool two, float three, double four, short five, char six, int seven, bool eight, float nine, double ten, short eleven, char twelve)
+void someVoidMethod(int& someIntRef, const char* someMessage)
 {
-	return 42;
+	printf("called someVoidMethod: %i %s \n", someIntRef, someMessage);
+	someIntRef++;
 }
 
 void testFunctor()
 {
-	int val2 = 42;
+	int someInt = 42;
+	const char* someMessage = "hai";
 
-	Functor<void>* call = createFunctor(thing, reference(val2));
-	(*call)();
-	printf("after call: %i \n", val2);
+	Func::Functor* someVoidCall = Func::makeFunctor(someVoidMethod, Func::reference(someInt), someMessage);
+	someVoidCall->call();
+	printf("after someVoidMethod: %i \n", someInt);
 
-	Functor<long>* dafuqcall = createFunctor(dafuq, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-	long result = (*dafuqcall)();
-	printf("result: %i \n", result);
+	int intReturn;
+	Func::Functor* someIntCall = Func::makeFunctor(intReturn, someIntMethod, Func::reference(someInt), someMessage);
+	someIntCall->call();
+	printf("after someIntMethod: %i %i \n", intReturn, someInt);
+
+	delete someVoidCall;
+	delete someIntCall;
 }
 
 namespace GLCommandQueue

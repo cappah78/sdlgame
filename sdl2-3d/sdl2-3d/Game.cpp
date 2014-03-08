@@ -49,7 +49,7 @@ int Game::renderThreadLoop(void* ptr)
 
 void Game::startRenderThread()
 {
-	s_renderThread = SDL_CreateThread(renderThreadLoop, "Render Thread", (void*) NULL);
+	s_renderThread = SDL_CreateThread(&renderThreadLoop, "Render Thread", (void*) NULL);
 }
 
 void Game::stopRenderThread()
