@@ -6,8 +6,10 @@
 
 #include "../../Utils/Functor.h"
 
-std::vector<GLCommand> s_commandQueue;
+std::vector<Func::Functor*> s_commandQueue;
 SDL_mutex* s_mutex = SDL_CreateMutex();
+
+using namespace Func;
 
 
 int someIntMethod(int& someIntRef, const char* someMessage)
@@ -42,7 +44,7 @@ void testFunctor()
 
 namespace GLCommandQueue
 {
-	inline void addCommand(GLCommand& command)
+	inline void addCommand(Func::Functor* command)
 	{
 		SDL_LockMutex(s_mutex);
 		s_commandQueue.emplace_back(command);
@@ -52,9 +54,9 @@ namespace GLCommandQueue
 	void update()
 	{
 		SDL_LockMutex(s_mutex);
-		for (GLCommand command : s_commandQueue)
+		for (Func::Functor* command : s_commandQueue)
 		{
-			command.execute();
+			command->call();
 		}
 		s_commandQueue.clear();
 		SDL_UnlockMutex(s_mutex);
@@ -64,56 +66,56 @@ namespace GLCommandQueue
 using namespace GLCommandQueue;
 
 
-void glqEnable(GLenum target);
-void glqDisable(GLenum target);
+void glqEnable(GLenum target) { addCommand(makeFunctor(glEnable, target)); }
+void glqDisable(GLenum target) { addCommand(makeFunctor(glDisable, target)); }
 
 /* Vertex Arrays */
-void glqVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer);
-void glqVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer);
-void glqEnableVertexAttribArray(GLuint index);
-void glqDisableVertexAttribArray(GLuint index);
-void glqPrimitiveRestartIndex(GLuint index);
+void glqVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer) { addCommand(makeFunctor(glVertexAttribPointer, index, size, type, normalized, stride, pointer)); }
+void glqVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer) { addCommand(makeFunctor(glVertexAttribIPointer, index, size, type, stride, pointer)); }
+void glqEnableVertexAttribArray(GLuint index) { addCommand(makeFunctor(glEnableVertexAttribArray, index)); }
+void glqDisableVertexAttribArray(GLuint index) { addCommand(makeFunctor(glDisableVertexAttribArray, index)); }
+void glqPrimitiveRestartIndex(GLuint index) { addCommand(makeFunctor(glPrimitiveRestartIndex, index)); }
 // Drawing Commands
-void glqDrawArrays(GLenum mode, GLint first, GLsizei count);
-void glqMultiDrawArrays(GLenum mode, GLint* first, GLsizei* count, GLsizei primcount);
-void glqDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices);
-void glqMultiDrawElements(GLenum mode, GLsizei* count, GLenum type, GLvoid** indices, GLsizei primcount);
-void glqDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLvoid* indices);
-void glqDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
-void glqDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices, GLsizei primcount);
-void glqDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLint basevertex);
-void glqDrawRangeElementsBaseVertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLvoid* indices, GLint basevertex);
-void glqDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei primcount, GLint basevertex);
-void glqMultiDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices, GLsizei primcount, GLint basevertex);
+void glqDrawArrays(GLenum mode, GLint first, GLsizei count) { addCommand(makeFunctor(glDrawArrays, mode, first, count)); }
+void glqMultiDrawArrays(GLenum mode, GLint* first, GLsizei* count, GLsizei primcount) { addCommand(makeFunctor(glMultiDrawArrays, mode, first, count, primcount)); }
+void glqDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices) { addCommand(makeFunctor(glDrawElements, mode, count, type, indices)); }
+void glqMultiDrawElements(GLenum mode, GLsizei* count, GLenum type, const GLvoid** indices, GLsizei primcount) { addCommand(makeFunctor(glMultiDrawElements, mode, count, type, indices, primcount)); }
+void glqDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLvoid* indices) { addCommand(makeFunctor(glDrawRangeElements, mode, start, end, count, type, indices)); }
+void glqDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei primcount) { addCommand(makeFunctor(glDrawArraysInstanced, mode, first, count, primcount)); }
+void glqDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices, GLsizei primcount) { addCommand(makeFunctor(glDrawElementsInstanced, mode, count, type, indices, primcount)); }
+void glqDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLint basevertex) { addCommand(makeFunctor(glDrawElementsBaseVertex, mode, count, type, indices, basevertex)); }
+void glqDrawRangeElementsBaseVertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLvoid* indices, GLint basevertex) { addCommand(makeFunctor(glDrawRangeElementsBaseVertex, mode, start, end, count, type, indices, basevertex)); }
+void glqDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei primcount, GLint basevertex) { addCommand(makeFunctor(glDrawElementsInstancedBaseVertex, mode, count, type, indices, primcount, basevertex)); }
+void glqMultiDrawElementsBaseVertex(GLenum mode, const GLsizei* count, GLenum type, const GLvoid* const *indices, GLsizei primcount, const GLint *basevertex) { addCommand(makeFunctor(glMultiDrawElementsBaseVertex, mode, count, type, indices, primcount, basevertex)); }
 
 /* Buffer Objects */
-void glqGenBuffers(GLsizei n, GLuint* buffers);
-void glqDeleteBuffers(GLsizei n, const GLuint* buffers);
+void glqGenBuffers(GLsizei n, GLuint* buffers) { addCommand(makeFunctor(glGenBuffers, n, buffers)); }
+void glqDeleteBuffers(GLsizei n, const GLuint* buffers) { addCommand(makeFunctor(glDeleteBuffers, n, buffers)); }
 // Creating and Binding Buffer Objects
-void glqBindBuffer(GLenum target, GLuint buffer);
-void glqBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
-void glqBindBufferBase(GLenum target, GLuint index, GLuint buffer);
+void glqBindBuffer(GLenum target, GLuint buffer) { addCommand(makeFunctor(glBindBuffer, target, buffer)); }
+void glqBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size) { addCommand(makeFunctor(glBindBufferRange, target, index, buffer, offset, size)); }
+void glqBindBufferBase(GLenum target, GLuint index, GLuint buffer) { addCommand(makeFunctor(glBindBufferBase, target, index, buffer)); }
 // Creating Buffer Object Data Stores
-void glqBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage);
-void glqBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data);
+void glqBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage) { addCommand(makeFunctor(glBufferData, target, size, data, usage)); }
+void glqBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data) { addCommand(makeFunctor(glBufferSubData, target, offset, size, data)); }
 // Mapping and Unmapping Buffer Data
-void* glqMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access, void* out);
-void* glqMapBuffer(GLenum target, GLenum access, void* out);
-void glqFlushMappedBufferRange(GLenum target, GLintptr offset, GLsizeiptr length);
-bool glqUnmapBuffer(GLenum target, bool* out);
+void* glqMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access, void*& out) { addCommand(makeFunctor(out, glMapBufferRange, target, offset, length, access)); }
+void* glqMapBuffer(GLenum target, GLenum access, void*& out) { addCommand(makeFunctor(out, glMapBuffer, target, access)); }
+void glqFlushMappedBufferRange(GLenum target, GLintptr offset, GLsizeiptr length) { addCommand(makeFunctor(glFlushMappedBufferRange, target, offset, length)); }
+GLboolean glqUnmapBuffer(GLenum target, GLboolean& out) { addCommand(makeFunctor(out, glUnmapBuffer, target)); }
 // Copying Between Buffers
-void* glqCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readoffset, GLintptr writeoffset, GLsizeiptr size, void* out);
+void glqCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readoffset, GLintptr writeoffset, GLsizeiptr size) { addCommand(makeFunctor(glCopyBufferSubData, readTarget, writeTarget, readoffset, writeoffset, size)); }
 // Vertex Array Objects
 void glqGenVertexArrays(GLsizei n, GLuint* arrays);
 void glqDeleteVertexArrays(GLsizei n, const GLuint* arrays);
 void glqBindVertexArray(GLuint arr);
 // Buffer Object Queries
-bool glqIsBuffer(GLuint buffer, GLboolean* out);
+bool glqIsBuffer(GLuint buffer, GLboolean& out);
 void glqGetBufferParameteriv(GLenum target, GLenum pname, GLint* data);
 void glqGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid* data);
 void glqGetBufferPointerv(GLenum target, GLenum pname, GLvoid** params);
 // Vertex Array Object Queries
-bool glqIsVertexArray(GLuint arr, GLboolean* out);
+bool glqIsVertexArray(GLuint arr, GLboolean& out);
 
 /* Viewport and Clipping */
 // Controlling the Viewport
@@ -140,19 +142,19 @@ void glqEndQuery(GLenum target);
 void glqGenQueries(GLsizei n, GLuint* ids);
 void glqDeleteQueries(GLsizei n, const GLuint* ids);
 // Asynchronous State Queries
-bool glqIsQuery(GLuint id, GLboolean* out);
+bool glqIsQuery(GLuint id, GLboolean& out);
 void glqGetQueryiv(GLenum target, GLenum pname, GLint* params);
 void glqGetQueryObjectiv(GLuint id, GLenum pname, GLint* params);
 void glqGetQueryObjectuiv(GLuint id, GLenum pname, GLuint* params);
 
 /* Shader and Programs */
 // Shader Objects
-GLuint glqCreateShader(GLenum type, GLuint* out);
+GLuint glqCreateShader(GLenum type, GLuint& out);
 void glqShaderSource(GLuint shader, GLsizei count, const GLchar** string, const GLint* length);
 void glqCompileShader(GLuint shader);
 void glqDeleteShader(GLuint shader);
 // Program Objects
-GLuint glqCreateProgram(GLuint* out);
+GLuint glqCreateProgram(GLuint& out);
 void glqAttachShader(GLuint program, GLuint shader);
 void glqDetachShader(GLuint program, GLuint shader);
 void glqLinkProgram(GLuint program);
@@ -160,11 +162,11 @@ void glqUseProgram(GLuint program);
 void glqDeleteProgram(GLuint program);
 // Vertex Attributes
 void glqGetActiveAttrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name);
-GLint glqGetAttribLocation(GLuint program, const GLchar* name, GLint* out);
+GLint glqGetAttribLocation(GLuint program, const GLchar* name, GLint& out);
 void glqBindAttribLocation(GLuint program, GLuint index, const GLchar* name);
 // Uniform variables
-GLint glqGetUniformLocation(GLuint program, const GLchar* name, GLint* out);
-GLuint glqGetUniformBlockIndex(GLuint program, const GLchar* uniformBlockName, GLuint* out);
+GLint glqGetUniformLocation(GLuint program, const GLchar* name, GLint& out);
+GLuint glqGetUniformBlockIndex(GLuint program, const GLchar* uniformBlockName, GLuint& out);
 void glqGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformBlockName);
 void glqGetActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint* params);
 void glqGetUniformIndies(GLuint program, GLsizei uniformCount, const GLchar** uniformNames, GLuint *uniformIndices);
@@ -217,10 +219,10 @@ void glqValidateProgram(GLuint program);
 void glqGetProgramiv(GLuint program, GLenum pname, GLint* params);
 // Fragment Shaders
 void glqBindFragDataLocation(GLuint program, GLuint colorNumber, const GLchar* name);
-GLint glqGetFragDataLocation(GLuint program, const GLchar* name, GLint* out);
+GLint glqGetFragDataLocation(GLuint program, const GLchar* name, GLint& out);
 
 /* Shader Queries */
-GLboolean glqIsShader(GLuint shader, GLboolean* out);
+GLboolean glqIsShader(GLuint shader, GLboolean& out);
 void glqGetShaderiv(GLuint shader, GLenum pname, GLint* params);
 void glqGetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei* count, GLuint* shaders);
 void glqGetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog);
@@ -229,7 +231,7 @@ void glqGetShaderSource(GLuint shader, GLsizei bufSize, GLsizei* length, GLchar*
 //void GetVertexAttrib{ dfi li lui }v(uint index, enum pname, double *params);
 //void GetVertexAttribPointerv(uint index, enum pname, void **pointer);
 //void GetUniform{if ui}v(uint program, int location, T *params);
-GLboolean glqIsProgram(GLuint program, GLboolean* out);
+GLboolean glqIsProgram(GLuint program, GLboolean& out);
 void glqGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
 
 /* Rasterization */
@@ -351,16 +353,16 @@ void glqFramebufferTexture3D(GLenum target, GLenum attachment, GLenum textarget,
 void glqFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
 void glqFramebufferTexture1D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
 void glqFramebufferTextureLayer(GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer);
-GLenum glqCheckFramebufferStatus(GLenum target, GLenum* out);
+GLenum glqCheckFramebufferStatus(GLenum target, GLenum& out);
 //TODO: Framebuffer Object Queries
 //TODO: Renderbuffer Object Queries
 
 /* Synchronization */
 void glqFlush();
 void glqFinish();
-GLsync glqFenceSync(GLenum condition, GLbitfield flags, GLsync* out);
+GLsync glqFenceSync(GLenum condition, GLbitfield flags, GLsync& out);
 void glqDeleteSync(GLsync sync);
-GLenum glqClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout_ns, GLenum* out);
+GLenum glqClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout_ns, GLenum& out);
 void glqWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout_ns);
 void glqGetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values);
-GLboolean glqIsSync(GLsync sync, GLboolean* out);
+GLboolean glqIsSync(GLsync sync, GLboolean& out);
