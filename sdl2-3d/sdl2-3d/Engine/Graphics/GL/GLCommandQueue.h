@@ -154,10 +154,10 @@ GLint glqGetUniformLocation(GLuint program, const GLchar* name, GLint& out);
 GLuint glqGetUniformBlockIndex(GLuint program, const GLchar* uniformBlockName, GLuint& out);
 void glqGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformBlockName);
 void glqGetActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint* params);
-void glqGetUniformIndies(GLuint program, GLsizei uniformCount, const GLchar** uniformNames, GLuint *uniformIndices);
+void glqGetUniformIndices(GLuint program, GLsizei uniformCount, const GLchar** uniformNames, GLuint *uniformIndices);
 void glqGetActiveUniformName(GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformName);
 void glqGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name);
-void GetActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params);
+void glqGetActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params);
 
 /* Loading Uniform Variables in Default Uniform Block */
 void glqUniform1i(GLint location, GLint value);
@@ -256,8 +256,8 @@ void glqCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffs
 void glqCopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
 // Compressed Texture Images
 void glqCompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, GLvoid* data);
-void glqCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, GLvoid* data);
-void glqCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, GLvoid* data);
+void glqCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+void glqCompressedTexImage1D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid *data);
 void glqCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, GLvoid *data);
 void glqCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, GLvoid *data);
 void glqCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, GLvoid *data);
@@ -286,7 +286,7 @@ void glqGetTexLevelParameterfv(GLenum target, GLint lod, GLenum value, GLfloat* 
 // Reading Pixels
 void glqReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data);
 void glqReadBuffer(GLenum src);
-void glqBlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
+void glqBlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
 
 /* Per-Fragment Operations */
 void glqScissor(GLint left, GLint bottom, GLsizei width, GLsizei height);
@@ -297,14 +297,14 @@ void glqStencilFuncSeperate(GLenum face, GLenum func, GLint ref, GLuint masl);
 void glqStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass);
 void glqStencilOpSeperate(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
 void glqDepthFunc(GLenum func);
-void glqBeginQUery(GLenum target, GLuint id);
+void glqBeginQuery(GLenum target, GLuint id);
 void glqEndQuery(GLenum target);
 void glqBlendEquation(GLenum mode);
 void glqBlendEquationSeperate(GLenum modeRGB, GLenum modeAlpha);
 void glqBlendFuncSeperate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
 void glqBlendFunc(GLenum src, GLenum dst);
 void glqBlendColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
-void glqLocitOp(GLenum op);
+void glLogicOp(GLenum op);
 void glqDrawBuffer(GLenum buf);
 void glqDrawBuffers(GLsizei n, const GLenum* bufs);
 void glqColorMask(GLboolean r, GLboolean g, GLboolean b, GLboolean a);
