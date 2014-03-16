@@ -19,12 +19,7 @@ GLuint vao;
 GLuint vertexBufferID = 5;
 GLuint colorBufferID;
 
-int printThing(const char* m, GLuint& da, int wa)
-{
-	printf(m, da);
-	da++;
-	return 2;
-}
+
 
 GameScreen::GameScreen()
 	: m_camera(
@@ -46,16 +41,17 @@ GameScreen::GameScreen()
 	glqGenBuffers(1, &vertexBufferID);
 	glqGenBuffers(1, &colorBufferID);
 
+	glqPrintf("da %i %i %f \n", vertexBufferID, colorBufferID, 2);
+
 	glqBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
 	glqVertexAttribPointer(0, sizeof(glm::vec2), GL_FLOAT, false, 0, NULL);
-	glqPrintGLuint(vertexBufferID);
-	glqPrintGLuint(colorBufferID);
+	
 
 	glqBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+	const char* message = "wa";
 	GLuint da = 1;;
-	int out;
-	Func::makeFunctor(out, printThing, "da", da, 5)->call();
-	printf("da: %i \n", da);
+
+	//Func::makeFunctor(thingy<GLuint, float>, message, da, 1.0f)->call();
 }
 
 void GameScreen::render(float deltaSec)

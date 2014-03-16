@@ -110,10 +110,9 @@ void Game::updateFPSCounter(float deltaSec)
 	renderCount++;
 	if (timePassed >= 1.0f)	//setting fps in title here
 	{
-		_itoa_s(renderCount, numFramesStr, 20);
-		char str[26] = "FPS: ";
-		strcat_s(str, 20, numFramesStr);
-		Game::graphics.setWindowTitle(str);
+		std::string fpsString("FPS: ");
+		fpsString.append(std::to_string(renderCount));
+		Game::graphics.setWindowTitle(fpsString.c_str());
 		timePassed = 0.0;
 		renderCount = 0;
 	}

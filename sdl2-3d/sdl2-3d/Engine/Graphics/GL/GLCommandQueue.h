@@ -1123,6 +1123,20 @@ void glqAddFunctor(Func::Functor* functor);
 
 void glqPrintGLuint(GLuint& val);
 
+template <typename... T>
+void __glqPrintf(const char* m, T... da) 
+{ 
+	printf(m, da...);
+}
+
+/* Prints the contents of the given reference at the time of the call() */
+template <typename... T>
+void glqPrintf(const char* m, T&&... da)
+{
+	GLCommandQueue::addCommand(Func::makeFunctor(__glqPrintf<T...>, m, da...));
+}
+
+
 /* OpenGL 3.2 Reference Card http://www.khronos.org/files/opengl-quick-reference-card.pdf */
 
 void glqEnable(GLenum target);

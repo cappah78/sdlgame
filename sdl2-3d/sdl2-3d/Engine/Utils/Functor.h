@@ -51,6 +51,7 @@ namespace Func
 		RET& m_retVal;
 	};
 
+	/* void return specialisation */
 	template <typename... Ts>
 	class FunctorImpl<void, Ts...> : public Functor
 	{

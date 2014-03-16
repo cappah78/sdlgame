@@ -64,6 +64,8 @@ void glqPrintGLuint(GLuint& val)
 }
 
 
+
+
 void glqAddFunctor(Func::Functor* functor)
 {
 	addCommand(functor);
