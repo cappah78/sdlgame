@@ -4,9 +4,7 @@
 #include <SDL_thread.h>
 #include <lua.hpp>
 
-
 #include "Engine\Utils\CheckGLError.h"
-
 #include "Screens/GameScreen.h"
 
 IScreen* Game::s_currScreen = NULL;
@@ -30,8 +28,6 @@ void Game::startLoop()
 		updateFPSCounter(deltaSec);
 	}
 }
-
-
 
 int Game::renderThreadLoop(void* ptr)
 {
@@ -108,15 +104,15 @@ void Game::updateFPSCounter(float deltaSec)
 {
 	static float timePassed = 0.0f;
 	static int renderCount = 0;
-	static char numFramesStr[10];
+	static char numFramesStr[20];
 
 	timePassed += deltaSec;
 	renderCount++;
 	if (timePassed >= 1.0f)	//setting fps in title here
 	{
-		_itoa_s(renderCount, numFramesStr, 10);
-		char str[16] = "FPS: ";
-		strcat_s(str, 10, numFramesStr);
+		_itoa_s(renderCount, numFramesStr, 20);
+		char str[26] = "FPS: ";
+		strcat_s(str, 20, numFramesStr);
 		Game::graphics.setWindowTitle(str);
 		timePassed = 0.0;
 		renderCount = 0;

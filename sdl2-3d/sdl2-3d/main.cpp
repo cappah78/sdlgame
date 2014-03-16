@@ -119,7 +119,6 @@ int main(int argc, char *argv[])
 	SDL_SetRelativeMouseMode(SDL_TRUE); //capture mouse
 
 	{
-		testFunctor();
 		GameScreen gameScreen;
 		Game::setScreen(&gameScreen);
 		Game::startLoop(); // blocks untill Game::stopLoop()
