@@ -13,8 +13,8 @@ class GameScreen : public IScreen, public IKeyListener
 public:
 	GameScreen();
 	~GameScreen();
-	void render(float deltaSec);
-	void resize(int width, int height);
+	void render(float deltaSec) override;
+	void resize(int width, int height) override;
 	virtual bool keyDown(SDL_Keysym key) override;
 	virtual bool keyUp(SDL_Keysym key) override;
 

@@ -1,6 +1,7 @@
 #include "ShaderManager.h"
 
 #include "FileReader.h"
+#include "CheckGLError.h"
 
 #include <gl/glew.h>
 #include <fstream>
@@ -9,13 +10,10 @@
 #include <iostream>
 #include <stdio.h>
 
-#define LOCAL_FILE_DIR ""
-#define GLOBAL_FILE_DIR ""
-
 GLuint ShaderManager::createShaderProgram(const char* vertexShaderFilePath, const char* geometryShaderFilePath, const char* fragmentShaderFilePath)
 {
 	GLuint program = glCreateProgram();
-
+	CHECK_GL_ERROR();
 	if (vertexShaderFilePath)
 	{
 		std::string contents = FileReader::readStringFromFile(vertexShaderFilePath);
@@ -31,7 +29,11 @@ GLuint ShaderManager::createShaderProgram(const char* vertexShaderFilePath, cons
 		std::string contents = FileReader::readStringFromFile(fragmentShaderFilePath);
 		attachShaderSource(program, GL_FRAGMENT_SHADER, contents.c_str());
 	}
+	CHECK_GL_ERROR();
+
 	glLinkProgram(program);
+	CHECK_GL_ERROR();
+
 	return program;
 }
 

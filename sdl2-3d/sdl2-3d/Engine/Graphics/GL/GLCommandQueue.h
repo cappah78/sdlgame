@@ -1131,11 +1131,10 @@ void __glqPrintf(const char* m, T... da)
 
 /* Prints the contents of the given reference at the time of the call() */
 template <typename... T>
-void glqPrintf(const char* m, T&&... da)
+void glqPrintf(const char* m, T&... da)
 {
-	GLCommandQueue::addCommand(Func::makeFunctor(__glqPrintf<T...>, m, da...));
+	GLCommandQueue::addCommand(Func::makeFunctor(__glqPrintf<T&...>, m, Func::reference(da...)));
 }
-
 
 /* OpenGL 3.2 Reference Card http://www.khronos.org/files/opengl-quick-reference-card.pdf */
 
@@ -1352,7 +1351,7 @@ void glqCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsiz
 // Multisample Textures
 void glqTexImage3DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
 void glqTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
-void glqTexBuffer(GLenum target, GLenum internalformat, GLuint buffer);
+void glqTexBuffer(GLenum target, GLenum internalformat, GLuint& buffer);
 void glqTexParameteri(GLenum target, GLenum pname, GLint param);
 void glqTexParameterf(GLenum target, GLenum pname, GLfloat param);
 void glqTexParameteriv(GLenum target, GLenum pname, GLint* params);

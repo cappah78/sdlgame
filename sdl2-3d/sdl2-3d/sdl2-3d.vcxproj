@@ -150,6 +150,8 @@
     <None Include="Assets\Shaders\multishadowmap.vert" />
     <None Include="Assets\Shaders\quad.frag" />
     <None Include="Assets\Shaders\quad.vert" />
+    <None Include="Assets\Shaders\simple.frag" />
+    <None Include="Assets\Shaders\simple.vert" />
     <None Include="Assets\Shaders\skybox.frag" />
     <None Include="Assets\Shaders\skybox.vert" />
     <None Include="Assets\Shaders\spritebatch.frag" />

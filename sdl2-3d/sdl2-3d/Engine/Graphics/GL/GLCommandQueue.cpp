@@ -27,7 +27,7 @@ namespace GLCommandQueue
 
 		SDL_LockMutex(s_mutex);
 		SDL_AtomicAdd(&s_atomic, -1);
-		s_commandQueue.emplace_back(command);
+		s_commandQueue.push_back(command);
 		SDL_UnlockMutex(s_mutex);
 	}
 
@@ -52,19 +52,6 @@ void glqSwapWindow()
 	SDL_Window* window = Game::graphics.getWindow();
 	addCommand(makeFunctor(SDL_GL_SwapWindow, window));
 }
-
-void glqDoPrintGLuint(GLuint& val)
-{
-	printf("val: %i \n", val);
-}
-
-void glqPrintGLuint(GLuint& val)
-{
-	addCommand(makeFunctor(glqDoPrintGLuint, val));
-}
-
-
-
 
 void glqAddFunctor(Func::Functor* functor)
 {
@@ -100,14 +87,14 @@ void glqDisableVertexAttribArray(GLuint index) { addCommand(makeFunctor(glDisabl
 void glqPrimitiveRestartIndex(GLuint index) { addCommand(makeFunctor(glPrimitiveRestartIndex, index)); }
 // Drawing Commands
 void glqDrawArrays(GLenum mode, GLint first, GLsizei count) { addCommand(makeFunctor(glDrawArrays, mode, first, count)); }
-void glqMultiDrawArrays(GLenum mode, GLint* first, GLsizei* count, GLsizei primcount) { addCommand(makeFunctor(glMultiDrawArrays, mode, first, count, primcount)); }
+void glqMultiDrawArrays(GLenum mode, const GLint* first, const GLsizei* count, GLsizei primcount) { addCommand(makeFunctor(glMultiDrawArrays, mode, first, count, primcount)); }
 void glqDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices) { addCommand(makeFunctor(glDrawElements, mode, count, type, indices)); }
-void glqMultiDrawElements(GLenum mode, GLsizei* count, GLenum type, const GLvoid** indices, GLsizei primcount) { addCommand(makeFunctor(glMultiDrawElements, mode, count, type, indices, primcount)); }
-void glqDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLvoid* indices) { addCommand(makeFunctor(glDrawRangeElements, mode, start, end, count, type, indices)); }
+void glqMultiDrawElements(GLenum mode, const GLsizei* count, GLenum type, const GLvoid** indices, GLsizei primcount) { addCommand(makeFunctor(glMultiDrawElements, mode, count, type, indices, primcount)); }
+void glqDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid* indices) { addCommand(makeFunctor(glDrawRangeElements, mode, start, end, count, type, indices)); }
 void glqDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei primcount) { addCommand(makeFunctor(glDrawArraysInstanced, mode, first, count, primcount)); }
 void glqDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices, GLsizei primcount) { addCommand(makeFunctor(glDrawElementsInstanced, mode, count, type, indices, primcount)); }
 void glqDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLint basevertex) { addCommand(makeFunctor(glDrawElementsBaseVertex, mode, count, type, indices, basevertex)); }
-void glqDrawRangeElementsBaseVertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, GLvoid* indices, GLint basevertex) { addCommand(makeFunctor(glDrawRangeElementsBaseVertex, mode, start, end, count, type, indices, basevertex)); }
+void glqDrawRangeElementsBaseVertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid* indices, GLint basevertex) { addCommand(makeFunctor(glDrawRangeElementsBaseVertex, mode, start, end, count, type, indices, basevertex)); }
 void glqDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei primcount, GLint basevertex) { addCommand(makeFunctor(glDrawElementsInstancedBaseVertex, mode, count, type, indices, primcount, basevertex)); }
 void glqMultiDrawElementsBaseVertex(GLenum mode, const GLsizei* count, GLenum type, const GLvoid* const *indices, GLsizei primcount, const GLint *basevertex) { addCommand(makeFunctor(glMultiDrawElementsBaseVertex, mode, count, type, indices, primcount, basevertex)); }
 
@@ -115,9 +102,9 @@ void glqMultiDrawElementsBaseVertex(GLenum mode, const GLsizei* count, GLenum ty
 void glqGenBuffers(GLsizei n, GLuint* buffers) { addCommand(makeFunctor(glGenBuffers, n, buffers)); }
 void glqDeleteBuffers(GLsizei n, const GLuint* buffers) { addCommand(makeFunctor(glDeleteBuffers, n, buffers)); }
 // Creating and Binding Buffer Objects
-void glqBindBuffer(GLenum target, GLuint& buffer) { addCommand(makeFunctor(glBindBuffer, target, buffer)); }
-void glqBindBufferRange(GLenum target, GLuint& index, GLuint& buffer, GLintptr offset, GLsizeiptr size) { addCommand(makeFunctor(glBindBufferRange, target, index, buffer, offset, size)); }
-void glqBindBufferBase(GLenum target, GLuint& index, GLuint& buffer) { addCommand(makeFunctor(glBindBufferBase, target, index, buffer)); }
+void glqBindBuffer(GLenum target, GLuint& buffer) { addCommand(makeFunctor(glBindBuffer, target, reference(buffer))); }
+void glqBindBufferRange(GLenum target, GLuint& index, GLuint& buffer, GLintptr offset, GLsizeiptr size) { addCommand(makeFunctor(glBindBufferRange, target, reference(index), reference(buffer), offset, size)); }
+void glqBindBufferBase(GLenum target, GLuint& index, GLuint& buffer) { addCommand(makeFunctor(glBindBufferBase, target, reference(index), reference(buffer))); }
 // Creating Buffer Object Data Stores
 void glqBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage) { addCommand(makeFunctor(glBufferData, target, size, data, usage)); }
 void glqBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data) { addCommand(makeFunctor(glBufferSubData, target, offset, size, data)); }
@@ -131,21 +118,22 @@ void glqCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readof
 // Vertex Array Objects
 void glqGenVertexArrays(GLsizei n, GLuint* arrays) { addCommand(makeFunctor(glGenVertexArrays, n, arrays)); }
 void glqDeleteVertexArrays(GLsizei n, const GLuint* arrays) { addCommand(makeFunctor(glDeleteVertexArrays, n, arrays)); }
-void glqBindVertexArray(GLuint& arr) { addCommand(makeFunctor(glBindVertexArray, arr)); }
+
+void glqBindVertexArray(GLuint& array) { addCommand(makeFunctor(glBindVertexArray, reference(array))); }
 // Buffer Object Queries
-void glqIsBuffer(GLuint& buffer, GLboolean& out) { addCommand(makeFunctor(out, glIsBuffer, buffer)); }
+void glqIsBuffer(GLuint& buffer, GLboolean& out) { addCommand(makeFunctor(out, glIsBuffer, reference(buffer))); }
 void glqGetBufferParameteriv(GLenum target, GLenum pname, GLint* data) { addCommand(makeFunctor(glGetBufferParameteriv, target, pname, data)); }
 void glqGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid* data) { addCommand(makeFunctor(glGetBufferSubData, target, offset, size, data)); }
 void glqGetBufferPointerv(GLenum target, GLenum pname, GLvoid** params) { addCommand(makeFunctor(glGetBufferPointerv, target, pname, params)); }
 // Vertex Array Object Queries
-void glqIsVertexArray(GLuint& arr, GLboolean& out) { addCommand(makeFunctor(out, glIsVertexArray, arr)); }
+void glqIsVertexArray(GLuint& arr, GLboolean& out) { addCommand(makeFunctor(out, glIsVertexArray, reference(arr))); }
 
 /* Viewport and Clipping */
 // Controlling the Viewport
 void glqDepthRange(GLclampd n, GLclampd f) { addCommand(makeFunctor(glDepthRange, n, f)); }
 void glqViewport(GLint x, GLint y, GLsizei w, GLsizei h) { addCommand(makeFunctor(glViewport, x, y, w, h)); }
 // Clipping
-void glqClipPlane(GLenum p, GLdouble eqn[4]) { addCommand(makeFunctor(glClipPlane, p, eqn)); }
+void glqClipPlane(GLenum p, const GLdouble eqn[4]) { addCommand(makeFunctor(glClipPlane, p, eqn)); }
 // Color
 void glqClampColor(GLenum target, GLenum clamp) { addCommand(makeFunctor(glClampColor, target, clamp)); }
 // Flatshading
@@ -153,118 +141,118 @@ void glqProvokingVertex(GLenum provokeMode) { addCommand(makeFunctor(glProvoking
 
 /* Rendering Control and Queries */
 // Conditional Rendering
-void glqBeginConditionalRender(GLuint& id, GLenum mode) { addCommand(makeFunctor(glBeginConditionalRender, id, mode)); }
+void glqBeginConditionalRender(GLuint& id, GLenum mode) { addCommand(makeFunctor(glBeginConditionalRender, reference(id), mode)); }
 void glqEndConditionalRender() { addCommand(makeFunctor(glEndConditionalRender)); }
 // Transform Feedback
 void glqBeginTransformFeedback(GLenum primitiveMode) { addCommand(makeFunctor(glBeginTransformFeedback, primitiveMode)); }
 void glqEndTransformFeedback() { addCommand(makeFunctor(glEndTransformFeedback)); }
 // Asynchronous Queries
-void glqBeginQuery(GLenum target, GLuint& id) { addCommand(makeFunctor(glBeginQuery, target, id)); }
+void glqBeginQuery(GLenum target, GLuint& id) { addCommand(makeFunctor(glBeginQuery, target, reference(id))); }
 void glqEndQuery(GLenum target) { addCommand(makeFunctor(glEndQuery, target)); }
 void glqGenQueries(GLsizei n, GLuint* ids) { addCommand(makeFunctor(glGenQueries, n, ids)); }
 void glqDeleteQueries(GLsizei n, const GLuint* ids) { addCommand(makeFunctor(glDeleteQueries, n, ids)); }
 // Asynchronous State Queries
-void glqIsQuery(GLuint& id, GLboolean& out) { addCommand(makeFunctor(out, glIsQuery, id)); }
+void glqIsQuery(GLuint& id, GLboolean& out) { addCommand(makeFunctor(out, glIsQuery, reference(id))); }
 void glqGetQueryiv(GLenum target, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetQueryiv, target, pname, params)); }
-void glqGetQueryObjectiv(GLuint& id, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetQueryObjectiv, id, pname, params)); }
-void glqGetQueryObjectuiv(GLuint& id, GLenum pname, GLuint* params) { addCommand(makeFunctor(glGetQueryObjectuiv, id, pname, params)); }
+void glqGetQueryObjectiv(GLuint& id, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetQueryObjectiv, reference(id), pname, params)); }
+void glqGetQueryObjectuiv(GLuint& id, GLenum pname, GLuint* params) { addCommand(makeFunctor(glGetQueryObjectuiv, reference(id), pname, params)); }
 
 /* Shader and Programs */
 // Shader Objects
 void glqCreateShader(GLenum type, GLuint& out) { addCommand(makeFunctor(out, glCreateShader, type)); }
-void glqShaderSource(GLuint& shader, GLsizei count, const GLchar** string, const GLint* length) { addCommand(makeFunctor(glShaderSource, shader, count, string, length)); }
-void glqCompileShader(GLuint& shader) { addCommand(makeFunctor(glCompileShader, shader)); }
-void glqDeleteShader(GLuint& shader) { addCommand(makeFunctor(glDeleteShader, shader)); }
+void glqShaderSource(GLuint& shader, GLsizei count, const GLchar** string, const GLint* length) { addCommand(makeFunctor(glShaderSource, reference(shader), count, string, length)); }
+void glqCompileShader(GLuint& shader) { addCommand(makeFunctor(glCompileShader, reference(shader))); }
+void glqDeleteShader(GLuint& shader) { addCommand(makeFunctor(glDeleteShader, reference(shader))); }
 // Program Objects
 void glqCreateProgram(GLuint& out) { addCommand(makeFunctor(out, glCreateProgram)); }
-void glqAttachShader(GLuint& program, GLuint& shader) { addCommand(makeFunctor(glAttachShader, program, shader)); }
-void glqDetachShader(GLuint& program, GLuint& shader) { addCommand(makeFunctor(glDetachShader, program, shader)); }
-void glqLinkProgram(GLuint& program) { addCommand(makeFunctor(glLinkProgram, program)); }
-void glqUseProgram(GLuint& program) { addCommand(makeFunctor(glUseProgram, program)); }
-void glqDeleteProgram(GLuint& program) { addCommand(makeFunctor(glDeleteProgram, program)); }
+void glqAttachShader(GLuint& program, GLuint& shader) { addCommand(makeFunctor(glAttachShader, reference(program), reference(shader))); }
+void glqDetachShader(GLuint& program, GLuint& shader) { addCommand(makeFunctor(glDetachShader, reference(program), reference(shader))); }
+void glqLinkProgram(GLuint& program) { addCommand(makeFunctor(glLinkProgram, reference(program))); }
+void glqUseProgram(GLuint& program) { addCommand(makeFunctor(glUseProgram, reference(program))); }
+void glqDeleteProgram(GLuint& program) { addCommand(makeFunctor(glDeleteProgram, reference(program))); }
 // Vertex Attributes
-void glqGetActiveAttrib(GLuint& program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name) { addCommand(makeFunctor(glGetActiveAttrib, program, index, bufSize, length, size, type, name)); }
-void glqGetAttribLocation(GLuint& program, const GLchar* name, GLint& out) { addCommand(makeFunctor(out, glGetAttribLocation, program, name)); }
-void glqBindAttribLocation(GLuint& program, GLuint index, const GLchar* name) { addCommand(makeFunctor(glBindAttribLocation, program, index, name)); }
+void glqGetActiveAttrib(GLuint& program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name) { addCommand(makeFunctor(glGetActiveAttrib, reference(program), index, bufSize, length, size, type, name)); }
+void glqGetAttribLocation(GLuint& program, const GLchar* name, GLint& out) { addCommand(makeFunctor(out, glGetAttribLocation, reference(program), name)); }
+void glqBindAttribLocation(GLuint& program, GLuint index, const GLchar* name) { addCommand(makeFunctor(glBindAttribLocation, reference(program), index, name)); }
 // Uniform variables
-void glqGetUniformLocation(GLuint& program, const GLchar* name, GLint& out) { addCommand(makeFunctor(out, glGetUniformLocation, program, name)); }
-void glqGetUniformBlockIndex(GLuint& program, const GLchar* uniformBlockName, GLuint& out) { addCommand(makeFunctor(out, glGetUniformBlockIndex, program, uniformBlockName)); }
-void glqGetActiveUniformBlockName(GLuint& program, GLuint& uniformBlockIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformBlockName) { addCommand(makeFunctor(glGetActiveUniformBlockName, program, uniformBlockIndex, bufSize, length, uniformBlockName)); }
-void glqGetActiveUniformBlockiv(GLuint& program, GLuint& uniformBlockIndex, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetActiveUniformBlockiv, program, uniformBlockIndex, pname, params)); }
-void glqGetUniformIndices(GLuint& program, GLsizei uniformCount, const GLchar** uniformNames, GLuint *uniformIndices) { addCommand(makeFunctor(glGetUniformIndices, program, uniformCount, uniformNames, uniformIndices)); }
-void glqGetActiveUniformName(GLuint& program, GLuint& uniformIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformName) { addCommand(makeFunctor(glGetActiveUniformName, program, uniformIndex, bufSize, length, uniformName)); }
-void glqGetActiveUniform(GLuint& program, GLuint& index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name) { addCommand(makeFunctor(glGetActiveUniform, program, index, bufSize, length, size, type, name)); }
-void glqGetActiveUniformsiv(GLuint& program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetActiveUniformsiv, program, uniformCount, uniformIndices, pname, params)); }
+void glqGetUniformLocation(GLuint& program, const GLchar* name, GLint& out) { addCommand(makeFunctor(out, glGetUniformLocation, reference(program), name)); }
+void glqGetUniformBlockIndex(GLuint& program, const GLchar* uniformBlockName, GLuint& out) { addCommand(makeFunctor(out, glGetUniformBlockIndex, reference(program), uniformBlockName)); }
+void glqGetActiveUniformBlockName(GLuint& program, GLuint& uniformBlockIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformBlockName) { addCommand(makeFunctor(glGetActiveUniformBlockName, reference(program), reference(uniformBlockIndex), bufSize, length, uniformBlockName)); }
+void glqGetActiveUniformBlockiv(GLuint& program, GLuint& uniformBlockIndex, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetActiveUniformBlockiv, reference(program), reference(uniformBlockIndex), pname, params)); }
+void glqGetUniformIndices(GLuint& program, GLsizei uniformCount, const GLchar** uniformNames, GLuint *uniformIndices) { addCommand(makeFunctor(glGetUniformIndices, reference(program), uniformCount, uniformNames, uniformIndices)); }
+void glqGetActiveUniformName(GLuint& program, GLuint& uniformIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformName) { addCommand(makeFunctor(glGetActiveUniformName, reference(program), reference(uniformIndex), bufSize, length, uniformName)); }
+void glqGetActiveUniform(GLuint& program, GLuint& index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name) { addCommand(makeFunctor(glGetActiveUniform, reference(program), reference(index), bufSize, length, size, type, name)); }
+void glqGetActiveUniformsiv(GLuint& program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetActiveUniformsiv, reference(program), uniformCount, uniformIndices, pname, params)); }
 
 /* Loading Uniform Variables in Default Uniform Block */
-void glqUniform1i(GLint& location, GLint value) { addCommand(makeFunctor(glUniform1i, location, value)); }
-void glqUniform2i(GLint& location, GLint value1, GLint value2) { addCommand(makeFunctor(glUniform2i, location, value1, value2)); }
-void glqUniform3i(GLint& location, GLint value1, GLint value2, GLint value3) { addCommand(makeFunctor(glUniform3i, location, value1, value2, value3)); }
-void glqUniform4i(GLint& location, GLint value1, GLint value2, GLint value3, GLint value4) { addCommand(makeFunctor(glUniform4i, location, value1, value2, value3, value4)); }
-void glqUniform1iv(GLint& location, GLsizei count, GLint* value) { addCommand(makeFunctor(glUniform1iv, location, count, value)); }
-void glqUniform2iv(GLint& location, GLsizei count, GLint* value) { addCommand(makeFunctor(glUniform2iv, location, count, value)); }
-void glqUniform3iv(GLint& location, GLsizei count, GLint* value) { addCommand(makeFunctor(glUniform3iv, location, count, value)); }
-void glqUniform4iv(GLint& location, GLsizei count, GLint* value) { addCommand(makeFunctor(glUniform4iv, location, count, value)); }
-void glqUniform1ui(GLint& location, GLuint value) { addCommand(makeFunctor(glUniform1ui, location, value)); }
-void glqUniform2ui(GLint& location, GLuint value1, GLuint value2) { addCommand(makeFunctor(glUniform2ui, location, value1, value2)); }
-void glqUniform3ui(GLint& location, GLuint value1, GLuint value2, GLuint value3) { addCommand(makeFunctor(glUniform3ui, location, value1, value2, value3)); }
-void glqUniform4ui(GLint& location, GLuint value1, GLuint value2, GLuint value3, GLuint value4) { addCommand(makeFunctor(glUniform4ui, location, value1, value2, value3, value4)); }
-void glqUniform1uiv(GLint& location, GLsizei count, GLuint* value) { addCommand(makeFunctor(glUniform1uiv, location, count, value)); }
-void glqUniform2uiv(GLint& location, GLsizei count, GLuint* value) { addCommand(makeFunctor(glUniform1uiv, location, count, value)); }
-void glqUniform3uiv(GLint& location, GLsizei count, GLuint* value) { addCommand(makeFunctor(glUniform1uiv, location, count, value)); }
-void glqUniform4uiv(GLint& location, GLsizei count, GLuint* value) { addCommand(makeFunctor(glUniform1uiv, location, count, value)); }
-void glqUniform1f(GLint& location, GLfloat value) { addCommand(makeFunctor(glUniform1f, location, value)); }
-void glqUniform2f(GLint& location, GLfloat value1, GLfloat value2) { addCommand(makeFunctor(glUniform2f, location, value1, value2)); }
-void glqUniform3f(GLint& location, GLfloat value1, GLfloat value2, GLfloat value3) { addCommand(makeFunctor(glUniform3f, location, value1, value2, value3)); }
-void glqUniform4f(GLint& location, GLfloat value1, GLfloat value2, GLfloat value3, GLfloat value4) { addCommand(makeFunctor(glUniform4f, location, value1, value2, value3, value4)); }
-void glqUniform1fv(GLint& location, GLsizei count, GLfloat* value) { addCommand(makeFunctor(glUniform1fv, location, count, value)); }
-void glqUniform2fv(GLint& location, GLsizei count, GLfloat* value) { addCommand(makeFunctor(glUniform2fv, location, count, value)); }
-void glqUniform3fv(GLint& location, GLsizei count, GLfloat* value) { addCommand(makeFunctor(glUniform3fv, location, count, value)); }
-void glqUniform4fv(GLint& location, GLsizei count, GLfloat* value) { addCommand(makeFunctor(glUniform4fv, location, count, value)); }
+void glqUniform1i(GLint& location, GLint value) { addCommand(makeFunctor(glUniform1i, reference(location), value)); }
+void glqUniform2i(GLint& location, GLint value1, GLint value2) { addCommand(makeFunctor(glUniform2i, reference(location), value1, value2)); }
+void glqUniform3i(GLint& location, GLint value1, GLint value2, GLint value3) { addCommand(makeFunctor(glUniform3i, reference(location), value1, value2, value3)); }
+void glqUniform4i(GLint& location, GLint value1, GLint value2, GLint value3, GLint value4) { addCommand(makeFunctor(glUniform4i, reference(location), value1, value2, value3, value4)); }
+void glqUniform1iv(GLint& location, GLsizei count, const GLint* value) { addCommand(makeFunctor(glUniform1iv, reference(location), count, value)); }
+void glqUniform2iv(GLint& location, GLsizei count, const GLint* value) { addCommand(makeFunctor(glUniform2iv, reference(location), count, value)); }
+void glqUniform3iv(GLint& location, GLsizei count, const  GLint* value) { addCommand(makeFunctor(glUniform3iv, reference(location), count, value)); }
+void glqUniform4iv(GLint& location, GLsizei count, const  GLint* value) { addCommand(makeFunctor(glUniform4iv, reference(location), count, value)); }
+void glqUniform1ui(GLint& location, GLuint value) { addCommand(makeFunctor(glUniform1ui, reference(location), value)); }
+void glqUniform2ui(GLint& location, GLuint value1, GLuint value2) { addCommand(makeFunctor(glUniform2ui, reference(location), value1, value2)); }
+void glqUniform3ui(GLint& location, GLuint value1, GLuint value2, GLuint value3) { addCommand(makeFunctor(glUniform3ui, reference(location), value1, value2, value3)); }
+void glqUniform4ui(GLint& location, GLuint value1, GLuint value2, GLuint value3, GLuint value4) { addCommand(makeFunctor(glUniform4ui, reference(location), value1, value2, value3, value4)); }
+void glqUniform1uiv(GLint& location, GLsizei count, const GLuint* value) { addCommand(makeFunctor(glUniform1uiv, reference(location), count, value)); }
+void glqUniform2uiv(GLint& location, GLsizei count, const GLuint* value) { addCommand(makeFunctor(glUniform1uiv, reference(location), count, value)); }
+void glqUniform3uiv(GLint& location, GLsizei count, const GLuint* value) { addCommand(makeFunctor(glUniform1uiv, reference(location), count, value)); }
+void glqUniform4uiv(GLint& location, GLsizei count, const GLuint* value) { addCommand(makeFunctor(glUniform1uiv, reference(location), count, value)); }
+void glqUniform1f(GLint& location, GLfloat value) { addCommand(makeFunctor(glUniform1f, reference(location), value)); }
+void glqUniform2f(GLint& location, GLfloat value1, GLfloat value2) { addCommand(makeFunctor(glUniform2f, reference(location), value1, value2)); }
+void glqUniform3f(GLint& location, GLfloat value1, GLfloat value2, GLfloat value3) { addCommand(makeFunctor(glUniform3f, reference(location), value1, value2, value3)); }
+void glqUniform4f(GLint& location, GLfloat value1, GLfloat value2, GLfloat value3, GLfloat value4) { addCommand(makeFunctor(glUniform4f, reference(location), value1, value2, value3, value4)); }
+void glqUniform1fv(GLint& location, GLsizei count, const GLfloat* value) { addCommand(makeFunctor(glUniform1fv, reference(location), count, value)); }
+void glqUniform2fv(GLint& location, GLsizei count, const GLfloat* value) { addCommand(makeFunctor(glUniform2fv, reference(location), count, value)); }
+void glqUniform3fv(GLint& location, GLsizei count, const GLfloat* value) { addCommand(makeFunctor(glUniform3fv, reference(location), count, value)); }
+void glqUniform4fv(GLint& location, GLsizei count, const GLfloat* value) { addCommand(makeFunctor(glUniform4fv, reference(location), count, value)); }
 
 void glqUniformMatrix2fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix2fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix2fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix3fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix3fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix3fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix4fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix4fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix4fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix2x3fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix2x3fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix2x3fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix3x2fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix3x2fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix3x2fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix2x4fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix2x4fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix2x4fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix4x2fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix4x2fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix4x2fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix3x4fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix3x4fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix3x4fv, reference(location), count, transpose, value)); }
 void glqUniformMatrix4x3fv(GLint& location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{ addCommand(makeFunctor(glUniformMatrix4x3fv, location, count, transpose, value)); }
+{ addCommand(makeFunctor(glUniformMatrix4x3fv, reference(location), count, transpose, value)); }
 // Uniform Buffer Object Bindings
-void glqUniformBlockBinding(GLuint& program, GLuint& uniformBlockIndex, GLuint& uniformBlockBinding) { addCommand(makeFunctor(glUniformBlockBinding, program, uniformBlockIndex, uniformBlockBinding)); }
+void glqUniformBlockBinding(GLuint& program, GLuint& uniformBlockIndex, GLuint& uniformBlockBinding) { addCommand(makeFunctor(glUniformBlockBinding, reference(program), reference(uniformBlockIndex), reference(uniformBlockBinding))); }
 // Varying Variables
-void glqTransformFeedbackVaryings(GLuint& program, GLsizei count, const GLchar** varyings, GLenum bufferMode)  { addCommand(makeFunctor(glTransformFeedbackVaryings, program, count, varyings, bufferMode)); }
-void glqGetTransformFeedbackVarying(GLuint& program, GLuint& index, GLsizei bufSize, GLsizei* length, GLsizei* size, GLenum* type, GLchar* name) { addCommand(makeFunctor(glGetTransformFeedbackVarying, program, index, bufSize, length, size, type, name)); }
+void glqTransformFeedbackVaryings(GLuint& program, GLsizei count, const GLchar** varyings, GLenum bufferMode)  { addCommand(makeFunctor(glTransformFeedbackVaryings, reference(program), count, varyings, bufferMode)); }
+void glqGetTransformFeedbackVarying(GLuint& program, GLuint& index, GLsizei bufSize, GLsizei* length, GLsizei* size, GLenum* type, GLchar* name) { addCommand(makeFunctor(glGetTransformFeedbackVarying, reference(program), reference(index), bufSize, length, size, type, name)); }
 // Shader Execution (Validation)
-void glqValidateProgram(GLuint& program) { addCommand(makeFunctor(glValidateProgram, program)); }
+void glqValidateProgram(GLuint& program) { addCommand(makeFunctor(glValidateProgram, reference(program))); }
 // Geometry Shaders
-void glqGetProgramiv(GLuint& program, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetProgramiv, program, pname, params)); }
+void glqGetProgramiv(GLuint& program, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetProgramiv, reference(program), pname, params)); }
 // Fragment Shaders
-void glqBindFragDataLocation(GLuint& program, GLuint colorNumber, const GLchar* name) { addCommand(makeFunctor(glBindFragDataLocation, program, colorNumber, name)); }
-void glqGetFragDataLocation(GLuint& program, const GLchar* name, GLint& out) { addCommand(makeFunctor(out, glGetFragDataLocation, program, name)); }
+void glqBindFragDataLocation(GLuint& program, GLuint colorNumber, const GLchar* name) { addCommand(makeFunctor(glBindFragDataLocation, reference(program), colorNumber, name)); }
+void glqGetFragDataLocation(GLuint& program, const GLchar* name, GLint& out) { addCommand(makeFunctor(out, glGetFragDataLocation, reference(program), name)); }
 
 /* Shader Queries */
-void glqIsShader(GLuint& shader, GLboolean& out) { addCommand(makeFunctor(out, glIsShader, shader)); }
-void glqGetShaderiv(GLuint& shader, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetShaderiv, shader, pname, params)); }
-void glqGetAttachedShaders(GLuint& program, GLsizei maxCount, GLsizei* count, GLuint* shaders) { addCommand(makeFunctor(glGetAttachedShaders, program, maxCount, count, shaders)); }
-void glqGetShaderInfoLog(GLuint& shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog) { addCommand(makeFunctor(glGetShaderInfoLog, shader, bufSize, length, infoLog)); }
-void glqGetShaderSource(GLuint& shader, GLsizei bufSize, GLsizei* length, GLchar* source) { addCommand(makeFunctor(glGetShaderSource, shader, bufSize, length, source)); }
+void glqIsShader(GLuint& shader, GLboolean& out) { addCommand(makeFunctor(out, glIsShader, reference(shader))); }
+void glqGetShaderiv(GLuint& shader, GLenum pname, GLint* params) { addCommand(makeFunctor(glGetShaderiv, reference(shader), pname, params)); }
+void glqGetAttachedShaders(GLuint& program, GLsizei maxCount, GLsizei* count, GLuint* shaders) { addCommand(makeFunctor(glGetAttachedShaders, reference(program), maxCount, count, shaders)); }
+void glqGetShaderInfoLog(GLuint& shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog) { addCommand(makeFunctor(glGetShaderInfoLog, reference(shader), bufSize, length, infoLog)); }
+void glqGetShaderSource(GLuint& shader, GLsizei bufSize, GLsizei* length, GLchar* source) { addCommand(makeFunctor(glGetShaderSource, reference(shader), bufSize, length, source)); }
 //TODO: 
 //void GetVertexAttrib{ dfi li lui }v(uint index, enum pname, double *params);
 //void GetVertexAttribPointerv(uint index, enum pname, void **pointer);
 //void GetUniform{if ui}v(uint program, int location, T *params);
-void glqIsProgram(GLuint& program, GLboolean& out) { addCommand(makeFunctor(out, glIsProgram, program)); }
-void glqGetProgramInfoLog(GLuint& program, GLsizei bufSize, GLsizei *length, GLchar *infoLog) { addCommand(makeFunctor(glGetProgramInfoLog, program, bufSize, length, infoLog)); }
+void glqIsProgram(GLuint& program, GLboolean& out) { addCommand(makeFunctor(out, glIsProgram, reference(program))); }
+void glqGetProgramInfoLog(GLuint& program, GLsizei bufSize, GLsizei *length, GLchar *infoLog) { addCommand(makeFunctor(glGetProgramInfoLog, reference(program), bufSize, length, infoLog)); }
 
 /* Rasterization */
 // Multisampling
@@ -290,21 +278,21 @@ void glqPixelstoref(GLenum pname, GLfloat value) { addCommand(makeFunctor(glPixe
 /* Texturing */
 void glqActiveTexture(GLenum texture) { addCommand(makeFunctor(glActiveTexture, texture)); }
 // Texture Image Specification
-void glqTexImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, GLvoid* data)
+void glqTexImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid* data)
 { addCommand(makeFunctor(glTexImage3D, target, level, internalformat, width, height, depth, border, format, type, data)); }
-void glqTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLvoid* data)
+void glqTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid* data)
 { addCommand(makeFunctor(glTexImage2D, target, level, internalformat, width, height, border, format, type, data)); }
-void glqTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, GLvoid* data)
+void glqTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data)
 { addCommand(makeFunctor(glTexImage1D, target, level, internalformat, width, border, format, type, data)); }
 void glqCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
 { addCommand(makeFunctor(glCopyTexImage2D, target, level, internalformat, x, y, width, height, border)); }
 void glqCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border)
 { addCommand(makeFunctor(glCopyTexImage1D, target, level, internalformat, x, y, width, border)); }
-void glqTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, GLvoid* data)
+void glqTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* data)
 { addCommand(makeFunctor(glTexSubImage3D, target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data)); }
-void glqTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data)
+void glqTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid* data)
 { addCommand(makeFunctor(glTexSubImage2D, target, level, xoffset, yoffset, width, height, format, type, data)); }
-void glqTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, GLvoid* data)
+void glqTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid* data)
 { addCommand(makeFunctor(glTexSubImage1D, target, level, xoffset, width, format, type, data)); }
 void glqCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height)
 { addCommand(makeFunctor(glCopyTexSubImage3D, target, level, xoffset, yoffset, zoffset, x, y, width, height)); }
@@ -313,33 +301,33 @@ void glqCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffs
 void glqCopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width)
 { addCommand(makeFunctor(glCopyTexSubImage1D, target, level, xoffset, x, y, width)); }
 // Compressed Texture Images
-void glqCompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, GLvoid* data)
+void glqCompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid* data)
 { addCommand(makeFunctor(glCompressedTexImage3D, target, level, internalformat, width, height, depth, border, imageSize, data)); }
 void glqCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data)
 { addCommand(makeFunctor(glCompressedTexImage2D, target, level, internalformat, width, height, border, imageSize, data)); }
 void glqCompressedTexImage1D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid *data)
 { addCommand(makeFunctor(glCompressedTexImage1D, target, level, internalformat, width, border, imageSize, data)); }
-void glqCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, GLvoid* data)
+void glqCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data)
 { addCommand(makeFunctor(glCompressedTexSubImage3D, target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data)); }
-void glqCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, GLvoid *data)
+void glqCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid *data)
 { addCommand(makeFunctor(glCompressedTexSubImage2D, target, level, xoffset, yoffset, width, height, format, imageSize, data)); }
-void glqCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, GLvoid *data)
+void glqCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid *data)
 { addCommand(makeFunctor(glCompressedTexSubImage1D, target, level, xoffset, width, format, imageSize, data)); }
 // Multisample Textures
 void glqTexImage3DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations)
 { addCommand(makeFunctor(glTexImage3DMultisample, target, samples, internalformat, width, height, depth, fixedsamplelocations)); }
 void glqTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations)
 { addCommand(makeFunctor(glTexImage2DMultisample, target, samples, internalformat, width, height, fixedsamplelocations)); }
-void glqTexBuffer(GLenum target, GLenum internalformat, GLuint buffer) { addCommand(makeFunctor(glTexBuffer, target, internalformat, buffer)); }
+void glqTexBuffer(GLenum target, GLenum internalformat, GLuint& buffer) { addCommand(makeFunctor(glTexBuffer, target, internalformat, buffer)); }
 void glqTexParameteri(GLenum target, GLenum pname, GLint param) { addCommand(makeFunctor(glTexParameteri, target, pname, param)); }
 void glqTexParameterf(GLenum target, GLenum pname, GLfloat param) { addCommand(makeFunctor(glTexParameterf, target, pname, param)); }
-void glqTexParameteriv(GLenum target, GLenum pname, GLint* params) { addCommand(makeFunctor(glTexParameteriv, target, pname, params)); }
-void glqTexParameterfv(GLenum target, GLenum pname, GLfloat* params) { addCommand(makeFunctor(glTexParameterfv, target, pname, params)); }
+void glqTexParameteriv(GLenum target, GLenum pname, const GLint* params) { addCommand(makeFunctor(glTexParameteriv, target, pname, params)); }
+void glqTexParameterfv(GLenum target, GLenum pname, const GLfloat* params) { addCommand(makeFunctor(glTexParameterfv, target, pname, params)); }
 //void TexParameterI{i ui}v(enum target, enum pname, T *params);
 void glqGenerateMipmap(GLenum target) { addCommand(makeFunctor(glGenerateMipmap, target)); }
 // Texture Objects
 void glqBindTexture(GLenum target, GLuint& texture) { addCommand(makeFunctor(glBindTexture, target, texture)); }
-void glqDeleteTextures(GLsizei n, GLuint* textures) { addCommand(makeFunctor(glDeleteTextures, n, textures)); }
+void glqDeleteTextures(GLsizei n, const GLuint* textures) { addCommand(makeFunctor(glDeleteTextures, n, textures)); }
 void glqGenTextures(GLsizei n, GLuint* textures) { addCommand(makeFunctor(glGenTextures, n, textures)); }
 void glqGetTexParameteriv(GLenum target, GLenum value, GLint* data) { addCommand(makeFunctor(glGetTexParameteriv, target, value, data)); }
 void glqGetTexParameterfv(GLenum target, GLenum value, GLfloat* data) { addCommand(makeFunctor(glGetTexParameterfv, target, value, data)); }
@@ -422,7 +410,7 @@ void glqClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint sten
 /* Framebuffer Objects */
 void glqBindFramebuffer(GLenum target, GLuint& framebuffer)
 { addCommand(makeFunctor(glBindFramebuffer, target, framebuffer)); }
-void glqDeleteFramebuffers(GLsizei n, GLuint *framebuffers)
+void glqDeleteFramebuffers(GLsizei n, const GLuint *framebuffers)
 { addCommand(makeFunctor(glDeleteFramebuffers, n, framebuffers)); }
 void glqGenFramebuffers(GLsizei n, GLuint *ids)
 { addCommand(makeFunctor(glGenFramebuffers, n, ids)); }
@@ -457,8 +445,8 @@ void glqCheckFramebufferStatus(GLenum target, GLenum& out)
 void glqFlush() { addCommand(makeFunctor(glFlush)); }
 void glqFinish() { addCommand(makeFunctor(glFinish)); }
 void glqFenceSync(GLenum condition, GLbitfield flags, GLsync& out) { addCommand(makeFunctor(out, glFenceSync, condition, flags)); }
-void glqDeleteSync(GLsync& sync) { addCommand(makeFunctor(glDeleteSync, sync)); }
-void glqClientWaitSync(GLsync& sync, GLbitfield flags, GLuint64 timeout_ns, GLenum& out) { addCommand(makeFunctor(out, glClientWaitSync, sync, flags, timeout_ns)); }
-void glqWaitSync(GLsync& sync, GLbitfield flags, GLuint64 timeout_ns) { addCommand(makeFunctor(glWaitSync, sync, flags, timeout_ns)); }
-void glqGetSynciv(GLsync& sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values) { addCommand(makeFunctor(glGetSynciv, sync, pname, bufSize, length, values)); }
-void glqIsSync(GLsync& sync, GLboolean& out) { addCommand(makeFunctor(out, glIsSync, sync)); }
+void glqDeleteSync(GLsync& sync) { addCommand(makeFunctor(glDeleteSync, reference(sync))); }
+void glqClientWaitSync(GLsync& sync, GLbitfield flags, GLuint64 timeout_ns, GLenum& out) { addCommand(makeFunctor(out, glClientWaitSync, reference(sync), flags, timeout_ns)); }
+void glqWaitSync(GLsync& sync, GLbitfield flags, GLuint64 timeout_ns) { addCommand(makeFunctor(glWaitSync, reference(sync), flags, timeout_ns)); }
+void glqGetSynciv(GLsync& sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values) { addCommand(makeFunctor(glGetSynciv, reference(sync), pname, bufSize, length, values)); }
+void glqIsSync(GLsync& sync, GLboolean& out) { addCommand(makeFunctor(out, glIsSync, reference(sync))); }

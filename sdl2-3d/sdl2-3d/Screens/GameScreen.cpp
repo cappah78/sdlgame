@@ -8,6 +8,9 @@
 #include "../Game.h"
 #include "../Engine/Graphics/GL/GLCommandQueue.h"
 #include "../Engine/Utils/Functor.h"
+#include "../Engine/Utils/ShaderManager.h"
+
+#include <GL/glew.h>
 
 static const float CAMERA_VERTICAL_FOV = 80.0f;
 static const float CAMERA_NEAR = 0.5f;
@@ -15,11 +18,29 @@ static const float CAMERA_FAR = 280.0f;
 static const glm::vec3 CAMERA_SPAWN_POS = glm::vec3(0, 2, -10);
 static const glm::vec3 CAMERA_SPAWN_DIR = glm::vec3(0, 0, 1);
 
-GLuint vao;
-GLuint vertexBufferID = 5;
-GLuint colorBufferID;
+GLuint shaderID = 0;
+GLuint vao = 0;
+GLuint vertexBufferID = 0;
+GLuint colorBufferID = 0;
 
+GLboolean isBuffer;
+GLboolean isVertexArray;
 
+const char* vertShaderPath = "Assets/Shaders/simple.vert";
+const char* geomShaderPath = NULL;
+const char* fragShaderPath = "Assets/Shaders/simple.frag";
+
+const GLfloat vertices[] = {
+	-1.0f, -1.0f, 0.0f,
+	1.0f, -1.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+};
+
+const GLfloat colors[] = {
+	1.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 1.0f,
+};
 
 GameScreen::GameScreen()
 	: m_camera(
@@ -31,35 +52,33 @@ GameScreen::GameScreen()
 		CAMERA_NEAR,
 		CAMERA_FAR)
 	, m_cameraController(m_camera, CAMERA_SPAWN_DIR)
-	//, m_modelShader("Assets/Shaders/modelshader.vert", NULL, "Assets/Shaders/modelshader.frag")
 {
 	Game::input.registerKeyListener(&m_cameraController);
 	Game::input.registerMouseListener(&m_cameraController);
 	Game::input.registerKeyListener(this);
 
+	glqAddFunctor(Func::makeFunctor(shaderID, ShaderManager::createShaderProgram, vertShaderPath, geomShaderPath, fragShaderPath));
+
 	glqGenVertexArrays(1, &vao);
+	glqBindVertexArray(vao);
+
 	glqGenBuffers(1, &vertexBufferID);
-	glqGenBuffers(1, &colorBufferID);
-
-	glqPrintf("da %i %i %f \n", vertexBufferID, colorBufferID, 2);
-
 	glqBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-	glqVertexAttribPointer(0, sizeof(glm::vec2), GL_FLOAT, false, 0, NULL);
-	
-
-	glqBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-	const char* message = "wa";
-	GLuint da = 1;;
-
-	//Func::makeFunctor(thingy<GLuint, float>, message, da, 1.0f)->call();
+	glqEnableVertexAttribArray(0);
+	glqVertexAttribPointer(0, 3, GL_FLOAT, false, 0, NULL);
+	glqBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
 void GameScreen::render(float deltaSec)
 {
 	glqClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-
 	glqClear(GL_COLOR_BUFFER_BIT);
-	glqCheckGLError();
+
+	glqUseProgram(shaderID);
+	glqBindVertexArray(vao);
+
+	glqDrawArrays(GL_TRIANGLES, 0, 3);
+
 	glqSwapWindow();
 }
 
