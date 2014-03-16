@@ -19,6 +19,6 @@ public:
 	virtual bool keyUp(SDL_Keysym key) override;
 
 private:
-	FPSCameraController m_cameraController;
-	PerspectiveCamera m_camera;
+	//FPSCameraController m_cameraController;
+	//PerspectiveCamera m_camera;
 };

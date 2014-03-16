@@ -191,13 +191,3 @@ void D3DVertexBuffer::setVertexAttributeParameters(const VertexAttributes& param
 		}
 	}
 }
-
-inline void* D3DVertexBuffer::map(unsigned int numBytes, unsigned int offset, BufferMapFlags mapFlags)
-{
-	return 0;
-}
-
-inline void D3DVertexBuffer::unmap()
-{
-
-}

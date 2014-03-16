@@ -23,6 +23,7 @@
     <ClInclude Include="Engine\Graphics\GL\GLCommandQueue.h" />
     <ClInclude Include="Engine\Graphics\GL\GLConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\GLCubeMap.h" />
+    <ClInclude Include="Engine\Graphics\GL\GLDefines.h" />
     <ClInclude Include="Engine\Graphics\GL\GLDepthCubeMap.h" />
     <ClInclude Include="Engine\Graphics\GL\GLGBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\GLGraphicsProvider.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="Engine\Graphics\GL\GLStateBuffer.h" />
     <ClInclude Include="Engine\Graphics\GL\GLTexture.h" />
     <ClInclude Include="Engine\Graphics\GL\GLTextureArray.h" />
+    <ClInclude Include="Engine\Graphics\GL\GLTypes.h" />
     <ClInclude Include="Engine\Graphics\GL\GLVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Graphics.h" />
     <ClInclude Include="Engine\Graphics\Model\EBufferMapFlagBits.h" />

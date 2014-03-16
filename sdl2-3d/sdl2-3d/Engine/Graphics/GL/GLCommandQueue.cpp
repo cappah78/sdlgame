@@ -82,6 +82,7 @@ void glqDisable(GLenum target) { addCommand(makeFunctor(glDisable, target)); }
 /* Vertex Arrays */
 void glqVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer) { addCommand(makeFunctor(glVertexAttribPointer, index, size, type, normalized, stride, pointer)); }
 void glqVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer) { addCommand(makeFunctor(glVertexAttribIPointer, index, size, type, stride, pointer)); }
+void glqVertexAttribDivisor(GLuint index, GLuint divisor) { addCommand(makeFunctor(glVertexAttribDivisor, index, divisor)); }
 void glqEnableVertexAttribArray(GLuint index) { addCommand(makeFunctor(glEnableVertexAttribArray, index)); }
 void glqDisableVertexAttribArray(GLuint index) { addCommand(makeFunctor(glDisableVertexAttribArray, index)); }
 void glqPrimitiveRestartIndex(GLuint index) { addCommand(makeFunctor(glPrimitiveRestartIndex, index)); }

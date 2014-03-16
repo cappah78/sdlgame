@@ -15,8 +15,6 @@ public:
 	virtual inline void bind() override;
 	virtual inline void resize(unsigned int numBytes, const void* data) override;
 	virtual void setVertexAttributeParameters(const VertexAttributes& parameters) override;
-	virtual inline void* map(unsigned int numBytes, unsigned int offset, BufferMapFlags mapFlags) override;
-	virtual inline void unmap() override;
 
 private:
 	bool m_isInitialized;

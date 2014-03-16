@@ -293,6 +293,12 @@
     <ClInclude Include="Engine\Utils\Functor.h">
       <Filter>Header Files\Engine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLTypes.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GL\GLDefines.h">
+      <Filter>Header Files\Engine\Graphics\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

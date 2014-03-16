@@ -4,7 +4,8 @@
 #include "../Model/IConstantBuffer.h"
 #include "../Model/IIndiceBuffer.h"
 
-#include <GL/glew.h>
+#include "GLCommandQueue.h"
+
 #include <assert.h>
 
 bool GLStateBuffer::s_isEnabled = false;
@@ -14,12 +15,12 @@ bool GLStateBuffer::s_isEnabled = false;
 GLStateBuffer::GLStateBuffer()
 	: m_isEnabled(false)
 {
-	glGenVertexArrays(1, &m_vao);
+	glqGenVertexArrays(1, &m_vao);
 }
 
 GLStateBuffer::~GLStateBuffer()
 {
-	glDeleteVertexArrays(1, &m_vao);
+	glqDeleteVertexArrays(1, &m_vao);
 }
 
 void GLStateBuffer::setIndiceBuffer(std::unique_ptr<IIndiceBuffer>& buffer)
@@ -46,7 +47,7 @@ void GLStateBuffer::enable()
 	assert(!s_isEnabled);
 	m_isEnabled = true;
 	s_isEnabled = true;
-	glBindVertexArray(m_vao);
+	glqBindVertexArray(m_vao);
 }
 
 void GLStateBuffer::disable()
@@ -55,5 +56,7 @@ void GLStateBuffer::disable()
 	assert(s_isEnabled);
 	m_isEnabled = false;
 	s_isEnabled = false;
-	glBindVertexArray(0);
+
+	//static GLuint zero = 0;
+	//glqBindVertexArray(zero);
 }

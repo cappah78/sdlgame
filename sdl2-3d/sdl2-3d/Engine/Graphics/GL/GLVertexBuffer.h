@@ -3,7 +3,8 @@
 #include "../Model/IVertexBuffer.h"
 #include "../Model/IIndiceBuffer.h"
 
-#include <gl\glew.h>
+#include "GLTypes.h"
+#include "GLDefines.h"
 
 class GLVertexBuffer : public IVertexBuffer, public IIndiceBuffer
 {
@@ -15,8 +16,6 @@ public:
 	virtual inline void bind() override;
 	virtual inline void resize(unsigned int numBytes, const void* data = 0) override;
 	virtual void setVertexAttributeParameters(const VertexAttributes& parameters) override;
-	virtual inline void* map(unsigned int numBytes, unsigned int offset, BufferMapFlags mapFlags) override;
-	virtual inline void unmap() override;
 
 	void setAttribPointer(GLuint attributeIdx, GLenum type, unsigned int valuesPerVertex,
 		GLboolean normalized = false, GLboolean isIntegerType = false, GLuint stride = 0,

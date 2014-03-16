@@ -58,5 +58,6 @@ private:
 		}
 	};
 
+	std::vector<std::pair<const char*, GLint>> m_uniformLocs;
 	std::unordered_map<const char*, GLint, StrHash, StrCmp> m_uniformLocMap;
 };
