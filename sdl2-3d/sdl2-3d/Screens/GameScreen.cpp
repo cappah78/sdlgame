@@ -2,10 +2,11 @@
 
 #include "../Game.h"
 
-#include "../Engine/Graphics/GL/GLCommandQueue.h"
 #include "../Engine/Graphics/GL/GLVertexBuffer.h"
 #include "../Engine/Graphics/GL/GLStateBuffer.h"
 #include "../Engine/Graphics/GL/GLShader.h"
+
+#include <GL/glew.h>
 
 GLShader* shader;
 GLStateBuffer* stateBuffer;
@@ -44,24 +45,26 @@ GameScreen::GameScreen()
 
 void GameScreen::render(float deltaSec)
 {
-	glqClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glqClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	shader->begin();
 
 	stateBuffer->enable();
-	glqDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 	stateBuffer->disable();
 
 	shader->end();
 
-	glqSwapWindow();
+	Game::graphics.swap();
 }
 
 GameScreen::~GameScreen() 
 {
 	delete colorBuffer;
-	delete po
+	delete positionBuffer;
+	delete shader;
+	delete stateBuffer;
 }
 
 void GameScreen::resize(int width, int height) 

@@ -5,7 +5,6 @@
 
 namespace Func
 {
-
 	template <class TYPE>
 	class Referencer
 	{
@@ -102,25 +101,25 @@ namespace Func
 	/* __cdecl */
 	//template <typename RET, typename... Args>
 	template <typename RET, typename... Args, typename... Args2>
-	Functor* makeFunctor(RET& ret, RET(__cdecl*f)(Args...), Args2... args)
+	inline Functor* makeFunctor(RET& ret, RET(__cdecl*f)(Args...), Args2... args)
 	{
 		return new FunctorImpl<RET, Args...>(ret, std::forward<RET(__cdecl*)(Args...)>(f), std::forward<Args>(args)...);
 	}
 	//template <typename... Args>
 	template <typename... Args, typename... Args2>
-	Functor* makeFunctor(void(__cdecl*f)(Args...), Args2... args)
+	inline Functor* makeFunctor(void(__cdecl*f)(Args...), Args2... args)
 	{
 		return new FunctorImpl<void, Args...>(std::forward<void(__cdecl*)(Args...)>(f), std::forward<Args>(args)...);
 	}
 	
 	/* __stdcall */
 	template <typename RET, typename... Args, typename... Args2>
-	Functor* makeFunctor(RET& ret, RET(__stdcall*f)(Args...), Args2&... args)
+	inline Functor* makeFunctor(RET& ret, RET(__stdcall*f)(Args...), Args2&... args)
 	{
 		return new FunctorImpl<RET, Args2...>(ret, std::forward<RET(__stdcall*)(Args...)>(f), std::forward<Args2>(args)...);
 	}
 	template <typename... Args, typename... Args2>
-	Functor* makeFunctor(void(__stdcall*f)(Args...), Args2&... args)
+	inline Functor* makeFunctor(void(__stdcall*f)(Args...), Args2&... args)
 	{
 		return new FunctorImpl<void, Args2...>(std::forward<void(__stdcall*)(Args...)>(f), std::forward<Args2>(args)...);
 	}

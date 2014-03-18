@@ -1,8 +1,10 @@
 #include "GLShader.h"
 
-#include "GLCommandQueue.h"
 #include "../../Utils/Functor.h"
 #include "../../Utils/ShaderManager.h"
+#include "../../Utils/CheckGLError.h"
+
+#include <GL/glew.h>
 
 bool GLShader::s_begun = false;
 
@@ -15,24 +17,24 @@ GLShader::GLShader(const char* const vertexShaderPath, const char* const geomSha
 	: m_begun(false)
 {
 	setupProgram(vertexShaderPath, geomShaderPath, fragShaderPath);
-	glqCheckGLError();
+	CHECK_GL_ERROR();
 }
 
 GLShader::GLShader(GLuint shaderID)
 	: m_begun(false)
 	, m_shaderID(shaderID)
 {
-	glqCheckGLError();
+	CHECK_GL_ERROR();
 }
 
 GLShader::~GLShader()
 {
-	glqDeleteProgram(m_shaderID);
+	glDeleteProgram(m_shaderID);
 }
 
 void GLShader::setupProgram(const char* const vertexShaderPath, const char* const geomShaderPath, const char* const fragShaderPath)
 {
-	glqAddFunctor(Func::makeFunctor(m_shaderID, ShaderManager::createShaderProgram, vertexShaderPath, geomShaderPath, fragShaderPath));
+	m_shaderID = ShaderManager::createShaderProgram(vertexShaderPath, geomShaderPath, fragShaderPath);
 }
 
 void GLShader::begin()
@@ -41,7 +43,7 @@ void GLShader::begin()
 	assert(!m_begun);
 	s_begun = true;
 	m_begun = true;
-	glqUseProgram(m_shaderID);
+	glUseProgram(m_shaderID);
 }
 
 void GLShader::end()
@@ -50,7 +52,7 @@ void GLShader::end()
 	assert(m_begun);
 	s_begun = false;
 	m_begun = false;
-	//glqUseProgram(0);	//optional
+	//glUseProgram(0);	//optional
 }
 
 unsigned int GLShader::getID()
@@ -68,15 +70,15 @@ void GLShader::setUniform1i(const char* const uniformName, int val)
 		if (!std::strcmp(it->first, uniformName))
 		{
 			contained = true;
-			glqUniform1i(it->second, val);
+			glUniform1i(it->second, val);
 		}
 	}
 
 	if (!contained)
 	{
 		m_uniformLocs.emplace_back(uniformName, 0);
-		glqGetUniformLocation(m_shaderID, uniformName, m_uniformLocs[m_uniformLocs.size() - 1].second);
-		glqUniform1i(m_uniformLocs[m_uniformLocs.size() - 1].second, val);
+		m_uniformLocs[m_uniformLocs.size() - 1].second = glGetUniformLocation(m_shaderID, uniformName);
+		glUniform1i(m_uniformLocs[m_uniformLocs.size() - 1].second, val);
 	}
 }
 void GLShader::setUniform1f(const char* const uniformName, float val)
@@ -89,15 +91,15 @@ void GLShader::setUniform1f(const char* const uniformName, float val)
 		if (!std::strcmp(it->first, uniformName))
 		{
 			contained = true;
-			glqUniform1f(it->second, val);
+			glUniform1f(it->second, val);
 		}
 	}
 
 	if (!contained)
 	{
 		m_uniformLocs.emplace_back(uniformName, 0);
-		glqGetUniformLocation(m_shaderID, uniformName, m_uniformLocs[m_uniformLocs.size() - 1].second);
-		glqUniform1f(m_uniformLocs[m_uniformLocs.size() - 1].second, val);
+		m_uniformLocs[m_uniformLocs.size() - 1].second = glGetUniformLocation(m_shaderID, uniformName);
+		glUniform1f(m_uniformLocs[m_uniformLocs.size() - 1].second, val);
 	}
 }
 void GLShader::setUniform2f(const char* const uniformName, const glm::vec2& vec)
@@ -110,15 +112,15 @@ void GLShader::setUniform2f(const char* const uniformName, const glm::vec2& vec)
 		if (!std::strcmp(it->first, uniformName))
 		{
 			contained = true;
-			glqUniform2f(it->second, vec.x, vec.y);
+			glUniform2f(it->second, vec.x, vec.y);
 		}
 	}
 
 	if (!contained)
 	{
 		m_uniformLocs.emplace_back(uniformName, 0);
-		glqGetUniformLocation(m_shaderID, uniformName, m_uniformLocs[m_uniformLocs.size() - 1].second);
-		glqUniform2f(m_uniformLocs[m_uniformLocs.size() - 1].second, vec.x, vec.y);
+		m_uniformLocs[m_uniformLocs.size() - 1].second = glGetUniformLocation(m_shaderID, uniformName);
+		glUniform2f(m_uniformLocs[m_uniformLocs.size() - 1].second, vec.x, vec.y);
 	}
 }
 void GLShader::setUniform3f(const char* const uniformName, const glm::vec3& vec)
@@ -131,15 +133,15 @@ void GLShader::setUniform3f(const char* const uniformName, const glm::vec3& vec)
 		if (!std::strcmp(it->first, uniformName))
 		{
 			contained = true;
-			glqUniform3f(it->second, vec.x, vec.y, vec.z);
+			glUniform3f(it->second, vec.x, vec.y, vec.z);
 		}
 	}
 
 	if (!contained)
 	{
 		m_uniformLocs.emplace_back(uniformName, 0);
-		glqGetUniformLocation(m_shaderID, uniformName, m_uniformLocs[m_uniformLocs.size() - 1].second);
-		glqUniform3f(m_uniformLocs[m_uniformLocs.size() - 1].second, vec.x, vec.y, vec.z);
+		m_uniformLocs[m_uniformLocs.size() - 1].second = glGetUniformLocation(m_shaderID, uniformName);
+		glUniform3f(m_uniformLocs[m_uniformLocs.size() - 1].second, vec.x, vec.y, vec.z);
 	}
 }
 void GLShader::setUniformMatrix4f(const char* const uniformName, const glm::mat4& mat)
@@ -152,14 +154,14 @@ void GLShader::setUniformMatrix4f(const char* const uniformName, const glm::mat4
 		if (!std::strcmp(it->first, uniformName))
 		{
 			contained = true;
-			glqUniformMatrix4fv(it->second, 1, GL_FALSE, &mat[0][0]);
+			glUniformMatrix4fv(it->second, 1, GL_FALSE, &mat[0][0]);
 		}
 	}
 
 	if (!contained)
 	{
 		m_uniformLocs.emplace_back(uniformName, 0);
-		glqGetUniformLocation(m_shaderID, uniformName, m_uniformLocs[m_uniformLocs.size() - 1].second);
-		glqUniformMatrix4fv(m_uniformLocs[m_uniformLocs.size() - 1].second, 1, GL_FALSE, &mat[0][0]);
+		m_uniformLocs[m_uniformLocs.size() - 1].second = glGetUniformLocation(m_shaderID, uniformName);
+		glUniformMatrix4fv(m_uniformLocs[m_uniformLocs.size() - 1].second, 1, GL_FALSE, &mat[0][0]);
 	}
 }

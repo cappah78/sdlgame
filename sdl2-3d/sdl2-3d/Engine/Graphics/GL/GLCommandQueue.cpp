@@ -319,7 +319,7 @@ void glqTexImage3DMultisample(GLenum target, GLsizei samples, GLint internalform
 { addCommand(makeFunctor(glTexImage3DMultisample, target, samples, internalformat, width, height, depth, fixedsamplelocations)); }
 void glqTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations)
 { addCommand(makeFunctor(glTexImage2DMultisample, target, samples, internalformat, width, height, fixedsamplelocations)); }
-void glqTexBuffer(GLenum target, GLenum internalformat, GLuint& buffer) { addCommand(makeFunctor(glTexBuffer, target, internalformat, buffer)); }
+void glqTexBuffer(GLenum target, GLenum internalformat, GLuint& buffer) { addCommand(makeFunctor(glTexBuffer, target, internalformat, reference(buffer))); }
 void glqTexParameteri(GLenum target, GLenum pname, GLint param) { addCommand(makeFunctor(glTexParameteri, target, pname, param)); }
 void glqTexParameterf(GLenum target, GLenum pname, GLfloat param) { addCommand(makeFunctor(glTexParameterf, target, pname, param)); }
 void glqTexParameteriv(GLenum target, GLenum pname, const GLint* params) { addCommand(makeFunctor(glTexParameteriv, target, pname, params)); }
@@ -426,17 +426,17 @@ void glqRenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum in
 void glqRenderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height)
 { addCommand(makeFunctor(glRenderbufferStorage, target, internalformat, width, height)); }
 void glqFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint& renderbuffer)
-{ addCommand(makeFunctor(glFramebufferRenderbuffer, target, attachment, renderbuffertarget, renderbuffer)); }
+{ addCommand(makeFunctor(glFramebufferRenderbuffer, target, attachment, renderbuffertarget, reference(renderbuffer))); }
 void glqFramebufferTexture(GLenum target, GLenum attachment, GLuint& texture, GLint level)
-{ addCommand(makeFunctor(glFramebufferTexture, target, attachment, texture, level)); }
+{ addCommand(makeFunctor(glFramebufferTexture, target, attachment, reference(texture), level)); }
 void glqFramebufferTexture3D(GLenum target, GLenum attachment, GLenum textarget, GLuint& texture, GLint level, GLint layer)
-{ addCommand(makeFunctor(glFramebufferTexture3D, target, attachment, textarget, texture, level, layer)); }
+{ addCommand(makeFunctor(glFramebufferTexture3D, target, attachment, textarget, reference(texture), level, layer)); }
 void glqFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint& texture, GLint level)
-{ addCommand(makeFunctor(glFramebufferTexture2D, target, attachment, textarget, texture, level)); }
+{ addCommand(makeFunctor(glFramebufferTexture2D, target, attachment, textarget, reference(texture), level)); }
 void glqFramebufferTexture1D(GLenum target, GLenum attachment, GLenum textarget, GLuint& texture, GLint level)
-{ addCommand(makeFunctor(glFramebufferTexture1D, target, attachment, textarget, texture, level)); }
+{ addCommand(makeFunctor(glFramebufferTexture1D, target, attachment, textarget, reference(texture), level)); }
 void glqFramebufferTextureLayer(GLenum target, GLenum attachment, GLuint& texture, GLint level, GLint layer)
-{ addCommand(makeFunctor(glFramebufferTextureLayer, target, attachment, texture, level, layer)); }
+{ addCommand(makeFunctor(glFramebufferTextureLayer, target, attachment, reference(texture), level, layer)); }
 void glqCheckFramebufferStatus(GLenum target, GLenum& out)
 { addCommand(makeFunctor(out, glCheckFramebufferStatus, target)); }
 //TODO: Framebuffer Object Queries

@@ -4,8 +4,7 @@
 
 #include <assert.h>
 #include <memory>
-
-#include "GLCommandQueue.h"
+#include <GL/glew.h>
 
 GLVertexBuffer::GLVertexBuffer(unsigned int sizeBytes, const void* data, GLenum bufferType, GLenum drawUsage)
 	: m_id(0)
@@ -15,7 +14,7 @@ GLVertexBuffer::GLVertexBuffer(unsigned int sizeBytes, const void* data, GLenum 
 	, m_isInitialized(false)
 	, m_attributeIdx(-1)
 {
-	glqGenBuffers(1, &m_id);
+	glGenBuffers(1, &m_id);
 
 	if (sizeBytes != 0)
 		resize(sizeBytes, data);
@@ -23,7 +22,7 @@ GLVertexBuffer::GLVertexBuffer(unsigned int sizeBytes, const void* data, GLenum 
 
 GLVertexBuffer::~GLVertexBuffer()
 {
-	glqDeleteBuffers(1, &m_id);
+	glDeleteBuffers(1, &m_id);
 }
 
 /** Set and enable glVertexAttrib(I)Pointer with the given properties, binds the buffer */
@@ -35,12 +34,11 @@ void GLVertexBuffer::setAttribPointer(GLuint attributeIdx, GLenum type, unsigned
 
 	bind();
 	if (isIntegerType)
-		glqVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, (const GLvoid*) offset);
+		glVertexAttribIPointer(attributeIdx, valuesPerVertex, type, stride, (const GLvoid*) offset);
 	else
-		glqVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, stride, (const GLvoid*) offset);
-	glqEnableVertexAttribArray(attributeIdx);
-	glqCheckGLError();
-	//CHECK_GL_ERROR();
+		glVertexAttribPointer(attributeIdx, valuesPerVertex, type, normalized, stride, (const GLvoid*) offset);
+	glEnableVertexAttribArray(attributeIdx);
+	CHECK_GL_ERROR();
 }
 
 void GLVertexBuffer::setEnabled(bool enabled)
@@ -49,15 +47,15 @@ void GLVertexBuffer::setEnabled(bool enabled)
 	bind();
 
 	if (enabled)
-		glqEnableVertexAttribArray(m_attributeIdx);
+		glEnableVertexAttribArray(m_attributeIdx);
 	else
-		glqDisableVertexAttribArray(m_attributeIdx);
+		glDisableVertexAttribArray(m_attributeIdx);
 }
 
 inline void GLVertexBuffer::setAttribDivisor(unsigned int divisor)
 {
 	bind();
-	glqVertexAttribDivisor(m_attributeIdx, divisor);
+	glVertexAttribDivisor(m_attributeIdx, divisor);
 }
 
 inline void GLVertexBuffer::resize(unsigned int numBytes, const void* data)
@@ -67,12 +65,12 @@ inline void GLVertexBuffer::resize(unsigned int numBytes, const void* data)
 	if (data && m_isInitialized)
 		glBufferData(m_bufferType, numBytes, NULL, m_drawUsage);
 	m_isInitialized = true;*/
-	glqBufferData(m_bufferType, numBytes, data, m_drawUsage);
+	glBufferData(m_bufferType, numBytes, data, m_drawUsage);
 }
 
 inline void GLVertexBuffer::bind()
 {
-	glqBindBuffer(m_bufferType, m_id);
+	glBindBuffer(m_bufferType, m_id);
 }
 
 GLenum mapFlagsToGLBitfield(BufferMapFlags flags)
